@@ -1,0 +1,33 @@
+# --- Python ---
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.pytest_cache/
+
+# --- Django ---
+db.sqlite3
+staticfiles/
+media/
+
+# --- Flutter / Dart ---
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+
+# --- ML model files ---
+backend/models/
+
+# --- IDE ---
+.vscode/
+.idea/
+*.iml
+
+# --- OS ---
+.DS_Store
+Thumbs.db
