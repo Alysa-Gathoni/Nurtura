@@ -1,4 +1,4 @@
-package com.webmasters.sofia.nurtura_app
+package com.sofia.nurtura_app
 
 import io.flutter.embedding.android.FlutterActivity
 
