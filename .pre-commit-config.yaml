@@ -1,0 +1,8 @@
+# Runs black on staged Python files before each commit.
+# Install the hook once per clone:  pre-commit install   (from the backend venv)
+repos:
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 26.5.1  # keep in sync with black in backend/requirements.txt
+    hooks:
+      - id: black
+        language_version: python3.13
