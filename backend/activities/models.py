@@ -1,14 +1,26 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.functions import Lower
 
-from .choices import AgeRange, Difficulty, Domain, Source
+from .choices import AgeRange, ContentStatus, Difficulty, Domain, Source
+
+
+class DevelopmentalActivityQuerySet(models.QuerySet):
+    def published(self):
+        """Activities eligible for recommendation."""
+        return self.filter(content_status=ContentStatus.PUBLISHED)
 
 
 class DevelopmentalActivity(models.Model):
-    """An evidence-based activity in the activity repository.
+    """An evidence-based activity in the activity repository."""
 
-    content_status (Draft/Under Review/Published) is added separately in #3.
-    """
+    # Content-validation workflow (FR-13, DR-12): content must be reviewed
+    # before it is published; any state can go back to draft for edits.
+    ALLOWED_TRANSITIONS = {
+        ContentStatus.DRAFT: {ContentStatus.UNDER_REVIEW},
+        ContentStatus.UNDER_REVIEW: {ContentStatus.PUBLISHED, ContentStatus.DRAFT},
+        ContentStatus.PUBLISHED: {ContentStatus.DRAFT},
+    }
 
     activity_id = models.CharField(
         max_length=20, unique=True, help_text="Dataset ID, e.g. ACT001."
@@ -26,8 +38,16 @@ class DevelopmentalActivity(models.Model):
         choices=Source.choices,
         help_text="Organisation whose guidance this activity is traceable to.",
     )
+    content_status = models.CharField(
+        max_length=20,
+        choices=ContentStatus.choices,
+        default=ContentStatus.DRAFT,
+        help_text="Only published activities are recommended.",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = DevelopmentalActivityQuerySet.as_manager()
 
     class Meta:
         ordering = ["activity_id"]
@@ -42,3 +62,14 @@ class DevelopmentalActivity(models.Model):
 
     def __str__(self):
         return f"{self.activity_id}: {self.activity_name}"
+
+    def transition_to(self, new_status):
+        """Move to new_status if the workflow allows it, and save."""
+        if new_status not in self.ALLOWED_TRANSITIONS[self.content_status]:
+            raise ValidationError(
+                f"Cannot move {self.activity_id} from "
+                f"{self.get_content_status_display()} to "
+                f"{ContentStatus(new_status).label}."
+            )
+        self.content_status = new_status
+        self.save(update_fields=["content_status", "updated_at"])

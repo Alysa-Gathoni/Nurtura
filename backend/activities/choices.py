@@ -31,6 +31,12 @@ class Difficulty(models.TextChoices):
     ADVANCED = "Advanced", "Advanced"
 
 
+class ContentStatus(models.TextChoices):
+    DRAFT = "draft", "Draft"
+    UNDER_REVIEW = "under_review", "Under Review"
+    PUBLISHED = "published", "Published"
+
+
 class Source(models.TextChoices):
     WHO = "WHO", "WHO"
     CDC = "CDC", "CDC"
