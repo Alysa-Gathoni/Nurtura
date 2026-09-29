@@ -31,6 +31,7 @@ bug       — something broken
 docs      — documentation/report updates
 test      — test coverage
 sofia     — items tied to the SOFIA alignment fixes
+chore     — setup, config, dependencies, data loading
 ```
 
 ### 3. Branches — one per issue
