@@ -7,6 +7,7 @@ from django.db.models import ProtectedError
 from django.test import TestCase
 from django.utils import timezone
 
+from activities.choices import ContentStatus
 from activities.models import DevelopmentalActivity
 from activities.tests import activity_fields
 from profiles.models import ChildProfile
@@ -26,7 +27,9 @@ def make_child(username="caregiver", name="Amani"):
 class RecommendationTests(TestCase):
     def setUp(self):
         self.child = make_child()
-        self.activity = DevelopmentalActivity.objects.create(**activity_fields())
+        self.activity = DevelopmentalActivity.objects.create(
+            **activity_fields(content_status=ContentStatus.PUBLISHED)
+        )
 
     def recommend(self, **kwargs):
         fields = {
@@ -45,6 +48,26 @@ class RecommendationTests(TestCase):
         self.assertEqual(self.activity.recommendations.get(), rec)
         self.assertEqual(rec.explanation, "")
         self.assertEqual(str(rec), "Tummy Time for Amani")
+
+    def test_only_published_activities_can_be_recommended(self):
+        for status in (ContentStatus.DRAFT, ContentStatus.UNDER_REVIEW):
+            with self.subTest(status=status):
+                activity = DevelopmentalActivity.objects.create(
+                    **activity_fields(
+                        activity_id=f"ACT-{status}",
+                        activity_name=f"Activity {status}",
+                        content_status=status,
+                    )
+                )
+                rec = Recommendation(
+                    child=self.child,
+                    activity=activity,
+                    similarity_score=0.5,
+                    ranking_score=0.5,
+                )
+                with self.assertRaises(ValidationError) as ctx:
+                    rec.full_clean()
+                self.assertIn("activity", ctx.exception.message_dict)
 
     def test_similarity_score_validated(self):
         for bad in (-1.5, 1.01):

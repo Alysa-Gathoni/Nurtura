@@ -2,6 +2,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
 
+from activities.choices import ContentStatus
 from activities.models import DevelopmentalActivity
 from profiles.models import ChildProfile
 
@@ -16,11 +17,13 @@ class Recommendation(models.Model):
         ChildProfile, on_delete=models.CASCADE, related_name="recommendations"
     )
     # PROTECT keeps recommendation history intact; retire activities by
-    # unpublishing them instead of deleting.
+    # unpublishing them instead of deleting. Only published activities can be
+    # chosen when a recommendation is validated.
     activity = models.ForeignKey(
         DevelopmentalActivity,
         on_delete=models.PROTECT,
         related_name="recommendations",
+        limit_choices_to={"content_status": ContentStatus.PUBLISHED},
     )
     similarity_score = models.FloatField(
         validators=[MinValueValidator(-1.0), MaxValueValidator(1.0)],
