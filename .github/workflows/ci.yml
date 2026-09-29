@@ -39,6 +39,9 @@ jobs:
       - name: Check for missing migrations
         run: python manage.py makemigrations --check --dry-run
 
+      - name: Run tests
+        run: python manage.py test
+
   mobile:
     name: Mobile (Flutter)
     runs-on: ubuntu-latest
