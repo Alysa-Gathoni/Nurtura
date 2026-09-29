@@ -1,17 +1,46 @@
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
 from django.utils import timezone
 
 from activities.choices import Domain
 
 
-class User(AbstractUser):
-    """Project user model.
+class NurturaUserManager(UserManager):
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault("role", User.Role.ADMINISTRATOR)
+        return super().create_superuser(username, email, password, **extra_fields)
 
-    Defined up front because Django does not support swapping AUTH_USER_MODEL
-    after the first migration. The Caregiver/Administrator role is added in #4.
+
+class User(AbstractUser):
+    """Project user with a Caregiver/Administrator role (FR-01, FR-02).
+
+    Caregivers use the mobile app via the API; Administrators manage the
+    activity repository via the Django admin. is_staff (admin site access) is
+    derived from the role so the two can't drift apart.
     """
+
+    class Role(models.TextChoices):
+        CAREGIVER = "caregiver", "Caregiver"
+        ADMINISTRATOR = "administrator", "Administrator"
+
+    role = models.CharField(max_length=20, choices=Role.choices, default=Role.CAREGIVER)
+
+    objects = NurturaUserManager()
+
+    @property
+    def is_caregiver(self):
+        return self.role == self.Role.CAREGIVER
+
+    @property
+    def is_administrator(self):
+        return self.role == self.Role.ADMINISTRATOR
+
+    def save(self, *args, **kwargs):
+        if self.is_superuser:
+            self.role = self.Role.ADMINISTRATOR
+        self.is_staff = self.is_administrator
+        super().save(*args, **kwargs)
 
 
 class ChildProfile(models.Model):

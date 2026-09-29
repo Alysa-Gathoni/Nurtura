@@ -86,6 +86,34 @@ CREATE DATABASE nurtura_db OWNER nurtura_user;
 
 Then set `DB_NAME=nurtura_db`, `DB_USER`, `DB_PASSWORD`, `DB_HOST=localhost` and `DB_PORT=5432` in `backend/.env` and run `python manage.py migrate`.
 
+To run `python manage.py test` against PostgreSQL, the database user also needs permission to create the temporary test database:
+
+```sql
+ALTER USER nurtura_user CREATEDB;
+```
+
+### Users and roles
+
+There are two roles:
+
+- **Caregiver**: uses the mobile app through the API. Anyone can register as a caregiver.
+- **Administrator**: manages the activity repository (including publishing) in the Django admin at `/admin/`. Only administrators can sign in to the admin.
+
+Create the first administrator with `python manage.py createsuperuser`; it is given the Administrator role automatically. Further administrators can be added from the admin's Users page.
+
+### API
+
+All endpoints are under `/api/` and, apart from register and login, need an `Authorization: Token <token>` header.
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/api/auth/register/` | Create a caregiver account (`username`, `email`, `password`); returns a token |
+| POST | `/api/auth/login/` | Exchange `username` and `password` for a token |
+| POST | `/api/auth/logout/` | Invalidate the current token |
+| GET | `/api/auth/me/` | Current user, including `role` |
+| GET, POST | `/api/children/` | List or create the caregiver's own child profiles |
+| GET, PATCH, PUT, DELETE | `/api/children/<id>/` | One of the caregiver's own child profiles |
+
 ## Mobile setup
 
 ```bash
