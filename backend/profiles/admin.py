@@ -3,7 +3,31 @@ from django.contrib.auth.admin import UserAdmin
 
 from .models import ChildProfile, DevelopmentalMilestone, User
 
-admin.site.register(User, UserAdmin)
+
+@admin.register(User)
+class NurturaUserAdmin(UserAdmin):
+    list_display = ["username", "email", "role", "is_active", "is_superuser"]
+    list_filter = ["role", "is_active", "is_superuser"]
+    # is_staff is derived from role in User.save(), so it isn't editable here.
+    fieldsets = [
+        (None, {"fields": ["username", "password"]}),
+        ("Personal info", {"fields": ["first_name", "last_name", "email"]}),
+        ("Role", {"fields": ["role"]}),
+        (
+            "Permissions",
+            {"fields": ["is_active", "is_superuser", "groups", "user_permissions"]},
+        ),
+        ("Important dates", {"fields": ["last_login", "date_joined"]}),
+    ]
+    add_fieldsets = [
+        (
+            None,
+            {
+                "classes": ["wide"],
+                "fields": ["username", "email", "role", "password1", "password2"],
+            },
+        ),
+    ]
 
 
 class DevelopmentalMilestoneInline(admin.TabularInline):

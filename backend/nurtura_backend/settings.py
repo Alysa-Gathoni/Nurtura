@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third-party
     "rest_framework",
+    "rest_framework.authtoken",
     # Local apps
     "profiles",
     "activities",
@@ -173,7 +174,17 @@ MAILERS = {
 
 # Django REST Framework
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    # Token auth for the mobile app; session auth for the browsable API.
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ],
+    # Everything requires login unless a view opts out (e.g. registration).
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    # Login attempts per client (IP address) to slow down password guessing.
+    "DEFAULT_THROTTLE_RATES": {
+        "login": "5/minute",
+    },
 }

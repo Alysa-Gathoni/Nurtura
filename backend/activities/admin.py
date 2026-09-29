@@ -28,6 +28,27 @@ class DevelopmentalActivityAdmin(admin.ModelAdmin):
     readonly_fields = ["content_status"]
     actions = ["submit_for_review", "publish", "return_to_draft"]
 
+    # Administrators manage the activity repository (FR-13) by role, without
+    # needing individual Django model permissions.
+    def _is_administrator(self, request):
+        user = request.user
+        return user.is_active and (user.is_superuser or user.is_administrator)
+
+    def has_module_permission(self, request):
+        return self._is_administrator(request)
+
+    def has_view_permission(self, request, obj=None):
+        return self._is_administrator(request)
+
+    def has_add_permission(self, request):
+        return self._is_administrator(request)
+
+    def has_change_permission(self, request, obj=None):
+        return self._is_administrator(request)
+
+    def has_delete_permission(self, request, obj=None):
+        return self._is_administrator(request)
+
     def _transition(self, request, queryset, new_status):
         moved, skipped = 0, []
         for activity in queryset:
