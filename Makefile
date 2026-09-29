@@ -37,7 +37,7 @@ run-app:
 
 ## seed-data: validate raw activities into data/processed/
 seed-data:
-	cd data/scripts && $(PY) clean_activities.py ../raw/activities_batch1.csv ../processed/activities_clean.csv
+	cd data/scripts && $(PY) clean_activities.py "../raw/activities_batch*.csv" ../processed/activities_clean.csv
 
 ## test: backend checks + tests, Flutter analyze + tests
 test:
