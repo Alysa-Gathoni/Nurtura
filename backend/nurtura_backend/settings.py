@@ -183,4 +183,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    # Login attempts per client (IP address) to slow down password guessing.
+    "DEFAULT_THROTTLE_RATES": {
+        "login": "5/minute",
+    },
 }

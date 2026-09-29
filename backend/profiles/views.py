@@ -2,6 +2,7 @@ from rest_framework import generics, permissions, status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from .permissions import IsCaregiver
@@ -26,7 +27,13 @@ class RegisterView(generics.CreateAPIView):
 
 
 class LoginView(ObtainAuthToken):
-    """Exchange username and password for an API token."""
+    """Exchange username and password for an API token.
+
+    Throttled per client to slow down password guessing (rate in settings).
+    """
+
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "login"
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(

@@ -29,6 +29,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ["username", "email", "password", "first_name", "last_name"]
 
+    def validate_email(self, value):
+        if User.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError(
+                "An account with this email already exists."
+            )
+        return value
+
     def validate(self, attrs):
         # Run Django's password validators (NFR-02), comparing against the
         # other fields so the password can't just be the username.

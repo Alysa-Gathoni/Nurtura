@@ -107,8 +107,8 @@ All endpoints are under `/api/` and, apart from register and login, need an `Aut
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| POST | `/api/auth/register/` | Create a caregiver account (`username`, `email`, `password`); returns a token |
-| POST | `/api/auth/login/` | Exchange `username` and `password` for a token |
+| POST | `/api/auth/register/` | Create a caregiver account (`username`, `email`, `password`); returns a token. Each email can only be used once (case-insensitive) |
+| POST | `/api/auth/login/` | Exchange `username` and `password` for a token. Limited to 5 attempts per minute per client (`429 Too Many Requests` after that) |
 | POST | `/api/auth/logout/` | Invalidate the current token |
 | GET | `/api/auth/me/` | Current user, including `role` |
 | GET, POST | `/api/children/` | List or create the caregiver's own child profiles |

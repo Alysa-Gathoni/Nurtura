@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
+from django.db.models.functions import Lower
 from django.utils import timezone
 
 from activities.choices import Domain
@@ -27,6 +28,18 @@ class User(AbstractUser):
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.CAREGIVER)
 
     objects = NurturaUserManager()
+
+    class Meta(AbstractUser.Meta):
+        constraints = [
+            # One account per email, ignoring case; blank emails (e.g. from
+            # createsuperuser) are allowed more than once.
+            models.UniqueConstraint(
+                Lower("email"),
+                condition=~models.Q(email=""),
+                name="unique_user_email_case_insensitive",
+                violation_error_message="A user with this email already exists.",
+            ),
+        ]
 
     @property
     def is_caregiver(self):

@@ -3,6 +3,9 @@
 import datetime
 
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
+from django.core.exceptions import ValidationError
+from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
@@ -50,6 +53,9 @@ class UserRoleTests(TestCase):
 
 
 class AuthAPITests(APITestCase):
+    def setUp(self):
+        cache.clear()  # login throttle counts live in the cache
+
     def register(self, **overrides):
         data = {
             "username": "wanjiru",
@@ -241,3 +247,76 @@ class AdminSiteAccessTests(TestCase):
             )
         activity.refresh_from_db()
         self.assertEqual(activity.content_status, ContentStatus.PUBLISHED)
+
+
+class EmailUniquenessTests(APITestCase):
+    def register(self, username, email):
+        return self.client.post(
+            reverse("register"),
+            {"username": username, "email": email, "password": "Str0ng-Passw0rd!"},
+            format="json",
+        )
+
+    def test_register_rejects_email_in_use_ignoring_case(self):
+        self.assertEqual(
+            self.register("wanjiru", "wanjiru@example.com").status_code,
+            status.HTTP_201_CREATED,
+        )
+        response = self.register("wanjiru2", "Wanjiru@Example.COM")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("email", response.data)
+        self.assertEqual(User.objects.count(), 1)
+
+    def test_database_enforces_unique_email_ignoring_case(self):
+        User.objects.create_user(username="a", email="parent@example.com")
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            User.objects.create_user(username="b", email="PARENT@example.com")
+
+    def test_model_validation_reports_duplicate_email(self):
+        User.objects.create_user(username="a", email="parent@example.com")
+        user = User(username="b", email="Parent@Example.com")
+        with self.assertRaises(ValidationError) as ctx:
+            user.validate_constraints()
+        self.assertIn("A user with this email already exists.", ctx.exception.messages)
+
+    def test_blank_emails_allowed_more_than_once(self):
+        User.objects.create_superuser(username="root1", password="x-test-pass")
+        User.objects.create_superuser(username="root2", password="x-test-pass")
+        self.assertEqual(User.objects.filter(email="").count(), 2)
+
+
+class LoginThrottleTests(APITestCase):
+    def setUp(self):
+        cache.clear()
+        User.objects.create_user(username="wanjiru", password="Str0ng-Passw0rd!")
+
+    def login(self, password):
+        return self.client.post(
+            reverse("login"),
+            {"username": "wanjiru", "password": password},
+            format="json",
+        )
+
+    def test_login_throttled_after_five_attempts_per_minute(self):
+        for _ in range(5):
+            self.assertEqual(
+                self.login("wrong-password").status_code, status.HTTP_400_BAD_REQUEST
+            )
+        # Even the correct password is refused once the limit is reached.
+        response = self.login("Str0ng-Passw0rd!")
+        self.assertEqual(response.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
+        self.assertNotIn("token", response.data)
+
+    def test_other_endpoints_not_throttled_by_login_limit(self):
+        for _ in range(5):
+            self.login("wrong-password")
+        response = self.client.post(
+            reverse("register"),
+            {
+                "username": "otieno",
+                "email": "otieno@example.com",
+                "password": "Str0ng-Passw0rd!",
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
