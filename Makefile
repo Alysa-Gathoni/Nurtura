@@ -35,9 +35,10 @@ run-backend:
 run-app:
 	cd $(APP) && flutter run $(if $(DEVICE),-d $(DEVICE),)
 
-## seed-data: validate raw activities into data/processed/
+## seed-data: validate raw activities into data/processed/, then load them into the database as Draft
 seed-data:
 	cd data/scripts && $(PY) clean_activities.py "../raw/activities_batch*.csv" ../processed/activities_clean.csv
+	cd $(BACKEND) && $(PY) manage.py seed_activities
 
 ## test: backend checks + tests, Flutter analyze + tests
 test:

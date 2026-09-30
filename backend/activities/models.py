@@ -23,7 +23,7 @@ class DevelopmentalActivity(models.Model):
     }
 
     activity_id = models.CharField(
-        max_length=20, unique=True, help_text="Dataset ID, e.g. ACT001."
+        max_length=20, unique=True, help_text="Dataset ID, e.g. ACT-0001."
     )
     activity_name = models.CharField(max_length=200)
     developmental_domain = models.CharField(max_length=20, choices=Domain.choices)
@@ -37,6 +37,11 @@ class DevelopmentalActivity(models.Model):
         max_length=20,
         choices=Source.choices,
         help_text="Organisation whose guidance this activity is traceable to.",
+    )
+    source_url = models.URLField(
+        max_length=500,
+        blank=True,
+        help_text="Link to the specific guidance document, once verified.",
     )
     content_status = models.CharField(
         max_length=20,
