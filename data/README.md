@@ -19,6 +19,12 @@ data/raw/*.csv  ──►  scripts/clean_activities.py  ──►  data/processe
    ```
    (or `make seed-data` from the repo root). The script expands the wildcard itself, so the same command works in PowerShell.
 3. Fix every `[REJECTED]` row in the **raw** file it came from and re-run until the summary shows all rows valid. Never edit files in `processed/` by hand.
+4. Load the processed file into the database:
+   ```
+   cd backend
+   python manage.py seed_activities            # add --dry-run to preview
+   ```
+   `make seed-data` runs steps 2 and 4 together. Loading is safe to repeat: rows are matched on `activity_id` and updated, never duplicated. New activities are always created as **Draft**, whatever the CSV's `content_status` says, and must be reviewed and published in the Django admin. Re-loading keeps the status set in the admin, except that an Under Review or Published activity whose content changed goes back to Draft for re-review. If any row is invalid, nothing is written.
 
 Exit codes: `0` all rows valid, `1` one or more rows rejected, `2` usage/file error.
 

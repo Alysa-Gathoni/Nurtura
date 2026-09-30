@@ -143,7 +143,8 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | One-time setup | `make setup` | see Backend and Mobile setup above, plus `pre-commit install` |
 | Run backend | `make run-backend` | `cd backend && python manage.py runserver` |
 | Run app | `make run-app DEVICE=chrome` | `cd mobile/nurtura_app && flutter run -d chrome` |
-| Clean activity data | `make seed-data` | `cd data/scripts && python clean_activities.py "../raw/activities_batch*.csv" ../processed/activities_clean.csv` |
+| Clean activity data | (first half of `make seed-data`) | `cd data/scripts && python clean_activities.py "../raw/activities_batch*.csv" ../processed/activities_clean.csv` |
+| Load activities into the database | `make seed-data` (cleans, then loads) | `cd backend && python manage.py seed_activities` (add `--dry-run` to preview) |
 | Backend checks | `make test` (runs all checks) | `cd backend && python manage.py check && python manage.py makemigrations --check --dry-run && python manage.py test` |
 | Flutter checks | (included in `make test`) | `cd mobile/nurtura_app && flutter analyze && flutter test` |
 | Format Python | (automatic on commit) | `pre-commit run --all-files` |
