@@ -5,6 +5,11 @@ from . import views
 
 router = DefaultRouter()
 router.register("children", views.ChildProfileViewSet, basename="child")
+router.register(
+    "reference-milestones",
+    views.ReferenceMilestoneViewSet,
+    basename="reference-milestone",
+)
 
 urlpatterns = [
     path("auth/register/", views.RegisterView.as_view(), name="register"),

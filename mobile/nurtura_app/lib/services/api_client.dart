@@ -25,7 +25,7 @@ class ApiException implements Exception {
 /// JSON client for the Django REST API, adding the auth token when set.
 class ApiClient {
   ApiClient({required this.baseUrl, http.Client? httpClient})
-      : _http = httpClient ?? http.Client();
+    : _http = httpClient ?? http.Client();
 
   static const timeout = Duration(seconds: 20);
 
@@ -106,7 +106,9 @@ class ApiClient {
     }
 
     if (status == 429) {
-      final seconds = RegExp(r'(\d+) second').firstMatch(detail ?? '')?.group(1);
+      final seconds = RegExp(r'(\d+) second')
+          .firstMatch(detail ?? '')
+          ?.group(1);
       return ApiException(
         seconds == null
             ? 'Too many attempts. Please wait a minute and try again.'
@@ -128,7 +130,8 @@ class ApiClient {
     }
 
     final general = fields.remove('non_field_errors');
-    final message = general?.join(' ') ??
+    final message =
+        general?.join(' ') ??
         detail ??
         (fields.isNotEmpty
             ? 'Please check the highlighted fields.'

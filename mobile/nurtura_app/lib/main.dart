@@ -53,8 +53,8 @@ class AuthGate extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (context.watch<AuthState>().status) {
       AuthStatus.unknown => const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
+        body: Center(child: CircularProgressIndicator()),
+      ),
       AuthStatus.signedOut => const AuthScreen(),
       AuthStatus.signedIn => const ChildrenScreen(),
     };

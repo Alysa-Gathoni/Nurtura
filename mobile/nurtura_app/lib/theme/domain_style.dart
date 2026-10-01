@@ -27,38 +27,38 @@ class DomainStyle {
   final IconData icon;
 
   static DomainStyle of(String domain) => switch (domain) {
-        'Cognitive' => const DomainStyle(
-            color: AppColors.gold,
-            background: AppColors.goldSoft,
-            onColor: AppColors.ink,
-            icon: Icons.lightbulb_rounded,
-          ),
-        'Language' => const DomainStyle(
-            color: AppColors.sky,
-            background: AppColors.skySoft,
-            onColor: Colors.white,
-            icon: Icons.chat_bubble_rounded,
-          ),
-        'Motor' => const DomainStyle(
-            color: AppColors.tealDeep,
-            background: AppColors.mint,
-            onColor: Colors.white,
-            icon: Icons.directions_run_rounded,
-          ),
-        'Socio-Emotional' => const DomainStyle(
-            color: AppColors.coral,
-            background: AppColors.coralSoft,
-            onColor: Colors.white,
-            icon: Icons.favorite_rounded,
-          ),
-        // Sensory
-        _ => DomainStyle(
-            color: AppColors.teal,
-            background: AppColors.tealLight.withValues(alpha: 0.3),
-            onColor: Colors.white,
-            icon: Icons.back_hand_rounded,
-          ),
-      };
+    'Cognitive' => const DomainStyle(
+      color: AppColors.gold,
+      background: AppColors.goldSoft,
+      onColor: AppColors.ink,
+      icon: Icons.lightbulb_rounded,
+    ),
+    'Language' => const DomainStyle(
+      color: AppColors.sky,
+      background: AppColors.skySoft,
+      onColor: Colors.white,
+      icon: Icons.chat_bubble_rounded,
+    ),
+    'Motor' => const DomainStyle(
+      color: AppColors.tealDeep,
+      background: AppColors.mint,
+      onColor: Colors.white,
+      icon: Icons.directions_run_rounded,
+    ),
+    'Socio-Emotional' => const DomainStyle(
+      color: AppColors.coral,
+      background: AppColors.coralSoft,
+      onColor: Colors.white,
+      icon: Icons.favorite_rounded,
+    ),
+    // Sensory
+    _ => DomainStyle(
+      color: AppColors.teal,
+      background: AppColors.tealLight.withValues(alpha: 0.3),
+      onColor: Colors.white,
+      icon: Icons.back_hand_rounded,
+    ),
+  };
 }
 
 /// A domain tag in its category colour.

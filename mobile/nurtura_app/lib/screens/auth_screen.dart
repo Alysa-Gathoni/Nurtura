@@ -140,7 +140,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                     : AutofillHints.password,
                               ],
                               errorText: _error?.field('password'),
-                              onSubmitted: _registering ? null : (_) => _submit(),
+                              onSubmitted: _registering
+                                  ? null
+                                  : (_) => _submit(),
                               validator: (v) => (v == null || v.isEmpty)
                                   ? 'Enter your password.'
                                   : null,

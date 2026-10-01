@@ -10,10 +10,10 @@ import 'package:nurtura_app/theme/app_theme.dart';
 
 /// JSON response the way Django REST Framework sends it (no charset).
 http.Response json(Object? body, [int status = 200]) => http.Response.bytes(
-      utf8.encode(jsonEncode(body)),
-      status,
-      headers: {'content-type': 'application/json'},
-    );
+  utf8.encode(jsonEncode(body)),
+  status,
+  headers: {'content-type': 'application/json'},
+);
 
 /// Records every request sent to the fake backend.
 ///

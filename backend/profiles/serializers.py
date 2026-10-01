@@ -1,9 +1,15 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.utils import timezone
 from rest_framework import serializers
 
-from .models import ChildProfile
+from .models import (
+    ChildProfile,
+    DevelopmentalMilestone,
+    DevelopmentalProfile,
+    ReferenceMilestone,
+)
 
 User = get_user_model()
 
@@ -65,3 +71,76 @@ class ChildProfileSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = ["id", "created_at", "updated_at"]
+
+
+class ReferenceMilestoneSerializer(serializers.ModelSerializer):
+    expected_age_months = serializers.FloatField()
+
+    class Meta:
+        model = ReferenceMilestone
+        fields = [
+            "id",
+            "milestone_key",
+            "domain",
+            "description",
+            "expected_age_months",
+            "source",
+        ]
+
+
+class DevelopmentalMilestoneSerializer(serializers.ModelSerializer):
+    reference_key = serializers.CharField(
+        source="reference.milestone_key", read_only=True, default=None
+    )
+
+    class Meta:
+        model = DevelopmentalMilestone
+        fields = [
+            "id",
+            "reference",
+            "reference_key",
+            "domain",
+            "description",
+            "status",
+            "observation_date",
+            "created_at",
+        ]
+        read_only_fields = fields
+
+
+class RecordMilestoneSerializer(serializers.Serializer):
+    """A milestone observation, chosen from the guideline catalogue.
+
+    The API only accepts catalogue milestones: free-text milestones have no
+    expected age, so the rule engine couldn't use them.
+    """
+
+    reference = serializers.PrimaryKeyRelatedField(
+        queryset=ReferenceMilestone.objects.all()
+    )
+    status = serializers.ChoiceField(choices=DevelopmentalMilestone.Status.choices)
+    observation_date = serializers.DateField(required=False)
+
+    def validate_observation_date(self, value):
+        if value > timezone.localdate():
+            raise serializers.ValidationError("Can't be in the future.")
+        return value
+
+    def validate(self, attrs):
+        child = self.context["child"]
+        if child.date_of_birth > timezone.localdate():
+            raise serializers.ValidationError(
+                "Milestones can be recorded once your baby is born."
+            )
+        observed = attrs.get("observation_date")
+        if observed and observed < child.date_of_birth:
+            raise serializers.ValidationError(
+                {"observation_date": "Can't be before the date of birth."}
+            )
+        return attrs
+
+
+class DevelopmentalProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DevelopmentalProfile
+        fields = ["age_months", "scores", "ranked_domains", "reasons", "generated_at"]

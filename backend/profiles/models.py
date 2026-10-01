@@ -113,6 +113,22 @@ class ChildProfile(models.Model):
     def __str__(self):
         return self.name
 
+    def refresh_developmental_profile(self, on_date=None):
+        """Run the rule engine and store the result as this child's profile."""
+        from .rules import build_profile  # rules import these models
+
+        evaluation = build_profile(self, on_date=on_date).to_dict()
+        profile, _ = DevelopmentalProfile.objects.update_or_create(
+            child=self,
+            defaults={
+                "age_months": evaluation["age_months"],
+                "scores": evaluation["scores"],
+                "ranked_domains": evaluation["ranked_domains"],
+                "reasons": evaluation["reasons"],
+            },
+        )
+        return profile
+
     def record_milestone(
         self,
         domain=None,
@@ -213,3 +229,34 @@ class DevelopmentalMilestone(models.Model):
                     f"({self.reference.domain})."
                 }
             )
+
+
+class DevelopmentalProfile(models.Model):
+    """A child's latest developmental profile from the rule engine (FR-05).
+
+    Regenerated whenever its inputs change (a milestone is recorded, or the
+    child's details, concerns or interests are saved through the API) and
+    when it is requested, since priorities also change as the child ages.
+    """
+
+    child = models.OneToOneField(
+        ChildProfile, on_delete=models.CASCADE, related_name="developmental_profile"
+    )
+    age_months = models.FloatField(
+        null=True, help_text="Age when generated; negative for prenatal profiles."
+    )
+    scores = models.JSONField(
+        default=dict, help_text="Priority per domain, 0-1 (top domain = 1)."
+    )
+    ranked_domains = models.JSONField(default=list)
+    reasons = models.JSONField(
+        default=list, help_text="Rules that fired, with sources and reasons."
+    )
+    generated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Profile for {self.child}"
+
+    @property
+    def top_domain(self):
+        return self.ranked_domains[0] if self.ranked_domains else None

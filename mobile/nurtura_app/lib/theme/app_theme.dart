@@ -68,9 +68,9 @@ abstract final class AppTheme {
       error: AppColors.coral,
     );
     OutlineInputBorder border(Color color) => OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadii.field),
-          borderSide: BorderSide(color: color, width: 2),
-        );
+      borderRadius: BorderRadius.circular(AppRadii.field),
+      borderSide: BorderSide(color: color, width: 2),
+    );
 
     return ThemeData(
       useMaterial3: true,
@@ -89,8 +89,10 @@ abstract final class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.card,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 14,
+        ),
         hintStyle: AppText.nunito(color: AppColors.mutedText),
         errorStyle: AppText.nunito(
           size: 12.5,
@@ -103,8 +105,9 @@ abstract final class AppTheme {
         errorBorder: border(AppColors.coral),
         focusedErrorBorder: border(AppColors.coral),
       ),
-      progressIndicatorTheme:
-          const ProgressIndicatorThemeData(color: AppColors.tealDeep),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: AppColors.tealDeep,
+      ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: AppColors.ink,
