@@ -31,7 +31,6 @@ bug       — something broken
 docs      — documentation/report updates
 test      — test coverage
 sofia     — items tied to the SOFIA alignment fixes
-chore     — setup, config, dependencies, data loading
 ```
 
 ### 3. Branches — one per issue
@@ -174,6 +173,54 @@ an actual test case, not a manual check.
 
 ---
 
+### Sprint 3.5 — Minimal Mobile Shell (thin-slice checkpoint)
+
+**GitHub Milestone:** "Sprint 3.5: Minimal Mobile Shell"
+
+**Entry condition:** Sprint 3 merged — models, auth, and the rule engine all exist
+and are reachable via Django REST Framework's browsable API or admin.
+
+**Why this sprint exists:** the full recommendation pipeline (Sprints 4–6) is one
+inseparable chain — there's nothing meaningful to show on screen until SBERT,
+ranking, and explainability are all done together on top of the rule engine.
+Waiting until Sprint 8 to build any mobile UI means going five more sprints
+without visual proof the Flutter ↔ Django ↔ PostgreSQL round trip actually works.
+This sprint proves that round trip now, while integration problems (CORS, auth
+tokens, serialization) are still cheap to fix — and while you have a real,
+working rule engine behind it, not just empty models.
+
+**Build:**
+- Flutter registration/login screen, calling the real Django auth endpoint (no
+  mock data).
+- Child profile creation screen, writing a real `ChildProfile` record to
+  PostgreSQL through the API.
+- Milestone recording screen, feeding the real rule engine from Sprint 3 —
+  submitting a milestone observation and confirming a `DevelopmentalProfile` is
+  actually generated server-side (the profile itself doesn't need to be displayed
+  to the caregiver yet; confirming it's created is enough for this checkpoint).
+- Nothing recommendation-related yet — SBERT/ranking/explainability don't exist
+  until Sprints 4–6.
+
+**Example Issues to open for this milestone:**
+```
+#XX feat: Flutter registration/login screen wired to auth API
+#XX feat: child profile creation screen wired to backend
+#XX feat: milestone recording screen wired to rule engine
+```
+
+**Definition of done:** From a real device/emulator, you can register, log in,
+create a child profile, and record a milestone observation that triggers the real
+rule engine — confirm the resulting `DevelopmentalProfile` exists in the database
+(via admin or a quick query), not just that the API returned 200 OK. Full round
+trip, zero manual backend poking. This is also your first genuinely demoable
+feature for a progress check, well before the recommendation engine exists.
+
+**Note:** until this sprint is done, use DRF's browsable API or Django admin to
+sanity-check Sprint 2/3 endpoints — you don't need Flutter running to confirm the
+backend itself works.
+
+---
+
 ### Sprint 4 — Semantic Retrieval (SBERT)
 
 **GitHub Milestone:** "Sprint 4: Semantic Retrieval"
@@ -275,12 +322,14 @@ feedback; an administrator can see that feedback against the activity it concern
 **GitHub Milestone:** "Sprint 8: Mobile App"
 
 **Entry condition:** Backend endpoints exist and are individually testable via
-Postman/curl.
+Postman/curl. Registration, login, and child profile creation already work from
+Sprint 3.5 — this sprint builds everything after that.
 
 **Build:**
-- Screens matching your wireframes: onboarding, child profile, milestone
-  tracking, recommendation display, activity detail, feedback.
-- REST integration with the Django backend (IR-01–IR-04).
+- Remaining screens matching your wireframes: milestone tracking, recommendation
+  display, activity detail, feedback. (Onboarding/login/profile creation are
+  already done — Sprint 3.5.)
+- REST integration for the remaining endpoints (IR-01–IR-04).
 - Offline caching (NFR-14) — local cache of last-fetched data, graceful
   degradation offline. The SOFIA gap — build it into core navigation now, not
   later.
@@ -291,7 +340,7 @@ Postman/curl.
 
 **Example Issues to open for this milestone:**
 ```
-#27 feat: onboarding + child profile screens
+#27 feat: milestone tracking screen
 #28 feat: recommendation display + explanation UI
 #29 feat: offline caching for recommendations (NFR-14, SOFIA)
 #30 feat: non-comparative progress/milestone view (NFR-15, SOFIA)
