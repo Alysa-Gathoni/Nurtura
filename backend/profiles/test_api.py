@@ -320,3 +320,29 @@ class LoginThrottleTests(APITestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class CorsTests(APITestCase):
+    """The Flutter web app (served on a random localhost port) can call the API."""
+
+    def preflight(self, origin):
+        return self.client.options(
+            reverse("login"),
+            HTTP_ORIGIN=origin,
+            HTTP_ACCESS_CONTROL_REQUEST_METHOD="POST",
+            HTTP_ACCESS_CONTROL_REQUEST_HEADERS="authorization,content-type",
+        )
+
+    def test_local_flutter_web_origin_allowed(self):
+        response = self.preflight("http://localhost:61234")
+        self.assertEqual(
+            response.headers.get("access-control-allow-origin"),
+            "http://localhost:61234",
+        )
+        self.assertIn(
+            "authorization", response.headers.get("access-control-allow-headers", "")
+        )
+
+    def test_other_origins_not_allowed(self):
+        response = self.preflight("https://example.com")
+        self.assertNotIn("access-control-allow-origin", response.headers)
