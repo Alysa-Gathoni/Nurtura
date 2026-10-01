@@ -111,7 +111,7 @@ All endpoints are under `/api/` and, apart from register and login, need an `Aut
 | POST | `/api/auth/login/` | Exchange `username` and `password` for a token. Limited to 5 attempts per minute per client (`429 Too Many Requests` after that) |
 | POST | `/api/auth/logout/` | Invalidate the current token |
 | GET | `/api/auth/me/` | Current user, including `role` |
-| GET, POST | `/api/children/` | List or create the caregiver's own child profiles |
+| GET, POST | `/api/children/` | List or create the caregiver's own child profiles (`concerns` is a list of domains the caregiver is worried about, e.g. `["Sensory"]`) |
 | GET, PATCH, PUT, DELETE | `/api/children/<id>/` | One of the caregiver's own child profiles |
 
 ## Mobile setup
@@ -145,6 +145,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | Run app | `make run-app DEVICE=chrome` | `cd mobile/nurtura_app && flutter run -d chrome` |
 | Clean activity data | (first half of `make seed-data`) | `cd data/scripts && python clean_activities.py "../raw/activities_batch*.csv" ../processed/activities_clean.csv` |
 | Load activities into the database | `make seed-data` (cleans, then loads) | `cd backend && python manage.py seed_activities` (add `--dry-run` to preview) |
+| Load the guideline milestone catalogue | (part of `make seed-data`) | `cd backend && python manage.py seed_milestones` (add `--dry-run` to preview) |
 | Backend checks | `make test` (runs all checks) | `cd backend && python manage.py check && python manage.py makemigrations --check --dry-run && python manage.py test` |
 | Flutter checks | (included in `make test`) | `cd mobile/nurtura_app && flutter analyze && flutter test` |
 | Format Python | (automatic on commit) | `pre-commit run --all-files` |

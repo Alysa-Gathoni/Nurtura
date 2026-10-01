@@ -1,10 +1,24 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.functions import Lower
 from django.utils import timezone
 
-from activities.choices import Domain
+from activities.choices import Domain, Source
+
+
+def validate_domain_list(value):
+    """A list of distinct developmental domain names, e.g. ["Sensory"]."""
+    if not isinstance(value, list):
+        raise ValidationError("Must be a list of domains.")
+    invalid = [item for item in value if item not in Domain.values]
+    if invalid:
+        raise ValidationError(
+            f"Unknown domain(s): {invalid}. Allowed: {', '.join(Domain.values)}."
+        )
+    if len(set(value)) != len(value):
+        raise ValidationError("Each domain may only be listed once.")
 
 
 class NurturaUserManager(UserManager):
@@ -84,6 +98,12 @@ class ChildProfile(models.Model):
         blank=True,
         help_text="Caregiver preferences used for ranking, e.g. preferred difficulty.",
     )
+    concerns = models.JSONField(
+        default=list,
+        blank=True,
+        validators=[validate_domain_list],
+        help_text='Domains the caregiver is concerned about, e.g. ["Sensory"].',
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -93,10 +113,25 @@ class ChildProfile(models.Model):
     def __str__(self):
         return self.name
 
-    def record_milestone(self, domain, description, status, observation_date=None):
-        """Validate and save a milestone observation for this child."""
+    def record_milestone(
+        self,
+        domain=None,
+        description=None,
+        status=None,
+        observation_date=None,
+        reference=None,
+    ):
+        """Validate and save a milestone observation for this child.
+
+        With a reference milestone, domain and description default to the
+        reference's, so callers only need the status.
+        """
+        if reference is not None:
+            domain = domain or reference.domain
+            description = description or reference.description
         milestone = DevelopmentalMilestone(
             child=self,
+            reference=reference,
             domain=domain,
             description=description,
             status=status,
@@ -107,6 +142,40 @@ class ChildProfile(models.Model):
         return milestone
 
 
+class ReferenceMilestone(models.Model):
+    """A guideline milestone (CDC/WHO) with the age by which it is expected.
+
+    Entries are written from the cited guideline and marked verified once
+    checked against the source document. They are reference data for the rule
+    engine, not caregiver-facing content, so they use a verified flag rather
+    than the activity review workflow.
+    """
+
+    milestone_key = models.CharField(
+        max_length=30, unique=True, help_text="e.g. CDC-12M-LA-01 or WHO-MO-06."
+    )
+    source = models.CharField(max_length=20, choices=Source.choices)
+    expected_age_months = models.DecimalField(
+        max_digits=4,
+        decimal_places=1,
+        help_text="Age by which the guideline expects the milestone.",
+    )
+    domain = models.CharField(max_length=20, choices=Domain.choices)
+    description = models.CharField(max_length=255)
+    source_reference = models.CharField(max_length=300)
+    notes = models.TextField(blank=True)
+    verified = models.BooleanField(
+        default=False, help_text="Checked against the source document."
+    )
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["expected_age_months", "milestone_key"]
+
+    def __str__(self):
+        return f"{self.milestone_key}: {self.description}"
+
+
 class DevelopmentalMilestone(models.Model):
     class Status(models.TextChoices):
         ACHIEVED = "achieved", "Achieved"
@@ -115,6 +184,14 @@ class DevelopmentalMilestone(models.Model):
 
     child = models.ForeignKey(
         ChildProfile, on_delete=models.CASCADE, related_name="milestones"
+    )
+    reference = models.ForeignKey(
+        ReferenceMilestone,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="observations",
+        help_text="Guideline milestone this observation is for, if any.",
     )
     domain = models.CharField(max_length=20, choices=Domain.choices)
     description = models.TextField()
@@ -127,3 +204,12 @@ class DevelopmentalMilestone(models.Model):
 
     def __str__(self):
         return f"{self.child}: {self.description} ({self.get_status_display()})"
+
+    def clean(self):
+        if self.reference and self.domain and self.domain != self.reference.domain:
+            raise ValidationError(
+                {
+                    "domain": f"Must match the reference milestone's domain "
+                    f"({self.reference.domain})."
+                }
+            )

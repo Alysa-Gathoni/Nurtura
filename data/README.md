@@ -82,3 +82,24 @@ Each rejected row is reported with its file, line number and every problem found
 | `raw/activities_batch3.csv` | 14 (`ACT-0025`–`ACT-0038`) | All CDC, with `source_url` pointing to the CDC *Milestone Moments* booklet. |
 
 Every activity is loaded as `Draft` and must pass admin review, including checking its source, before it is published.
+
+## Guideline milestone catalogue
+
+`reference/developmental_milestones.csv` lists the developmental milestones the rule engine uses to decide when a milestone is due. It is reference data, not caregiver-facing content.
+
+| Column | Description |
+|---|---|
+| `milestone_key` | Unique key, e.g. `CDC-12M-LA-01` (source, age, domain, number) or `WHO-MO-06` |
+| `source` | `CDC` or `WHO` |
+| `expected_age_months` | Age by which the guideline expects the milestone |
+| `domain` | `Socio-Emotional`, `Language`, `Cognitive` or `Motor`. The guidelines have no Sensory category |
+| `description` | The milestone |
+| `source_reference` | Citation |
+| `notes` | How the expected age was derived, and any caveats |
+
+Sources:
+
+- **CDC** *Learn the Signs. Act Early.* milestone checklists, 2022 revision (Zubler et al., *Pediatrics* 2022;149(3):e2021052138): 127 milestones at 2, 4, 6, 9, 12, 15, 18, 24, 30 and 36 months. Each is reached by most children (75% or more) by that age. CDC's Social/Emotional, Language/Communication, Cognitive and Movement/Physical domains map to Socio-Emotional, Language, Cognitive and Motor.
+- **WHO** Multicentre Growth Reference Study, Motor Development Study (*Acta Paediatrica* Suppl 2006;450:86-95): 6 gross motor milestones. The expected age is the end of the WHO window of achievement (99th percentile).
+
+The entries were written from these publications and **must each be checked against the source document**. Load them with `python manage.py seed_milestones` (also part of `make seed-data`); every entry starts unverified. An administrator marks entries verified in the Django admin (**Reference milestones**, "Mark selected milestones as verified"). Re-loading keeps the verified flag unless an entry's content changed, in which case it is marked unverified for re-checking.

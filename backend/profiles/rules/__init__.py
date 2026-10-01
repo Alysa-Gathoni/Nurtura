@@ -1,35 +1,44 @@
 """Developmental profiling: a custom IF-THEN rule engine (FR-05).
 
-build_profile(child) turns a child's recorded milestones into normalized 0-1
-priority scores for the five developmental domains.
+build_profile(child) turns a child's recorded milestones, caregiver concerns
+and interests into normalized 0-1 priority scores for the five developmental
+domains, using the guideline rules in guidelines.py.
 """
 
 from django.utils import timezone
 
 from .engine import DOMAINS, DevelopmentalProfile, Firing, Rule, RuleEngine
-from .facts import MilestoneFact, age_in_months, milestone_facts
+from .facts import (
+    ConcernFact,
+    InterestFact,
+    MilestoneFact,
+    age_in_months,
+    child_facts,
+    milestone_facts,
+)
+from .guidelines import GUIDELINE_RULES
 
 __all__ = [
     "DOMAINS",
+    "GUIDELINE_RULES",
+    "ConcernFact",
     "DevelopmentalProfile",
     "Firing",
+    "InterestFact",
     "MilestoneFact",
     "Rule",
     "RuleEngine",
     "age_in_months",
     "build_profile",
+    "child_facts",
     "milestone_facts",
 ]
 
 
-def build_profile(child, rules=(), on_date=None):
-    """Evaluate rules over the child's milestone facts.
-
-    The guideline rule set (#18) becomes the default once it is encoded; until
-    then callers pass the rules to apply.
-    """
+def build_profile(child, rules=GUIDELINE_RULES, on_date=None):
+    """Evaluate rules (the guideline rules by default) over the child's facts."""
     on_date = on_date or timezone.localdate()
-    facts = milestone_facts(child, on_date)
     return RuleEngine(rules).evaluate(
-        facts, age_months=age_in_months(child.date_of_birth, on_date)
+        child_facts(child, on_date),
+        age_months=age_in_months(child.date_of_birth, on_date),
     )

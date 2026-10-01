@@ -60,6 +60,7 @@ class ChildProfileSerializer(serializers.ModelSerializer):
             "gender",
             "interests",
             "preferences",
+            "concerns",
             "created_at",
             "updated_at",
         ]
