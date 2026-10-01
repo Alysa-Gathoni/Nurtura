@@ -9,6 +9,7 @@ import '../widgets/app_card.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
+import '../widgets/segmented_toggle.dart';
 
 /// Register or log in as a caregiver.
 class AuthScreen extends StatefulWidget {
@@ -102,9 +103,10 @@ class _AuthScreenState extends State<AuthScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            _ModeToggle(
-                              registering: _registering,
-                              onChanged: _switchMode,
+                            SegmentedToggle(
+                              options: const ['Log in', 'Register'],
+                              selected: _registering ? 1 : 0,
+                              onChanged: (i) => _switchMode(i == 1),
                             ),
                             const SizedBox(height: 20),
                             AppTextField(
@@ -256,57 +258,6 @@ class _Brand extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-/// Pill-shaped Log in / Register switch.
-class _ModeToggle extends StatelessWidget {
-  const _ModeToggle({required this.registering, required this.onChanged});
-
-  final bool registering;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(4),
-      decoration: const ShapeDecoration(
-        color: AppColors.mint,
-        shape: StadiumBorder(),
-      ),
-      child: Row(
-        children: [
-          _segment('Log in', !registering, () => onChanged(false)),
-          _segment('Register', registering, () => onChanged(true)),
-        ],
-      ),
-    );
-  }
-
-  Widget _segment(String label, bool active, VoidCallback onTap) {
-    return Expanded(
-      child: Material(
-        key: Key('mode_$label'),
-        color: active ? AppColors.tealDeep : Colors.transparent,
-        shape: const StadiumBorder(),
-        child: InkWell(
-          customBorder: const StadiumBorder(),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: AppText.nunito(
-                size: 15,
-                weight: FontWeight.w800,
-                color: active ? Colors.white : AppColors.tealDeep,
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
