@@ -188,3 +188,8 @@ REST_FRAMEWORK = {
         "login": "5/minute",
     },
 }
+
+# Sentence-BERT model used for semantic retrieval, saved by setup_sbert.py.
+SBERT_MODEL_PATH = Path(
+    os.getenv("SBERT_MODEL_PATH", BASE_DIR / "models" / "all-MiniLM-L6-v2")
+)
