@@ -113,6 +113,7 @@ All endpoints are under `/api/` and, apart from register and login, need an `Aut
 | GET | `/api/auth/me/` | Current user, including `role` |
 | GET, POST | `/api/children/` | List or create the caregiver's own child profiles (`concerns` is a list of domains the caregiver is worried about, e.g. `["Sensory"]`) |
 | GET, PATCH, PUT, DELETE | `/api/children/<id>/` | One of the caregiver's own child profiles |
+| GET | `/api/children/<id>/candidates/?limit=10` | Published activities closest in meaning to the child's developmental profile (SBERT retrieval candidates, before ranking). Needs `embed_activities` to have been run |
 
 ## Mobile setup
 
