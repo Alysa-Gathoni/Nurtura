@@ -7,8 +7,12 @@ For each held-out child (recommendations/heldout.py) the sheet holds the
 pooled top 5 from the SBERT-only baseline and from the weighted ranking at
 every alpha from 0.0 to 1.0, de-duplicated and shuffled with a fixed seed. No
 scores, ranks, rule priorities or domains are written, so labelling stays
-blind. The children are created in a transaction that is rolled back. See
-data/evaluation/README.md.
+blind. The children are created in a transaction that is rolled back.
+
+Alongside the sheet it writes a provenance sidecar (heldout_labels.provenance.json)
+recording the Published activities, rule weights, catalogue version and
+embedding model the pools were built from; evaluate_alpha_grid warns if any
+of them have changed since. See data/evaluation/README.md.
 """
 
 import csv
@@ -20,7 +24,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
 from activities.models import DevelopmentalActivity
-from recommendations import heldout
+from recommendations import heldout, provenance
 
 DEFAULT_OUTPUT = (
     Path(settings.BASE_DIR).parent / "data" / "evaluation" / "heldout_labels.csv"
@@ -61,14 +65,14 @@ class Command(BaseCommand):
         if not DevelopmentalActivity.objects.published().exists():
             raise CommandError("No Published activities, so there is nothing to pool.")
 
-        rows, counts = [], {}
+        rows, pooled = [], {}
         with transaction.atomic():
             caregiver = get_user_model().objects.create_user(username=HELDOUT_USERNAME)
             for child in heldout.HELDOUT_CHILDREN:
                 profile = heldout.create_child(child, caregiver)
                 activities, rankings = heldout.rankings_for(profile)
                 ids = heldout.shuffled(heldout.pool(rankings), child.child_id)
-                counts[child.child_id] = len(ids)
+                pooled[child.child_id] = ids
                 for activity_id in ids:
                     activity = activities[activity_id]
                     rows.append(
@@ -92,15 +96,18 @@ class Command(BaseCommand):
             writer = csv.DictWriter(f, fieldnames=COLUMNS)
             writer.writeheader()
             writer.writerows(rows)
+        sidecar = provenance.sidecar_path(output)
+        provenance.write(sidecar, provenance.snapshot(rows=pooled))
 
         for child in heldout.HELDOUT_CHILDREN:
             self.stdout.write(
-                f"{child.child_id} ({child.split}): {counts[child.child_id]} rows"
+                f"{child.child_id} ({child.split}): {len(pooled[child.child_id])} rows"
             )
         self.stdout.write(
             self.style.SUCCESS(
-                f"Wrote {len(rows)} rows for {len(counts)} children (pool depth "
+                f"Wrote {len(rows)} rows for {len(pooled)} children (pool depth "
                 f"{heldout.POOL_DEPTH}, SBERT-only plus {len(heldout.ALPHAS)} "
                 f"alpha values) to {output}"
             )
         )
+        self.stdout.write(f"Wrote the provenance sidecar to {sidecar}")
