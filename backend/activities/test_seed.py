@@ -17,6 +17,13 @@ from .models import DevelopmentalActivity
 
 COLUMNS = list(FIELD_MAP) + ["content_status"]
 
+# Counts from the real processed dataset, so adding a batch doesn't break
+# the tests that load it.
+with open(DEFAULT_FILE, newline="", encoding="utf-8") as _f:
+    _REAL_ROWS = list(csv.DictReader(_f))
+REAL_TOTAL = len(_REAL_ROWS)
+REAL_WITH_URL = sum(1 for r in _REAL_ROWS if r["source_url"].strip())
+
 
 def csv_row(**overrides):
     row = {
@@ -60,14 +67,16 @@ class SeedActivitiesTests(TestCase):
 
     def test_loads_real_processed_dataset_as_draft(self):
         output = self.seed()
-        self.assertIn("38 rows: 38 created, 0 updated, 0 unchanged", output)
+        self.assertIn(
+            f"{REAL_TOTAL} rows: {REAL_TOTAL} created, 0 updated, 0 unchanged", output
+        )
         activities = DevelopmentalActivity.objects.all()
-        self.assertEqual(activities.count(), 38)
+        self.assertEqual(activities.count(), REAL_TOTAL)
         self.assertEqual(
             set(activities.values_list("content_status", flat=True)),
             {ContentStatus.DRAFT},
         )
-        self.assertEqual(activities.exclude(source_url="").count(), 14)
+        self.assertEqual(activities.exclude(source_url="").count(), REAL_WITH_URL)
         self.assertTrue(
             DevelopmentalActivity.objects.get(
                 activity_id="ACT-0025"
@@ -79,8 +88,10 @@ class SeedActivitiesTests(TestCase):
     def test_rerun_does_not_duplicate(self):
         self.seed()
         output = self.seed()
-        self.assertIn("38 rows: 0 created, 0 updated, 38 unchanged", output)
-        self.assertEqual(DevelopmentalActivity.objects.count(), 38)
+        self.assertIn(
+            f"{REAL_TOTAL} rows: 0 created, 0 updated, {REAL_TOTAL} unchanged", output
+        )
+        self.assertEqual(DevelopmentalActivity.objects.count(), REAL_TOTAL)
 
     def test_fields_mapped_from_csv_columns(self):
         self.seed(self.write_csv([csv_row()]))
@@ -162,7 +173,7 @@ class SeedActivitiesTests(TestCase):
 
     def test_dry_run_saves_nothing(self):
         output = self.seed(None, "--dry-run")
-        self.assertIn("38 created", output)
+        self.assertIn(f"{REAL_TOTAL} created", output)
         self.assertIn("dry run - nothing saved", output)
         self.assertFalse(DevelopmentalActivity.objects.exists())
 
@@ -178,7 +189,9 @@ class SourceLinkAdminTests(TestCase):
 
     def test_filter_by_source_link(self):
         with_link = self.client.get(self.url, {"has_source_url": "yes"})
-        self.assertContains(with_link, "14 developmental activities")
+        self.assertContains(with_link, f"{REAL_WITH_URL} developmental activities")
         self.assertContains(with_link, 'target="_blank"')
         without_link = self.client.get(self.url, {"has_source_url": "no"})
-        self.assertContains(without_link, "24 developmental activities")
+        self.assertContains(
+            without_link, f"{REAL_TOTAL - REAL_WITH_URL} developmental activities"
+        )
