@@ -15,7 +15,11 @@ For each eligible activity a, for child c:
 - age_weight: a fixed, documented design choice, applied as a multiplier so
   it scales a score rather than competing with the two signals.
 
-Ties are broken by raw similarity, then activity ID, so the order is stable.
+Tie-breaks keep the order stable and deterministic:
+- alpha < 1: raw similarity, then activity ID.
+- alpha = 1 (rule priority only): age fit (the age weight), then activity ID.
+  Similarity is deliberately not used here, so the alpha = 1 end of the
+  curve contains no semantic signal at all.
 """
 
 from dataclasses import dataclass
@@ -131,7 +135,10 @@ def rank_candidates(candidates, evaluation, alpha, use_age=True):
                 age_weight=weight,
             )
         )
-    ranked.sort(key=lambda r: (-r.score, -r.similarity, r.activity.activity_id))
+    if alpha == 1.0:
+        ranked.sort(key=lambda r: (-r.score, -r.age_weight, r.activity.activity_id))
+    else:
+        ranked.sort(key=lambda r: (-r.score, -r.similarity, r.activity.activity_id))
     return ranked
 
 

@@ -118,16 +118,30 @@ class RankCandidatesTests(SimpleTestCase):
             ["A", "B", "C"],
         )
 
-    def test_alpha_one_ranks_by_priority_then_similarity(self):
+    def test_alpha_one_ranks_by_priority_then_age_fit_then_id(self):
+        # Similarity must not break ties at alpha = 1 (rules only).
         cands = [
             candidate("A", "Sensory", AgeRange.MONTHS_12_18, 0.90),
             candidate("B", "Language", AgeRange.MONTHS_12_18, 0.40),
             candidate("C", "Language", AgeRange.MONTHS_12_18, 0.55),
-            candidate("D", "Motor", AgeRange.MONTHS_12_18, 0.60),
+            candidate("D", "Language", AgeRange.MONTHS_6_12, 0.99),
+            candidate("E", "Motor", AgeRange.MONTHS_12_18, 0.60),
         ]
-        self.assertEqual(
-            ids(rank_candidates(cands, evaluation(), 1.0)), ["C", "B", "D", "A"]
-        )
+        ranked = rank_candidates(cands, evaluation(), 1.0)
+        # Language (priority 1.0) first: same-bracket B, C (age 1.0, by ID),
+        # then D (age 0.7) despite its top similarity; then Motor, Sensory.
+        self.assertEqual(ids(ranked), ["B", "C", "D", "E", "A"])
+
+    def test_alpha_one_ties_on_score_break_by_age_fit(self):
+        # Equal scores (1.0 x 0.5 vs 0.5 x 1.0): the better age fit wins.
+        scores = {**SCORES, "Language": 0.5, "Motor": 1.0}
+        cands = [
+            candidate("A-motor-older", "Motor", AgeRange.MONTHS_18_24, 0.9),
+            candidate("B-language-same", "Language", AgeRange.MONTHS_12_18, 0.1),
+        ]
+        ranked = rank_candidates(cands, evaluation(scores=scores), 1.0)
+        self.assertAlmostEqual(ranked[0].score, ranked[1].score)
+        self.assertEqual(ids(ranked), ["B-language-same", "A-motor-older"])
 
     def test_age_weighting_demotes_older_bracket(self):
         # The 13-month-old's preview problem: an 18-24 month activity with the
