@@ -9,6 +9,7 @@ import datetime
 from dataclasses import dataclass, field
 
 from django.utils import timezone
+from django.utils.text import slugify
 
 from profiles.models import ChildProfile, ReferenceMilestone
 
@@ -24,6 +25,15 @@ class SampleProfile:
     concerns: tuple = ()
     interests: tuple = ()
     note: str = ""
+
+    @property
+    def key(self):
+        """Stable ID used in relevance labels, e.g. "language-delay".
+
+        Derived from the name, so renaming a sample changes its key and its
+        existing labels would need updating.
+        """
+        return slugify(self.name)
 
 
 SAMPLE_PROFILES = (
@@ -102,3 +112,6 @@ def create_child(sample, caregiver, today=None):
             observation_date=today,
         )
     return child
+
+
+SAMPLES_BY_KEY = {sample.key: sample for sample in SAMPLE_PROFILES}
