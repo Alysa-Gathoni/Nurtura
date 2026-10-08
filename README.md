@@ -117,13 +117,31 @@ All endpoints are under `/api/` and, apart from register and login, need an `Aut
 
 ## Mobile setup
 
+Start the backend first (`python manage.py runserver`), then:
+
 ```bash
 cd mobile/nurtura_app
 flutter pub get
 flutter run -d chrome        # or: flutter devices, then flutter run -d <device-id>
 ```
 
+The app calls the API at `http://127.0.0.1:8000` (web and desktop) or `http://10.0.2.2:8000` (Android emulator, which reaches your computer at that address). To use another server, pass `--dart-define=API_BASE_URL=https://your-server`. In development the backend accepts browser requests from any `localhost` port (CORS), so `flutter run -d chrome` works without extra setup.
+
 App identifier: `com.sofia.nurtura_app` (Android), `com.sofia.nurturaApp` (iOS).
+
+### End-to-end test (real backend, real browser)
+
+`integration_test/app_flow_test.dart` drives the app in Chrome against the running backend: it registers a new caregiver, logs out and back in, creates an expecting and a born child profile, searches the milestone catalogue and records a milestone. Screenshots are saved to `build/e2e_screenshots/`.
+
+1. Start the backend: `cd backend && python manage.py runserver`
+2. Download the [ChromeDriver](https://googlechromelabs.github.io/chrome-for-testing/) that matches your Chrome version and start it: `chromedriver --port=4444`
+3. From `mobile/nurtura_app`, using an email that isn't registered yet:
+   ```bash
+   flutter drive -d web-server --browser-name=chrome --no-headless \
+     --driver=test_driver/integration_test.dart \
+     --target=integration_test/app_flow_test.dart \
+     --dart-define=E2E_EMAIL=new-tester@nurtura.test
+   ```
 
 ## Git hooks
 

@@ -55,8 +55,10 @@ class Firing:
 
 
 @dataclass(frozen=True)
-class DevelopmentalProfile:
-    """Per-domain priority scores (0-1) and the rule firings behind them."""
+class ProfileEvaluation:
+    """One rule-engine evaluation: per-domain priority scores (0-1) and the
+    rule firings behind them. Stored for a child as a DevelopmentalProfile.
+    """
 
     scores: dict
     raw_scores: dict
@@ -121,7 +123,7 @@ class RuleEngine:
         scores = {
             domain: (score / top if top else 0.0) for domain, score in raw.items()
         }
-        return DevelopmentalProfile(
+        return ProfileEvaluation(
             scores=scores,
             raw_scores=raw,
             firings=tuple(firings),
