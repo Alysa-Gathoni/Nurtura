@@ -16,14 +16,28 @@ http.Response json(Object? body, [int status = 200]) => http.Response.bytes(
     );
 
 /// Records every request sent to the fake backend.
+///
+/// Unless [serveChildren] is false, `GET /api/children/` returns [children],
+/// so tests that sign in land on the children screen.
 class FakeBackend {
-  FakeBackend(this.handler);
+  FakeBackend(
+    this.handler, {
+    this.children = const [],
+    this.serveChildren = true,
+  });
 
   final Future<http.Response> Function(http.Request request) handler;
+  final List<Map<String, dynamic>> children;
+  final bool serveChildren;
   final requests = <http.Request>[];
 
   late final client = MockClient((request) {
     requests.add(request);
+    if (serveChildren &&
+        request.method == 'GET' &&
+        request.url.path == '/api/children/') {
+      return Future.value(json(children));
+    }
     return handler(request);
   });
 

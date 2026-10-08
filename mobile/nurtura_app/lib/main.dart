@@ -3,9 +3,10 @@ import 'package:provider/provider.dart';
 
 import 'config.dart';
 import 'screens/auth_screen.dart';
-import 'screens/home_screen.dart';
+import 'screens/children_screen.dart';
 import 'services/api_client.dart';
 import 'state/auth_state.dart';
+import 'state/children_state.dart';
 import 'state/token_store.dart';
 import 'theme/app_theme.dart';
 
@@ -32,6 +33,7 @@ class NurturaApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => AuthState(api: api, store: tokenStore)..restore(),
         ),
+        ChangeNotifierProvider(create: (_) => ChildrenState(api)),
       ],
       child: MaterialApp(
         title: 'Nurtura',
@@ -54,7 +56,7 @@ class AuthGate extends StatelessWidget {
           body: Center(child: CircularProgressIndicator()),
         ),
       AuthStatus.signedOut => const AuthScreen(),
-      AuthStatus.signedIn => const HomeScreen(),
+      AuthStatus.signedIn => const ChildrenScreen(),
     };
   }
 }

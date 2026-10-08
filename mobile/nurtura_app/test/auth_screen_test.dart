@@ -18,7 +18,7 @@ Future<void> fillAndSubmit(
   bool register = false,
 }) async {
   if (register) {
-    await tester.tap(find.byKey(const Key('mode_Register')));
+    await tester.tap(find.byKey(const Key('toggle_Register')));
     await tester.pumpAndSettle();
   }
   await tester.enterText(find.byKey(const Key('emailField')).last, email);
@@ -61,7 +61,7 @@ void main() {
     final body = jsonDecode(backend.to('/api/auth/login/').single.body);
     expect(body, {'username': 'wanjiru@example.com', 'password': 'Str0ng-Passw0rd!'});
     expect(store.token, 'tok-123');
-    expect(find.byKey(const Key('signedInEmail')), findsOneWidget);
+    expect(find.text('Your children'), findsOneWidget);
   });
 
   testWidgets('wrong credentials show a clear message', (tester) async {
@@ -187,7 +187,7 @@ void main() {
 
     pending.complete(json(success));
     await tester.pumpAndSettle();
-    expect(find.byKey(const Key('signedInEmail')), findsOneWidget);
+    expect(find.text('Your children'), findsOneWidget);
   });
 
   testWidgets('an unreachable server is reported, not a silent failure',
@@ -212,7 +212,7 @@ void main() {
         });
     final store = await pumpApp(tester, backend, savedToken: 'saved');
 
-    expect(find.byKey(const Key('signedInEmail')), findsOneWidget);
+    expect(find.text('Your children'), findsOneWidget);
     expect(
       backend.to('/api/auth/me/').single.headers['Authorization'],
       'Token saved',
