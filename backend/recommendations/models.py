@@ -47,3 +47,23 @@ class Recommendation(models.Model):
 
     def __str__(self):
         return f"{self.activity.activity_name} for {self.child}"
+
+
+class ActivityEmbedding(models.Model):
+    """Precomputed SBERT embedding of a Published activity (DR-09, DR-10).
+
+    Stored as float32 bytes. text_hash records the model and text that were
+    embedded, so embed_activities only re-encodes activities that changed.
+    """
+
+    activity = models.OneToOneField(
+        DevelopmentalActivity, on_delete=models.CASCADE, related_name="embedding"
+    )
+    model_name = models.CharField(max_length=100)
+    dimensions = models.PositiveSmallIntegerField()
+    text_hash = models.CharField(max_length=64)
+    vector = models.BinaryField()
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.model_name} embedding of {self.activity.activity_id}"

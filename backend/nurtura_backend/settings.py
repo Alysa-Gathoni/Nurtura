@@ -199,3 +199,8 @@ CORS_ALLOWED_ORIGINS = [
 ]
 if DEBUG:
     CORS_ALLOWED_ORIGIN_REGEXES = [r"^http://(localhost|127\.0\.0\.1)(:\d+)?$"]
+
+# Sentence-BERT model used for semantic retrieval, saved by setup_sbert.py.
+SBERT_MODEL_PATH = Path(
+    os.getenv("SBERT_MODEL_PATH", BASE_DIR / "models" / "all-MiniLM-L6-v2")
+)

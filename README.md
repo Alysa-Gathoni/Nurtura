@@ -169,12 +169,13 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | Format Python | (automatic on commit) | `pre-commit run --all-files` |
 | Apply migrations | | `cd backend && python manage.py migrate` |
 | Verify SBERT model | | `cd backend && python setup_sbert.py` |
+| Embed Published activities for semantic retrieval | | `cd backend && python manage.py embed_activities` (re-run after publishing or editing activities; `--dry-run` to preview, `--force` to re-embed all) |
 
 ## Continuous integration
 
 `.github/workflows/ci.yml` runs on every push to `main` and on pull requests:
 
-- **Backend:** installs `backend/requirements.txt` (with CPU-only PyTorch), then runs `manage.py check` and `makemigrations --check --dry-run` against SQLite.
+- **Backend:** installs `backend/requirements.txt` (with CPU-only PyTorch), then runs `manage.py check`, `makemigrations --check --dry-run` and `manage.py test` against SQLite. Tests that need the SBERT model are skipped there, since the model isn't downloaded in CI.
 - **Mobile:** `flutter pub get`, `flutter analyze`, `flutter test`.
 
 ## Data
