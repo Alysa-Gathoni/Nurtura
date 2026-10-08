@@ -67,6 +67,7 @@ The seven sample children above are the **development set**. They were used to b
 | File | What it is |
 |---|---|
 | `heldout_labels.csv` | The held-out labelling sheet, generated once. Fill it in **in place**; the evaluation reads this file. |
+| `heldout_labels.provenance.json` | Written with the sheet: a record of the state the pools were built from. Don't edit it. |
 
 The sheet was generated with:
 
@@ -76,6 +77,19 @@ python manage.py export_heldout_labels
 ```
 
 It refuses to overwrite an existing file unless you pass `--force`, which would discard your labels.
+
+### Provenance sidecar
+
+When it writes the sheet, the command also writes `heldout_labels.provenance.json`, recording what the pools were built from:
+
+- **activities**: every Published activity ID, with a SHA-256 hash of its content (name, domain, age range, goal, materials, difficulty, description, cultural relevance, source, source URL and status);
+- **rule weights**: the rule engine's baseline, weights, upcoming window, sensory keywords, the not-a-delay list and the rule names;
+- **ranking settings**: the age weights and the retrieval query settings;
+- **catalogue version**: the number of reference milestones and a hash of their key, source, expected age, domain and description. The `verified` flag is deliberately left out, because the rules don't read it: marking milestones as verified isn't a change, but correcting an age or a description is;
+- **embedding model**: model name, dimensions, a hash of the stored activity vectors, and a hash of the model files used to encode the profile query;
+- **sheet rows**: a hash of the sheet's (child_id, activity_id) pairs.
+
+`evaluate_alpha_grid` takes the same snapshot when it runs and prints a **warning** listing anything that differs, because the rankings may then not match the pools you labelled. The sidecar's `info` section (generation time, git commit, verified-milestone count) is for the record only and isn't compared.
 
 ## The held-out children and the split
 
@@ -160,6 +174,15 @@ Equal scores are broken deterministically:
 - α < 1: higher raw similarity first, then activity ID.
 - α = 1 (rule priority only): **better age fit first** (the higher age weight), **then activity ID**. Similarity is deliberately not used here, so the α = 1 end of the curve has no semantic signal.
 - SBERT-only baseline: similarity order (ties keep a stable order).
+
+## Unlabelled candidates
+
+`evaluate_alpha_grid` counts, for every ranking (SBERT-only and each α), the top-5 candidates with no label, by split. While **any** is unlabelled:
+
+- the chosen α is marked **provisional** if any of them belong to tune children; and
+- the **final test numbers (and the gap child's) are not printed**.
+
+Every row in the sheet is in some ranking's top 5, so this means every row must be labelled.
 
 ## Running the evaluation
 
