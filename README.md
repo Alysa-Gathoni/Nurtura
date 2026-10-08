@@ -171,6 +171,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | Apply migrations | | `cd backend && python manage.py migrate` |
 | Verify SBERT model | | `cd backend && python setup_sbert.py` |
 | Embed Published activities for semantic retrieval | | `cd backend && python manage.py embed_activities` (re-run after publishing or editing activities; `--dry-run` to preview, `--force` to re-embed all) |
+| Spot-check retrieval relevance (Sprint 4) | | `cd backend && python manage.py spot_check_retrieval` (sample children, top activities, domain match; `--markdown` for the report, `--preview-unpublished` to preview before content review; nothing is saved) |
 
 ## Continuous integration
 
