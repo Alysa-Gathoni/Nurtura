@@ -3,17 +3,22 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
-/// Inline message box for errors (coral) or information (gold).
+/// Inline message box for errors (coral), success (mint) or information (gold).
 class MessageBanner extends StatelessWidget {
   const MessageBanner.error(this.message, {super.key})
-      : background = AppColors.coralSoft,
-        iconColor = AppColors.coral,
-        icon = Icons.error_outline_rounded;
+    : background = AppColors.coralSoft,
+      iconColor = AppColors.coral,
+      icon = Icons.error_outline_rounded;
+
+  const MessageBanner.success(this.message, {super.key})
+    : background = AppColors.mint,
+      iconColor = AppColors.tealDeep,
+      icon = Icons.check_circle_rounded;
 
   const MessageBanner.info(this.message, {super.key})
-      : background = AppColors.goldSoft,
-        iconColor = AppColors.ink,
-        icon = Icons.info_outline_rounded;
+    : background = AppColors.goldSoft,
+      iconColor = AppColors.ink,
+      icon = Icons.info_outline_rounded;
 
   final String message;
   final Color background;

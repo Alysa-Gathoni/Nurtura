@@ -20,18 +20,17 @@ Map<String, dynamic> childJson({
   String dob = '2025-08-01',
   List<String> interests = const [],
   List<String> concerns = const [],
-}) =>
-    {
-      'id': id,
-      'name': name,
-      'date_of_birth': dob,
-      'gender': 'unspecified',
-      'interests': interests,
-      'preferences': {},
-      'concerns': concerns,
-      'created_at': '2026-10-01T08:00:00Z',
-      'updated_at': '2026-10-01T08:00:00Z',
-    };
+}) => {
+  'id': id,
+  'name': name,
+  'date_of_birth': dob,
+  'gender': 'unspecified',
+  'interests': interests,
+  'preferences': {},
+  'concerns': concerns,
+  'created_at': '2026-10-01T08:00:00Z',
+  'updated_at': '2026-10-01T08:00:00Z',
+};
 
 void main() {
   setUpAll(() => WidgetController.hitTestWarningShouldBeFatal = true);
@@ -66,23 +65,21 @@ void main() {
     expect(find.text('Expecting'), findsOneWidget);
   });
 
-  testWidgets('a failed load shows the error and can be retried',
-      (tester) async {
+  testWidgets('a failed load shows the error and can be retried', (
+    tester,
+  ) async {
     var childrenCalls = 0;
     await pumpApp(
       tester,
-      FakeBackend(
-        (request) async {
-          if (request.url.path == '/api/children/') {
-            childrenCalls++;
-            return childrenCalls == 1
-                ? json({'detail': 'Server error'}, 500)
-                : json([childJson()]);
-          }
-          return json(caregiverJson);
-        },
-        serveChildren: false,
-      ),
+      FakeBackend((request) async {
+        if (request.url.path == '/api/children/') {
+          childrenCalls++;
+          return childrenCalls == 1
+              ? json({'detail': 'Server error'}, 500)
+              : json([childJson()]);
+        }
+        return json(caregiverJson);
+      }, serveChildren: false),
       savedToken: 'tok',
     );
     expect(
@@ -114,14 +111,20 @@ void main() {
     await pumpApp(tester, backend, savedToken: 'tok');
 
     await tapVisible(tester, find.byKey(const Key('addChildButton')));
-    await tester.enterText(find.byKey(const Key('childNameField')).last, 'Amani');
+    await tester.enterText(
+      find.byKey(const Key('childNameField')).last,
+      'Amani',
+    );
     await tapVisible(tester, find.byKey(const Key('toggle_Expecting')));
     await tapVisible(tester, find.byKey(const Key('dateField')));
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
     expect(find.text('30 Dec 2026'), findsOneWidget);
 
-    await tester.enterText(find.byKey(const Key('interestField')).last, 'water play');
+    await tester.enterText(
+      find.byKey(const Key('interestField')).last,
+      'water play',
+    );
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('interest_water play')), findsOneWidget);
@@ -134,13 +137,20 @@ void main() {
       'interests': ['water play'],
       'concerns': ['Sensory'],
     });
-    expect(find.text('Your children'), findsOneWidget);
+    // Saving goes straight to milestone recording; an expected baby gets
+    // a message instead of the picker.
+    expect(find.text('Record a milestone'), findsOneWidget);
+    expect(find.byKey(const Key('prenatalMessage')), findsOneWidget);
     expect(find.text("Amani's profile is saved."), findsOneWidget);
+
+    await tapVisible(tester, find.byTooltip('Back'));
+    expect(find.text('Your children'), findsOneWidget);
     expect(find.text('Due 30 Dec 2026'), findsOneWidget);
   });
 
-  testWidgets('requires a name and a date before sending anything',
-      (tester) async {
+  testWidgets('requires a name and a date before sending anything', (
+    tester,
+  ) async {
     final backend = FakeBackend((_) async => json(caregiverJson));
     await pumpApp(tester, backend, savedToken: 'tok');
     await tapVisible(tester, find.byKey(const Key('addChildButton')));
@@ -151,8 +161,9 @@ void main() {
     expect(backend.requests.where((r) => r.method == 'POST'), isEmpty);
   });
 
-  testWidgets('switching between born and expecting clears the date',
-      (tester) async {
+  testWidgets('switching between born and expecting clears the date', (
+    tester,
+  ) async {
     await pumpApp(
       tester,
       FakeBackend((_) async => json(caregiverJson)),
@@ -169,8 +180,9 @@ void main() {
     expect(find.text('Expected due date'), findsOneWidget);
   });
 
-  testWidgets('backend validation errors appear next to the field',
-      (tester) async {
+  testWidgets('backend validation errors appear next to the field', (
+    tester,
+  ) async {
     await pumpApp(
       tester,
       FakeBackend((request) async {
@@ -184,7 +196,10 @@ void main() {
       savedToken: 'tok',
     );
     await tapVisible(tester, find.byKey(const Key('addChildButton')));
-    await tester.enterText(find.byKey(const Key('childNameField')).last, 'Amani');
+    await tester.enterText(
+      find.byKey(const Key('childNameField')).last,
+      'Amani',
+    );
     await tapVisible(tester, find.byKey(const Key('dateField')));
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();

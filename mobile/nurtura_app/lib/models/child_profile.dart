@@ -10,12 +10,12 @@ class ChildProfile {
   });
 
   factory ChildProfile.fromJson(Map<String, dynamic> json) => ChildProfile(
-        id: json['id'] as int,
-        name: json['name'] as String,
-        dateOfBirth: DateTime.parse(json['date_of_birth'] as String),
-        interests: List<String>.from(json['interests'] as List? ?? const []),
-        concerns: List<String>.from(json['concerns'] as List? ?? const []),
-      );
+    id: json['id'] as int,
+    name: json['name'] as String,
+    dateOfBirth: DateTime.parse(json['date_of_birth'] as String),
+    interests: List<String>.from(json['interests'] as List? ?? const []),
+    concerns: List<String>.from(json['concerns'] as List? ?? const []),
+  );
 
   final int id;
   final String name;
@@ -28,7 +28,6 @@ class ChildProfile {
   bool get isExpecting => dateOfBirth.isAfter(today());
 
   /// "14 months", or "Due 1 Feb 2027" for an expected baby.
-  String get ageDescription => isExpecting
-      ? 'Due ${formatDate(dateOfBirth)}'
-      : ageLabel(dateOfBirth);
+  String get ageDescription =>
+      isExpecting ? 'Due ${formatDate(dateOfBirth)}' : ageLabel(dateOfBirth);
 }

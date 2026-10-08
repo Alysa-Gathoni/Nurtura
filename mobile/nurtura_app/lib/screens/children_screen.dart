@@ -13,6 +13,7 @@ import '../widgets/message_banner.dart';
 import '../widgets/nurtura_app_bar.dart';
 import '../widgets/pill_chip.dart';
 import 'child_form_screen.dart';
+import 'milestone_screen.dart';
 
 /// The caregiver's children; the signed-in home screen.
 class ChildrenScreen extends StatefulWidget {
@@ -40,14 +41,11 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
   }
 
   void _openChild(ChildProfile child, {bool justCreated = false}) {
-    // Milestone recording for the child is added in #25.
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          justCreated
-              ? "${child.name}'s profile is saved."
-              : 'Milestone recording for ${child.name} is coming next.',
-        ),
+    // The milestone screen confirms a new profile itself: a SnackBar here
+    // would float over the "Add a child" button when the caregiver comes back.
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => MilestoneScreen(child: child, justCreated: justCreated),
       ),
     );
   }

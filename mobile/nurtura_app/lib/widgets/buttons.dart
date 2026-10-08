@@ -128,7 +128,11 @@ class _ButtonLabel extends StatelessWidget {
     if (icon == null) return text;
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [Icon(icon, color: color, size: 20), const SizedBox(width: 8), text],
+      children: [
+        Icon(icon, color: color, size: 20),
+        const SizedBox(width: 8),
+        text,
+      ],
     );
   }
 }

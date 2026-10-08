@@ -47,8 +47,9 @@ void main() {
     expect(find.byKey(const Key('confirmField')), findsNothing);
   });
 
-  testWidgets('logs in, stores the token and shows the signed-in screen',
-      (tester) async {
+  testWidgets('logs in, stores the token and shows the signed-in screen', (
+    tester,
+  ) async {
     final backend = FakeBackend((_) async => json(success));
     final store = await pumpApp(tester, backend);
 
@@ -59,7 +60,10 @@ void main() {
     );
 
     final body = jsonDecode(backend.to('/api/auth/login/').single.body);
-    expect(body, {'username': 'wanjiru@example.com', 'password': 'Str0ng-Passw0rd!'});
+    expect(body, {
+      'username': 'wanjiru@example.com',
+      'password': 'Str0ng-Passw0rd!',
+    });
     expect(store.token, 'tok-123');
     expect(find.text('Your children'), findsOneWidget);
   });
@@ -67,9 +71,11 @@ void main() {
   testWidgets('wrong credentials show a clear message', (tester) async {
     await pumpApp(
       tester,
-      FakeBackend((_) async => json({
-            'non_field_errors': ['Unable to log in with provided credentials.'],
-          }, 400)),
+      FakeBackend(
+        (_) async => json({
+          'non_field_errors': ['Unable to log in with provided credentials.'],
+        }, 400),
+      ),
     );
     await fillAndSubmit(tester, email: 'a@b.co', password: 'nope');
     expect(
@@ -81,9 +87,11 @@ void main() {
   testWidgets('rate limiting shows how long to wait', (tester) async {
     await pumpApp(
       tester,
-      FakeBackend((_) async => json({
-            'detail': 'Request was throttled. Expected available in 42 seconds.',
-          }, 429)),
+      FakeBackend(
+        (_) async => json({
+          'detail': 'Request was throttled. Expected available in 42 seconds.',
+        }, 429),
+      ),
     );
     await fillAndSubmit(tester, email: 'a@b.co', password: 'nope');
     expect(
@@ -92,14 +100,17 @@ void main() {
     );
   });
 
-  testWidgets('email already in use is shown once, under the email field',
-      (tester) async {
+  testWidgets('email already in use is shown once, under the email field', (
+    tester,
+  ) async {
     await pumpApp(
       tester,
-      FakeBackend((_) async => json({
-            'username': ['A user with that username already exists.'],
-            'email': ['An account with this email already exists.'],
-          }, 400)),
+      FakeBackend(
+        (_) async => json({
+          'username': ['A user with that username already exists.'],
+          'email': ['An account with this email already exists.'],
+        }, 400),
+      ),
     );
     await fillAndSubmit(
       tester,
@@ -107,21 +118,30 @@ void main() {
       password: 'Str0ng-Passw0rd!',
       register: true,
     );
-    expect(find.text('An account with this email already exists.'), findsOneWidget);
-    expect(find.text('A user with that username already exists.'), findsNothing);
+    expect(
+      find.text('An account with this email already exists.'),
+      findsOneWidget,
+    );
+    expect(
+      find.text('A user with that username already exists.'),
+      findsNothing,
+    );
     expect(find.byKey(const Key('authError')), findsNothing);
   });
 
-  testWidgets('weak password errors from the server appear under the field',
-      (tester) async {
+  testWidgets('weak password errors from the server appear under the field', (
+    tester,
+  ) async {
     await pumpApp(
       tester,
-      FakeBackend((_) async => json({
-            'password': [
-              'This password is too short. It must contain at least 8 characters.',
-              'This password is too common.',
-            ],
-          }, 400)),
+      FakeBackend(
+        (_) async => json({
+          'password': [
+            'This password is too short. It must contain at least 8 characters.',
+            'This password is too common.',
+          ],
+        }, 400),
+      ),
     );
     await fillAndSubmit(
       tester,
@@ -138,8 +158,9 @@ void main() {
     );
   });
 
-  testWidgets('mismatched confirmation is caught before any request',
-      (tester) async {
+  testWidgets('mismatched confirmation is caught before any request', (
+    tester,
+  ) async {
     final backend = FakeBackend((_) async => json(success));
     await pumpApp(tester, backend);
     await fillAndSubmit(
@@ -153,8 +174,9 @@ void main() {
     expect(backend.requests, isEmpty);
   });
 
-  testWidgets('registration sends the email as username and signs in',
-      (tester) async {
+  testWidgets('registration sends the email as username and signs in', (
+    tester,
+  ) async {
     final backend = FakeBackend((_) async => json(success, 201));
     final store = await pumpApp(tester, backend);
     await fillAndSubmit(
@@ -169,8 +191,9 @@ void main() {
     expect(store.token, 'tok-123');
   });
 
-  testWidgets('shows a spinner and ignores repeat taps while submitting',
-      (tester) async {
+  testWidgets('shows a spinner and ignores repeat taps while submitting', (
+    tester,
+  ) async {
     final pending = Completer<http.Response>();
     final backend = FakeBackend((_) => pending.future);
     await pumpApp(tester, backend);
@@ -190,11 +213,14 @@ void main() {
     expect(find.text('Your children'), findsOneWidget);
   });
 
-  testWidgets('an unreachable server is reported, not a silent failure',
-      (tester) async {
+  testWidgets('an unreachable server is reported, not a silent failure', (
+    tester,
+  ) async {
     await pumpApp(
       tester,
-      FakeBackend((_) async => throw http.ClientException('Connection refused')),
+      FakeBackend(
+        (_) async => throw http.ClientException('Connection refused'),
+      ),
     );
     await fillAndSubmit(tester, email: 'a@b.co', password: 'pw');
     expect(
@@ -206,10 +232,12 @@ void main() {
   });
 
   testWidgets('restores a saved session, then logs out', (tester) async {
-    final backend = FakeBackend((request) async => switch (request.url.path) {
-          '/api/auth/me/' => json(caregiverJson),
-          _ => http.Response('', 204),
-        });
+    final backend = FakeBackend(
+      (request) async => switch (request.url.path) {
+        '/api/auth/me/' => json(caregiverJson),
+        _ => http.Response('', 204),
+      },
+    );
     final store = await pumpApp(tester, backend, savedToken: 'saved');
 
     expect(find.text('Your children'), findsOneWidget);

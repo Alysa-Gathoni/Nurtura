@@ -58,7 +58,8 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
         ? now.add(const Duration(days: 1))
         : DateTime(now.year - 6, now.month, now.day);
     final last = _expecting ? now.add(const Duration(days: 300)) : now;
-    final initial = _date ??
+    final initial =
+        _date ??
         (_expecting
             ? now.add(const Duration(days: 90))
             : DateTime(now.year, now.month - 6, now.day));
@@ -101,11 +102,11 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
     setState(() => _submitting = true);
     try {
       final child = await context.read<ChildrenState>().create(
-            name: _name.text,
-            dateOfBirth: _date!,
-            interests: List.of(_interests),
-            concerns: developmentalDomains.where(_concerns.contains).toList(),
-          );
+        name: _name.text,
+        dateOfBirth: _date!,
+        interests: List.of(_interests),
+        concerns: developmentalDomains.where(_concerns.contains).toList(),
+      );
       if (mounted) Navigator.of(context).pop(child);
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e);
@@ -127,11 +128,12 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
       final parts = [if (!anyShown) _error!.message, ...other];
       banner = parts.isEmpty ? null : parts.join(' ');
     }
-    final dateError = _error?.field('date_of_birth') ??
+    final dateError =
+        _error?.field('date_of_birth') ??
         (_dateMissing
             ? (_expecting
-                ? 'Choose the expected due date.'
-                : 'Choose the date of birth.')
+                  ? 'Choose the expected due date.'
+                  : 'Choose the date of birth.')
             : null);
 
     return Scaffold(
@@ -346,10 +348,7 @@ class _DateField extends StatelessWidget {
                 ? null
                 : Text(
                     formatDate(value!),
-                    style: AppText.nunito(
-                      size: 15.5,
-                      weight: FontWeight.w600,
-                    ),
+                    style: AppText.nunito(size: 15.5, weight: FontWeight.w600),
                   ),
           ),
         ),

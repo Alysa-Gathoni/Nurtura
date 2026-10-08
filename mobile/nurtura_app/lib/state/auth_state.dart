@@ -10,8 +10,8 @@ enum AuthStatus { unknown, signedOut, signedIn }
 /// Who is signed in, shared across screens.
 class AuthState extends ChangeNotifier {
   AuthState({required ApiClient api, required this._store})
-      : _api = api,
-        _auth = AuthService(api);
+    : _api = api,
+      _auth = AuthService(api);
 
   final ApiClient _api;
   final TokenStore _store;
