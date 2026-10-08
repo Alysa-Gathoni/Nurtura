@@ -102,7 +102,11 @@ def profile_query(evaluation, child):
 
 
 def retrieve(child, limit=DEFAULT_LIMIT, on_date=None):
-    """Top Published activities by cosine similarity to the child's profile."""
+    """Top Published activities by cosine similarity to the child's profile.
+
+    limit=None returns every eligible activity, in similarity order (used by
+    the weighted ranking, which re-scores the whole pool).
+    """
     on_date = on_date or timezone.localdate()
     evaluation = build_profile(child, on_date=on_date)
     query = profile_query(evaluation, child)
