@@ -204,3 +204,8 @@ if DEBUG:
 SBERT_MODEL_PATH = Path(
     os.getenv("SBERT_MODEL_PATH", BASE_DIR / "models" / "all-MiniLM-L6-v2")
 )
+
+# Weight of rule priority vs semantic similarity in the ranking (0 = SBERT
+# only, 1 = rule priority only). Provisional until the alpha grid search
+# (#37) picks a value from hand-labelled relevance judgments.
+RANKING_ALPHA = float(os.getenv("RANKING_ALPHA", "0.5"))

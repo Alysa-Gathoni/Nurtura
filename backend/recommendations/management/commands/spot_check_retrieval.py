@@ -2,13 +2,16 @@
 
 Usage (from backend/):
     python manage.py spot_check_retrieval [--limit 5] [--markdown]
-                                          [--preview-unpublished]
+                                          [--preview-unpublished] [--alpha A]
 
 For each sample child (one per domain, a mixed case and an expecting parent)
 this shows the query, the profile's top domain and the top retrieved
 activities, marking whether each is in the domain the sample should retrieve.
 Everything runs in a transaction that is rolled back: the sample children are
 never saved.
+
+With --alpha, the weighted ranking (rule priority, similarity and age, #35)
+is shown instead of plain similarity, with each score's components.
 
 Only Published, embedded activities are retrieved, as in the app.
 --preview-unpublished temporarily publishes and embeds every activity (also
@@ -26,6 +29,7 @@ from django.db import transaction
 from activities.choices import ContentStatus
 from activities.models import DevelopmentalActivity
 from recommendations.models import ActivityEmbedding
+from recommendations.ranking import rank
 from recommendations.retrieval import retrieve
 from recommendations.samples import SAMPLE_PROFILES, create_child
 
@@ -43,6 +47,13 @@ class Command(BaseCommand):
             help="Output Markdown tables, e.g. for the project report.",
         )
         parser.add_argument(
+            "--alpha",
+            type=float,
+            default=None,
+            help="Show the weighted ranking at this alpha (0-1) instead of "
+            "plain similarity.",
+        )
+        parser.add_argument(
             "--preview-unpublished",
             action="store_true",
             help="Temporarily publish and embed every activity (rolled back).",
@@ -56,10 +67,12 @@ class Command(BaseCommand):
                     content_status=ContentStatus.PUBLISHED
                 )
                 call_command("embed_activities", stdout=StringIO())
-            self._run(options["limit"], options["preview_unpublished"])
+            self._run(
+                options["limit"], options["preview_unpublished"], options["alpha"]
+            )
             transaction.set_rollback(True)
 
-    def _run(self, limit, preview):
+    def _run(self, limit, preview, alpha=None):
         published = DevelopmentalActivity.objects.published()
         embedded = ActivityEmbedding.objects.filter(
             activity__content_status=ContentStatus.PUBLISHED
@@ -93,26 +106,39 @@ class Command(BaseCommand):
         matches = total = 0
         for sample in SAMPLE_PROFILES:
             child = create_child(sample, caregiver)
-            result = retrieve(child, limit=limit)
-            ranked = result.evaluation.ranked_domains()
-            self._header(sample, ranked[0], result.query)
+            if alpha is None:
+                result = retrieve(child, limit=limit)
+                items = [(c.activity, f"{c.similarity:.3f}") for c in result.candidates]
+            else:
+                result = rank(child, alpha=alpha, limit=limit)
+                items = [
+                    (
+                        r.activity,
+                        f"{r.score:.3f} (sim {r.similarity_norm:.2f}, "
+                        f"priority {r.priority:.2f}, age x{r.age_weight:g})",
+                    )
+                    for r in result.ranked
+                ]
+            ranked_domains = result.evaluation.ranked_domains()
+            self._header(sample, ranked_domains[0], result.query)
             rows = []
-            for rank, candidate in enumerate(result.candidates, start=1):
-                activity = candidate.activity
+            for position, (activity, score) in enumerate(items, start=1):
                 match = activity.developmental_domain in sample.expected_domains
                 matches += match
                 total += 1
                 rows.append(
                     (
-                        rank,
-                        f"{candidate.similarity:.3f}",
+                        position,
+                        score,
                         f"{activity.activity_id} {activity.activity_name}",
                         activity.developmental_domain,
                         activity.age_range,
                         "yes" if match else "no",
                     )
                 )
-            self._table(rows)
+            self._table(
+                rows, "Similarity" if alpha is None else f"Score (alpha {alpha:g})"
+            )
 
         share = matches / total if total else 0
         self._line("")
@@ -138,7 +164,7 @@ class Command(BaseCommand):
             self._line(f"   expected: {expected} | profile top domain: {top_domain}")
             self._line(f"   query: {query}")
 
-    def _table(self, rows):
+    def _table(self, rows, score_label="Similarity"):
         if not rows:
             self._line(
                 "   (no candidates)" if not self.markdown else "_No candidates._"
@@ -146,12 +172,12 @@ class Command(BaseCommand):
             return
         if self.markdown:
             self._line(
-                "| # | Similarity | Activity | Domain | Age range | Expected domain? |"
+                f"| # | {score_label} | Activity | Domain | Age range | Expected domain? |"
             )
             self._line("|---|---|---|---|---|---|")
             for row in rows:
                 self._line("| " + " | ".join(str(c) for c in row) + " |")
         else:
-            for rank, sim, name, domain, age, match in rows:
+            for position, score, name, domain, age, match in rows:
                 mark = "+" if match == "yes" else "-"
-                self._line(f"   {rank}. {sim}  {mark} {name} [{domain}, {age}]")
+                self._line(f"   {position}. {score}  {mark} {name} [{domain}, {age}]")
