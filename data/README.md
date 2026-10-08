@@ -80,6 +80,7 @@ Each rejected row is reported with its file, line number and every problem found
 | `raw/activities_batch1.csv` | 8 (`ACT-0001`–`ACT-0008`) | Initial sample. Descriptions are original wording. The `source` tag names the organisation whose guidance covers the activity type; the specific guidance documents still need to be cited (no `source_url`). |
 | `raw/activities_batch2.csv` | 16 (`ACT-0009`–`ACT-0024`) | Mixed sources (CDC, Pathways.org, Montessori, UNICEF, WHO); no `source_url` yet. |
 | `raw/activities_batch3.csv` | 14 (`ACT-0025`–`ACT-0038`) | All CDC, with `source_url` pointing to the CDC *Milestone Moments* booklet. |
+| `raw/activities_batch4.csv` | 16 (`ACT-0039`–`ACT-0054`) | 11 Socio-Emotional, 6 Prenatal, plus Language, Sensory and Cognitive, filling the gaps found by the retrieval preview. Sources and `source_url` values as in the CSV. |
 
 Every activity is loaded as `Draft` and must pass admin review, including checking its source, before it is published.
 
