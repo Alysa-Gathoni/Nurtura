@@ -7,7 +7,7 @@ domains, using the guideline rules in guidelines.py.
 
 from django.utils import timezone
 
-from .engine import DOMAINS, DevelopmentalProfile, Firing, Rule, RuleEngine
+from .engine import DOMAINS, ProfileEvaluation, Firing, Rule, RuleEngine
 from .facts import (
     ConcernFact,
     InterestFact,
@@ -22,7 +22,7 @@ __all__ = [
     "DOMAINS",
     "GUIDELINE_RULES",
     "ConcernFact",
-    "DevelopmentalProfile",
+    "ProfileEvaluation",
     "Firing",
     "InterestFact",
     "MilestoneFact",
