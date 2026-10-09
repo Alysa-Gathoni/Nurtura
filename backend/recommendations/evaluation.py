@@ -17,11 +17,13 @@ import csv
 import math
 from dataclasses import dataclass
 
+from .heldout import HELDOUT_BY_ID
 from .samples import SAMPLES_BY_KEY
 
 RELEVANCE_VALUES = {0, 1, 2}
 RELEVANT_AT = 1
 LABEL_COLUMNS = ("sample_key", "activity_id", "relevance")
+HELDOUT_COLUMNS = ("child_id", "split", "activity_id", "relevance", "relevance_rater2")
 
 
 class LabelError(Exception):
@@ -79,9 +81,10 @@ def load_labels(path):
     return labels
 
 
-def precision_at_k(ranked_ids, relevance, k):
+def precision_at_k(ranked_ids, relevance, k, threshold=RELEVANT_AT):
+    """Share of the top k whose relevance is at least `threshold`."""
     top = ranked_ids[:k]
-    hits = sum(1 for a in top if relevance.get(a, 0) >= RELEVANT_AT)
+    hits = sum(1 for a in top if relevance.get(a, 0) >= threshold)
     return hits / k
 
 
@@ -145,3 +148,158 @@ def evaluate(rankings, labels, k=5):
         unlabelled_in_top_k=sum(s.unlabelled_in_top_k for s in scores),
         unlabelled_samples=unlabelled_samples,
     )
+
+
+def select_alpha(curve, tolerance=0.02):
+    """Choose alpha from {alpha: mean nDCG@5 on tune} (#37 selection rule).
+
+    Every alpha within `tolerance` of the best mean qualifies. The chosen
+    alpha is the qualifying one closest to the middle of the qualifying range
+    (min to max); on a tie, the lower alpha. Choosing among qualifying values
+    only means the result always meets the tolerance, even when the
+    qualifying alphas aren't contiguous. Returns (chosen, qualifying).
+    """
+    scored = {a: v for a, v in curve.items() if v is not None}
+    if not scored:
+        return None, []
+    best = max(scored.values())
+    qualifying = sorted(a for a, v in scored.items() if v >= best - tolerance - 1e-12)
+    middle = (qualifying[0] + qualifying[-1]) / 2
+    # Rounded so float noise (0.1 + 0.2 != 0.3) can't break a genuine tie.
+    chosen = min(qualifying, key=lambda a: (round(abs(a - middle), 9), a))
+    return chosen, qualifying
+
+
+def rater_agreement(first, second):
+    """Simple agreement between two raters' labels ({key: {id: grade}}).
+
+    Only items graded by both raters count. Returns None when there are none.
+    """
+    pairs = [
+        (grades[a], second[k][a])
+        for k, grades in first.items()
+        for a in grades
+        if a in second.get(k, {})
+    ]
+    if not pairs:
+        return None
+    n = len(pairs)
+    return {
+        "items": n,
+        "exact": sum(x == y for x, y in pairs) / n,
+        "relevant_at_1": sum((x >= 1) == (y >= 1) for x, y in pairs) / n,
+        "relevant_at_2": sum((x >= 2) == (y >= 2) for x, y in pairs) / n,
+    }
+
+
+@dataclass(frozen=True)
+class HeldOutLabels:
+    relevance: dict  # {child_id: {activity_id: grade}}, labelled rows only
+    rater2: dict  # the same for relevance_rater2
+    rows: dict  # {child_id: [activity_id, ...]}, every row in the sheet
+
+    @property
+    def total_rows(self):
+        return sum(len(ids) for ids in self.rows.values())
+
+    @property
+    def labelled_rows(self):
+        return sum(len(grades) for grades in self.relevance.values())
+
+
+def _grade(raw, column, line, problems):
+    if raw == "":
+        return None
+    if raw not in {str(v) for v in RELEVANCE_VALUES}:
+        problems.append(f"line {line}: {column} '{raw}' must be 0, 1 or 2 (or empty)")
+        return None
+    return int(raw)
+
+
+def load_heldout_labels(path):
+    """Read the held-out sheet (#37); every problem is collected first.
+
+    Checks that each child_id is a held-out child, that its split matches the
+    stored definition (the split can't be changed after labelling), that
+    grades are 0, 1, 2 or empty, and that no (child, activity) repeats.
+    """
+    relevance, rater2, rows, problems, seen = {}, {}, {}, [], {}
+    try:
+        with open(path, newline="", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            fields = reader.fieldnames or []
+            missing = [c for c in HELDOUT_COLUMNS if c not in fields]
+            if missing:
+                raise LabelError([f"missing column(s): {', '.join(missing)}"])
+            for row in reader:
+                line = reader.line_num
+                child_id = (row.get("child_id") or "").strip()
+                split = (row.get("split") or "").strip()
+                activity_id = (row.get("activity_id") or "").strip()
+                child = HELDOUT_BY_ID.get(child_id)
+                if child is None:
+                    problems.append(f"line {line}: unknown child_id '{child_id}'")
+                    continue
+                if split != child.split:
+                    problems.append(
+                        f"line {line}: {child_id} has split '{split}', but its "
+                        f"stored split is '{child.split}'"
+                    )
+                    continue
+                if not activity_id:
+                    problems.append(f"line {line}: missing activity_id")
+                    continue
+                pair = (child_id, activity_id)
+                if pair in seen:
+                    problems.append(
+                        f"line {line}: duplicate row for {child_id} / "
+                        f"{activity_id} (first on line {seen[pair]})"
+                    )
+                    continue
+                seen[pair] = line
+                rows.setdefault(child_id, []).append(activity_id)
+                for column, target in (
+                    ("relevance", relevance),
+                    ("relevance_rater2", rater2),
+                ):
+                    raw = (row.get(column) or "").strip()
+                    grade = _grade(raw, column, line, problems)
+                    if grade is not None:
+                        target.setdefault(child_id, {})[activity_id] = grade
+    except OSError as exc:
+        raise LabelError([f"cannot read {path}: {exc}"]) from exc
+    if problems:
+        raise LabelError(problems)
+    return HeldOutLabels(relevance=relevance, rater2=rater2, rows=rows)
+
+
+# The metrics reported on the held-out set, in report order.
+METRICS = (
+    ("P@3>=1", lambda ids, rel: precision_at_k(ids, rel, 3, 1)),
+    ("P@5>=1", lambda ids, rel: precision_at_k(ids, rel, 5, 1)),
+    ("P@3>=2", lambda ids, rel: precision_at_k(ids, rel, 3, 2)),
+    ("P@5>=2", lambda ids, rel: precision_at_k(ids, rel, 5, 2)),
+    ("nDCG@3", lambda ids, rel: ndcg_at_k(ids, rel, 3)),
+    ("nDCG@5", lambda ids, rel: ndcg_at_k(ids, rel, 5)),
+)
+SELECTION_METRIC = "nDCG@5"
+
+
+def score_all(ranked_ids, relevance):
+    """{metric name: value} for one ranking; nDCG is None without labels."""
+    return {name: fn(ranked_ids, relevance) for name, fn in METRICS}
+
+
+def mean(values):
+    """Mean of the values that aren't None, or None if there are none."""
+    present = [v for v in values if v is not None]
+    return sum(present) / len(present) if present else None
+
+
+def compare(hybrid, baseline, tolerance=1e-9):
+    """'improved', 'tied' or 'worse' (hybrid vs baseline); None if either is None."""
+    if hybrid is None or baseline is None:
+        return None
+    if abs(hybrid - baseline) <= tolerance:
+        return "tied"
+    return "improved" if hybrid > baseline else "worse"
