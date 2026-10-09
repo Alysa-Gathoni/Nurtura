@@ -1,0 +1,117 @@
+{
+  "activities": {
+    "ACT-0001": "96e83a2fc69f8f8b823e31a09e717a81c0a6733957e2dd66c6e6bb2664eab438",
+    "ACT-0002": "df27b8f953163ea9b4b5519992b55c313623b667b572f729b705157d97bd3536",
+    "ACT-0003": "c964ab73f725c9cfa2d15bfa874b0f66f0d24db015fd4f1acf64d923cfff360d",
+    "ACT-0004": "5b245413fbfea1444badff2a3edad1ee49f8154675cc9912243b592e99d61d03",
+    "ACT-0005": "3839e0491417ff65512df7c079708169759b67968c5b30bdf3d1e323d7e05912",
+    "ACT-0006": "1bae120d87bf455a8bdb414f1678aff6b270a7615607bde68d33abb358cbbb67",
+    "ACT-0007": "19326f39988bc0bb972e2058ed6c7a98c1687faf0aa339dc9e99fe307743222b",
+    "ACT-0008": "8b3a78dc19a33df0429e80b5ade2492dbfa5a09512e59c111f096b72943ab8bc",
+    "ACT-0009": "3d9fa576026d5d323777c0e3b3184e5aca2ab5809485a72508a01a4dd0de05a1",
+    "ACT-0010": "bf81b6ca8e0d9ae8f9e21545f6834749395a54710077e394b221f899216161a4",
+    "ACT-0011": "b52c25c549943f5153efd0053c9e686c29850b7569c91c2571b3ffea01d03ea5",
+    "ACT-0012": "d1e64330ad29d1cfc8bd97c38c9d47800226127c3b6d32721729383a931fb63d",
+    "ACT-0013": "8db56378a263b07335aecb5d7b5953d2271009ff08f2409a950fc91ae206ba38",
+    "ACT-0014": "aa2592dd47bdf907fe8e2e6ce2f7cd559a50303d8306b71ed885dd7db910b637",
+    "ACT-0015": "1c7e9ffd010a68222cf3bc7d3dba9c6242886595f4aa21dc4f85d27149fcf549",
+    "ACT-0016": "e6955082dca45d46889c1c2955fd8e58493e7a1ed6afcb61cb758fcf983e4cee",
+    "ACT-0017": "9b19b25238b8fd1b8493512eb3e6350b185be3552785b4f30a6ab47ce19ce358",
+    "ACT-0018": "0ef49ee087f4eb7b76726805189689e421da5c1aad19dd7ae013c9a55e54514e",
+    "ACT-0019": "bcfaf4c442fbd88930589868e19b8b2d25c79679bfb71e9cbbb3bc8f6adb0faf",
+    "ACT-0020": "be30332bc57e779c2d0a33baa7ea314e73ba19867a5437a4f1941eaa2ab21468",
+    "ACT-0021": "bf49a76c6e7bfac5ce19ea5e05f3e92e27a756d871c82bc107a7be063453b68d",
+    "ACT-0022": "c0e49b1176267fa169a0b2006d1dbfb5434ebd756be58959891df4f60e90b0f6",
+    "ACT-0023": "91e377ad202b48ad335a19ad6e73169d5dd32d724a237a08b1148498cd8d44e8",
+    "ACT-0024": "c9e55cb1a7d6a9beb6ddad84d27a3ed823ab23d0436b5f97ca33e279c9340a83",
+    "ACT-0025": "f169617669a5c0e05d002e7a802fb3f45771d0eebd97b82d041ef0ee63752da4",
+    "ACT-0026": "d43497497c7819f2b8f94a0a3f8fc18775423baa6588e06295393d74e5bcae00",
+    "ACT-0027": "d576054785ec596c1475152b0d197f9a3e6b1e709975d4f25bf6eb4294b3c2aa",
+    "ACT-0028": "26532c5b351e9907b809c582d0bf71d1acec3a3e58e656c9cad573c41f11d519",
+    "ACT-0029": "376e09d9277f3a34fd51905a14edd4a24d87d897314b9becec5cd692cfed8ed0",
+    "ACT-0030": "d94350364189efee2f79d1041552ebd784b65100b67855fde183db6bafc42b5a",
+    "ACT-0031": "d9e1a98b8eea4e12ec1adc1da805452b78e6a0ec78c4df8fcad2eb13a1c5487d",
+    "ACT-0032": "540c3efea21708cb72658d1df29c53171ae1e9fbb307e026b93704b82e0c00a3",
+    "ACT-0033": "95e4dbbcde0539dccba165c41ffbafc27c8ed448d751f1ebf7009e98e9afac99",
+    "ACT-0034": "12027902478fb7f46f03c112f395e1d4070883f4b9667829f3bb42d62646a05d",
+    "ACT-0035": "5f3f3990947328f900825a2cd75e4ac1f3ab83f55452750fcfbbdc611bbecf6b",
+    "ACT-0036": "da65bcb41496369492fffcd2b4a24400b25417559964879b6c83f124da8b920a",
+    "ACT-0037": "175603652f6e3a095ac29344e7bcd49dce63eab403107ca2efbbb1b65ec6dc90",
+    "ACT-0038": "77b90e1963a34c56c4e6fbfe8f662b6f265ed607a628d67c77b1aed0388f7bd6",
+    "ACT-0039": "490d1bd63f0a57c1bfbb45206525ec0c9d507e664b11850b5c3f8cc570ad4029",
+    "ACT-0040": "e2359d9b9502629fe6fa14adecaee62438953fc4c1c98ced449393344c38370a",
+    "ACT-0041": "92083124b185cbc2d1152f5779f2d96d1b5428a5e573d84264421b0d81d4754a",
+    "ACT-0042": "417f62c4f829d91100ac4bded7eea25691ca82fb549adc66f75a5c64a02b5854",
+    "ACT-0043": "b2437ae322b509cc49d20cba220c371c58465ec14f7f5a0094f7d1493dd557c7",
+    "ACT-0044": "b4007b5ee0efdde50081afc9e4deae6628a72756fbb34ec1c223736d1c34dc6b",
+    "ACT-0045": "936827343033e1970df2a05880686bf05d3e8bb52b903d33701e15582a2d7868",
+    "ACT-0046": "bb88b53cd718197f66fe43cd062a1d9c6d5cfddbfe8ce07aeff88dfa78d4b23d",
+    "ACT-0047": "aa01f938dad86a18eb2fb0b030a7234f58fdfb5d5352f799cc250304f92ff7ba",
+    "ACT-0048": "55ca0d7a797c19e5b274510baaea5d62575f93c9f2ee69dc346f4f52ed55f810",
+    "ACT-0049": "9e4bd371cfcc3a16a964cafe5deeaa22d040e94bd195c8db118b1ed9cb75e9bd",
+    "ACT-0050": "d4c221188c1bc0e7e508fcf00b3486624e402942bb08d810310306afa96eada9",
+    "ACT-0051": "f1957c1ef70ea4fffc54f14a4b0476b26c94cd004df73f878df7eb35212bebc7",
+    "ACT-0052": "057c5d7e3e3cbeb8c2ef778819c370097a531869c3b824fa962b0703455c251b",
+    "ACT-0053": "20badd88c52554d7ce29988c3d374334e24818a2a3d9e41a32095ce5794190a1",
+    "ACT-0054": "c08cceefb56ae124f09ab5933201c9465fe4af5be562924fd45fafd4ba6d6225"
+  },
+  "catalogue": {
+    "milestones": 133,
+    "sha256": "cde95da5dc2d7819a68603e3161a565617716c2b38d2f8a2c7e17f20990558a6"
+  },
+  "embedding": {
+    "dimensions": 384,
+    "embedded_activities": 54,
+    "model_files_sha256": "457f7e5e77fac1c5a85b53f291dcc661e8205458e98be0ea7323e404141cf32b",
+    "model_name": "all-MiniLM-L6-v2",
+    "vectors_sha256": "fbd28f654e81e752bbdfde74c86f87d227ecd00ee97221792690709c0d3c1127"
+  },
+  "format": 1,
+  "info": {
+    "generated_at": "2026-10-08T16:43:56+00:00",
+    "git_commit": "a71ca5c7e4fbcda3b6ddeb72eb2ab190d58f4862",
+    "verified_milestones": 0
+  },
+  "ranking": {
+    "age_weights": {
+      "further": 0.1,
+      "one_older": 0.5,
+      "one_younger": 0.7,
+      "same_bracket": 1.0,
+      "two_away": 0.25
+    },
+    "domain_descriptions_sha256": "71a28d0c6d7410633d39309f40e7528f3758f34f720d7fa225220684e3c5065d",
+    "focus_threshold": 0.5
+  },
+  "rule_weights": {
+    "baseline": 1.0,
+    "concern_weight": 5.0,
+    "emerging_deficit": 5.0,
+    "not_a_delay_signal": [
+      "WHO-MO-03"
+    ],
+    "not_yet_deficit": 10.0,
+    "rules": [
+      "due-milestone-not-yet",
+      "due-milestone-emerging",
+      "upcoming-milestone",
+      "caregiver-concern",
+      "sensory-interest"
+    ],
+    "sensory_interest_keywords": [
+      "sensory",
+      "texture",
+      "touch",
+      "water",
+      "sand",
+      "messy play",
+      "music",
+      "sound",
+      "light"
+    ],
+    "sensory_interest_weight": 2.0,
+    "upcoming_weight": 2.0,
+    "upcoming_window_months": 3.0
+  },
+  "sheet_rows_sha256": "2b30b724e192c70a75f1da5d43e206a3bb8fd60b89bbe225660001a1a3f5f6f7"
+}

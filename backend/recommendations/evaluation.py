@@ -303,3 +303,19 @@ def compare(hybrid, baseline, tolerance=1e-9):
     if abs(hybrid - baseline) <= tolerance:
         return "tied"
     return "improved" if hybrid > baseline else "worse"
+
+
+def unlabelled_in_top(rankings, relevance, depth):
+    """{method: {child_id: count}} of top-`depth` activities with no grade.
+
+    `rankings` is {child_id: {method: [activity_id, ...]}}; an activity counts
+    as unlabelled if its row is blank or it isn't in the sheet at all.
+    """
+    counts = {}
+    for child_id, methods in rankings.items():
+        graded = relevance.get(child_id, {})
+        for method, ranked_ids in methods.items():
+            counts.setdefault(method, {})[child_id] = sum(
+                1 for a in ranked_ids[:depth] if a not in graded
+            )
+    return counts
