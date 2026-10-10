@@ -12,9 +12,11 @@ by the serving process and by nothing else:
 - migrate, test, check and other management commands never import wsgi.py
   or asgi.py, so they never load the model.
 
-Set NURTURA_MODEL_WARMUP=0 (or false/no/off) to disable it. A missing model
-never stops the server: warm-up is skipped with a message, and the first
-request reports the usual error.
+NURTURA_MODEL_WARMUP switches it: 1/true/yes/on enables it and 0/false/no/off
+disables it. When the variable isn't set, it is **off in development**
+(DEBUG=True), so code reloads stay quick, and **on otherwise**. A missing
+model never stops the server: warm-up is skipped with a message, and the
+first request reports the usual error.
 """
 
 import os
@@ -30,7 +32,11 @@ DISABLED_VALUES = {"0", "false", "no", "off"}
 
 
 def enabled():
-    return os.getenv(ENV_FLAG, "1").strip().lower() not in DISABLED_VALUES
+    """The env flag if set; otherwise off in development (DEBUG), on elsewhere."""
+    value = os.getenv(ENV_FLAG)
+    if value is None or not value.strip():
+        return not settings.DEBUG
+    return value.strip().lower() not in DISABLED_VALUES
 
 
 def _say(message):
@@ -44,7 +50,7 @@ def warm_up():
     Returns the seconds it took, or None if skipped.
     """
     if not enabled():
-        _say(f"skipped ({ENV_FLAG} is off)")
+        _say(f"skipped ({ENV_FLAG} is off, or unset in development)")
         return None
     if not settings.SBERT_MODEL_PATH.exists():
         _say(f"skipped (no model at {settings.SBERT_MODEL_PATH})")
