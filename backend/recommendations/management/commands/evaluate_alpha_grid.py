@@ -2,6 +2,10 @@
 
 Usage (from backend/):
     python manage.py evaluate_alpha_grid [--labels PATH] [--markdown]
+    python manage.py evaluate_alpha_grid --check-provenance
+
+--check-provenance runs only the provenance check (step 0) and exits with an
+error if the sidecar is missing or anything differs (#52).
 
 0. Provenance: compares the current activities, rule weights, catalogue and
    embedding model with the sidecar written alongside the sheet, and warns
@@ -72,6 +76,11 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("--labels", type=Path, default=DEFAULT_LABELS)
         parser.add_argument(
+            "--check-provenance",
+            action="store_true",
+            help="Only check the provenance sidecar; fail if anything differs.",
+        )
+        parser.add_argument(
             "--markdown",
             action="store_true",
             help="Output Markdown headings, e.g. for the project report.",
@@ -86,7 +95,14 @@ class Command(BaseCommand):
                 "Can't use the labels file:\n  " + "\n  ".join(exc.problems)
             ) from exc
 
-        self._provenance(options["labels"], labels)
+        matches = self._provenance(options["labels"], labels)
+        if options["check_provenance"]:
+            if not matches:
+                raise CommandError(
+                    "Provenance check failed: the current state does not match "
+                    "the state the held-out sheet was built from."
+                )
+            return
         rankings = self._rankings()
         scores = {
             child.child_id: {
@@ -155,7 +171,7 @@ class Command(BaseCommand):
                     "embedding model match those the pools were built from."
                 )
             )
-            return
+            return False
         recorded = provenance.read(sidecar)
         found = provenance.differences(recorded, provenance.snapshot(rows=labels.rows))
         generated = recorded.get("info", {}).get("generated_at", "unknown time")
@@ -165,7 +181,7 @@ class Command(BaseCommand):
                 "same Published activities and content, rule weights, ranking "
                 "settings, milestone catalogue, embeddings and sheet rows."
             )
-            return
+            return True
         self.stdout.write(
             self.style.WARNING(
                 "WARNING: the state differs from when the sheet was generated "
@@ -173,6 +189,7 @@ class Command(BaseCommand):
                 "were labelled:\n  - " + "\n  - ".join(found)
             )
         )
+        return False
 
     def _labelling_status(self, labels, rankings, by_split):
         self._heading("Labelling status")

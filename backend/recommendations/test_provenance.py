@@ -8,6 +8,7 @@ from unittest import mock
 
 from django.conf import settings
 from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.test import SimpleTestCase, TestCase
 
 from activities.choices import ContentStatus
@@ -252,3 +253,41 @@ class GeneratedSidecarTests(SimpleTestCase):
             provenance.read(sidecar)["sheet_rows_sha256"],
             provenance.sheet_rows_sha256(rows),
         )
+
+
+class CheckProvenanceFlagTests(HeldOutCommandTestCase):
+    def check(self):
+        out = StringIO()
+        call_command(
+            "evaluate_alpha_grid",
+            "--labels",
+            str(self.path),
+            "--check-provenance",
+            stdout=out,
+            stderr=StringIO(),
+        )
+        return out.getvalue()
+
+    def test_passes_and_prints_only_the_check(self):
+        self.publish()
+        self.export()
+        output = self.check()
+        self.assertIn("Matches the state the sheet was generated from", output)
+        self.assertNotIn("Tune set", output)
+        self.assertNotIn("Labelling status", output)
+
+    def test_fails_when_anything_changed(self):
+        self.publish()
+        self.export()
+        DevelopmentalActivity.objects.filter(activity_id="ACT-0951").update(
+            description="Changed."
+        )
+        with self.assertRaisesMessage(CommandError, "Provenance check failed"):
+            self.check()
+
+    def test_fails_without_a_sidecar(self):
+        self.publish()
+        self.export()
+        provenance.sidecar_path(self.path).unlink()
+        with self.assertRaisesMessage(CommandError, "Provenance check failed"):
+            self.check()
