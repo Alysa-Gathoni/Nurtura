@@ -435,5 +435,5 @@ class ExplanationSamplesCommandTests(ExplanationTestCase):
         )
 
     def test_unknown_child(self):
-        with self.assertRaisesMessage(Exception, "Unknown held-out child"):
+        with self.assertRaisesMessage(Exception, "Unknown child"):
             call_command("explanation_samples", "--children", "H99", stdout=StringIO())
