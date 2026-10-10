@@ -68,6 +68,7 @@ The seven sample children above are the **development set**. They were used to b
 |---|---|
 | `heldout_labels.csv` | The held-out labelling sheet, generated once. Fill it in **in place**; the evaluation reads this file. |
 | `heldout_labels.provenance.json` | Written with the sheet: a record of the state the pools were built from. Don't edit it. |
+| `label_heldout.html` | A labelling page that shows one child at a time (see below). |
 
 The sheet was generated with:
 
@@ -111,6 +112,30 @@ Labelling every activity for 20 children would take too long, so each child's sh
 Duplicates are removed and the pool is **shuffled** within each child (fixed seed), so row order says nothing about rank. The sheet shows no similarity scores, ranks, rule priorities or domains.
 
 Because every ranking that is evaluated contributes its whole top 5, every activity that can appear in a reported top k is in the sheet. If a row is left blank, it counts as not relevant, and the evaluation reports how many such rows there were.
+
+## How to label: the labelling page
+
+The easiest way to label is `label_heldout.html`. It's a single file that runs offline in your browser, and nothing is uploaded.
+
+1. Double-click `data/evaluation/label_heldout.html` to open it in **Chrome or Edge**.
+2. Click **Open CSV** and choose `data/evaluation/heldout_labels.csv`.
+3. Each child's profile stays at the top while you grade their activities with the **0 / 1 / 2** buttons. Add optional notes as you go.
+4. Click **Save** (or press Ctrl+S). The first time, the browser asks for permission to edit the file; allow it, and from then on Save writes straight back to the CSV.
+
+Keys:
+- **0**, **1** or **2** grades the highlighted activity and moves on to the next one.
+- **↑** and **↓** move between activities.
+- **N** jumps to the next unlabelled activity.
+
+The list on the left shows each child's progress.
+
+Good to know:
+- **Autosave.** Grades and notes are kept in the browser as you go. If you close the tab before saving, the page offers to restore them the next time you open the same sheet.
+- **Other browsers** (for example Firefox) can't write to the file, so Save downloads a filled copy. Use it to replace `data/evaluation/heldout_labels.csv`.
+- **Second rater.** Choose **Rater → Second rater** to fill `relevance_rater2`. This hides the first rater's grades and notes.
+- **Only the label columns change.** The page only edits `relevance`, `notes` and `relevance_rater2`. The rows keep their order, and every other cell is written back exactly as it was read.
+
+You can also fill the CSV in a spreadsheet. In Excel, open it with **Data → From Text/CSV** and choose UTF-8 encoding. Save it as **CSV UTF-8**. Don't add or delete rows, and don't edit `child_id`, `split` or `activity_id`.
 
 ## Columns
 

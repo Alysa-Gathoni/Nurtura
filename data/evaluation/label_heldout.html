@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Held-out Labelling</title>
+<!--
+  Nurtura held-out labelling page (#46).
+
+  Open this file in a browser (Chrome or Edge recommended), choose
+  data/evaluation/heldout_labels.csv, and grade each activity 0, 1 or 2 for
+  the child shown. Works offline; nothing leaves your computer.
+
+  - Grades and notes autosave in this browser as you go.
+  - "Save" writes back to the CSV in Chrome/Edge (after one permission
+    prompt); other browsers download the filled CSV instead.
+  - Only relevance, notes and relevance_rater2 are ever changed. Rows keep
+    their order and every other cell is written back exactly as read.
+  - Shows no domains, scores or ranks (there are none in the sheet), so
+    labelling stays blind. See data/evaluation/README.md for the rules.
+-->
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --surface-2: #f0eee8;
+    --text: #1f2328;
+    --muted: #5f6670;
+    --border: #dcd8ce;
+    --accent: #0f766e;
+    --accent-soft: #d5efec;
+    --g0: #6b7280;
+    --g0-soft: #e8e9ec;
+    --g1: #b45309;
+    --g1-soft: #fbead2;
+    --g2: #15803d;
+    --g2-soft: #d8f0df;
+    --warn-soft: #fff4d6;
+    --warn: #8a5a00;
+    --focus: #2563eb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171a;
+      --surface: #1e2125;
+      --surface-2: #262a2f;
+      --text: #e7e9ec;
+      --muted: #9aa3ad;
+      --border: #353a41;
+      --accent: #5eead4;
+      --accent-soft: #123b37;
+      --g0: #a3aab3;
+      --g0-soft: #2c3036;
+      --g1: #f5b75c;
+      --g1-soft: #3d2d14;
+      --g2: #6ee08f;
+      --g2-soft: #173a22;
+      --warn-soft: #3a2f12;
+      --warn: #f3cf73;
+      --focus: #7aa7ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  button, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  header.bar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+    padding: 10px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .bar h1 { font-size: 17px; margin: 0; }
+  .bar .file { color: var(--muted); font-size: 14px; }
+  .bar .spacer { flex: 1; }
+  .bar .status { font-size: 14px; color: var(--muted); }
+  .bar .status.dirty { color: var(--warn); }
+  .btn {
+    border: 1px solid var(--border); background: var(--surface-2);
+    padding: 6px 14px; border-radius: 8px;
+  }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); font-weight: 600; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  select { border: 1px solid var(--border); background: var(--surface-2); padding: 5px 8px; border-radius: 8px; }
+
+  .progress { height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; width: 160px; }
+  .progress > div { height: 100%; background: var(--accent); width: 0; transition: width .2s; }
+
+  .layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; padding: 20px 16px 80px; }
+  nav.children { position: sticky; top: 72px; align-self: start; display: flex; flex-direction: column; gap: 4px; max-height: calc(100vh - 90px); overflow-y: auto; }
+  nav.children button {
+    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    text-align: left; border: 1px solid transparent; background: none;
+    padding: 6px 10px; border-radius: 8px;
+  }
+  nav.children button:hover { background: var(--surface-2); }
+  nav.children button.current { background: var(--accent-soft); border-color: var(--accent); }
+  nav.children .count { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  nav.children .done .count { color: var(--g2); font-weight: 600; }
+
+  main { min-width: 0; }
+  .profile {
+    position: sticky; top: 64px; z-index: 5;
+    background: var(--surface); border: 1px solid var(--border); border-left: 5px solid var(--accent);
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,.06);
+  }
+  .profile .who { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .profile p { margin: 4px 0 0; font-size: 18px; font-weight: 600; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; margin-bottom: 12px; scroll-margin-top: 190px;
+  }
+  .card.active { border-color: var(--focus); box-shadow: 0 0 0 1px var(--focus); }
+  .card.graded-0 { border-left: 5px solid var(--g0); }
+  .card.graded-1 { border-left: 5px solid var(--g1); }
+  .card.graded-2 { border-left: 5px solid var(--g2); }
+  .card h2 { font-size: 17px; margin: 0; }
+  .card .meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0 8px; font-size: 13px; color: var(--muted); }
+  .chip { background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 1px 10px; color: var(--text); font-weight: 600; }
+  .card .desc { margin: 0 0 12px; white-space: pre-wrap; }
+  .grades { display: flex; flex-wrap: wrap; gap: 8px; }
+  .grade {
+    border: 1px solid var(--border); background: var(--surface-2);
+    border-radius: 8px; padding: 6px 12px; min-width: 0;
+  }
+  .grade b { margin-right: 6px; }
+  .grade[aria-pressed="true"].g0 { background: var(--g0-soft); border-color: var(--g0); color: var(--g0); font-weight: 600; }
+  .grade[aria-pressed="true"].g1 { background: var(--g1-soft); border-color: var(--g1); color: var(--g1); font-weight: 600; }
+  .grade[aria-pressed="true"].g2 { background: var(--g2-soft); border-color: var(--g2); color: var(--g2); font-weight: 600; }
+  textarea.notes {
+    display: block; width: 100%; margin-top: 10px; min-height: 38px; resize: vertical;
+    border: 1px solid var(--border); border-radius: 8px; background: var(--bg); padding: 6px 10px; font-size: 14px;
+  }
+  .childnav { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; }
+
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin-bottom: 16px; }
+  .panel h2 { font-size: 17px; margin: 0 0 8px; }
+  .panel ul { margin: 6px 0; padding-left: 20px; }
+  .banner { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; font-weight: 600; }
+  .scale td { padding: 2px 10px 2px 0; vertical-align: top; }
+  details summary { cursor: pointer; font-weight: 600; }
+  kbd { border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font-size: 13px; background: var(--surface-2); }
+  .empty { max-width: 640px; margin: 48px auto; padding: 0 16px; }
+  .hidden { display: none !important; }
+
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: minmax(0, 1fr); gap: 12px; padding-top: 12px; }
+    nav.children { position: static; flex-direction: row; overflow-x: auto; max-height: none; padding-bottom: 4px; }
+    nav.children button { flex: 0 0 auto; }
+    .profile { top: 96px; }
+    .progress { width: 100px; }
+  }
+</style>
+</head>
+<body>
+<header class="bar">
+  <h1>Held-out labelling</h1>
+  <span class="file" id="fileName">No file open</span>
+  <span class="spacer"></span>
+  <label class="hidden" id="modeWrap">Rater
+    <select id="mode">
+      <option value="relevance">First rater (relevance + notes)</option>
+      <option value="relevance_rater2">Second rater (relevance_rater2)</option>
+    </select>
+  </label>
+  <div class="progress hidden" id="progressWrap" title="Rows labelled"><div id="progressBar"></div></div>
+  <span class="status" id="status"></span>
+  <button class="btn" id="openBtn">Open CSV</button>
+  <button class="btn primary hidden" id="saveBtn">Save</button>
+  <input type="file" id="fileInput" accept=".csv,text/csv" class="hidden">
+</header>
+
+<section class="empty" id="welcome">
+  <div class="panel">
+    <h2>Label the held-out sheet</h2>
+    <p>Click <b>Open CSV</b> and choose <code>data/evaluation/heldout_labels.csv</code>. Then, for each child, grade every activity:</p>
+    <table class="scale">
+      <tr><td><b>2</b></td><td>Clearly relevant and age-appropriate</td></tr>
+      <tr><td><b>1</b></td><td>Somewhat relevant (right area or age, but not a good match). Right topic, wrong age: 1 at most.</td></tr>
+      <tr><td><b>0</b></td><td>Not relevant for this child</td></tr>
+    </table>
+    <p>Your work autosaves in this browser. Click <b>Save</b> to write it to the CSV. In Chrome or Edge it saves back to the same file; in other browsers it downloads a copy, which you then use to replace the original.</p>
+    <p>Keys: <kbd>0</kbd> <kbd>1</kbd> <kbd>2</kbd> grade the highlighted activity and move to the next one, <kbd>↑</kbd> <kbd>↓</kbd> move between activities, <kbd>N</kbd> jumps to the next unlabelled activity, and <kbd>Ctrl</kbd>+<kbd>S</kbd> saves.</p>
+  </div>
+</section>
+
+<div class="layout hidden" id="app">
+  <nav class="children" id="childList" aria-label="Children"></nav>
+  <main>
+    <div class="banner hidden" id="rater2Banner">Second-rater mode: the first rater's grades and notes are hidden. Grade independently.</div>
+    <div class="banner hidden" id="doneBanner"></div>
+    <details class="panel" id="rules">
+      <summary>Scale and labelling rules</summary>
+      <table class="scale">
+        <tr><td><b>2</b></td><td>Clearly relevant and age-appropriate</td></tr>
+        <tr><td><b>1</b></td><td>Somewhat relevant (right area or age, but not a good match)</td></tr>
+        <tr><td><b>0</b></td><td>Not relevant for this child</td></tr>
+      </table>
+      <ul>
+        <li>A domain or topic alone doesn't make an activity relevant: judge what it asks the caregiver and child to do.</li>
+        <li>Right topic, wrong age: <b>1 at most</b> (0 if unsafe or unusable at this age).</li>
+        <li>On-track children (H10, H20): judge age-appropriateness and general usefulness.</li>
+        <li>Expecting parents (H01, H02): judge against the parent's stated focus.</li>
+        <li>Don't look at any ranking output for these children until you've finished.</li>
+      </ul>
+    </details>
+    <section class="profile" id="profile" aria-live="polite">
+      <div class="who" id="profileWho"></div>
+      <p id="profileText"></p>
+    </section>
+    <div id="cards"></div>
+    <div class="childnav">
+      <button class="btn" id="prevChild">← Previous child</button>
+      <button class="btn" id="nextUnlabelled">Next unlabelled (N)</button>
+      <button class="btn" id="nextChild">Next child →</button>
+    </div>
+  </main>
+</div>
+
+<script>
+// <csv> Pure CSV helpers, kept free of the DOM so they can be tested.
+// Matches Python's csv module defaults (QUOTE_MINIMAL), which wrote the file,
+// so untouched cells are written back byte for byte.
+function parseCsv(text) {
+  const rows = [];
+  let row = [], field = "", i = 0, quoted = false;
+  while (i < text.length) {
+    const c = text[i];
+    if (quoted) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i += 2; continue; }
+        quoted = false; i++; continue;
+      }
+      field += c; i++; continue;
+    }
+    if (c === '"' && field === "") { quoted = true; i++; continue; }
+    if (c === ",") { row.push(field); field = ""; i++; continue; }
+    if (c === "\r" || c === "\n") {
+      row.push(field); rows.push(row); row = []; field = "";
+      i += (c === "\r" && text[i + 1] === "\n") ? 2 : 1;
+      continue;
+    }
+    field += c; i++;
+  }
+  if (field !== "" || row.length) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+function quoteField(value) {
+  return /[",\r\n]/.test(value) ? '"' + value.replace(/"/g, '""') + '"' : value;
+}
+
+function serializeCsv(rows, eol) {
+  return rows.map(r => r.map(quoteField).join(",") + eol).join("");
+}
+
+function readSheet(text) {
+  const bom = text.charCodeAt(0) === 0xFEFF;
+  if (bom) text = text.slice(1);
+  const eol = text.includes("\r\n") ? "\r\n" : "\n";
+  const table = parseCsv(text);
+  const header = table.shift() || [];
+  return { bom, eol, header, rows: table };
+}
+
+function writeSheet(sheet) {
+  return (sheet.bom ? "﻿" : "") + serializeCsv([sheet.header, ...sheet.rows], sheet.eol);
+}
+// </csv>
+
+const REQUIRED = ["child_id", "child_profile", "activity_id", "activity_name",
+  "activity_description", "age_range", "relevance", "notes", "relevance_rater2"];
+const GRADE_TEXT = { "0": "Not relevant", "1": "Somewhat", "2": "Clearly relevant" };
+
+const $ = id => document.getElementById(id);
+let sheet = null, col = {}, children = [], byChild = new Map();
+let fileHandle = null, fileName = "", current = 0, active = 0, dirty = false;
+let mode = "relevance";
+
+function storage(fn) { try { return fn(); } catch (e) { return null; } }
+function draftKey() {
+  let h = 5381;
+  for (const r of sheet.rows) for (const ch of r[col.child_id] + "|" + r[col.activity_id] + ";") h = ((h * 33) ^ ch.charCodeAt(0)) >>> 0;
+  return "nurtura-heldout-draft:" + h.toString(16);
+}
+const EDITABLE = ["relevance", "notes", "relevance_rater2"];
+function saveDraft() {
+  const values = sheet.rows.map(r => EDITABLE.map(c => r[col[c]]));
+  storage(() => localStorage.setItem(draftKey(), JSON.stringify(values)));
+}
+function clearDraft() { storage(() => localStorage.removeItem(draftKey())); }
+
+function loadText(text, name, handle) {
+  const parsed = readSheet(text);
+  const missing = REQUIRED.filter(c => !parsed.header.includes(c));
+  if (missing.length) { alert("This doesn't look like the held-out sheet. Missing column(s): " + missing.join(", ")); return; }
+  const width = parsed.header.length;
+  const bad = parsed.rows.findIndex(r => r.length !== width);
+  if (bad >= 0) { alert("Row " + (bad + 2) + " has " + parsed.rows[bad].length + " cells instead of " + width + ". Please check the file."); return; }
+  sheet = parsed; fileHandle = handle; fileName = name;
+  col = Object.fromEntries(sheet.header.map((c, i) => [c, i]));
+  children = []; byChild = new Map();
+  sheet.rows.forEach((r, i) => {
+    const id = r[col.child_id];
+    if (!byChild.has(id)) { byChild.set(id, []); children.push(id); }
+    byChild.get(id).push(i);
+  });
+
+  const draft = storage(() => JSON.parse(localStorage.getItem(draftKey()) || "null"));
+  if (Array.isArray(draft) && draft.length === sheet.rows.length) {
+    const changes = draft.reduce((n, vals, i) => n + EDITABLE.filter((c, j) => (vals[j] ?? "") !== sheet.rows[i][col[c]]).length, 0);
+    if (changes && confirm("This browser has " + changes + " unsaved change(s) to this sheet from an earlier session. Restore them?")) {
+      draft.forEach((vals, i) => EDITABLE.forEach((c, j) => { sheet.rows[i][col[c]] = vals[j] ?? ""; }));
+      dirty = true;
+    } else if (changes) {
+      clearDraft();
+    }
+  }
+  $("welcome").classList.add("hidden");
+  ["app", "saveBtn", "modeWrap", "progressWrap"].forEach(id => $(id).classList.remove("hidden"));
+  $("fileName").textContent = fileName;
+  current = Math.max(0, children.findIndex(id => unlabelled(id) > 0));
+  active = 0;
+  render();
+}
+
+function grade(i) { return sheet.rows[i][col[mode]]; }
+function unlabelled(childId) { return byChild.get(childId).filter(i => grade(i) === "").length; }
+function totalLabelled() { return sheet.rows.filter((r, i) => grade(i) !== "").length; }
+
+function setStatus() {
+  const done = totalLabelled(), total = sheet.rows.length;
+  $("progressBar").style.width = (100 * done / total) + "%";
+  const s = $("status");
+  s.textContent = done + " / " + total + " labelled" + (dirty ? " · unsaved" : " · saved");
+  s.classList.toggle("dirty", dirty);
+  const banner = $("doneBanner");
+  banner.classList.toggle("hidden", done !== total);
+  banner.textContent = done === total
+    ? (dirty ? "All " + total + " rows are labelled. Click Save to write them to the CSV." : "All " + total + " rows are labelled and saved.")
+    : "";
+}
+
+function renderChildList() {
+  const nav = $("childList");
+  nav.innerHTML = "";
+  children.forEach((id, idx) => {
+    const n = byChild.get(id).length, left = unlabelled(id);
+    const b = document.createElement("button");
+    b.className = (idx === current ? "current " : "") + (left === 0 ? "done" : "");
+    b.innerHTML = "<span></span><span class='count'></span>";
+    b.firstChild.textContent = id;
+    b.lastChild.textContent = left === 0 ? "✓ " + n : (n - left) + " / " + n;
+    b.setAttribute("aria-current", idx === current ? "true" : "false");
+    b.onclick = () => { current = idx; active = 0; render(); window.scrollTo(0, 0); };
+    nav.appendChild(b);
+  });
+}
+
+function renderCards() {
+  const id = children[current], rows = byChild.get(id);
+  const first = sheet.rows[rows[0]];
+  $("profileWho").textContent = id + " · " + (current + 1) + " of " + children.length + " children";
+  $("profileText").textContent = first[col.child_profile];
+  const box = $("cards");
+  box.innerHTML = "";
+  rows.forEach((rowIndex, k) => {
+    const r = sheet.rows[rowIndex], g = grade(rowIndex);
+    const card = document.createElement("article");
+    card.className = "card" + (g !== "" ? " graded-" + g : "") + (k === active ? " active" : "");
+    card.tabIndex = 0;
+    card.dataset.k = k;
+    card.innerHTML =
+      "<h2></h2><div class='meta'><span class='chip'></span><span></span></div>" +
+      "<p class='desc'></p><div class='grades' role='group' aria-label='Relevance'></div>";
+    card.querySelector("h2").textContent = r[col.activity_name];
+    card.querySelector(".chip").textContent = r[col.age_range];
+    card.querySelector(".meta span:last-child").textContent = r[col.activity_id];
+    card.querySelector(".desc").textContent = r[col.activity_description];
+    const grades = card.querySelector(".grades");
+    ["0", "1", "2"].forEach(v => {
+      const b = document.createElement("button");
+      b.className = "grade g" + v;
+      b.setAttribute("aria-pressed", g === v ? "true" : "false");
+      b.innerHTML = "<b></b><span></span>";
+      b.firstChild.textContent = v;
+      b.lastChild.textContent = GRADE_TEXT[v];
+      b.onclick = e => { e.stopPropagation(); setGrade(k, g === v ? "" : v, false); };
+      grades.appendChild(b);
+    });
+    if (mode === "relevance") {
+      const t = document.createElement("textarea");
+      t.className = "notes"; t.rows = 1; t.placeholder = "Notes (optional)";
+      t.value = r[col.notes];
+      t.oninput = () => { r[col.notes] = t.value.replace(/\r?\n/g, " "); markDirty(); };
+      t.onfocus = () => focusCard(k, false);
+      card.appendChild(t);
+    }
+    card.onfocus = () => focusCard(k, false);
+    card.onclick = () => focusCard(k, true);
+    box.appendChild(card);
+  });
+  $("prevChild").disabled = current === 0;
+  $("nextChild").disabled = current === children.length - 1;
+}
+
+function render() {
+  $("rater2Banner").classList.toggle("hidden", mode !== "relevance_rater2");
+  renderChildList(); renderCards(); setStatus();
+}
+
+function focusCard(k, move) {
+  active = k;
+  document.querySelectorAll(".card").forEach(c => c.classList.toggle("active", +c.dataset.k === k));
+  const card = document.querySelector('.card[data-k="' + k + '"]');
+  if (card && move && document.activeElement !== card && !card.contains(document.activeElement)) card.focus({ preventScroll: true });
+  if (card) card.scrollIntoView({ block: "nearest", behavior: "smooth" });
+}
+
+function markDirty() { dirty = true; saveDraft(); setStatus(); }
+
+function setGrade(k, value, advance) {
+  const rows = byChild.get(children[current]);
+  sheet.rows[rows[k]][col[mode]] = value;
+  markDirty();
+  const next = advance ? Math.min(k + 1, rows.length - 1) : k;
+  active = next;
+  renderChildList(); renderCards();
+  focusCard(next, true);
+}
+
+function nextUnlabelled() {
+  for (let step = 0; step < children.length; step++) {
+    const idx = (current + step) % children.length;
+    const rows = byChild.get(children[idx]);
+    const start = step === 0 ? active : 0;
+    let k = rows.findIndex((i, j) => j >= start && grade(i) === "");
+    if (k < 0 && step === 0) k = rows.findIndex(i => grade(i) === "");
+    if (k >= 0) {
+      if (idx !== current) { current = idx; window.scrollTo(0, 0); }
+      active = k; render(); focusCard(k, true); return;
+    }
+  }
+  setStatus();
+}
+
+async function openFile() {
+  if (dirty && !confirm("You have unsaved changes. Open another file anyway? (They stay in this browser's draft.)")) return;
+  if (window.showOpenFilePicker) {
+    try {
+      const [handle] = await showOpenFilePicker({ types: [{ description: "CSV", accept: { "text/csv": [".csv"] } }] });
+      const file = await handle.getFile();
+      dirty = false;
+      loadText(await file.text(), file.name, handle);
+      return;
+    } catch (e) {
+      if (e.name === "AbortError") return;
+    }
+  }
+  $("fileInput").click();
+}
+
+$("fileInput").onchange = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  dirty = false;
+  loadText(await file.text(), file.name, null);
+  e.target.value = "";
+};
+
+async function save() {
+  if (!sheet) return;
+  const text = writeSheet(sheet);
+  if (fileHandle && fileHandle.createWritable) {
+    try {
+      if (fileHandle.requestPermission && (await fileHandle.requestPermission({ mode: "readwrite" })) !== "granted") throw new Error("Permission to save was not granted.");
+      const w = await fileHandle.createWritable();
+      await w.write(text); await w.close();
+      dirty = false; clearDraft(); setStatus();
+      $("status").textContent += " to " + fileName;
+      return;
+    } catch (e) {
+      if (!confirm("Couldn't save to the file (" + e.message + "). Download a copy instead?")) return;
+    }
+  }
+  const url = URL.createObjectURL(new Blob([text], { type: "text/csv;charset=utf-8" }));
+  const a = Object.assign(document.createElement("a"), { href: url, download: fileName || "heldout_labels.csv" });
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  dirty = false; setStatus();
+  $("status").textContent += " (downloaded: replace data/evaluation/heldout_labels.csv with it)";
+}
+
+$("openBtn").onclick = openFile;
+$("saveBtn").onclick = save;
+$("prevChild").onclick = () => { if (current > 0) { current--; active = 0; render(); window.scrollTo(0, 0); } };
+$("nextChild").onclick = () => { if (current < children.length - 1) { current++; active = 0; render(); window.scrollTo(0, 0); } };
+$("nextUnlabelled").onclick = nextUnlabelled;
+$("mode").onchange = e => {
+  mode = e.target.value; active = 0;
+  current = Math.max(0, children.findIndex(id => unlabelled(id) > 0));
+  render();
+};
+
+document.addEventListener("keydown", e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); save(); return; }
+  if (!sheet || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") return;
+  const n = byChild.get(children[current]).length;
+  if (["0", "1", "2"].includes(e.key)) { e.preventDefault(); setGrade(active, e.key, true); }
+  else if (e.key === "ArrowDown") { e.preventDefault(); focusCard(Math.min(active + 1, n - 1), true); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); focusCard(Math.max(active - 1, 0), true); }
+  else if (e.key.toLowerCase() === "n") { e.preventDefault(); nextUnlabelled(); }
+});
+
+window.addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+</script>
+</body>
+</html>
