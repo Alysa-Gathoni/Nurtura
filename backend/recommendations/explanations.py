@@ -13,13 +13,22 @@ It never shows scores and never uses diagnostic language. CDC milestones say
 do this by about N months" (N rounded up), because WHO ages are the end of
 the window in which almost all children reach the skill.
 
-At most four sentences. Above that, sentences are dropped in this order: a
-stand-alone "It uses ..." sentence, the second milestone group, the
-support/interest sentence, then the aim sentence. The first milestone group,
-or the fallback, and the age sentence are always kept. A milestone group is
-two sentences ("You recorded ... as not yet. Most children do this by ..."),
-so with the age sentence a second group would make five: under the cap only
-the first group (not yet > just starting > coming next) is ever shown.
+Each milestone group (not yet, just starting, coming next; at most two
+groups) is one sentence: "You recorded “X” as not yet; most children do
+this by N months."
+
+At most four sentences. Above that, these are dropped in order: a
+stand-alone "It uses X" sentence; the age sentence, but only its plain
+"your child's age group" version (slightly younger, older or further
+away is always kept); the support/interest sentence, but only when a
+milestone group is already giving the reason. The first reason and the
+aim sentence are never dropped.
+
+With no reason for the activity's area, the fallback depends on the
+child: no rule fired at all (nothing asked for) gives "You haven't asked
+for help with a particular area, ..."; otherwise the activity is outside
+the areas the child is working on, and gets "This one is a good fit for
+your child's age and supports {area}."
 
 Changing any wording here must bump EXPLANATION_VERSION, so the next request
 stores a new batch instead of reusing explanations with the old wording.
@@ -34,9 +43,10 @@ from profiles.rules.facts import ConcernFact, InterestFact
 
 from .ranking import FURTHER, ONE_OLDER, ONE_YOUNGER, SAME_BRACKET, TWO_AWAY
 
-EXPLANATION_VERSION = "1"
+EXPLANATION_VERSION = "2"
 MAX_SENTENCES = 4
 MAX_NAMED_MILESTONES = 3
+MAX_GROUPS = 2
 
 # Plain words for each area, and for asking for support with it.
 AREA = {
@@ -96,20 +106,18 @@ def _ages(facts):
         groups.setdefault(_by_when(fact), []).append(fact)
     if len(groups) == 1:
         (who, when), members = next(iter(groups.items()))
-        return (
-            f"{who} children do {'this' if len(members) == 1 else 'these'} by {when}."
-        )
+        pronoun = "this" if len(members) == 1 else "these"
+        return f"{who.lower()} children do {pronoun} by {when}"
     clauses = []
     for i, ((who, when), members) in enumerate(groups.items()):
         subject = f"{who.lower()} children" if i == 0 else who.lower()
         names = _named([m.description for m in members])
         clauses.append(f"{subject} do {names} by {when}")
-    text = ", and ".join(clauses)
-    return text[0].upper() + text[1:] + "."
+    return ", and ".join(clauses)
 
 
 def _milestone_groups(firings):
-    """[(sentences, facts)] per status, not yet > just starting > upcoming."""
+    """[(sentence, facts)] per status, not yet > just starting > upcoming."""
     by_rule = {}
     for f in firings:
         if f.rule.name in MILESTONE_RULES:
@@ -129,14 +137,15 @@ def _milestone_groups(firings):
         facts = [f.fact for f in members]
         names = _named([fact.description for fact in facts])
         if rule == NOT_YET:
-            lead = f"You recorded {names} as not yet."
+            lead = f"You recorded {names} as not yet"
         elif rule == EMERGING:
-            lead = f"You recorded {names} as just starting."
+            lead = f"You recorded {names} as just starting"
         else:
-            lead = f"{names} {'often comes' if len(facts) == 1 else 'often come'} next."
+            lead = f"{names} {'often comes' if len(facts) == 1 else 'often come'} next"
         # Only the milestones named in the lead get an age.
-        groups.append(([lead, _ages(facts[:MAX_NAMED_MILESTONES])], facts))
-    return groups
+        sentence = f"{lead}; {_ages(facts[:MAX_NAMED_MILESTONES])}."
+        groups.append((sentence, facts))
+    return groups[:MAX_GROUPS]
 
 
 def _stem(word):
@@ -218,9 +227,16 @@ def explain(child, evaluation, ranked):
 
     fallback = None
     if not groups and support is None:
-        fallback = (
-            f"This one is a good fit for your child's age and supports {AREA[domain]}."
-        )
+        if not evaluation.firings:
+            fallback = (
+                "You haven't asked for help with a particular area, so this is a "
+                "general activity for your child's age."
+            )
+        else:
+            fallback = (
+                "This one is a good fit for your child's age and supports "
+                f"{AREA[domain]}."
+            )
     uses = (
         f"It uses {_join(used_alone)}, which you said your child enjoys."
         if used_alone
@@ -229,31 +245,32 @@ def explain(child, evaluation, ranked):
     age = _age_sentence(activity, ranked.age_weight)
     aim = f"Its aim is to {activity.plain_aim.strip()}." if activity.plain_aim else None
 
-    first = groups[0][0] if groups else []
-    second = groups[1][0] if len(groups) > 1 else []
     parts = {
-        "first": first,
-        "second": second,
+        "groups": [sentence for sentence, _ in groups],
         "support": [support] if support else [],
         "fallback": [fallback] if fallback else [],
         "uses": [uses] if uses else [],
         "age": [age],
         "aim": [aim] if aim else [],
     }
-    for drop in ("uses", "second", "support", "aim"):
+    plain_age = ranked.age_weight == SAME_BRACKET or (
+        activity.age_range == AgeRange.PRENATAL
+    )
+    droppable = [
+        ("uses", True),
+        ("age", plain_age),
+        ("support", bool(groups)),  # only when a milestone already explains it
+    ]
+    for key, allowed in droppable:
         if sum(len(v) for v in parts.values()) <= MAX_SENTENCES:
             break
-        parts[drop] = []
+        if allowed:
+            parts[key] = []
 
-    order = ("first", "second", "support", "fallback", "uses", "age", "aim")
+    order = ("groups", "support", "fallback", "uses", "age", "aim")
     sentences = [s for key in order for s in parts[key]]
-    named_groups = [groups[0]] if groups else []
-    if parts["second"]:
-        named_groups.append(groups[1])
     milestones = [
-        fact.description
-        for _, facts in named_groups
-        for fact in facts[:MAX_NAMED_MILESTONES]
+        fact.description for _, facts in groups for fact in facts[:MAX_NAMED_MILESTONES]
     ]
     return Explanation(
         text=" ".join(sentences),
