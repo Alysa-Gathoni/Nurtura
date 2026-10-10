@@ -306,7 +306,7 @@ class GenerateTests(RecommendationAPITestCase):
         self.assertEqual([c["position"] for c in cards], [1, 2, 3, 4, 5])
         for card in cards:
             self.assertEqual(set(card), CARD_FIELDS)
-            self.assertEqual(card["explanation"], "")
+            self.assertTrue(card["explanation"])  # generated since #69
             self.assertEqual(card["batch"], body["batch"])
             self.assertEqual(card["generated_at"], body["generated_at"])
         self.assertEqual(Recommendation.objects.count(), 5)

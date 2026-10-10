@@ -9,9 +9,12 @@ are stored as one batch of Recommendation rows.
   remaining order is exactly the evaluated order. This filter is outside the
   evaluated pipeline: the Sprint 5 evaluation never excluded anything.
   Partially completed activities stay eligible.
+- Each row stores its caregiver-readable explanation (explanations.py) and
+  the EXPLANATION_VERSION that produced it.
 - Existing recommendations are never edited or deleted. A new request whose
   activities, order, alpha, profile fingerprint and ranking version all
-  match the newest batch returns that batch instead of storing a copy. The
+  match the newest batch, and whose explanations (version and text) match
+  too, returns that batch instead of storing a copy. The
   fingerprint covers the rule engine output, the retrieval query (and so
   the child's interests), the age bracket and the milestone catalogue.
 - The child row is locked for the whole generation, so simultaneous
@@ -31,6 +34,7 @@ from feedback.models import CompletedActivity
 from profiles.models import ChildProfile
 
 from . import embeddings, provenance
+from .explanations import EXPLANATION_VERSION, explain
 from .models import Recommendation
 from .ranking import child_bracket, rank
 
@@ -143,6 +147,7 @@ def generate(child_id, caregiver):
         alpha = result.alpha
         fingerprint = profile_fingerprint(result.evaluation, result.query)
         version = ranking_version()
+        texts = [explain(child, result.evaluation, r).text for r in top]
 
         newest = latest_batch(child)
         if newest and (
@@ -151,8 +156,12 @@ def generate(child_id, caregiver):
                 r.alpha == alpha
                 and r.profile_fingerprint == fingerprint
                 and r.ranking_version == version
+                and r.explanation_version == EXPLANATION_VERSION
                 for r in newest
             )
+            # The text too: a newly approved plain_aim changes it without
+            # changing the version.
+            and [r.explanation for r in newest] == texts
         ):
             return GenerationResult(recommendations=newest, created=False)
         if not top:
@@ -173,9 +182,11 @@ def generate(child_id, caregiver):
                     alpha=alpha,
                     profile_fingerprint=fingerprint,
                     ranking_version=version,
+                    explanation=text,
+                    explanation_version=EXPLANATION_VERSION,
                     date_generated=now,
                 )
-                for position, r in enumerate(top, start=1)
+                for position, (r, text) in enumerate(zip(top, texts), start=1)
             ]
         )
         return GenerationResult(recommendations=rows, created=True)
