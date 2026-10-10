@@ -417,3 +417,23 @@ class AreaWordsTests(APITestCase):
         self.assertEqual(set(SUPPORT), {d.value for d in Domain})
         self.assertEqual(SUPPORT["Sensory"], "sensory development")
         self.assertIn(AgeRange.PRENATAL, AgeRange.values)
+
+
+class ExplanationSamplesCommandTests(ExplanationTestCase):
+    def test_prints_scenarios_and_explanations_without_storing(self):
+        out = StringIO()
+        call_command("explanation_samples", "--markdown", stdout=out)
+        text = out.getvalue()
+        self.assertEqual(text.count("**Your child:**"), 10)
+        self.assertEqual(text.count("\n> "), 10)
+        self.assertIn("Your child is 2½ months old.", text)
+        self.assertNotIn("most babies", text)  # the scenario mustn't give it away
+        self.assertNotIn("H03", text)  # no internal IDs in the reader version
+        self.assertFalse(Recommendation.objects.exists())
+        self.assertFalse(
+            ChildProfile.objects.exclude(caregiver=self.caregiver).exists()
+        )
+
+    def test_unknown_child(self):
+        with self.assertRaisesMessage(Exception, "Unknown child"):
+            call_command("explanation_samples", "--children", "H99", stdout=StringIO())
