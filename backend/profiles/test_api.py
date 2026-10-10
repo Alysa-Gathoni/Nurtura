@@ -1,8 +1,10 @@
 """Role-based authentication and access control tests (FR-01, FR-02)."""
 
 import datetime
+import re
 
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
@@ -72,14 +74,17 @@ class AuthAPITests(APITestCase):
             format="json",
         )
 
-    def test_register_creates_caregiver_and_returns_token(self):
+    def test_register_creates_caregiver_and_asks_for_the_email_code(self):
         response = self.register()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["user"]["role"], "caregiver")
         self.assertNotIn("password", response.data["user"])
         user = User.objects.get(username="wanjiru")
         self.assertTrue(user.check_password("Str0ng-Passw0rd!"))
-        self.assertEqual(Token.objects.get(user=user).key, response.data["token"])
+        # No token until the emailed code is entered (#86).
+        self.assertTrue(response.data["two_factor_required"])
+        self.assertNotIn("token", response.data)
+        self.assertFalse(Token.objects.filter(user=user).exists())
 
     def test_cannot_self_register_as_administrator(self):
         response = self.register(role="administrator", is_staff=True)
@@ -106,7 +111,14 @@ class AuthAPITests(APITestCase):
 
     def test_login_me_and_logout(self):
         self.register()
-        response = self.login()
+        challenge = self.login()
+        self.assertEqual(challenge.status_code, status.HTTP_202_ACCEPTED)
+        code = re.search(r"\b(\d{6})\b", mail.outbox[-1].body).group(1)
+        response = self.client.post(
+            reverse("login-verify"),
+            {"challenge": challenge.data["challenge"], "code": code},
+            format="json",
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["user"]["role"], "caregiver")
 
