@@ -269,6 +269,27 @@ work.
 **Definition of done:** The system returns a single ranked list combining both
 signals, and you have at least a preliminary best-alpha result.
 
+**Scope decision (recorded 2026-10-10, #53):**
+
+| Item | Status |
+|---|---|
+| Age-appropriateness weighting | Built as a fixed, documented weighting (#35) |
+| Caregiver-preference weighting | **Out of scope** |
+| Contextual-factor weighting | **Out of scope** |
+
+The final ranking is `age_weight × ((1 − α) · similarity + α · rule priority)`. α is
+the only tuned parameter; it was chosen on the held-out set (α = 0.7, tag
+`sprint5-eval-v1`, see `docs/sprint5_alpha_results.md`).
+
+Why the two weightings are out of scope:
+- No labelled data exists to set or validate extra weights, and adding them untested
+  would weaken the evaluated result.
+- Caregiver interests already reach the ranking in two ways: through the profile
+  query (and so through similarity), and through the sensory-interest rule.
+
+**This is a deviation from Section 3.2.3 of the project proposal.** The report should
+state it as such.
+
 ---
 
 ### Sprint 6 — Explainability Module
