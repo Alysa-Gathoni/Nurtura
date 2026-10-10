@@ -53,10 +53,26 @@ class WarmUpTests(SimpleTestCase):
                 self.assertIsNone(warmup.warm_up())
                 get_encoder.assert_not_called()
 
+    def test_default_is_off_in_development_and_on_otherwise(self):
+        env = {k: v for k, v in os.environ.items() if k != warmup.ENV_FLAG}
+        with mock.patch.dict(os.environ, env, clear=True):
+            with override_settings(DEBUG=True):
+                self.assertFalse(warmup.enabled())
+            with override_settings(DEBUG=False):
+                self.assertTrue(warmup.enabled())
+        with mock.patch.dict(os.environ, {warmup.ENV_FLAG: "1"}), override_settings(
+            DEBUG=True
+        ):
+            self.assertTrue(warmup.enabled())  # explicit beats the default
+        with mock.patch.dict(os.environ, {warmup.ENV_FLAG: "0"}), override_settings(
+            DEBUG=False
+        ):
+            self.assertFalse(warmup.enabled())
+
     def test_missing_model_is_skipped_not_fatal(self):
-        with override_settings(SBERT_MODEL_PATH=Path(MISSING_MODEL)), mock.patch.object(
-            embeddings, "get_encoder"
-        ) as get_encoder:
+        with override_settings(SBERT_MODEL_PATH=Path(MISSING_MODEL)), mock.patch.dict(
+            os.environ, {warmup.ENV_FLAG: "1"}
+        ), mock.patch.object(embeddings, "get_encoder") as get_encoder:
             self.assertIsNone(warmup.warm_up())
             get_encoder.assert_not_called()
 
