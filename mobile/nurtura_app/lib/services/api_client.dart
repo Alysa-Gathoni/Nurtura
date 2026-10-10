@@ -35,18 +35,25 @@ class ApiClient {
   /// Auth token sent as `Authorization: Token <token>` when set.
   String? token;
 
-  Future<dynamic> get(String path, {Map<String, String>? query}) =>
-      _send('GET', path, query: query);
+  /// [timeout] overrides the default for slow calls (e.g. generating
+  /// recommendations, which can take ~16 s on a server's first request).
+  Future<dynamic> get(
+    String path, {
+    Map<String, String>? query,
+    Duration? timeout,
+  }) => _send('GET', path, query: query, timeout: timeout);
 
-  Future<dynamic> post(String path, [Object? body]) =>
-      _send('POST', path, body: body);
+  Future<dynamic> post(String path, [Object? body, Duration? timeout]) =>
+      _send('POST', path, body: body, timeout: timeout);
 
   Future<dynamic> _send(
     String method,
     String path, {
     Map<String, String>? query,
     Object? body,
+    Duration? timeout,
   }) async {
+    final limit = timeout ?? ApiClient.timeout;
     var uri = Uri.parse('$baseUrl$path');
     if (query != null && query.isNotEmpty) {
       uri = uri.replace(queryParameters: query);
@@ -61,8 +68,8 @@ class ApiClient {
 
     final http.Response response;
     try {
-      final streamed = await _http.send(request).timeout(timeout);
-      response = await http.Response.fromStream(streamed).timeout(timeout);
+      final streamed = await _http.send(request).timeout(limit);
+      response = await http.Response.fromStream(streamed).timeout(limit);
     } on TimeoutException {
       throw ApiException(
         'The server took too long to respond. Please try again.',

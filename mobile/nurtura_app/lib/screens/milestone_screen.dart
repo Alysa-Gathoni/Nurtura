@@ -17,6 +17,7 @@ import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
 import '../widgets/nurtura_app_bar.dart';
 import '../widgets/pill_chip.dart';
+import 'recommendations_screen.dart';
 
 /// Records a milestone for a child by picking it from the guideline
 /// catalogue (never free text, since only catalogue milestones have an
@@ -151,7 +152,21 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const NurturaAppBar(title: 'Record a milestone'),
+      appBar: NurturaAppBar(
+        title: 'Record a milestone',
+        actions: [
+          IconButton(
+            key: const Key('openRecommendationsButton'),
+            tooltip: 'See recommendations',
+            icon: const Icon(Icons.lightbulb_rounded),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => RecommendationsScreen(child: widget.child),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -571,6 +586,19 @@ class _Confirmation extends StatelessWidget {
               label: 'Record another',
               icon: Icons.add_rounded,
               onPressed: onRecordAnother,
+            ),
+            const SizedBox(height: 10),
+            SecondaryButton(
+              key: const Key('seeRecommendationsButton'),
+              label: 'See ideas',
+              icon: Icons.lightbulb_rounded,
+              // A milestone was just recorded, so ask for a fresh batch.
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) =>
+                      RecommendationsScreen(child: child, refresh: true),
+                ),
+              ),
             ),
             const SizedBox(height: 10),
             SecondaryButton(

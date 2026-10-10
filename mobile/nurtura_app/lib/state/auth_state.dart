@@ -53,6 +53,14 @@ class AuthState extends ChangeNotifier {
     _setSignedOut();
   }
 
+  /// The server rejected the token (401): forget it without calling the
+  /// server again, so the app shows the login screen.
+  Future<void> sessionExpired() async {
+    await _store.clear();
+    _api.token = null;
+    _setSignedOut();
+  }
+
   Future<void> _signIn(AuthResult result) async {
     await _store.write(result.token);
     _api.token = result.token;

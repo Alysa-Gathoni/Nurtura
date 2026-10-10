@@ -111,6 +111,26 @@ Future<FakeBackend> openMilestoneScreen(
       return onRecord?.call(request) ??
           Future.value(json(recordedResponse('not_yet'), 201));
     }
+    if (request.url.path == '/api/children/3/recommendations/') {
+      return json({
+        'batch': 'b-1',
+        'generated_at': '2026-10-01T09:00:00Z',
+        'recommendations': [
+          {
+            'id': 1,
+            'batch': 'b-1',
+            'position': 1,
+            'generated_at': '2026-10-01T09:00:00Z',
+            'activity_id': 'ACT-0004',
+            'activity_name': 'Naming Everyday Objects',
+            'developmental_domain': 'Language',
+            'age_range': '12-18 months',
+            'short_description': 'Name things you see together.',
+            'explanation': 'You recorded “Waves ‘bye-bye’” as not yet.',
+          },
+        ],
+      }, request.method == 'POST' ? 201 : 200);
+    }
     return json(caregiverJson);
   }, children: [child]);
   await pumpApp(tester, backend, savedToken: 'tok');
@@ -232,6 +252,34 @@ void main() {
     await tapVisible(tester, find.byKey(const Key('recordAnotherButton')));
     expect(find.byKey(const Key('milestoneSearchField')), findsOneWidget);
     expect(find.text('How is Amani doing with this?'), findsNothing);
+  });
+
+  testWidgets('after recording, "See ideas" asks for fresh recommendations', (
+    tester,
+  ) async {
+    final backend = await openMilestoneScreen(tester);
+    await tapVisible(tester, find.byKey(const Key('milestone_CDC-12M-LA-01')));
+    await tapVisible(tester, find.byKey(const Key('status_not_yet')));
+    await tapVisible(tester, find.byKey(const Key('saveMilestoneButton')));
+    await tapVisible(tester, find.byKey(const Key('seeRecommendationsButton')));
+
+    expect(
+      backend.to('/api/children/3/recommendations/').map((r) => r.method),
+      ['POST'],
+    );
+    expect(find.text('Ideas for Amani'), findsOneWidget);
+    expect(find.text('Naming Everyday Objects'), findsOneWidget);
+  });
+
+  testWidgets('the app bar opens the recommendations', (tester) async {
+    final backend = await openMilestoneScreen(tester);
+    await tester.tap(find.byKey(const Key('openRecommendationsButton')));
+    await tester.pumpAndSettle();
+    expect(
+      backend.to('/api/children/3/recommendations/').map((r) => r.method),
+      ['GET'],
+    );
+    expect(find.text('Naming Everyday Objects'), findsOneWidget);
   });
 
   testWidgets('shows why a milestone could not be recorded', (tester) async {
