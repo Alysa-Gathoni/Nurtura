@@ -16,6 +16,10 @@ This test checks that with real readers, before explanations are shown to caregi
 - **Show readers only** the "Your child", "Suggested activity" and explanation text.
 - **Never show readers** the answer key or this page's headings.
 - **A recording sheet** (below), one per reader.
+- **Printable versions:**
+  - [`explanation_reader_test_cards.md`](explanation_reader_test_cards.md) has the 10 cards to cut out, with no labels.
+  - [`explanation_reader_test_session_sheet.md`](explanation_reader_test_session_sheet.md) is a one-page sheet per reader, with the questions, the pass rule, an answer table and the card order for each reader.
+  - The answer key stays on this page only.
 
 ## Procedure (about 15 minutes per reader)
 
