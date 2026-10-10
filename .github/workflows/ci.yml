@@ -7,14 +7,39 @@ on:
 
 jobs:
   backend:
-    name: Backend (Django)
+    name: Backend (Django, ${{ matrix.database }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # SQLite is the no-setup fallback; PostgreSQL is what the project runs
+        # on, and the only place row-locking tests can run (#59).
+        database: [sqlite, postgresql]
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          # A throwaway CI container: trust auth, so there's no password.
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: nurtura_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     defaults:
       run:
         working-directory: backend
     env:
-      # No DB_NAME -> settings fall back to SQLite; DEBUG allows the dev SECRET_KEY placeholder.
+      # DEBUG allows the dev SECRET_KEY placeholder. With no DB_NAME the
+      # settings fall back to SQLite; the postgresql leg sets it.
       DEBUG: "True"
+      DB_NAME: ${{ matrix.database == 'postgresql' && 'nurtura_ci' || '' }}
+      DB_USER: postgres
+      DB_HOST: localhost
+      DB_PORT: "5432"
     steps:
       - uses: actions/checkout@v4
 
@@ -41,6 +66,12 @@ jobs:
 
       - name: Run tests
         run: python manage.py test
+
+      - name: Confirm the PostgreSQL-only tests ran (not skipped)
+        if: matrix.database == 'postgresql'
+        run: |
+          python manage.py test recommendations.test_recommendations_api.ConcurrentPostTests -v 2 2>&1 | tee concurrency.log
+          grep -E "test_simultaneous_posts_store_one_batch .*\.\.\. ok$" concurrency.log
 
   mobile:
     name: Mobile (Flutter)
