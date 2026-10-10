@@ -8,6 +8,7 @@ import 'package:nurtura_app/screens/recommendations_screen.dart';
 import 'package:nurtura_app/services/api_client.dart';
 import 'package:nurtura_app/services/recommendation_service.dart';
 import 'package:nurtura_app/state/auth_state.dart';
+import 'package:nurtura_app/state/recommendation_cache.dart';
 import 'package:nurtura_app/state/token_store.dart';
 import 'package:nurtura_app/theme/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -53,6 +54,8 @@ Future<void> pumpScreen(
   WidgetTester tester,
   FakeBackend backend, {
   bool refresh = false,
+  RecommendationCache? cache,
+  MemoryTokenStore? store,
 }) async {
   AppText.useGoogleFonts = false;
   final api = ApiClient(baseUrl: 'http://test', httpClient: backend.client)
@@ -61,8 +64,15 @@ Future<void> pumpScreen(
     MultiProvider(
       providers: [
         Provider.value(value: api),
+        Provider<RecommendationCache>.value(
+          value: cache ?? MemoryRecommendationCache(),
+        ),
         ChangeNotifierProvider(
-          create: (_) => AuthState(api: api, store: MemoryTokenStore('tok')),
+          create: (_) => AuthState(
+            api: api,
+            store: store ?? MemoryTokenStore('tok'),
+            onSessionCleared: (cache ?? MemoryRecommendationCache()).clear,
+          ),
         ),
       ],
       child: MaterialApp(
