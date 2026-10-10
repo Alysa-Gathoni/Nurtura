@@ -468,3 +468,39 @@ class ConcurrentPostTests(TransactionTestCase):
         )
         self.assertEqual(Recommendation.objects.count(), 5)
         self.assertEqual(responses[0].json()["batch"], responses[1].json()["batch"])
+
+
+class FingerprintQueryTests(RecommendationAPITestCase):
+    """The fingerprint covers the retrieval query, so interests count (#60)."""
+
+    def test_fingerprint_changes_with_the_query_only(self):
+        result = rank(self.child)
+        same = generation.profile_fingerprint(result.evaluation, result.query)
+        self.assertEqual(
+            same, generation.profile_fingerprint(result.evaluation, result.query)
+        )
+        self.assertNotEqual(
+            same,
+            generation.profile_fingerprint(result.evaluation, result.query + " x"),
+        )
+
+    def test_non_sensory_interest_change_stores_a_new_batch(self):
+        first = self.post().json()
+        before = rank(self.child)
+
+        self.child.interests = ["books", "dancing"]  # not sensory keywords
+        self.child.save()
+        after = rank(self.child)
+        # The rule engine output is identical; only the query changed.
+        self.assertEqual(after.evaluation.scores, before.evaluation.scores)
+        self.assertEqual(
+            [f.reason for f in after.evaluation.firings],
+            [f.reason for f in before.evaluation.firings],
+        )
+        self.assertNotEqual(after.query, before.query)
+        self.assertIn("Enjoys books, dancing.", after.query)
+
+        response = self.post()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertNotEqual(response.json()["batch"], first["batch"])
+        self.assertEqual(Recommendation.objects.count(), 10)  # old batch kept
