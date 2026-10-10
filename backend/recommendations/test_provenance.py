@@ -291,3 +291,66 @@ class CheckProvenanceFlagTests(HeldOutCommandTestCase):
         provenance.sidecar_path(self.path).unlink()
         with self.assertRaisesMessage(CommandError, "Provenance check failed"):
             self.check()
+
+
+class ActivityFieldTests(TestCase):
+    """The hash covers what retrieval and ranking read, nothing else (#68)."""
+
+    def setUp(self):
+        embeddings.set_encoder(FakeEncoder())
+        self.addCleanup(embeddings.set_encoder, None)
+        for fields in DOMAIN_ACTIVITIES:
+            DevelopmentalActivity.objects.create(
+                **activity_fields(content_status=ContentStatus.PUBLISHED, **fields)
+            )
+        call_command("embed_activities", stdout=StringIO())
+
+    def test_new_snapshots_record_format_2_and_their_fields(self):
+        state = provenance.snapshot()
+        self.assertEqual(state["format"], 2)
+        self.assertEqual(state["activity_fields"], list(provenance.ACTIVITY_FIELDS))
+        self.assertNotIn("plain_aim", provenance.ACTIVITY_FIELDS)
+        self.assertNotIn("plain_aim", provenance.ACTIVITY_FIELDS_V1)
+
+    def test_only_retrieval_and_ranking_fields_count(self):
+        recorded = provenance.snapshot()
+        DevelopmentalActivity.objects.update(
+            plain_aim="help your child enjoy this",
+            materials="Changed",
+            cultural_relevance="Changed",
+            source_url="https://example.org/changed",
+        )
+        self.assertEqual(
+            provenance.differences(recorded, provenance.snapshot_like(recorded)), []
+        )
+        DevelopmentalActivity.objects.filter(activity_id="ACT-0951").update(
+            developmental_goal="Changed goal"
+        )
+        self.assertEqual(
+            provenance.differences(recorded, provenance.snapshot_like(recorded)),
+            ["activity content changed: ACT-0951"],
+        )
+
+    def test_format_1_sidecars_are_compared_on_their_own_fields(self):
+        v1 = provenance.snapshot(activity_fields=provenance.ACTIVITY_FIELDS_V1)
+        v1["format"] = 1
+        del v1["activity_fields"]  # format 1 didn't record them
+        self.assertEqual(
+            provenance.recorded_activity_fields(v1), provenance.ACTIVITY_FIELDS_V1
+        )
+        DevelopmentalActivity.objects.update(plain_aim="help your child enjoy this")
+        self.assertEqual(provenance.differences(v1, provenance.snapshot_like(v1)), [])
+        DevelopmentalActivity.objects.filter(activity_id="ACT-0952").update(
+            materials="A mat"
+        )
+        self.assertEqual(
+            provenance.differences(v1, provenance.snapshot_like(v1)),
+            ["activity content changed: ACT-0952"],
+        )
+
+    def test_plain_aim_is_not_in_the_embedding_text(self):
+        activity = DevelopmentalActivity.objects.get(activity_id="ACT-0951")
+        before = embeddings.activity_text(activity)
+        activity.plain_aim = "help your child enjoy this"
+        self.assertEqual(embeddings.activity_text(activity), before)
+        self.assertNotIn("enjoy this", before)

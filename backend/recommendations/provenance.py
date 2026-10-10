@@ -3,7 +3,11 @@
 export_heldout_labels writes a sidecar JSON next to the labelling sheet with
 a snapshot of everything that shapes the pools:
 
-- activities: every Published activity ID with a hash of its content;
+- activities: every Published activity ID with a hash of the fields that
+  retrieval and ranking read (ACTIVITY_FIELDS). Other fields, such as
+  materials, source or plain_aim, can change without invalidating the
+  evaluation. The field list is recorded in the sidecar, and a format-1
+  sidecar (written before #68) is compared on its own wider field list;
 - rule_weights: the rule engine's weights, thresholds and rule names;
 - ranking: the age weights and the retrieval query settings;
 - catalogue: a version hash of the reference milestones (key, source,
@@ -34,8 +38,21 @@ from profiles.rules import GUIDELINE_RULES, RuleEngine, guidelines
 from . import embeddings, ranking, retrieval
 from .models import ActivityEmbedding
 
-FORMAT = 1
+FORMAT = 2
+# Fields that retrieval and ranking read (#68): the embedding text
+# (embeddings.activity_text: name, goal, description), the domain (rule
+# priority), the age range (prenatal filter and age weight) and the status
+# (only Published is eligible). activity_id is the key.
 ACTIVITY_FIELDS = (
+    "activity_name",
+    "developmental_goal",
+    "description",
+    "developmental_domain",
+    "age_range",
+    "content_status",
+)
+# Format 1 (sprint5-eval-v1) hashed every content field.
+ACTIVITY_FIELDS_V1 = (
     "activity_name",
     "developmental_domain",
     "age_range",
@@ -69,8 +86,15 @@ def _sha256(value):
     return hashlib.sha256(data.encode("utf-8")).hexdigest()
 
 
-def activity_hash(activity):
-    return _sha256({f: getattr(activity, f) for f in ACTIVITY_FIELDS})
+def activity_hash(activity, fields=ACTIVITY_FIELDS):
+    return _sha256({f: getattr(activity, f) for f in fields})
+
+
+def recorded_activity_fields(recorded):
+    """The activity fields a sidecar was hashed on."""
+    if "activity_fields" in recorded:
+        return tuple(recorded["activity_fields"])
+    return ACTIVITY_FIELDS_V1  # format 1 didn't record them
 
 
 def rule_weights():
@@ -171,12 +195,18 @@ def sheet_rows_sha256(rows):
     return _sha256(sorted([c, a] for c, ids in rows.items() for a in ids))
 
 
-def snapshot(rows=None):
-    """The current state; `rows` is {child_id: [activity_id, ...]} if known."""
+def snapshot(rows=None, activity_fields=ACTIVITY_FIELDS):
+    """The current state; `rows` is {child_id: [activity_id, ...]} if known.
+
+    Pass a recorded sidecar's activity fields to compare against it.
+    """
     activities = DevelopmentalActivity.objects.published().order_by("activity_id")
     state = {
         "format": FORMAT,
-        "activities": {a.activity_id: activity_hash(a) for a in activities},
+        "activity_fields": list(activity_fields),
+        "activities": {
+            a.activity_id: activity_hash(a, activity_fields) for a in activities
+        },
         "rule_weights": rule_weights(),
         "ranking": ranking_settings(),
         "catalogue": catalogue_version(),
@@ -209,12 +239,28 @@ def _changed_keys(old, new):
     return sorted(k for k in set(old) | set(new) if old.get(k) != new.get(k))
 
 
+def snapshot_like(recorded, rows=None):
+    """A current snapshot hashed the same way as `recorded`."""
+    return snapshot(rows=rows, activity_fields=recorded_activity_fields(recorded))
+
+
 def differences(recorded, current):
-    """Plain-English list of what differs between two snapshots."""
+    """Plain-English list of what differs between two snapshots.
+
+    `current` must be hashed on the recorded activity fields (snapshot_like).
+    """
     found = []
-    if recorded.get("format") != current.get("format"):
+    if recorded.get("format", 1) > FORMAT:
         found.append(
-            f"sidecar format {recorded.get('format')} (expected {current['format']})"
+            f"sidecar format {recorded.get('format')} is newer than this code "
+            f"({FORMAT})"
+        )
+    if recorded_activity_fields(recorded) != tuple(
+        current.get("activity_fields", ACTIVITY_FIELDS)
+    ):
+        found.append(
+            "the activity hashes cover different fields; compare with "
+            "snapshot_like()"
         )
     old, new = recorded.get("activities", {}), current["activities"]
     added = sorted(set(new) - set(old))
