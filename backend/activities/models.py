@@ -4,6 +4,21 @@ from django.db.models.functions import Lower
 
 from .choices import AgeRange, ContentStatus, Difficulty, Domain, Source
 
+PLAIN_AIM_MAX_WORDS = 20
+
+
+def validate_plain_aim(value):
+    """At most PLAIN_AIM_MAX_WORDS words, and it must read after "Its aim is to"."""
+    words = value.split()
+    if len(words) > PLAIN_AIM_MAX_WORDS:
+        raise ValidationError(
+            f"Use at most {PLAIN_AIM_MAX_WORDS} words (this has {len(words)})."
+        )
+    if words and (words[0][0].isupper() or value.rstrip().endswith(".")):
+        raise ValidationError(
+            'Write it to follow "Its aim is to": start in lower case, no final full stop.'
+        )
+
 
 class DevelopmentalActivityQuerySet(models.QuerySet):
     def published(self):
@@ -33,6 +48,18 @@ class DevelopmentalActivity(models.Model):
     difficulty_level = models.CharField(max_length=20, choices=Difficulty.choices)
     description = models.TextField()
     cultural_relevance = models.TextField()
+    # Caregiver-facing wording of the goal, shown in explanations as "Its aim
+    # is to ..." (#68). Deliberately outside the embedding text, the ranking
+    # and the provenance hash, so it can be written or reworded without
+    # changing any recommendation or the Sprint 5 evaluation.
+    plain_aim = models.CharField(
+        max_length=200,
+        blank=True,
+        validators=[validate_plain_aim],
+        help_text='Completes "Its aim is to ...": second person, at most '
+        f"{PLAIN_AIM_MAX_WORDS} words, no technical terms, British spelling. "
+        "Leave blank to show no aim sentence.",
+    )
     source = models.CharField(
         max_length=20,
         choices=Source.choices,

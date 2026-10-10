@@ -173,7 +173,9 @@ class Command(BaseCommand):
             )
             return False
         recorded = provenance.read(sidecar)
-        found = provenance.differences(recorded, provenance.snapshot(rows=labels.rows))
+        found = provenance.differences(
+            recorded, provenance.snapshot_like(recorded, rows=labels.rows)
+        )
         generated = recorded.get("info", {}).get("generated_at", "unknown time")
         if not found:
             self._line(
