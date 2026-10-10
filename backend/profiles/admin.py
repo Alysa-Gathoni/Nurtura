@@ -5,7 +5,9 @@ from .models import (
     ChildProfile,
     DevelopmentalMilestone,
     DevelopmentalProfile,
+    LoginChallenge,
     ReferenceMilestone,
+    TrustedDevice,
     User,
 )
 
@@ -118,6 +120,49 @@ class DevelopmentalProfileAdmin(admin.ModelAdmin):
         "reasons",
         "generated_at",
     ]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(TrustedDevice)
+class TrustedDeviceAdmin(admin.ModelAdmin):
+    """Devices that passed the emailed-code check (#86). Delete one to make
+    that device ask for a code again; the device ID itself is only a hash."""
+
+    list_display = ["user", "trusted_until", "last_used_at", "created_at"]
+    search_fields = ["user__username", "user__email"]
+    readonly_fields = [
+        "user",
+        "device_hash",
+        "trusted_until",
+        "created_at",
+        "last_used_at",
+    ]
+
+    def has_add_permission(self, request):
+        return False
+
+
+@admin.register(LoginChallenge)
+class LoginChallengeAdmin(admin.ModelAdmin):
+    """Emailed login codes, for checking delivery problems (#86). Only a hash
+    of each code is stored, so codes can't be read here."""
+
+    list_display = [
+        "user",
+        "purpose",
+        "created_at",
+        "expires_at",
+        "sends",
+        "attempts",
+        "used_at",
+    ]
+    list_filter = ["purpose"]
+    search_fields = ["user__username", "user__email"]
 
     def has_add_permission(self, request):
         return False
