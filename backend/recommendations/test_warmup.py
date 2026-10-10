@@ -144,7 +144,10 @@ class EntryPointTests(SimpleTestCase):
                     capture_output=True,
                 )
             else:
-                os.killpg(proc.pid, signal.SIGTERM)
+                try:
+                    os.killpg(proc.pid, signal.SIGTERM)
+                except ProcessLookupError:
+                    pass  # already exited; its output explains why
             rest, _ = proc.communicate(timeout=30)
             lines.append(rest or "")
         return "".join(lines)
