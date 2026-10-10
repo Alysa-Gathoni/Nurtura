@@ -131,25 +131,34 @@ class ExplanationTestCase(APITestCase):
 
 
 class WordingTests(ExplanationTestCase):
-    def test_cdc_not_yet_and_age_group(self):
+    def test_cdc_not_yet_is_one_sentence(self):
         child = self.child(2.5, [("CDC-02M-MO-01", "not_yet")])
         e = self.explain_activity(child, "ACT-0962")  # Motor, 3-6 months
         self.assertEqual(
-            e.sentences[:2],
-            [
-                "You recorded “Holds head up when on tummy” as not yet.",
-                "Most children do this by 2 months.",
-            ],
+            e.sentences[0],
+            "You recorded “Holds head up when on tummy” as not yet; most "
+            "children do this by 2 months.",
         )
         self.assertIn("slightly older children (3–6 months)", e.text)
 
     def test_who_wording_rounds_up_and_mixed_sources(self):
         child = self.child(13, [("WHO-MO-02", "not_yet"), ("CDC-12M-MO-01", "not_yet")])
         e = self.explain_activity(child, "ACT-0952")  # Motor, 12-18 months
-        self.assertIn(
-            "Almost all children do “Standing with assistance” by about 12 "
-            "months, and most do “Pulls up to stand” by 12 months.",
-            e.text,
+        self.assertEqual(
+            e.sentences[0],
+            "You recorded “Standing with assistance” and “Pulls up to "
+            "stand” as not yet; almost all children do “Standing with "
+            "assistance” by about 12 months, and most do “Pulls up to "
+            "stand” by 12 months.",
+        )
+
+    def test_who_alone(self):
+        child = self.child(13, [("WHO-MO-02", "not_yet")])
+        e = self.explain_activity(child, "ACT-0952")
+        self.assertEqual(
+            e.sentences[0],
+            "You recorded “Standing with assistance” as not yet; almost all "
+            "children do this by about 12 months.",
         )
 
     def test_same_status_milestones_share_one_sentence_capped_at_three(self):
@@ -163,30 +172,41 @@ class WordingTests(ExplanationTestCase):
             ],
         )
         e = self.explain_activity(child, "ACT-0951")
-        self.assertRegex(e.sentences[0], r"^You recorded “.*as not yet\.$")
-        self.assertIn("and 1 more you recorded as not yet.", e.sentences[0])
-        self.assertEqual(e.sentences[0].count("“"), 3)
+        first = e.sentences[0]
+        lead = first.split(";")[0]
+        self.assertTrue(lead.startswith("You recorded “"))
+        self.assertTrue(lead.endswith("and 1 more you recorded as not yet"))
+        self.assertEqual(lead.count("“"), 3)
 
     def test_inner_quotes_become_single_quotes(self):
         child = self.child(14, [("CDC-12M-LA-01", "not_yet")])
         e = self.explain_activity(child, "ACT-0951")
         self.assertIn("“Waves ‘bye-bye’”", e.text)
 
-    def test_not_yet_comes_first_and_the_cap_leaves_one_group(self):
-        # Two groups (2 sentences each) plus the age sentence would be five.
+    def test_two_groups_not_yet_first(self):
         child = self.child(
             16,
             [("CDC-15M-LA-01", "emerging"), ("CDC-12M-LA-01", "not_yet")],
         )
-        e = self.explain_activity(child, "ACT-0951")
-        self.assertTrue(e.sentences[0].endswith("as not yet."))
-        self.assertNotIn("just starting", e.text)
-        self.assertEqual(len(e.sentences), 3)
+        e = self.explain_activity(child, "ACT-0951")  # Language, 6-12 months
+        self.assertRegex(e.sentences[0], r"as not yet; most children do this by 12")
+        self.assertRegex(
+            e.sentences[1], r"as just starting; most children do this by 15"
+        )
+        self.assertLessEqual(len(e.sentences), MAX_SENTENCES)
 
-    def test_just_starting_shows_when_nothing_is_not_yet(self):
-        child = self.child(16, [("CDC-15M-LA-01", "emerging")])
+    def test_at_most_two_groups(self):
+        child = self.child(
+            16,
+            [
+                ("CDC-12M-LA-01", "not_yet"),
+                ("CDC-15M-LA-01", "emerging"),
+                ("CDC-18M-LA-01", "not_yet"),  # upcoming at 16 months
+            ],
+        )
         e = self.explain_activity(child, "ACT-0951")
-        self.assertTrue(e.sentences[0].endswith("as just starting."))
+        self.assertNotIn("often comes next", e.text)
+        self.assertIn("just starting", e.text)
 
     def test_ages_name_only_the_milestones_shown(self):
         child = self.child(
@@ -198,9 +218,11 @@ class WordingTests(ExplanationTestCase):
                 ("CDC-12M-LA-03", "not_yet"),
             ],
         )
-        e = self.explain_activity(child, "ACT-0951")
-        shown = set(re.findall(r"“(.*?)”", e.sentences[0]))
-        aged = set(re.findall(r"“(.*?)”", e.sentences[1]))
+        lead, ages = (
+            self.explain_activity(child, "ACT-0951").sentences[0].split("; ", 1)
+        )
+        shown = set(re.findall(r"“(.*?)”", lead))
+        aged = set(re.findall(r"“(.*?)”", ages))
         self.assertLessEqual(aged, shown)
 
     def test_concern_and_interest_merge_with_literal_use(self):
@@ -220,9 +242,18 @@ class WordingTests(ExplanationTestCase):
         e = self.explain_activity(child, "ACT-0951")  # mentions picture books
         self.assertIn("It uses books, which you said your child enjoys.", e.text)
 
-    def test_fallback_when_no_rule_fired_for_the_area(self):
+    def test_fallback_for_a_child_with_no_requests(self):
         child = self.child(9)
         e = self.explain_activity(child, "ACT-0953")
+        self.assertEqual(
+            e.sentences[0],
+            "You haven't asked for help with a particular area, so this is a general "
+            "activity for your child's age.",
+        )
+
+    def test_fallback_for_an_area_outside_the_childs_requests(self):
+        child = self.child(9, concerns=["Language"])
+        e = self.explain_activity(child, "ACT-0953")  # Cognitive
         self.assertEqual(
             e.sentences[0],
             "This one is a good fit for your child's age and supports thinking and "
@@ -246,21 +277,48 @@ class WordingTests(ExplanationTestCase):
             )
         )
 
-    def test_cap_drops_uses_then_second_group_first(self):
+    def test_cap_drops_uses_then_plain_age_keeps_first_reason_and_aim(self):
         DevelopmentalActivity.objects.filter(activity_id="ACT-0951").update(
             plain_aim="help your child talk and listen"
         )
+        # Two groups + support + uses + age + aim = 6 sentences before the cap.
         child = self.child(
-            16,
-            [("CDC-12M-LA-01", "not_yet"), ("CDC-15M-LA-01", "emerging")],
+            8,
+            [("CDC-06M-LA-01", "not_yet"), ("CDC-06M-LA-02", "emerging")],
             concerns=["Language"],
             interests=["books"],
         )
-        e = self.explain_activity(child, "ACT-0951")
+        e = self.explain_activity(child, "ACT-0951")  # Language, 6-12 months
+        self.assertEqual(len(e.sentences), MAX_SENTENCES)
+        self.assertNotIn("It uses books", e.text)  # dropped first
+        self.assertNotIn("your child's age group", e.text)  # plain age, second
+        self.assertTrue(e.sentences[0].startswith("You recorded"))  # first reason
+        self.assertTrue(e.sentences[-1].startswith("Its aim is to"))  # aim kept
+        self.assertIn("You said you'd like support with", e.text)
+
+    def test_cap_keeps_a_non_plain_age_and_drops_support_instead(self):
+        DevelopmentalActivity.objects.filter(activity_id="ACT-0961").update(
+            plain_aim="help your baby enjoy taking turns with sounds"
+        )
+        child = self.child(
+            8,
+            [("CDC-06M-LA-01", "not_yet"), ("CDC-06M-LA-02", "emerging")],
+            concerns=["Language"],
+        )
+        e = self.explain_activity(child, "ACT-0961")  # Language, 3-6 months
+        self.assertEqual(len(e.sentences), MAX_SENTENCES)
+        self.assertIn("slightly younger children (3–6 months)", e.text)
+        self.assertNotIn("like support with", e.text)
+        self.assertTrue(e.sentences[-1].startswith("Its aim is to"))
+
+    def test_support_is_kept_when_it_is_the_first_reason(self):
+        DevelopmentalActivity.objects.filter(activity_id="ACT-0955").update(
+            plain_aim="help your baby explore textures"
+        )
+        child = self.child(8, concerns=["Sensory"], interests=["textures", "books"])
+        e = self.explain_activity(child, "ACT-0955")
+        self.assertTrue(e.sentences[0].startswith("You said you'd like support"))
         self.assertLessEqual(len(e.sentences), MAX_SENTENCES)
-        self.assertNotIn("It uses books", e.text)
-        self.assertNotIn("just starting", e.text)
-        self.assertIn("as not yet.", e.text)
 
     def test_used_interests_matches_whole_words_only(self):
         activity = DevelopmentalActivity.objects.get(activity_id="ACT-0955")
