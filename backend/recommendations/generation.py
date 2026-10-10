@@ -11,7 +11,9 @@ are stored as one batch of Recommendation rows.
   Partially completed activities stay eligible.
 - Existing recommendations are never edited or deleted. A new request whose
   activities, order, alpha, profile fingerprint and ranking version all
-  match the newest batch returns that batch instead of storing a copy.
+  match the newest batch returns that batch instead of storing a copy. The
+  fingerprint covers the rule engine output, the retrieval query (and so
+  the child's interests), the age bracket and the milestone catalogue.
 - The child row is locked for the whole generation, so simultaneous
   requests for the same child can't both store a batch.
 """
@@ -62,11 +64,17 @@ def ranking_version():
     )
 
 
-def profile_fingerprint(evaluation):
-    """Hash of the rule engine output, the age bracket and the catalogue."""
+def profile_fingerprint(evaluation, query):
+    """Hash of the rule engine output, the retrieval query, the age bracket
+    and the milestone catalogue.
+
+    The query carries what the rules don't, such as non-sensory interests, so
+    a change there can't leave a stale batch (or, later, a stale explanation).
+    """
     bracket = child_bracket(evaluation.age_months)
     return _sha256(
         {
+            "query_sha256": hashlib.sha256(query.encode("utf-8")).hexdigest(),
             "scores": evaluation.scores,
             "firings": [
                 [f.rule.name, f.adjustments, f.reason] for f in evaluation.firings
@@ -133,7 +141,7 @@ def generate(child_id, caregiver):
             :RECOMMENDATIONS_PER_BATCH
         ]
         alpha = result.alpha
-        fingerprint = profile_fingerprint(result.evaluation)
+        fingerprint = profile_fingerprint(result.evaluation, result.query)
         version = ranking_version()
 
         newest = latest_batch(child)
