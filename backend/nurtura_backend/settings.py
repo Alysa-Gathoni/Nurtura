@@ -206,6 +206,7 @@ SBERT_MODEL_PATH = Path(
 )
 
 # Weight of rule priority vs semantic similarity in the ranking (0 = SBERT
-# only, 1 = rule priority only). Provisional until the alpha grid search
-# (#37) picks a value from hand-labelled relevance judgments.
-RANKING_ALPHA = float(os.getenv("RANKING_ALPHA", "0.5"))
+# only, 1 = rule priority only). 0.7 was chosen by the pre-registered rule
+# on the held-out tune set (Sprint 5, #50); see
+# docs/sprint5_alpha_results.md for the evidence and its limits.
+RANKING_ALPHA = float(os.getenv("RANKING_ALPHA", "0.7"))
