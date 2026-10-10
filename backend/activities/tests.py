@@ -2,11 +2,11 @@ from django.contrib.admin.models import LogEntry
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from django.test import TestCase
+from django.test import SimpleTestCase, TestCase
 from django.urls import reverse
 
 from .choices import AgeRange, ContentStatus, Difficulty, Domain, Source
-from .models import DevelopmentalActivity
+from .models import PLAIN_AIM_MAX_WORDS, DevelopmentalActivity, validate_plain_aim
 
 
 def activity_fields(**overrides):
@@ -218,3 +218,19 @@ class ActivityAdminWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 302)
         activity.refresh_from_db()
         self.assertEqual(activity.content_status, ContentStatus.DRAFT)
+
+
+class PlainAimValidationTests(SimpleTestCase):
+    def test_valid_aims(self):
+        for value in ("", "help your baby build strength for rolling and sitting"):
+            with self.subTest(value=value):
+                validate_plain_aim(value)
+
+    def test_rejected_aims(self):
+        for value in (
+            " ".join(["word"] * (PLAIN_AIM_MAX_WORDS + 1)),
+            "Help your baby",
+            "help your baby.",
+        ):
+            with self.subTest(value=value), self.assertRaises(ValidationError):
+                validate_plain_aim(value)
