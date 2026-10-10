@@ -51,8 +51,8 @@
 
 | Warm-up (`NURTURA_MODEL_WARMUP`) | Startup | First POST | Runs |
 |---|---|---|---|
-| Off (the behaviour before #58) | 2.1 s | **13.9–15.2 s** | 3 |
-| **On (default)** | **17.1–17.7 s** | **0.14–0.15 s** | 3 |
+| Off (the behaviour before #58, and the default in development) | 2.1 s | **13.9–15.2 s** | 3 |
+| **On** (the default when `DEBUG` is off; set `NURTURA_MODEL_WARMUP=1` in development) | **17.1–17.7 s** | **0.14–0.15 s** | 3 |
 
 - **Without the warm-up**, the first request after each start pays for importing PyTorch and sentence-transformers and loading the model, about 14–15 s.
 - **With it**, that cost moves to server start, and the server only accepts connections once the model is loaded, so the first caregiver's request takes about the same time as any other.
