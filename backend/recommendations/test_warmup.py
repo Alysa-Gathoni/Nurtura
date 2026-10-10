@@ -125,6 +125,7 @@ class EntryPointTests(SimpleTestCase):
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
+            **kwargs,
         )
         lines = []
         try:
@@ -145,9 +146,13 @@ class EntryPointTests(SimpleTestCase):
                 )
             else:
                 try:
-                    os.killpg(proc.pid, signal.SIGTERM)
+                    os.killpg(proc.pid, signal.SIGTERM)  # server and reloader child
                 except ProcessLookupError:
                     pass  # already exited; its output explains why
-            rest, _ = proc.communicate(timeout=30)
+            try:
+                rest, _ = proc.communicate(timeout=30)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                rest, _ = proc.communicate(timeout=30)
             lines.append(rest or "")
         return "".join(lines)
