@@ -1,3 +1,5 @@
+import uuid
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
@@ -25,23 +27,86 @@ class Recommendation(models.Model):
         related_name="recommendations",
         limit_choices_to={"content_status": ContentStatus.PUBLISHED},
     )
+    # One POST stores one batch of up to 5 rows (#52); position 1 is the top.
+    batch = models.UUIDField(default=uuid.uuid4, db_index=True)
+    position = models.PositiveSmallIntegerField(
+        default=1, validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
     similarity_score = models.FloatField(
         validators=[MinValueValidator(-1.0), MaxValueValidator(1.0)],
-        help_text="Cosine similarity between profile and activity embeddings.",
+        help_text="Raw cosine similarity between profile and activity embeddings.",
     )
+    # age_weight x ((1 - alpha) x min-max-normalised similarity + alpha x
+    # rule_priority). Every factor is in [0, 1], so the score is too.
     ranking_score = models.FloatField(
-        help_text="Weighted score combining rule priority and semantic similarity."
+        validators=[MinValueValidator(0.0), MaxValueValidator(1.0)],
+        help_text="Weighted score combining rule priority and semantic similarity.",
+    )
+    rule_priority = models.FloatField(
+        default=0.0,
+        validators=[MinValueValidator(0.0), MaxValueValidator(1.0)],
+        help_text="Rule-engine priority of the activity's domain (top = 1).",
+    )
+    age_weight = models.FloatField(
+        default=1.0,
+        validators=[MinValueValidator(0.0), MaxValueValidator(1.0)],
+        help_text="How well the activity's age range suits the child.",
+    )
+    alpha = models.FloatField(
+        default=0.0,
+        validators=[MinValueValidator(0.0), MaxValueValidator(1.0)],
+        help_text="Weight of rule priority used for this batch.",
+    )
+    profile_fingerprint = models.CharField(
+        max_length=64,
+        blank=True,
+        help_text="Hash of the rule-engine output, age bracket and milestone "
+        "catalogue the batch was ranked from.",
+    )
+    ranking_version = models.CharField(
+        max_length=64,
+        blank=True,
+        help_text="Hash of the ranking configuration (weights, settings, alpha, "
+        "model).",
     )
     explanation = models.TextField(blank=True)
     date_generated = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        ordering = ["-date_generated", "-ranking_score"]
+        ordering = ["-date_generated", "-ranking_score", "position"]
         constraints = [
             models.CheckConstraint(
                 condition=models.Q(similarity_score__gte=-1.0)
                 & models.Q(similarity_score__lte=1.0),
                 name="similarity_score_between_-1_and_1",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(ranking_score__gte=0.0)
+                & models.Q(ranking_score__lte=1.0),
+                name="ranking_score_between_0_and_1",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(rule_priority__gte=0.0)
+                & models.Q(rule_priority__lte=1.0),
+                name="rule_priority_between_0_and_1",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(age_weight__gte=0.0) & models.Q(age_weight__lte=1.0),
+                name="age_weight_between_0_and_1",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(alpha__gte=0.0) & models.Q(alpha__lte=1.0),
+                name="alpha_between_0_and_1",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(position__gte=1) & models.Q(position__lte=5),
+                name="position_between_1_and_5",
+            ),
+            models.UniqueConstraint(
+                fields=["batch", "position"], name="unique_position_per_batch"
+            ),
+            models.UniqueConstraint(
+                fields=["batch", "activity"], name="unique_activity_per_batch"
             ),
         ]
 
