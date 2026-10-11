@@ -26,21 +26,25 @@ class PrimaryButton extends StatelessWidget {
     final enabled = onPressed != null && !loading;
     return _ButtonShell(
       background: enabled
-          ? AppColors.tealDeep
-          : AppColors.tealDeep.withValues(alpha: 0.55),
+          ? context.palette.tealDeep
+          : context.palette.tealDeep.withValues(alpha: 0.55),
       shadow: enabled ? AppShadows.primaryButton : const [],
       onTap: enabled ? onPressed : null,
       child: loading
-          ? const SizedBox(
-              key: Key('buttonSpinner'),
+          ? SizedBox(
+              key: const Key('buttonSpinner'),
               width: 22,
               height: 22,
               child: CircularProgressIndicator(
                 strokeWidth: 2.6,
-                color: Colors.white,
+                color: context.palette.onPrimary,
               ),
             )
-          : _ButtonLabel(label: label, icon: icon, color: Colors.white),
+          : _ButtonLabel(
+              label: label,
+              icon: icon,
+              color: context.palette.onPrimary,
+            ),
     );
   }
 }
@@ -61,10 +65,14 @@ class SecondaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _ButtonShell(
-      background: AppColors.mint,
+      background: context.palette.mint,
       shadow: const [],
       onTap: onPressed,
-      child: _ButtonLabel(label: label, icon: icon, color: AppColors.tealDeep),
+      child: _ButtonLabel(
+        label: label,
+        icon: icon,
+        color: context.palette.tealDeep,
+      ),
     );
   }
 }
@@ -121,8 +129,11 @@ class _ButtonLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Long labels shrink with an ellipsis rather than overflowing.
     final text = Text(
       label,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
       style: AppText.nunito(size: 16, weight: FontWeight.w800, color: color),
     );
     if (icon == null) return text;
@@ -131,7 +142,7 @@ class _ButtonLabel extends StatelessWidget {
       children: [
         Icon(icon, color: color, size: 20),
         const SizedBox(width: 8),
-        text,
+        Flexible(child: text),
       ],
     );
   }

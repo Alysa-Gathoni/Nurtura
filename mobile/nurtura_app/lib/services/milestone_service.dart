@@ -24,6 +24,14 @@ class MilestoneService {
         .toList();
   }
 
+  /// Every observation recorded for the child (read-only).
+  Future<List<MilestoneObservation>> history(int childId) async {
+    final data = await _api.get('/api/children/$childId/milestones/') as List;
+    return data
+        .map((e) => MilestoneObservation.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
   /// Records an observation; the backend regenerates the child's profile.
   Future<RecordedMilestone> record({
     required int childId,

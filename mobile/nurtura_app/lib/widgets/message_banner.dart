@@ -3,32 +3,30 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
+enum _Kind { error, success, info }
+
 /// Inline message box for errors (coral), success (mint) or information (gold).
 class MessageBanner extends StatelessWidget {
-  const MessageBanner.error(this.message, {super.key})
-    : background = AppColors.coralSoft,
-      iconColor = AppColors.coral,
-      icon = Icons.error_outline_rounded;
+  const MessageBanner.error(this.message, {super.key}) : _kind = _Kind.error;
 
   const MessageBanner.success(this.message, {super.key})
-    : background = AppColors.mint,
-      iconColor = AppColors.tealDeep,
-      icon = Icons.check_circle_rounded;
+    : _kind = _Kind.success;
 
-  const MessageBanner.info(this.message, {super.key})
-    : background = AppColors.goldSoft,
-      iconColor = AppColors.ink,
-      icon = Icons.info_outline_rounded;
+  const MessageBanner.info(this.message, {super.key}) : _kind = _Kind.info;
 
   final String message;
-  final Color background;
-  final Color iconColor;
-  final IconData icon;
+  final _Kind _kind;
 
   @override
   Widget build(BuildContext context) {
+    final p = context.palette;
+    final (background, iconColor, icon) = switch (_kind) {
+      _Kind.error => (p.coralSoft, p.coral, Icons.error_outline_rounded),
+      _Kind.success => (p.mint, p.tealDeep, Icons.check_circle_rounded),
+      _Kind.info => (p.goldSoft, p.gold, Icons.info_outline_rounded),
+    };
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.circular(AppRadii.field),
@@ -41,7 +39,11 @@ class MessageBanner extends StatelessWidget {
           Expanded(
             child: Text(
               message,
-              style: AppText.nunito(size: 14, weight: FontWeight.w700),
+              style: AppText.nunito(
+                size: 14,
+                weight: FontWeight.w700,
+                color: p.ink,
+              ),
             ),
           ),
         ],

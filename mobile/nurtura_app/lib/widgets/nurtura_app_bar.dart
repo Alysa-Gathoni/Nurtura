@@ -17,7 +17,7 @@ class NurturaAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: 64,
-      backgroundColor: AppColors.teal,
+      backgroundColor: context.palette.teal,
       foregroundColor: Colors.white,
       elevation: 0,
       scrolledUnderElevation: 0,

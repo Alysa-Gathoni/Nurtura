@@ -5,15 +5,16 @@ import '../theme/app_theme.dart';
 
 /// Fully rounded tag with bold text and a category colour.
 ///
-/// Unselected chips use the soft [background] with [foreground] text and a
-/// [color] icon; selected chips are filled with [color].
+/// Unselected chips use the soft [background] with [foreground] text (the
+/// theme's text colour by default) and a [color] icon; selected chips are
+/// filled with [color].
 class PillChip extends StatelessWidget {
   const PillChip({
     super.key,
     required this.label,
     required this.color,
     required this.background,
-    this.foreground = AppColors.ink,
+    this.foreground,
     this.selectedForeground = Colors.white,
     this.selected = false,
     this.icon,
@@ -24,7 +25,7 @@ class PillChip extends StatelessWidget {
   final String label;
   final Color color;
   final Color background;
-  final Color foreground;
+  final Color? foreground;
   final Color selectedForeground;
   final bool selected;
   final IconData? icon;
@@ -33,7 +34,9 @@ class PillChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = selected ? selectedForeground : foreground;
+    final textColor = selected
+        ? selectedForeground
+        : (foreground ?? context.palette.ink);
     return Semantics(
       selected: onTap == null ? null : selected,
       button: onTap != null,

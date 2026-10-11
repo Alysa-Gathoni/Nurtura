@@ -3,11 +3,14 @@ import 'package:provider/provider.dart';
 
 import 'config.dart';
 import 'screens/auth_screen.dart';
-import 'screens/children_screen.dart';
+import 'screens/home_shell.dart';
 import 'services/api_client.dart';
 import 'state/auth_state.dart';
 import 'state/children_state.dart';
+import 'state/engagement.dart';
+import 'state/preferences.dart';
 import 'state/recommendation_cache.dart';
+import 'state/theme_state.dart';
 import 'state/token_store.dart';
 import 'theme/app_theme.dart';
 
@@ -17,6 +20,7 @@ void main() {
       api: ApiClient(baseUrl: apiBaseUrl),
       tokenStore: SecureTokenStore(),
       recommendationCache: SharedPrefsRecommendationCache(),
+      preferences: SharedPrefsPreferences(),
     ),
   );
 }
@@ -27,32 +31,45 @@ class NurturaApp extends StatelessWidget {
     required this.api,
     required this.tokenStore,
     required this.recommendationCache,
+    required this.preferences,
   });
 
   final ApiClient api;
   final TokenStore tokenStore;
   final RecommendationCache recommendationCache;
+  final Preferences preferences;
 
   @override
   Widget build(BuildContext context) {
+    final engagement = EngagementState(preferences)..load();
     return MultiProvider(
       providers: [
         Provider.value(value: api),
         Provider.value(value: recommendationCache),
+        ChangeNotifierProvider(create: (_) => ThemeState(preferences)..load()),
+        ChangeNotifierProvider.value(value: engagement),
         ChangeNotifierProvider(
           create: (_) => AuthState(
             api: api,
             store: tokenStore,
-            onSessionCleared: recommendationCache.clear,
+            // Forget this account's data on the phone when it signs out.
+            onSessionCleared: () async {
+              await recommendationCache.clear();
+              await engagement.clear();
+            },
           )..restore(),
         ),
         ChangeNotifierProvider(create: (_) => ChildrenState(api)),
       ],
-      child: MaterialApp(
-        title: 'Nurtura',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.light(),
-        home: const AuthGate(),
+      child: Consumer<ThemeState>(
+        builder: (context, theme, _) => MaterialApp(
+          title: 'Nurtura',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light(),
+          darkTheme: AppTheme.dark(),
+          themeMode: theme.mode,
+          home: const AuthGate(),
+        ),
       ),
     );
   }
@@ -69,7 +86,7 @@ class AuthGate extends StatelessWidget {
         body: Center(child: CircularProgressIndicator()),
       ),
       AuthStatus.signedOut => const AuthScreen(),
-      AuthStatus.signedIn => const ChildrenScreen(),
+      AuthStatus.signedIn => const HomeShell(),
     };
   }
 }

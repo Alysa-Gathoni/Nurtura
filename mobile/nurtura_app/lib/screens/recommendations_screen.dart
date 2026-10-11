@@ -6,6 +6,7 @@ import '../models/recommendation.dart';
 import '../services/api_client.dart';
 import '../services/recommendation_service.dart';
 import '../state/auth_state.dart';
+import '../state/engagement.dart';
 import '../state/recommendation_cache.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
@@ -32,9 +33,13 @@ class RecommendationsScreen extends StatefulWidget {
     super.key,
     required this.child,
     this.refresh = false,
+    this.embedded = false,
   });
 
   final ChildProfile child;
+
+  /// Shown as the home shell's Today tab, without its own app bar.
+  final bool embedded;
 
   /// Ask for a fresh batch straight away (e.g. right after a milestone was
   /// recorded) instead of showing the newest stored one.
@@ -82,6 +87,9 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
             );
       if (!batch.isEmpty) await _cache.write(widget.child.id, batch);
       if (!mounted) return;
+      // Checking today's ideas keeps the day streak going.
+      await context.read<EngagementState>().checkIn();
+      if (!mounted) return;
       setState(() {
         _batch = batch;
         _savedAt = null;
@@ -128,6 +136,22 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
   @override
   Widget build(BuildContext context) {
     final busy = _phase == _Phase.loading || _phase == _Phase.preparing;
+    final content = Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 560),
+        child: switch (_phase) {
+          _Phase.loading => const Center(
+            child: CircularProgressIndicator(
+              key: Key('recommendationsLoading'),
+            ),
+          ),
+          _Phase.preparing => _preparing(),
+          _Phase.error => _errorView(),
+          _Phase.ready => _list(),
+        },
+      ),
+    );
+    if (widget.embedded) return content;
     return Scaffold(
       appBar: NurturaAppBar(
         title: 'Ideas for ${widget.child.name}',
@@ -140,23 +164,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 560),
-            child: switch (_phase) {
-              _Phase.loading => const Center(
-                child: CircularProgressIndicator(
-                  key: Key('recommendationsLoading'),
-                ),
-              ),
-              _Phase.preparing => _preparing(),
-              _Phase.error => _errorView(),
-              _Phase.ready => _list(),
-            },
-          ),
-        ),
-      ),
+      body: SafeArea(child: content),
     );
   }
 
@@ -172,7 +180,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
           Text(
             'Preparing recommendations...',
             textAlign: TextAlign.center,
-            style: AppText.quicksand(size: 20, color: AppColors.tealDeep),
+            style: AppText.quicksand(size: 20, color: context.palette.tealDeep),
           ),
           const SizedBox(height: 6),
           Text(
@@ -237,10 +245,26 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                 ),
                 const SizedBox(height: 12),
               ],
-              Text(
-                'Activities to try with ${widget.child.name}, chosen from '
-                "what you've told us.",
-                style: Theme.of(context).textTheme.bodySmall,
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Activities to try with ${widget.child.name}, chosen '
+                      "from what you've told us. Tap one for details.",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                  if (widget.embedded)
+                    IconButton(
+                      key: const Key('refreshRecommendationsButton'),
+                      tooltip: 'Refresh',
+                      icon: Icon(
+                        Icons.refresh_rounded,
+                        color: context.palette.tealDeep,
+                      ),
+                      onPressed: () => _load(regenerate: true),
+                    ),
+                ],
               ),
             ],
           );
@@ -277,6 +301,7 @@ class RecommendationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final r = recommendation;
+    final style = DomainStyle.of(r.domain, context.palette);
     return AppCard(
       key: Key('recommendation_${r.activityId}'),
       onTap: onTap,
@@ -284,8 +309,30 @@ class RecommendationCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(r.activityName, style: AppText.quicksand(size: 19)),
-          const SizedBox(height: 8),
+          Row(
+            children: [
+              // A playful area tile, like a sticker for the activity.
+              Container(
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: style.background,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(style.icon, color: style.color, size: 24),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(r.activityName, style: AppText.quicksand(size: 18)),
+              ),
+              if (onTap != null)
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: context.palette.mutedText,
+                ),
+            ],
+          ),
+          const SizedBox(height: 10),
           Wrap(
             spacing: 6,
             runSpacing: 6,
@@ -293,8 +340,8 @@ class RecommendationCard extends StatelessWidget {
               DomainChip(r.domain),
               PillChip(
                 label: r.ageLabel,
-                color: AppColors.mutedText,
-                background: AppColors.paper,
+                color: context.palette.mutedText,
+                background: context.palette.cardAlt,
                 icon: Icons.child_care_rounded,
               ),
             ],
@@ -326,13 +373,13 @@ class ExplanationBox extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.goldSoft,
+        color: context.palette.goldSoft,
         borderRadius: BorderRadius.circular(AppRadii.field),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.lightbulb_rounded, size: 20, color: AppColors.gold),
+          Icon(Icons.lightbulb_rounded, size: 20, color: context.palette.gold),
           const SizedBox(width: 10),
           Expanded(
             child: Column(

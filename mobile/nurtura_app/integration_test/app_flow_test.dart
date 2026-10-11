@@ -14,6 +14,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:nurtura_app/config.dart';
 import 'package:nurtura_app/main.dart';
 import 'package:nurtura_app/services/api_client.dart';
+import 'package:nurtura_app/state/preferences.dart';
 import 'package:nurtura_app/state/recommendation_cache.dart';
 import 'package:nurtura_app/state/token_store.dart';
 
@@ -70,6 +71,7 @@ void main() {
         api: ApiClient(baseUrl: apiBaseUrl),
         tokenStore: SecureTokenStore(),
         recommendationCache: MemoryRecommendationCache(),
+        preferences: MemoryPreferences(),
       ),
     );
     await pumpUntil(tester, find.byKey(const Key('emailField')));
