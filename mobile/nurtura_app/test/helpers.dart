@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:nurtura_app/main.dart';
 import 'package:nurtura_app/services/api_client.dart';
+import 'package:nurtura_app/state/device_id_store.dart';
 import 'package:nurtura_app/state/preferences.dart';
 import 'package:nurtura_app/state/recommendation_cache.dart';
 import 'package:nurtura_app/state/token_store.dart';
@@ -54,6 +55,7 @@ Future<MemoryTokenStore> pumpApp(
   String? savedToken,
   RecommendationCache? cache,
   Preferences? preferences,
+  DeviceIdStore? deviceIds,
 }) async {
   AppText.useGoogleFonts = false;
   final store = MemoryTokenStore(savedToken);
@@ -63,11 +65,14 @@ Future<MemoryTokenStore> pumpApp(
       tokenStore: store,
       recommendationCache: cache ?? MemoryRecommendationCache(),
       preferences: preferences ?? MemoryPreferences(),
+      deviceIds: deviceIds ?? MemoryDeviceIdStore(testDeviceId),
     ),
   );
   await tester.pumpAndSettle();
   return store;
 }
+
+const testDeviceId = 'test-device-0123456789abcdef';
 
 const caregiverJson = {
   'id': 7,

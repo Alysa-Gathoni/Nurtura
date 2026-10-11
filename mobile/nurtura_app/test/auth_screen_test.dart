@@ -47,7 +47,7 @@ void main() {
     expect(find.byKey(const Key('confirmField')), findsNothing);
   });
 
-  testWidgets('logs in, stores the token and shows the signed-in screen', (
+  testWidgets('a trusted phone logs straight in and stores the token', (
     tester,
   ) async {
     final backend = FakeBackend((_) async => json(success));
@@ -63,6 +63,7 @@ void main() {
     expect(body, {
       'username': 'wanjiru@example.com',
       'password': 'Str0ng-Passw0rd!',
+      'device_id': testDeviceId,
     });
     expect(store.token, 'tok-123');
     expect(find.text('Your children'), findsOneWidget);

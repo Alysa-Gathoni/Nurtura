@@ -8,6 +8,7 @@ import 'package:nurtura_app/screens/recommendations_screen.dart';
 import 'package:nurtura_app/services/api_client.dart';
 import 'package:nurtura_app/services/recommendation_service.dart';
 import 'package:nurtura_app/state/auth_state.dart';
+import 'package:nurtura_app/state/device_id_store.dart';
 import 'package:nurtura_app/state/engagement.dart';
 import 'package:nurtura_app/state/preferences.dart';
 import 'package:nurtura_app/state/recommendation_cache.dart';
@@ -77,6 +78,7 @@ Future<void> pumpScreen(
           create: (_) => AuthState(
             api: api,
             store: store ?? MemoryTokenStore('tok'),
+            deviceIds: MemoryDeviceIdStore(),
             onSessionCleared: (cache ?? MemoryRecommendationCache()).clear,
           ),
         ),

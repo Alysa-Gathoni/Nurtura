@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 import 'config.dart';
 import 'screens/auth_screen.dart';
 import 'screens/home_shell.dart';
+import 'screens/verify_code_screen.dart';
 import 'services/api_client.dart';
 import 'state/auth_state.dart';
 import 'state/children_state.dart';
+import 'state/device_id_store.dart';
 import 'state/engagement.dart';
 import 'state/preferences.dart';
 import 'state/recommendation_cache.dart';
@@ -21,6 +23,7 @@ void main() {
       tokenStore: SecureTokenStore(),
       recommendationCache: SharedPrefsRecommendationCache(),
       preferences: SharedPrefsPreferences(),
+      deviceIds: SecureDeviceIdStore(),
     ),
   );
 }
@@ -32,12 +35,14 @@ class NurturaApp extends StatelessWidget {
     required this.tokenStore,
     required this.recommendationCache,
     required this.preferences,
+    required this.deviceIds,
   });
 
   final ApiClient api;
   final TokenStore tokenStore;
   final RecommendationCache recommendationCache;
   final Preferences preferences;
+  final DeviceIdStore deviceIds;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +57,7 @@ class NurturaApp extends StatelessWidget {
           create: (_) => AuthState(
             api: api,
             store: tokenStore,
+            deviceIds: deviceIds,
             // Forget this account's data on the phone when it signs out.
             onSessionCleared: () async {
               await recommendationCache.clear();
@@ -86,6 +92,7 @@ class AuthGate extends StatelessWidget {
         body: Center(child: CircularProgressIndicator()),
       ),
       AuthStatus.signedOut => const AuthScreen(),
+      AuthStatus.codeRequired => const VerifyCodeScreen(),
       AuthStatus.signedIn => const HomeShell(),
     };
   }

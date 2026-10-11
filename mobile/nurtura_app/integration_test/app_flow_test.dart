@@ -7,6 +7,9 @@
 //     --target=integration_test/app_flow_test.dart \
 //     --dart-define=E2E_EMAIL=someone-new@example.com
 // Screenshots are saved to build/e2e_screenshots/.
+//
+// Registering emails a sign-in code (#91). With the console mailer the code
+// is printed by runserver; type it into the app within three minutes.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,6 +17,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:nurtura_app/config.dart';
 import 'package:nurtura_app/main.dart';
 import 'package:nurtura_app/services/api_client.dart';
+import 'package:nurtura_app/state/device_id_store.dart';
 import 'package:nurtura_app/state/preferences.dart';
 import 'package:nurtura_app/state/recommendation_cache.dart';
 import 'package:nurtura_app/state/token_store.dart';
@@ -72,6 +76,7 @@ void main() {
         tokenStore: SecureTokenStore(),
         recommendationCache: MemoryRecommendationCache(),
         preferences: MemoryPreferences(),
+        deviceIds: MemoryDeviceIdStore(),
       ),
     );
     await pumpUntil(tester, find.byKey(const Key('emailField')));
@@ -84,7 +89,15 @@ void main() {
     await type(tester, 'confirmField', password);
     await screenshot('02_register');
     await tap(tester, find.byKey(const Key('submitButton')));
-    await pumpUntil(tester, find.text('Add your first child'));
+    await pumpUntil(tester, find.byKey(const Key('codeField')));
+    await screenshot('03_code_screen');
+    // Waits for the tester to enter the emailed code; this phone is then
+    // trusted, so logging in again below needs no code.
+    await pumpUntil(
+      tester,
+      find.text('Add your first child'),
+      timeout: const Duration(minutes: 3),
+    );
     await screenshot('03_registered_empty_children');
 
     // 2. Log out, then log back in with the same account.
