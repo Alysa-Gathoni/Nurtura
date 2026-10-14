@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.core.exceptions import ValidationError
@@ -260,3 +262,59 @@ class DevelopmentalProfile(models.Model):
     @property
     def top_domain(self):
         return self.ranked_domains[0] if self.ranked_domains else None
+
+
+class LoginChallenge(models.Model):
+    """One emailed verification code for logging in or registering (#86).
+
+    Only a keyed hash of the code is stored. A challenge expires after
+    TWO_FACTOR_CODE_TTL, allows a few attempts, and is used at most once.
+    """
+
+    class Purpose(models.TextChoices):
+        LOGIN = "login", "Login"
+        REGISTER = "register", "Registration"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="login_challenges"
+    )
+    purpose = models.CharField(max_length=10, choices=Purpose.choices)
+    code_hash = models.CharField(max_length=128)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    last_sent_at = models.DateTimeField()
+    sends = models.PositiveSmallIntegerField(default=1)
+    attempts = models.PositiveSmallIntegerField(default=0)
+    used_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.get_purpose_display()} code for {self.user}"
+
+
+class TrustedDevice(models.Model):
+    """A device that passed the email check, trusted for a while (#86).
+
+    The app sends a random device ID; only its hash is stored.
+    """
+
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="trusted_devices"
+    )
+    device_hash = models.CharField(max_length=64)
+    trusted_until = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_used_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "device_hash"], name="unique_trusted_device_per_user"
+            )
+        ]
+
+    def __str__(self):
+        return f"Trusted device for {self.user} until {self.trusted_until:%Y-%m-%d}"

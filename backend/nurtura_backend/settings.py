@@ -167,11 +167,32 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
-    },
-}
+# The two-step login codes (#86) are sent by email. With no EMAIL_HOST the
+# console backend prints each email in the server output, which is how codes
+# are read in development. To send real emails, set EMAIL_HOST and the
+# credentials in .env (never in this file).
+_email_host = os.getenv("EMAIL_HOST", "")
+if _email_host:
+    MAILERS = {
+        "default": {
+            "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+            "OPTIONS": {
+                "host": _email_host,
+                "port": int(os.getenv("EMAIL_PORT", "587")),
+                "username": os.getenv("EMAIL_HOST_USER", ""),
+                "password": os.getenv("EMAIL_HOST_PASSWORD", ""),
+                "use_tls": os.getenv("EMAIL_USE_TLS", "True") == "True",
+                "timeout": 20,
+            },
+        },
+    }
+else:
+    MAILERS = {
+        "default": {
+            "BACKEND": "django.core.mail.backends.console.EmailBackend",
+        },
+    }
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Nurtura <noreply@localhost>")
 
 
 # Django REST Framework
@@ -188,6 +209,8 @@ REST_FRAMEWORK = {
     # Login attempts per client (IP address) to slow down password guessing.
     "DEFAULT_THROTTLE_RATES": {
         "login": "5/minute",
+        # Entering or resending the emailed login code (#86).
+        "two_factor": "10/minute",
     },
 }
 
