@@ -1,3 +1,5 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import serializers, status
@@ -7,6 +9,7 @@ from rest_framework.views import APIView
 from profiles.permissions import IsCaregiver
 from recommendations.models import Recommendation
 
+from .manager import FeedbackManager
 from .models import CompletedActivity
 
 
@@ -25,6 +28,16 @@ def completion_json(completion):
     return {
         "status": completion.status,
         "completion_date": completion.completion_date.isoformat(),
+    }
+
+
+def feedback_json(feedback):
+    if feedback is None:
+        return None
+    return {
+        "rating": feedback.rating,
+        "comment": feedback.comment,
+        "date_submitted": feedback.date_submitted.isoformat(),
     }
 
 
@@ -65,3 +78,44 @@ class RecommendationCompletionView(APIView):
         recommendation = own_recommendation(request.user, recommendation_id)
         CompletedActivity.objects.filter(recommendation=recommendation).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FeedbackSerializer(serializers.Serializer):
+    # Only the shape is checked here; FeedbackManager owns the rules.
+    rating = serializers.IntegerField()
+    comment = serializers.CharField(required=False, allow_blank=True, default="")
+
+
+class RecommendationFeedbackView(APIView):
+    """A caregiver's rating and comment on a recommendation (FR-15).
+
+    PUT records it through FeedbackManager (201 the first time, 200 when it
+    replaces the earlier entry); GET returns it, or 404 if there is none.
+    """
+
+    permission_classes = [IsCaregiver]
+
+    def get(self, request, recommendation_id):
+        try:
+            feedback = FeedbackManager.for_caregiver(request.user, recommendation_id)
+        except Recommendation.DoesNotExist:
+            raise Http404
+        if feedback is None:
+            raise Http404("No feedback yet.")
+        return Response(feedback_json(feedback))
+
+    def put(self, request, recommendation_id):
+        serializer = FeedbackSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            feedback, created = FeedbackManager.submit(
+                request.user, recommendation_id, **serializer.validated_data
+            )
+        except Recommendation.DoesNotExist:
+            raise Http404
+        except DjangoValidationError as e:
+            raise serializers.ValidationError(e.message_dict)
+        return Response(
+            feedback_json(feedback),
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+        )

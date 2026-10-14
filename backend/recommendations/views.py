@@ -6,7 +6,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from feedback.views import completion_json
+from feedback.manager import latest as latest_feedback
+from feedback.views import completion_json, feedback_json
 from profiles.models import ChildProfile
 from profiles.permissions import IsCaregiver
 
@@ -71,11 +72,13 @@ def _card(recommendation):
         "explanation": recommendation.explanation,
         # Read-only state recorded by the caregiver (FR-14).
         "completion": completion_json(getattr(recommendation, "completion", None)),
+        # Read-only, from FeedbackManager (FR-15).
+        "feedback": feedback_json(latest_feedback(recommendation.feedback.all())),
     }
 
 
 def _payload(recommendations):
-    prefetch_related_objects(recommendations, "completion")
+    prefetch_related_objects(recommendations, "completion", "feedback")
     first = recommendations[0] if recommendations else None
     return {
         "batch": str(first.batch) if first else None,

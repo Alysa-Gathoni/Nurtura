@@ -89,6 +89,7 @@ CARD_FIELDS = {
     "short_description",
     "explanation",
     "completion",
+    "feedback",
 }
 
 
