@@ -1,5 +1,7 @@
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
+from django.db.models import Avg, Count
+from django.urls import reverse
 from django.utils.html import format_html
 
 from .choices import ContentStatus
@@ -32,6 +34,8 @@ class DevelopmentalActivityAdmin(admin.ModelAdmin):
         "source",
         "source_link",
         "content_status",
+        "feedback_count",
+        "average_rating",
     ]
     list_filter = [
         "content_status",
@@ -45,6 +49,32 @@ class DevelopmentalActivityAdmin(admin.ModelAdmin):
     # Status changes only through the workflow actions below.
     readonly_fields = ["content_status"]
     actions = ["submit_for_review", "publish", "return_to_draft"]
+
+    def get_queryset(self, request):
+        # Caregiver feedback per activity (FR-16), for the list columns.
+        return (
+            super()
+            .get_queryset(request)
+            .annotate(
+                _feedback_count=Count("recommendations__feedback"),
+                _average_rating=Avg("recommendations__feedback__rating"),
+            )
+        )
+
+    @admin.display(description="Feedback", ordering="_feedback_count")
+    def feedback_count(self, obj):
+        if not obj._feedback_count:
+            return "-"
+        url = reverse("admin:feedback_feedback_changelist")
+        return format_html(
+            '<a href="{}?q={}">{}</a>', url, obj.activity_id, obj._feedback_count
+        )
+
+    @admin.display(description="Avg rating", ordering="_average_rating")
+    def average_rating(self, obj):
+        if obj._average_rating is None:
+            return "-"
+        return f"{obj._average_rating:.1f}/5"
 
     @admin.display(description="Source link", ordering="source_url")
     def source_link(self, obj):
