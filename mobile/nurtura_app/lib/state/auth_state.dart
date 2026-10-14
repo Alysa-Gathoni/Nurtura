@@ -9,9 +9,17 @@ enum AuthStatus { unknown, signedOut, signedIn }
 
 /// Who is signed in, shared across screens.
 class AuthState extends ChangeNotifier {
-  AuthState({required ApiClient api, required this._store})
-    : _api = api,
-      _auth = AuthService(api);
+  AuthState({
+    required ApiClient api,
+    required this._store,
+    this.onSessionCleared,
+  }) : _api = api,
+       _auth = AuthService(api);
+
+  /// Called when the user logs out or the server ends the session (401), to
+  /// forget data saved on the device for this account. Not called when a
+  /// launch merely fails to reach the server.
+  final Future<void> Function()? onSessionCleared;
 
   final ApiClient _api;
   final TokenStore _store;
@@ -30,7 +38,10 @@ class AuthState extends ChangeNotifier {
       status = AuthStatus.signedIn;
       notifyListeners();
     } on ApiException catch (e) {
-      if (e.statusCode == 401) await _store.clear();
+      if (e.statusCode == 401) {
+        await _store.clear();
+        await onSessionCleared?.call();
+      }
       _api.token = null;
       _setSignedOut();
     }
@@ -49,6 +60,7 @@ class AuthState extends ChangeNotifier {
       // The token is discarded locally either way.
     }
     await _store.clear();
+    await onSessionCleared?.call();
     _api.token = null;
     _setSignedOut();
   }
@@ -57,6 +69,7 @@ class AuthState extends ChangeNotifier {
   /// server again, so the app shows the login screen.
   Future<void> sessionExpired() async {
     await _store.clear();
+    await onSessionCleared?.call();
     _api.token = null;
     _setSignedOut();
   }

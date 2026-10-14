@@ -6,9 +6,11 @@ import '../models/recommendation.dart';
 import '../services/api_client.dart';
 import '../services/recommendation_service.dart';
 import '../state/auth_state.dart';
+import '../state/recommendation_cache.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../theme/domain_style.dart';
+import '../utils/dates.dart';
 import '../widgets/app_card.dart';
 import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
@@ -21,6 +23,10 @@ import 'activity_detail_screen.dart';
 /// On open it reads the newest stored batch; if there isn't one, it asks the
 /// server to prepare one (which can take ~16 s the first time). Scores and
 /// rank numbers are never shown: the API doesn't send them.
+///
+/// Each batch it receives is saved on the device. If the server can't be
+/// reached, the saved batch is shown with a "Saved recommendations"
+/// notice (NFR-14).
 class RecommendationsScreen extends StatefulWidget {
   const RecommendationsScreen({
     super.key,
@@ -44,10 +50,15 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
   late final RecommendationService _service = RecommendationService(
     context.read<ApiClient>(),
   );
+  late final RecommendationCache _cache = context.read<RecommendationCache>();
 
   _Phase _phase = _Phase.loading;
   RecommendationBatch? _batch;
   String? _error;
+
+  /// When the batch on screen was saved, if it came from the device
+  /// because the server couldn't be reached.
+  DateTime? _savedAt;
 
   @override
   void initState() {
@@ -69,14 +80,28 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                 if (mounted) setState(() => _phase = _Phase.preparing);
               },
             );
+      if (!batch.isEmpty) await _cache.write(widget.child.id, batch);
       if (!mounted) return;
       setState(() {
         _batch = batch;
+        _savedAt = null;
         _phase = _Phase.ready;
       });
     } on ApiException catch (e) {
       if (!mounted) return;
       if (e.statusCode == 401) return _sessionEnded();
+      // No response at all (offline or timed out): show what was saved.
+      final saved = e.statusCode == null
+          ? await _cache.read(widget.child.id)
+          : null;
+      if (!mounted) return;
+      if (saved != null) {
+        return setState(() {
+          _batch = saved.batch;
+          _savedAt = saved.savedAt;
+          _phase = _Phase.ready;
+        });
+      }
       setState(() {
         _error = _messageFor(e);
         _phase = _Phase.error;
@@ -201,10 +226,23 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
       separatorBuilder: (_, _) => const SizedBox(height: 12),
       itemBuilder: (context, i) {
         if (i == 0) {
-          return Text(
-            'Activities to try with ${widget.child.name}, chosen from what '
-            "you've told us.",
-            style: Theme.of(context).textTheme.bodySmall,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (_savedAt != null) ...[
+                MessageBanner.info(
+                  'Saved recommendations from ${formatDate(_savedAt!)}. '
+                  "You're offline, so they may be out of date.",
+                  key: const Key('savedRecommendationsNotice'),
+                ),
+                const SizedBox(height: 12),
+              ],
+              Text(
+                'Activities to try with ${widget.child.name}, chosen from '
+                "what you've told us.",
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
           );
         }
         final item = items[i - 1];
