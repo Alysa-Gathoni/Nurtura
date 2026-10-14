@@ -47,6 +47,7 @@ class NurturaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final engagement = EngagementState(preferences)..load();
+    final children = ChildrenState(api, preferences);
     return MultiProvider(
       providers: [
         Provider.value(value: api),
@@ -62,10 +63,11 @@ class NurturaApp extends StatelessWidget {
             onSessionCleared: () async {
               await recommendationCache.clear();
               await engagement.clear();
+              await children.clearSaved();
             },
           )..restore(),
         ),
-        ChangeNotifierProvider(create: (_) => ChildrenState(api)),
+        ChangeNotifierProvider.value(value: children),
       ],
       child: Consumer<ThemeState>(
         builder: (context, theme, _) => MaterialApp(

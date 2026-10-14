@@ -29,6 +29,8 @@ class AuthState extends ChangeNotifier {
   final AuthService _auth;
 
   AuthStatus status = AuthStatus.unknown;
+
+  /// Null when the app was opened offline with a saved session.
   AppUser? user;
 
   /// The emailed-code step in progress, while [status] is codeRequired.
@@ -44,6 +46,14 @@ class AuthState extends ChangeNotifier {
       status = AuthStatus.signedIn;
       notifyListeners();
     } on ApiException catch (e) {
+      if (e.statusCode == null) {
+        // Offline: the saved session can't be checked, so keep it and open
+        // the app with what's saved on the phone (#102). The first request
+        // that reaches the server signs out if the token has ended (401).
+        status = AuthStatus.signedIn;
+        notifyListeners();
+        return;
+      }
       if (e.statusCode == 401) {
         await _store.clear();
         await onSessionCleared?.call();

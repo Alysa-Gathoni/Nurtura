@@ -191,6 +191,14 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
         children: [
+          if (state.offline) ...[
+            const MessageBanner.info(
+              "You're offline, so this is the list saved on your phone. "
+              'Pull down to refresh when you are back online.',
+              key: Key('offlineChildrenNotice'),
+            ),
+            const SizedBox(height: 12),
+          ],
           if (widget.embedded)
             Text('Your children', style: AppText.quicksand(size: 20)),
           if (widget.embedded) const SizedBox(height: 10),
