@@ -1,3 +1,4 @@
+from django.db.models import prefetch_related_objects
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -5,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from feedback.views import completion_json
 from profiles.models import ChildProfile
 from profiles.permissions import IsCaregiver
 
@@ -67,10 +69,13 @@ def _card(recommendation):
         "age_range": activity.age_range,
         "short_description": short_description(activity.description),
         "explanation": recommendation.explanation,
+        # Read-only state recorded by the caregiver (FR-14).
+        "completion": completion_json(getattr(recommendation, "completion", None)),
     }
 
 
 def _payload(recommendations):
+    prefetch_related_objects(recommendations, "completion")
     first = recommendations[0] if recommendations else None
     return {
         "batch": str(first.batch) if first else None,

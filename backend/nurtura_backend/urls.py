@@ -22,4 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("profiles.urls")),
     path("api/", include("recommendations.urls")),
+    path("api/", include("feedback.urls")),
 ]
