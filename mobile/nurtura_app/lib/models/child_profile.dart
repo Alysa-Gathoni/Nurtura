@@ -27,6 +27,14 @@ class ChildProfile {
 
   bool get isExpecting => dateOfBirth.isAfter(today());
 
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'date_of_birth': apiDate(dateOfBirth),
+    'interests': interests,
+    'concerns': concerns,
+  };
+
   /// "14 months", or "Due 1 Feb 2027" for an expected baby.
   String get ageDescription =>
       isExpecting ? 'Due ${formatDate(dateOfBirth)}' : ageLabel(dateOfBirth);
