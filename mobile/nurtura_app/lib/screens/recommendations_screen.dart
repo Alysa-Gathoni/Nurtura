@@ -14,6 +14,7 @@ import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
 import '../widgets/nurtura_app_bar.dart';
 import '../widgets/pill_chip.dart';
+import 'activity_detail_screen.dart';
 
 /// The selected child's recommended activities.
 ///
@@ -206,7 +207,18 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
             style: Theme.of(context).textTheme.bodySmall,
           );
         }
-        return RecommendationCard(recommendation: items[i - 1]);
+        final item = items[i - 1];
+        return RecommendationCard(
+          recommendation: item,
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ActivityDetailScreen(
+                recommendation: item,
+                childName: widget.child.name,
+              ),
+            ),
+          ),
+        );
       },
     );
   }
