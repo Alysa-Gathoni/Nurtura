@@ -27,6 +27,32 @@ class RecommendationService {
             as Map<String, dynamic>,
       );
 
+  /// Marks the activity done, or partly done (FR-14).
+  Future<Completion> markDone(
+    int recommendationId, {
+    bool partial = false,
+  }) async => Completion.fromJson(
+    await _api.put('/api/recommendations/$recommendationId/completion/', {
+      'status': partial ? 'partially_completed' : 'completed',
+    }) as Map<String, dynamic>,
+  );
+
+  /// Undoes a mistaken "done".
+  Future<void> undoDone(int recommendationId) =>
+      _api.delete('/api/recommendations/$recommendationId/completion/');
+
+  /// Records or replaces the caregiver's feedback (FR-15).
+  Future<ActivityFeedback> sendFeedback(
+    int recommendationId, {
+    required int rating,
+    String comment = '',
+  }) async => ActivityFeedback.fromJson(
+    await _api.put('/api/recommendations/$recommendationId/feedback/', {
+      'rating': rating,
+      'comment': comment.trim(),
+    }) as Map<String, dynamic>,
+  );
+
   /// The newest batch, generating one first if there isn't any yet.
   Future<RecommendationBatch> load(
     int childId, {
