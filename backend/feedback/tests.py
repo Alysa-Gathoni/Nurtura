@@ -66,7 +66,7 @@ class FeedbackTests(FeedbackTestCase):
     def test_comment_optional(self):
         feedback = Feedback.objects.create(recommendation=self.recommendation, rating=3)
         feedback.full_clean()
-        self.assertEqual(str(feedback), "3/5 on Tummy Time for Amani")
+        self.assertEqual(str(feedback), "3/5 on Tummy Time")
 
     def test_rating_validated(self):
         for bad in (0, 6):

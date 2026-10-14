@@ -29,7 +29,10 @@ class CompletedActivity(models.Model):
         verbose_name_plural = "completed activities"
 
     def __str__(self):
-        return f"{self.recommendation} ({self.get_status_display()})"
+        # Names the activity, not the child: the admin review shows this
+        # label and keeps families out of it (FR-16).
+        activity = self.recommendation.activity
+        return f"{activity.activity_name} ({self.get_status_display()})"
 
 
 class Feedback(models.Model):
@@ -56,4 +59,5 @@ class Feedback(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.rating}/5 on {self.recommendation}"
+        # The activity, not the child (see CompletedActivity.__str__).
+        return f"{self.rating}/5 on {self.recommendation.activity.activity_name}"
