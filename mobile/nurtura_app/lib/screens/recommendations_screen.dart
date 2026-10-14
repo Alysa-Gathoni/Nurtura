@@ -117,6 +117,16 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
     }
   }
 
+  /// Done/feedback saved on the detail screen: show it here and keep the
+  /// offline copy in step.
+  Future<void> _changed(Recommendation updated) async {
+    final batch = _batch;
+    if (batch == null) return;
+    final next = batch.replacing(updated);
+    setState(() => _batch = next);
+    await _cache.write(widget.child.id, next);
+  }
+
   Future<void> _sessionEnded() async {
     final auth = context.read<AuthState>();
     Navigator.of(context).popUntil((route) => route.isFirst);
@@ -277,6 +287,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
               builder: (_) => ActivityDetailScreen(
                 recommendation: item,
                 childName: widget.child.name,
+                onChanged: _changed,
               ),
             ),
           ),
@@ -344,6 +355,24 @@ class RecommendationCard extends StatelessWidget {
                 background: context.palette.cardAlt,
                 icon: Icons.child_care_rounded,
               ),
+              if (r.completion != null)
+                PillChip(
+                  key: Key('doneChip_${r.activityId}'),
+                  label: r.completion!.label,
+                  color: context.palette.tealDeep,
+                  background: context.palette.mint,
+                  icon: r.completion!.partial
+                      ? Icons.timelapse_rounded
+                      : Icons.check_circle_rounded,
+                ),
+              if (r.feedback != null)
+                PillChip(
+                  key: Key('ratingChip_${r.activityId}'),
+                  label: '${r.feedback!.rating}/5',
+                  color: context.palette.ink,
+                  background: context.palette.goldSoft,
+                  icon: Icons.star_rounded,
+                ),
             ],
           ),
           if (r.shortDescription.isNotEmpty) ...[
