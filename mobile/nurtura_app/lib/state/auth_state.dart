@@ -3,15 +3,17 @@ import 'package:flutter/foundation.dart';
 import '../models/app_user.dart';
 import '../services/api_client.dart';
 import '../services/auth_service.dart';
+import 'device_id_store.dart';
 import 'token_store.dart';
 
-enum AuthStatus { unknown, signedOut, signedIn }
+enum AuthStatus { unknown, signedOut, codeRequired, signedIn }
 
 /// Who is signed in, shared across screens.
 class AuthState extends ChangeNotifier {
   AuthState({
     required ApiClient api,
     required this._store,
+    required this._deviceIds,
     this.onSessionCleared,
   }) : _api = api,
        _auth = AuthService(api);
@@ -23,10 +25,14 @@ class AuthState extends ChangeNotifier {
 
   final ApiClient _api;
   final TokenStore _store;
+  final DeviceIdStore _deviceIds;
   final AuthService _auth;
 
   AuthStatus status = AuthStatus.unknown;
   AppUser? user;
+
+  /// The emailed-code step in progress, while [status] is codeRequired.
+  CodeChallenge? challenge;
 
   /// Restores a saved session on launch.
   Future<void> restore() async {
@@ -47,11 +53,39 @@ class AuthState extends ChangeNotifier {
     }
   }
 
-  Future<void> register(String email, String password) async =>
-      _signIn(await _auth.register(email, password));
+  Future<void> register(String email, String password) async => _handle(
+    await _auth.register(email, password, deviceId: await _deviceIds.id()),
+  );
 
-  Future<void> login(String email, String password) async =>
-      _signIn(await _auth.login(email, password));
+  Future<void> login(String email, String password) async => _handle(
+    await _auth.login(email, password, deviceId: await _deviceIds.id()),
+  );
+
+  /// Finishes signing in with the emailed code.
+  Future<void> verifyCode(String code, {bool rememberDevice = true}) async {
+    final pending = challenge;
+    if (pending == null) return;
+    await _signIn(
+      await _auth.verify(
+        pending,
+        code,
+        deviceId: await _deviceIds.id(),
+        remember: rememberDevice,
+      ),
+    );
+  }
+
+  /// Emails a new code; returns the refreshed challenge.
+  Future<CodeChallenge?> resendCode() async {
+    final pending = challenge;
+    if (pending == null) return null;
+    challenge = await _auth.resend(pending);
+    notifyListeners();
+    return challenge;
+  }
+
+  /// Back to the login form ("use a different account").
+  void cancelChallenge() => _setSignedOut();
 
   Future<void> logout() async {
     try {
@@ -74,16 +108,29 @@ class AuthState extends ChangeNotifier {
     _setSignedOut();
   }
 
+  Future<void> _handle(LoginOutcome outcome) async {
+    switch (outcome) {
+      case SignedIn(:final result):
+        await _signIn(result);
+      case CodeRequired(challenge: final c):
+        challenge = c;
+        status = AuthStatus.codeRequired;
+        notifyListeners();
+    }
+  }
+
   Future<void> _signIn(AuthResult result) async {
     await _store.write(result.token);
     _api.token = result.token;
     user = result.user;
+    challenge = null;
     status = AuthStatus.signedIn;
     notifyListeners();
   }
 
   void _setSignedOut() {
     user = null;
+    challenge = null;
     status = AuthStatus.signedOut;
     notifyListeners();
   }
