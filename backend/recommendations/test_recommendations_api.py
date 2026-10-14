@@ -88,6 +88,7 @@ CARD_FIELDS = {
     "age_range",
     "short_description",
     "explanation",
+    "completion",
 }
 
 
