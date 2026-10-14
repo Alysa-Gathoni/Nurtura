@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:nurtura_app/main.dart';
 import 'package:nurtura_app/services/api_client.dart';
+import 'package:nurtura_app/state/preferences.dart';
 import 'package:nurtura_app/state/recommendation_cache.dart';
 import 'package:nurtura_app/state/token_store.dart';
 import 'package:nurtura_app/theme/app_theme.dart';
@@ -52,6 +53,7 @@ Future<MemoryTokenStore> pumpApp(
   FakeBackend backend, {
   String? savedToken,
   RecommendationCache? cache,
+  Preferences? preferences,
 }) async {
   AppText.useGoogleFonts = false;
   final store = MemoryTokenStore(savedToken);
@@ -60,6 +62,7 @@ Future<MemoryTokenStore> pumpApp(
       api: ApiClient(baseUrl: 'http://test', httpClient: backend.client),
       tokenStore: store,
       recommendationCache: cache ?? MemoryRecommendationCache(),
+      preferences: preferences ?? MemoryPreferences(),
     ),
   );
   await tester.pumpAndSettle();

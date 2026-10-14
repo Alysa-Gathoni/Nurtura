@@ -58,6 +58,9 @@ void main() {
       ),
       savedToken: 'tok',
     );
+    // Signed in with children, the app opens on Today; the list is on Family.
+    expect(find.byKey(const Key('tab_today')), findsOneWidget);
+    await tapVisible(tester, find.byKey(const Key('tab_family')));
     expect(find.text('Amani'), findsOneWidget);
     expect(find.text('14 months'), findsOneWidget);
     expect(find.text('Language'), findsOneWidget);
@@ -137,13 +140,13 @@ void main() {
       'interests': ['water play'],
       'concerns': ['Sensory'],
     });
-    // Saving goes straight to milestone recording; an expected baby gets
-    // a message instead of the picker.
-    expect(find.text('Record a milestone'), findsOneWidget);
+    // Saving goes straight to the Milestones tab; an expected baby gets a
+    // message instead of the picker.
+    expect(find.text('What can Amani do?'), findsOneWidget);
     expect(find.byKey(const Key('prenatalMessage')), findsOneWidget);
     expect(find.text("Amani's profile is saved."), findsOneWidget);
 
-    await tapVisible(tester, find.byTooltip('Back'));
+    await tapVisible(tester, find.byKey(const Key('tab_family')));
     expect(find.text('Your children'), findsOneWidget);
     expect(find.text('Due 30 Dec 2026'), findsOneWidget);
   });
@@ -220,6 +223,7 @@ void main() {
       ),
       savedToken: 'tok',
     );
+    await tapVisible(tester, find.byKey(const Key('tab_family')));
     expect(find.text('Amani'), findsOneWidget);
     await tapVisible(tester, find.byKey(const Key('logoutButton')));
     expect(find.byKey(const Key('emailField')), findsOneWidget);

@@ -44,8 +44,8 @@ class ActivityDetailScreen extends StatelessWidget {
                     DomainChip(r.domain),
                     PillChip(
                       label: r.ageLabel,
-                      color: AppColors.mutedText,
-                      background: AppColors.card,
+                      color: context.palette.mutedText,
+                      background: context.palette.card,
                       icon: Icons.child_care_rounded,
                     ),
                   ],
@@ -62,7 +62,7 @@ class ActivityDetailScreen extends StatelessWidget {
                           style: AppText.nunito(
                             size: 13,
                             weight: FontWeight.w800,
-                            color: AppColors.mutedText,
+                            color: context.palette.mutedText,
                           ),
                         ),
                         const SizedBox(height: 6),

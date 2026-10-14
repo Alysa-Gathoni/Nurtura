@@ -12,7 +12,16 @@ const developmentalDomains = [
   'Socio-Emotional',
 ];
 
-/// Colour and icon for each developmental domain's tags.
+/// Plain words for each domain, for tiles and headings.
+const domainLabels = {
+  'Cognitive': 'Thinking',
+  'Language': 'Talking',
+  'Motor': 'Moving',
+  'Sensory': 'Senses',
+  'Socio-Emotional': 'Feelings',
+};
+
+/// Colour and icon for each developmental domain.
 class DomainStyle {
   const DomainStyle({
     required this.color,
@@ -26,35 +35,37 @@ class DomainStyle {
   final Color onColor;
   final IconData icon;
 
-  static DomainStyle of(String domain) => switch (domain) {
-    'Cognitive' => const DomainStyle(
-      color: AppColors.gold,
-      background: AppColors.goldSoft,
+  static DomainStyle of(String domain, NurturaPalette p) => switch (domain) {
+    'Cognitive' => DomainStyle(
+      color: p.gold,
+      background: p.goldSoft,
       onColor: AppColors.ink,
       icon: Icons.lightbulb_rounded,
     ),
-    'Language' => const DomainStyle(
-      color: AppColors.sky,
-      background: AppColors.skySoft,
+    'Language' => DomainStyle(
+      color: p.sky,
+      background: p.skySoft,
       onColor: Colors.white,
       icon: Icons.chat_bubble_rounded,
     ),
-    'Motor' => const DomainStyle(
-      color: AppColors.tealDeep,
-      background: AppColors.mint,
+    'Motor' => DomainStyle(
+      color: p.teal,
+      background: p.mint,
       onColor: Colors.white,
       icon: Icons.directions_run_rounded,
     ),
-    'Socio-Emotional' => const DomainStyle(
-      color: AppColors.coral,
-      background: AppColors.coralSoft,
+    'Socio-Emotional' => DomainStyle(
+      color: p.coral,
+      background: p.coralSoft,
       onColor: Colors.white,
       icon: Icons.favorite_rounded,
     ),
     // Sensory
     _ => DomainStyle(
-      color: AppColors.teal,
-      background: AppColors.tealLight.withValues(alpha: 0.3),
+      color: const Color(0xFF9B7BEA),
+      background: p.paper == AppColors.paper
+          ? const Color(0xFFEDE6FF)
+          : const Color(0xFF2A2342),
       onColor: Colors.white,
       icon: Icons.back_hand_rounded,
     ),
@@ -71,7 +82,7 @@ class DomainChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = DomainStyle.of(domain);
+    final style = DomainStyle.of(domain, context.palette);
     return PillChip(
       label: domain,
       icon: style.icon,

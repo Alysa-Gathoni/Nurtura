@@ -71,3 +71,30 @@ class RecordedMilestone {
   final MilestoneStatus status;
   final DateTime profileGeneratedAt;
 }
+
+/// One milestone observation already recorded for a child
+/// (`GET /api/children/<id>/milestones/`).
+class MilestoneObservation {
+  const MilestoneObservation({
+    required this.domain,
+    required this.description,
+    required this.status,
+    required this.observationDate,
+  });
+
+  factory MilestoneObservation.fromJson(Map<String, dynamic> json) =>
+      MilestoneObservation(
+        domain: json['domain'] as String,
+        description: json['description'] as String,
+        status: MilestoneStatus.values.firstWhere(
+          (s) => s.apiValue == json['status'],
+          orElse: () => MilestoneStatus.notYet,
+        ),
+        observationDate: DateTime.parse(json['observation_date'] as String),
+      );
+
+  final String domain;
+  final String description;
+  final MilestoneStatus status;
+  final DateTime observationDate;
+}

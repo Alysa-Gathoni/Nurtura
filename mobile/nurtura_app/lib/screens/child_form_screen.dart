@@ -208,9 +208,9 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
                             suffix: IconButton(
                               key: const Key('addInterestButton'),
                               tooltip: 'Add interest',
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.add_circle_rounded,
-                                color: AppColors.tealDeep,
+                                color: context.palette.tealDeep,
                               ),
                               onPressed: _addInterest,
                             ),
@@ -225,8 +225,8 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
                                   PillChip(
                                     key: Key('interest_$interest'),
                                     label: interest,
-                                    color: AppColors.gold,
-                                    background: AppColors.goldSoft,
+                                    color: context.palette.gold,
+                                    background: context.palette.goldSoft,
                                     icon: Icons.star_rounded,
                                     trailingIcon: Icons.close_rounded,
                                     onTap: () => setState(
@@ -274,7 +274,7 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
                               style: AppText.nunito(
                                 size: 12.5,
                                 weight: FontWeight.w700,
-                                color: AppColors.coral,
+                                color: context.palette.coral,
                               ),
                             ),
                           ],
@@ -337,9 +337,9 @@ class _DateField extends StatelessWidget {
           child: InputDecorator(
             isEmpty: value == null,
             decoration: InputDecoration(
-              prefixIcon: const Icon(
+              prefixIcon: Icon(
                 Icons.calendar_month_rounded,
-                color: AppColors.mutedText,
+                color: context.palette.mutedText,
               ),
               hintText: 'Choose a date',
               errorText: errorText,

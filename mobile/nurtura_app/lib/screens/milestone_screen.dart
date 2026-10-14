@@ -27,12 +27,21 @@ class MilestoneScreen extends StatefulWidget {
     super.key,
     required this.child,
     this.justCreated = false,
+    this.embedded = false,
+    this.onSeeIdeas,
   });
 
   final ChildProfile child;
 
   /// Shows a "profile saved" confirmation at the top.
   final bool justCreated;
+
+  /// Shown as the home shell's Milestones tab, without its own app bar.
+  final bool embedded;
+
+  /// "See ideas" after recording; by default opens a fresh recommendations
+  /// screen.
+  final VoidCallback? onSeeIdeas;
 
   @override
   State<MilestoneScreen> createState() => _MilestoneScreenState();
@@ -151,6 +160,25 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final content = Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 560),
+        child: _recorded != null
+            ? _Confirmation(
+                child: widget.child,
+                recorded: _recorded!,
+                onRecordAnother: _recordAnother,
+                onSeeIdeas: widget.onSeeIdeas,
+                onDone: widget.embedded
+                    ? _recordAnother
+                    : () => Navigator.of(context).pop(),
+              )
+            : widget.child.isExpecting
+            ? _prenatalMessage()
+            : _picker(),
+      ),
+    );
+    if (widget.embedded) return content;
     return Scaffold(
       appBar: NurturaAppBar(
         title: 'Record a milestone',
@@ -167,22 +195,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 560),
-            child: _recorded != null
-                ? _Confirmation(
-                    child: widget.child,
-                    recorded: _recorded!,
-                    onRecordAnother: _recordAnother,
-                  )
-                : widget.child.isExpecting
-                ? _prenatalMessage()
-                : _picker(),
-          ),
-        ),
-      ),
+      body: SafeArea(child: content),
     );
   }
 
@@ -207,11 +220,13 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
             '(due ${formatDate(widget.child.dateOfBirth)}).',
             key: const Key('prenatalMessage'),
           ),
-          const SizedBox(height: 16),
-          SecondaryButton(
-            label: 'Back to your children',
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+          if (!widget.embedded) ...[
+            const SizedBox(height: 16),
+            SecondaryButton(
+              label: 'Back to your children',
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
         ],
       ),
     );
@@ -232,7 +247,10 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
               ],
               Text(
                 '${widget.child.name} · ${widget.child.ageDescription}',
-                style: AppText.quicksand(size: 20, color: AppColors.tealDeep),
+                style: AppText.quicksand(
+                  size: 20,
+                  color: context.palette.tealDeep,
+                ),
               ),
               const SizedBox(height: 2),
               Text(
@@ -262,8 +280,8 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
               PillChip(
                 key: const Key('domain_All'),
                 label: 'All',
-                color: AppColors.tealDeep,
-                background: AppColors.mint,
+                color: context.palette.tealDeep,
+                background: context.palette.mint,
                 selected: _domain == null,
                 onTap: () => _setDomain(null),
               ),
@@ -349,7 +367,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
   Widget _statusPanel() {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.card,
+        color: context.palette.card,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: AppShadows.card,
       ),
@@ -425,7 +443,7 @@ class _MilestoneTile extends StatelessWidget {
     return AppCard(
       key: Key('milestone_${milestone.key}'),
       onTap: onTap,
-      borderColor: selected ? AppColors.tealDeep : null,
+      borderColor: selected ? context.palette.tealDeep : null,
       child: Row(
         children: [
           Expanded(
@@ -457,7 +475,7 @@ class _MilestoneTile extends StatelessWidget {
             selected
                 ? Icons.check_circle_rounded
                 : Icons.radio_button_unchecked_rounded,
-            color: selected ? AppColors.tealDeep : AppColors.mint,
+            color: selected ? context.palette.tealDeep : context.palette.mint,
             size: 26,
           ),
         ],
@@ -481,20 +499,20 @@ class _StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final (color, background, onColor, icon) = switch (status) {
       MilestoneStatus.achieved => (
-        AppColors.tealDeep,
-        AppColors.mint,
+        context.palette.tealDeep,
+        context.palette.mint,
         Colors.white,
         Icons.check_circle_rounded,
       ),
       MilestoneStatus.emerging => (
-        AppColors.gold,
-        AppColors.goldSoft,
-        AppColors.ink,
+        context.palette.gold,
+        context.palette.goldSoft,
+        context.palette.ink,
         Icons.trending_up_rounded,
       ),
       MilestoneStatus.notYet => (
-        AppColors.coral,
-        AppColors.coralSoft,
+        context.palette.coral,
+        context.palette.coralSoft,
         Colors.white,
         Icons.hourglass_bottom_rounded,
       ),
@@ -517,11 +535,15 @@ class _Confirmation extends StatelessWidget {
     required this.child,
     required this.recorded,
     required this.onRecordAnother,
+    required this.onDone,
+    this.onSeeIdeas,
   });
 
   final ChildProfile child;
   final RecordedMilestone recorded;
   final VoidCallback onRecordAnother;
+  final VoidCallback onDone;
+  final VoidCallback? onSeeIdeas;
 
   @override
   Widget build(BuildContext context) {
@@ -537,13 +559,13 @@ class _Confirmation extends StatelessWidget {
               width: 72,
               height: 72,
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.mint,
+                color: context.palette.mint,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.check_rounded,
-                color: AppColors.tealDeep,
+                color: context.palette.tealDeep,
                 size: 44,
               ),
             ),
@@ -563,12 +585,12 @@ class _Confirmation extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.goldSoft,
+                color: context.palette.goldSoft,
                 borderRadius: BorderRadius.circular(AppRadii.field),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.auto_graph_rounded, color: AppColors.ink),
+                  Icon(Icons.auto_graph_rounded, color: context.palette.ink),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -593,18 +615,20 @@ class _Confirmation extends StatelessWidget {
               label: 'See ideas',
               icon: Icons.lightbulb_rounded,
               // A milestone was just recorded, so ask for a fresh batch.
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) =>
-                      RecommendationsScreen(child: child, refresh: true),
-                ),
-              ),
+              onPressed:
+                  onSeeIdeas ??
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          RecommendationsScreen(child: child, refresh: true),
+                    ),
+                  ),
             ),
             const SizedBox(height: 10),
             SecondaryButton(
               key: const Key('doneButton'),
               label: 'Done',
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: onDone,
             ),
           ],
         ),

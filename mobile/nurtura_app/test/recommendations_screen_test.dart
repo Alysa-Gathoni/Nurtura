@@ -8,6 +8,8 @@ import 'package:nurtura_app/screens/recommendations_screen.dart';
 import 'package:nurtura_app/services/api_client.dart';
 import 'package:nurtura_app/services/recommendation_service.dart';
 import 'package:nurtura_app/state/auth_state.dart';
+import 'package:nurtura_app/state/engagement.dart';
+import 'package:nurtura_app/state/preferences.dart';
 import 'package:nurtura_app/state/recommendation_cache.dart';
 import 'package:nurtura_app/state/token_store.dart';
 import 'package:nurtura_app/theme/app_theme.dart';
@@ -56,6 +58,7 @@ Future<void> pumpScreen(
   bool refresh = false,
   RecommendationCache? cache,
   MemoryTokenStore? store,
+  EngagementState? engagement,
 }) async {
   AppText.useGoogleFonts = false;
   final api = ApiClient(baseUrl: 'http://test', httpClient: backend.client)
@@ -66,6 +69,9 @@ Future<void> pumpScreen(
         Provider.value(value: api),
         Provider<RecommendationCache>.value(
           value: cache ?? MemoryRecommendationCache(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => engagement ?? EngagementState(MemoryPreferences()),
         ),
         ChangeNotifierProvider(
           create: (_) => AuthState(
@@ -283,11 +289,9 @@ void main() {
         },
       ],
     );
+    // Signed in with a child, the app opens on Today, whose request gets
+    // the 401.
     final store = await pumpApp(tester, backend, savedToken: 'tok');
-    await tester.tap(find.byKey(const Key('child_3')));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('openRecommendationsButton')));
-    await tester.pumpAndSettle();
 
     expect(find.text('Log in'), findsWidgets);
     expect(await store.read(), isNull);

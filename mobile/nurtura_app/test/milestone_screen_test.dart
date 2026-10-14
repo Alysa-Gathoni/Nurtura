@@ -134,7 +134,7 @@ Future<FakeBackend> openMilestoneScreen(
     return json(caregiverJson);
   }, children: [child]);
   await pumpApp(tester, backend, savedToken: 'tok');
-  await tester.tap(find.byKey(const Key('child_3')));
+  await tester.tap(find.byKey(const Key('tab_milestones')));
   await tester.pumpAndSettle();
   return backend;
 }
@@ -263,21 +263,25 @@ void main() {
     await tapVisible(tester, find.byKey(const Key('saveMilestoneButton')));
     await tapVisible(tester, find.byKey(const Key('seeRecommendationsButton')));
 
+    // The app opened on Today (GET); "See ideas" goes back there and asks
+    // for a fresh batch (POST).
     expect(
       backend.to('/api/children/3/recommendations/').map((r) => r.method),
-      ['POST'],
+      ['GET', 'POST'],
     );
-    expect(find.text('Ideas for Amani'), findsOneWidget);
+    expect(find.text('Today\u2019s ideas'), findsOneWidget);
     expect(find.text('Naming Everyday Objects'), findsOneWidget);
   });
 
-  testWidgets('the app bar opens the recommendations', (tester) async {
+  testWidgets('the app opens on Today with the recommendations', (
+    tester,
+  ) async {
     final backend = await openMilestoneScreen(tester);
-    await tester.tap(find.byKey(const Key('openRecommendationsButton')));
+    await tester.tap(find.byKey(const Key('tab_today')));
     await tester.pumpAndSettle();
     expect(
       backend.to('/api/children/3/recommendations/').map((r) => r.method),
-      ['GET'],
+      ['GET', 'GET'],
     );
     expect(find.text('Naming Everyday Objects'), findsOneWidget);
   });

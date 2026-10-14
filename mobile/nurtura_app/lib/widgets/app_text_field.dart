@@ -67,7 +67,7 @@ class AppTextField extends StatelessWidget {
             errorMaxLines: 3,
             prefixIcon: prefixIcon == null
                 ? null
-                : Icon(prefixIcon, color: AppColors.mutedText),
+                : Icon(prefixIcon, color: context.palette.mutedText),
             suffixIcon: suffix,
           ),
         ),

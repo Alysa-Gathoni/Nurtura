@@ -11,9 +11,26 @@ class ChildrenState extends ChangeNotifier {
   final ChildService _service;
 
   List<ChildProfile> children = const [];
+  int? _selectedId;
   bool loading = false;
   bool loaded = false;
   ApiException? error;
+
+  /// The child the Today, Progress and Milestones tabs are about: the one
+  /// last picked, else the first.
+  ChildProfile? get selected {
+    if (children.isEmpty) return null;
+    return children.firstWhere(
+      (c) => c.id == _selectedId,
+      orElse: () => children.first,
+    );
+  }
+
+  void select(ChildProfile child) {
+    if (_selectedId == child.id) return;
+    _selectedId = child.id;
+    notifyListeners();
+  }
 
   Future<void> load() async {
     loading = true;
@@ -44,12 +61,14 @@ class ChildrenState extends ChangeNotifier {
       concerns: concerns,
     );
     children = [...children, child]..sort((a, b) => a.name.compareTo(b.name));
+    _selectedId = child.id;
     notifyListeners();
     return child;
   }
 
   void clear() {
     children = const [];
+    _selectedId = null;
     loaded = false;
     error = null;
     notifyListeners();

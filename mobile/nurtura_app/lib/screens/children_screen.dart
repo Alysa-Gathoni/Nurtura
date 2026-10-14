@@ -4,20 +4,40 @@ import 'package:provider/provider.dart';
 import '../models/child_profile.dart';
 import '../state/auth_state.dart';
 import '../state/children_state.dart';
+import '../state/theme_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../theme/domain_style.dart';
 import '../widgets/app_card.dart';
 import '../widgets/buttons.dart';
+import '../widgets/gamification.dart';
 import '../widgets/message_banner.dart';
 import '../widgets/nurtura_app_bar.dart';
 import '../widgets/pill_chip.dart';
+import '../widgets/segmented_toggle.dart';
 import 'child_form_screen.dart';
 import 'milestone_screen.dart';
 
-/// The caregiver's children; the signed-in home screen.
+/// The caregiver's children and app settings.
+///
+/// Standalone (before there is a child) it is a full screen with loading,
+/// errors and "Add your first child". In the home shell ([embedded]) it is
+/// the Family tab: the children, light/dark mode and logging out.
 class ChildrenScreen extends StatefulWidget {
-  const ChildrenScreen({super.key});
+  const ChildrenScreen({
+    super.key,
+    this.embedded = false,
+    this.onOpenChild,
+    this.onChildAdded,
+  });
+
+  final bool embedded;
+
+  /// Tapping a child; by default opens their milestones.
+  final ValueChanged<ChildProfile>? onOpenChild;
+
+  /// A child was added; by default opens their milestones.
+  final ValueChanged<ChildProfile>? onChildAdded;
 
   @override
   State<ChildrenScreen> createState() => _ChildrenScreenState();
@@ -37,10 +57,17 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
     final child = await Navigator.of(context).push<ChildProfile>(
       MaterialPageRoute(builder: (_) => const ChildFormScreen()),
     );
-    if (child != null && mounted) _openChild(child, justCreated: true);
+    if (child == null || !mounted) return;
+    if (widget.onChildAdded != null) return widget.onChildAdded!(child);
+    _openMilestones(child, justCreated: true);
   }
 
-  void _openChild(ChildProfile child, {bool justCreated = false}) {
+  void _openChild(ChildProfile child) {
+    if (widget.onOpenChild != null) return widget.onOpenChild!(child);
+    _openMilestones(child);
+  }
+
+  void _openMilestones(ChildProfile child, {bool justCreated = false}) {
     // The milestone screen confirms a new profile itself: a SnackBar here
     // would float over the "Add a child" button when the caregiver comes back.
     Navigator.of(context).push(
@@ -58,6 +85,13 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<ChildrenState>();
+    final body = Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 560),
+        child: _body(state),
+      ),
+    );
+    if (widget.embedded) return body;
     return Scaffold(
       appBar: NurturaAppBar(
         title: 'Your children',
@@ -70,18 +104,12 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 560),
-            child: _body(state),
-          ),
-        ),
-      ),
+      body: SafeArea(child: body),
     );
   }
 
   Widget _body(ChildrenState state) {
+    final p = context.palette;
     if (!state.loaded && state.error == null) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -109,17 +137,30 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
         padding: const EdgeInsets.all(20),
         child: Center(
           child: AppCard(
-            padding: const EdgeInsets.all(22),
+            padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Icon(
-                  Icons.family_restroom_rounded,
-                  size: 48,
-                  color: AppColors.teal,
+                Container(
+                  width: 84,
+                  height: 84,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(bottom: 14),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [p.teal, p.tealLight],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.family_restroom_rounded,
+                    size: 44,
+                    color: Colors.white,
+                  ),
                 ),
-                const SizedBox(height: 10),
                 Text(
                   'Add your first child',
                   textAlign: TextAlign.center,
@@ -128,7 +169,7 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
                 const SizedBox(height: 6),
                 Text(
                   "Tell us about your child, or the baby you're expecting, "
-                  'to start tracking milestones.',
+                  'to get playful ideas and start tracking milestones.',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
@@ -145,68 +186,90 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
         ),
       );
     }
-    return Column(
-      children: [
-        Expanded(
-          child: RefreshIndicator(
-            onRefresh: state.load,
-            child: ListView.separated(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-              itemCount: state.children.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
-              itemBuilder: (_, i) => _ChildCard(
-                child: state.children[i],
-                onTap: () => _openChild(state.children[i]),
-              ),
+    return RefreshIndicator(
+      onRefresh: state.load,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+        children: [
+          if (widget.embedded)
+            Text('Your children', style: AppText.quicksand(size: 20)),
+          if (widget.embedded) const SizedBox(height: 10),
+          for (final child in state.children) ...[
+            _ChildCard(
+              child: child,
+              selected: widget.embedded && child.id == state.selected?.id,
+              onTap: () => _openChild(child),
             ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-          child: PrimaryButton(
+            const SizedBox(height: 12),
+          ],
+          PrimaryButton(
             key: const Key('addChildButton'),
             label: 'Add a child',
             icon: Icons.add_rounded,
             onPressed: _addChild,
           ),
-        ),
+          if (widget.embedded) ...[
+            const SizedBox(height: 26),
+            Text('Appearance', style: AppText.quicksand(size: 20)),
+            const SizedBox(height: 10),
+            const _ThemePicker(),
+            const SizedBox(height: 26),
+            SecondaryButton(
+              key: const Key('logoutButton'),
+              label: 'Log out',
+              icon: Icons.logout_rounded,
+              onPressed: _logout,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _ThemePicker extends StatelessWidget {
+  const _ThemePicker();
+
+  static const _modes = [ThemeMode.system, ThemeMode.light, ThemeMode.dark];
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.watch<ThemeState>();
+    return SegmentedToggle(
+      key: const Key('themePicker'),
+      options: const ['System', 'Light', 'Dark'],
+      icons: const [
+        Icons.brightness_auto_rounded,
+        Icons.light_mode_rounded,
+        Icons.dark_mode_rounded,
       ],
+      selected: _modes.indexOf(theme.mode),
+      onChanged: (i) => theme.set(_modes[i]),
     );
   }
 }
 
 class _ChildCard extends StatelessWidget {
-  const _ChildCard({required this.child, required this.onTap});
+  const _ChildCard({
+    required this.child,
+    required this.onTap,
+    this.selected = false,
+  });
 
   final ChildProfile child;
   final VoidCallback onTap;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
+    final p = context.palette;
     return AppCard(
       key: Key('child_${child.id}'),
       onTap: onTap,
+      borderColor: selected ? p.teal : null,
       child: Row(
         children: [
-          Container(
-            width: 52,
-            height: 52,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: LinearGradient(
-                colors: child.isExpecting
-                    ? const [AppColors.coral, AppColors.gold]
-                    : const [AppColors.teal, AppColors.tealLight],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: Text(
-              child.name.isEmpty ? '?' : child.name[0].toUpperCase(),
-              style: AppText.quicksand(size: 22, color: Colors.white),
-            ),
-          ),
+          ChildAvatar(child: child, size: 52),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -223,10 +286,10 @@ class _ChildCard extends StatelessWidget {
                     ),
                     if (child.isExpecting) ...[
                       const SizedBox(width: 8),
-                      const PillChip(
+                      PillChip(
                         label: 'Expecting',
-                        color: AppColors.gold,
-                        background: AppColors.goldSoft,
+                        color: p.gold,
+                        background: p.goldSoft,
                         icon: Icons.favorite_rounded,
                       ),
                     ],
@@ -248,7 +311,7 @@ class _ChildCard extends StatelessWidget {
               ],
             ),
           ),
-          const Icon(Icons.chevron_right_rounded, color: AppColors.mutedText),
+          Icon(Icons.chevron_right_rounded, color: p.mutedText),
         ],
       ),
     );
