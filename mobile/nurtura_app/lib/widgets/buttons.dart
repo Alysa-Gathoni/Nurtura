@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
-/// Solid teal button with a soft coloured shadow.
+/// Solid terracotta pill button.
 ///
 /// While [loading] it shows a spinner and ignores taps, so a request can't be
 /// sent twice.
@@ -49,7 +49,7 @@ class PrimaryButton extends StatelessWidget {
   }
 }
 
-/// Mint button with teal text and no shadow.
+/// Terracotta-wash pill button with terracotta text.
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
     super.key,

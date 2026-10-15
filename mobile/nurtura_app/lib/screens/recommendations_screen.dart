@@ -319,7 +319,7 @@ class RecommendationCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              // A playful area tile, like a sticker for the activity.
+              // A small area tile in the activity's colour.
               Container(
                 width: 46,
                 height: 46,
