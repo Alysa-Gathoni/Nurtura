@@ -1,0 +1,229 @@
+/* Nurtura's "village" theme for the Django admin: the app's linen,
+   terracotta, sage and mustard palette (and warm browns at night), set
+   through the admin's own CSS variables. Styling only. */
+
+:root {
+  --n-linen: #F7F0E3;
+  --n-paper: #FFFBF3;
+  --n-paper-deep: #F1E6D3;
+  --n-ink: #3B2F28;
+  --n-muted: #85766A;
+  --n-terracotta: #B4583A;
+  --n-terracotta-dark: #8E4128;
+  --n-terracotta-wash: #F4DFD2;
+  --n-sage: #6A8763;
+  --n-sage-dark: #57714F;
+  --n-sage-wash: #E2E9D7;
+  --n-mustard: #CF9B33;
+  --n-mustard-wash: #F6EACB;
+  --n-rose: #BC5F55;
+  --n-rose-wash: #F5DDD8;
+  --n-dusk-wash: #DDE7EB;
+  --n-line: #E6D7BF;
+  --n-border: #D9C6A8;
+  --n-on-accent: #FFF8EF;
+
+  --primary: var(--n-paper-deep);
+  --secondary: var(--n-terracotta);
+  --accent: var(--n-mustard);
+  --primary-fg: var(--n-ink);
+
+  --body-fg: var(--n-ink);
+  --body-bg: var(--n-linen);
+  --body-quiet-color: var(--n-muted);
+  --body-medium-color: #5A4A3F;
+  --body-loud-color: #2A201A;
+
+  --header-color: var(--n-ink);
+  --header-branding-color: var(--n-ink);
+  --header-bg: var(--n-linen);
+  --header-link-color: var(--n-ink);
+
+  --breadcrumbs-fg: var(--n-muted);
+  --breadcrumbs-link-fg: var(--n-terracotta);
+  --breadcrumbs-bg: var(--n-paper-deep);
+
+  --link-fg: var(--n-terracotta);
+  --link-hover-color: var(--n-terracotta-dark);
+  --link-selected-fg: var(--n-terracotta-dark);
+
+  --hairline-color: var(--n-line);
+  --border-color: var(--n-border);
+
+  --error-fg: var(--n-rose);
+
+  --message-debug-bg: var(--n-paper-deep);
+  --message-info-bg: var(--n-dusk-wash);
+  --message-success-bg: var(--n-sage-wash);
+  --message-warning-bg: var(--n-mustard-wash);
+  --message-error-bg: var(--n-rose-wash);
+
+  --darkened-bg: var(--n-paper-deep);
+  --selected-bg: var(--n-terracotta-wash);
+  --selected-row: var(--n-mustard-wash);
+
+  --button-fg: var(--n-on-accent);
+  --button-bg: var(--n-terracotta);
+  --button-hover-bg: var(--n-terracotta-dark);
+  --default-button-bg: var(--n-sage);
+  --default-button-hover-bg: var(--n-sage-dark);
+  --close-button-bg: var(--n-muted);
+  --close-button-hover-bg: var(--n-ink);
+  --delete-button-bg: var(--n-rose);
+  --delete-button-hover-bg: #9E4A41;
+
+  --object-tools-fg: var(--n-on-accent);
+  --object-tools-bg: var(--n-sage);
+  --object-tools-hover-bg: var(--n-sage-dark);
+
+  --font-family-primary: "Nunito", "Segoe UI", system-ui, Roboto, Arial, sans-serif;
+}
+
+/* Evening by the fire: the same roles in warm browns. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --n-linen: #1E1915;
+    --n-paper: #28211C;
+    --n-paper-deep: #332A23;
+    --n-ink: #F3EADC;
+    --n-muted: #B6A796;
+    --n-terracotta: #E38D69;
+    --n-terracotta-dark: #F0A585;
+    --n-terracotta-wash: #47291D;
+    --n-sage: #7E9C75;
+    --n-sage-dark: #93B08A;
+    --n-sage-wash: #2C3627;
+    --n-mustard: #E6BD63;
+    --n-mustard-wash: #3D3120;
+    --n-rose: #E59B8F;
+    --n-rose-wash: #452722;
+    --n-dusk-wash: #243139;
+    --n-line: #44382E;
+    --n-border: #574839;
+    --n-on-accent: #2A140B;
+    --body-medium-color: #E0D5C6;
+    --body-loud-color: #FFF8EF;
+    --delete-button-hover-bg: #C97F74;
+    color-scheme: dark;
+  }
+}
+html[data-theme="dark"] {
+  --n-linen: #1E1915;
+  --n-paper: #28211C;
+  --n-paper-deep: #332A23;
+  --n-ink: #F3EADC;
+  --n-muted: #B6A796;
+  --n-terracotta: #E38D69;
+  --n-terracotta-dark: #F0A585;
+  --n-terracotta-wash: #47291D;
+  --n-sage: #7E9C75;
+  --n-sage-dark: #93B08A;
+  --n-sage-wash: #2C3627;
+  --n-mustard: #E6BD63;
+  --n-mustard-wash: #3D3120;
+  --n-rose: #E59B8F;
+  --n-rose-wash: #452722;
+  --n-dusk-wash: #243139;
+  --n-line: #44382E;
+  --n-border: #574839;
+  --n-on-accent: #2A140B;
+  --body-medium-color: #E0D5C6;
+  --body-loud-color: #FFF8EF;
+  --delete-button-hover-bg: #C97F74;
+  color-scheme: dark;
+}
+
+/* Header: the brand on linen with a soft watercolour glow, not a blue bar. */
+#header {
+  border-bottom: 1px solid var(--n-line);
+  background:
+    radial-gradient(60% 140% at 92% 0%, color-mix(in srgb, var(--n-sage) 20%, transparent), transparent 70%),
+    radial-gradient(50% 120% at 8% 100%, color-mix(in srgb, var(--n-mustard) 18%, transparent), transparent 70%),
+    var(--n-linen);
+}
+#site-name { display: flex; align-items: center; gap: 10px; }
+#site-name a:link,
+#site-name a:visited {
+  color: var(--n-ink);
+  font-family: "Quicksand", "Nunito", system-ui, sans-serif;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+#site-name .nurtura-mark { width: 34px; height: 34px; flex: none; }
+#site-name .nurtura-role {
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--n-muted);
+}
+
+/* Headings in the app's rounded display face. */
+#content h1,
+#content h2,
+#login-form h1 {
+  font-family: "Quicksand", "Nunito", system-ui, sans-serif;
+}
+
+/* Section captions: a sage wash instead of a solid blue band. */
+.module h2,
+.module caption,
+.inline-group h2 {
+  background: var(--n-sage-wash);
+  color: var(--n-ink);
+  font-weight: 700;
+}
+.module caption a:link,
+.module caption a:visited { color: var(--n-ink); }
+
+/* Paper cards with a hairline, like the app. */
+.module,
+#changelist-filter {
+  background: var(--n-paper);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.dashboard .module,
+#changelist-filter { border: 1px solid var(--n-line); }
+
+/* Pill buttons; softer fields. */
+.button,
+input[type=submit],
+input[type=button],
+.submit-row input,
+a.button,
+.object-tools a:link,
+.object-tools a:visited,
+.submit-row a.deletelink,
+.submit-row a.closelink {
+  border-radius: 999px;
+}
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=search],
+input[type=number],
+input[type=url],
+textarea,
+select,
+.vTextField {
+  border-radius: 10px;
+  border-color: var(--n-border);
+  background: var(--n-paper);
+  color: var(--n-ink);
+}
+
+/* Sidebar: the current section in a terracotta wash. */
+#nav-sidebar .current-model { background: var(--n-terracotta-wash); }
+.toggle-nav-sidebar { background: var(--n-linen); border-color: var(--n-line); }
+
+/* Login: a paper card on linen. */
+.login #container {
+  background: var(--n-paper);
+  border: 1px solid var(--n-line);
+  border-radius: 20px;
+  overflow: hidden;
+}

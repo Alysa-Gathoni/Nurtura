@@ -1,0 +1,33 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Quicksand:wght@600;700&display=swap">
+<link rel="stylesheet" href="{% static 'nurtura/admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+  <a href="{% url 'admin:index' %}">
+    {# Nurtura's mark, as in the app: a sprout on a hill under a mustard sun. #}
+    <svg class="nurtura-mark" viewBox="0 0 72 72" aria-hidden="true">
+      <circle cx="36" cy="36" r="36" fill="#F4DFD2"/>
+      <circle cx="50.4" cy="21.6" r="7.9" fill="#CF9B33"/>
+      <path d="M0 58 Q36 34 72 58 L72 72 L0 72 Z" fill="#B4583A"/>
+      <path d="M36 47.5 Q35.3 36 36 28.8" stroke="#6A8763" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+      <path d="M36 33.8 Q21.6 33.1 18.7 21.6 Q32.4 21.6 36 33.8 Z" fill="#6A8763"/>
+      <path d="M36 30.2 Q41.8 17.3 54.7 15.8 Q51.8 28.8 36 30.2 Z" fill="#6A8763"/>
+    </svg>
+    {{ site_header|default:_('Django administration') }}
+  </a>
+  <span class="nurtura-role">Admin</span>
+</div>
+{% if user.is_anonymous %}
+  {% include "admin/color_theme_toggle.html" %}
+{% endif %}
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
