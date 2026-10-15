@@ -85,14 +85,14 @@ class _HomeShellState extends State<HomeShell> {
 
     final (title, subtitle) = switch (_tab) {
       today => (
-        child.isExpecting ? 'Ideas for now' : 'Today’s ideas',
+        'From the village',
         child.isExpecting
-            ? 'Gentle activities for your pregnancy'
-            : 'Playful activities chosen for ${child.name}',
+            ? 'Gentle ideas for your pregnancy'
+            : 'Picked for ${child.name}',
       ),
-      progress => ('Progress', 'Celebrate every step'),
+      progress => ('Progress', 'Every step counts'),
       milestones => ('Milestones', 'What can ${child.name} do?'),
-      _ => ('Family', 'Children, settings and your account'),
+      _ => ('Family', null),
     };
 
     return Scaffold(

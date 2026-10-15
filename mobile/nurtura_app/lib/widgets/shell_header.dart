@@ -8,8 +8,9 @@ import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'buttons.dart';
 import 'gamification.dart';
+import 'village.dart';
 
-/// The curved gradient header of each tab: the selected child (tap to
+/// The header of each tab, on a watercolour wash: the selected child (tap to
 /// switch), the day streak, and the tab's title.
 class ShellHeader extends StatelessWidget {
   const ShellHeader({
@@ -32,15 +33,8 @@ class ShellHeader extends StatelessWidget {
     final p = context.palette;
     final child = context.watch<ChildrenState>().selected;
     final streak = context.watch<EngagementState>().streak;
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [p.headerStart, p.headerEnd],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(30)),
-      ),
+    return VillageWash(
+      seed: title.length,
       child: SafeArea(
         bottom: false,
         child: Padding(
@@ -61,22 +55,19 @@ class ShellHeader extends StatelessWidget {
                     const Spacer(),
                   ?trailing,
                   const SizedBox(width: 8),
-                  StreakChip(days: streak, onDark: true),
+                  StreakChip(days: streak),
                 ],
               ),
               const SizedBox(height: 16),
-              Text(
-                title,
-                style: AppText.quicksand(size: 27, color: Colors.white),
-              ),
+              Text(title, style: AppText.quicksand(size: 28, color: p.ink)),
               if (subtitle != null) ...[
                 const SizedBox(height: 2),
                 Text(
                   subtitle!,
                   style: AppText.nunito(
-                    size: 14,
+                    size: 14.5,
                     weight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.86),
+                    color: p.mutedText,
                   ),
                 ),
               ],
@@ -96,11 +87,12 @@ class _ChildSwitcherButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final p = context.palette;
     return Align(
       alignment: Alignment.centerLeft,
       child: Material(
-        color: Colors.white.withValues(alpha: 0.16),
-        shape: const StadiumBorder(),
+        color: p.card,
+        shape: StadiumBorder(side: BorderSide(color: p.border)),
         child: InkWell(
           key: const Key('childSwitcher'),
           customBorder: const StadiumBorder(),
@@ -124,7 +116,7 @@ class _ChildSwitcherButton extends StatelessWidget {
                         style: AppText.nunito(
                           size: 15,
                           weight: FontWeight.w800,
-                          color: Colors.white,
+                          color: p.ink,
                         ),
                       ),
                       Text(
@@ -133,18 +125,14 @@ class _ChildSwitcherButton extends StatelessWidget {
                         style: AppText.nunito(
                           size: 12,
                           weight: FontWeight.w600,
-                          color: Colors.white.withValues(alpha: 0.85),
+                          color: p.mutedText,
                         ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 4),
-                const Icon(
-                  Icons.expand_more_rounded,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                Icon(Icons.expand_more_rounded, color: p.mutedText, size: 20),
               ],
             ),
           ),
@@ -177,7 +165,9 @@ Future<void> showChildSwitcher(
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Material(
-                    color: c.id == state.selected?.id ? p.mint : p.cardAlt,
+                    color: c.id == state.selected?.id
+                        ? p.primarySoft
+                        : p.cardAlt,
                     borderRadius: BorderRadius.circular(AppRadii.card),
                     child: ListTile(
                       key: Key('switch_${c.id}'),
@@ -197,7 +187,7 @@ Future<void> showChildSwitcher(
                         style: Theme.of(sheetContext).textTheme.bodySmall,
                       ),
                       trailing: c.id == state.selected?.id
-                          ? Icon(Icons.check_circle_rounded, color: p.tealDeep)
+                          ? Icon(Icons.check_circle_rounded, color: p.primary)
                           : null,
                       onTap: () {
                         state.select(c);

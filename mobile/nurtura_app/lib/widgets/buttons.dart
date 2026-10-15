@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
-/// Solid teal button with a soft coloured shadow.
+/// Solid terracotta pill button.
 ///
 /// While [loading] it shows a spinner and ignores taps, so a request can't be
 /// sent twice.
@@ -26,8 +26,8 @@ class PrimaryButton extends StatelessWidget {
     final enabled = onPressed != null && !loading;
     return _ButtonShell(
       background: enabled
-          ? context.palette.tealDeep
-          : context.palette.tealDeep.withValues(alpha: 0.55),
+          ? context.palette.primary
+          : context.palette.primary.withValues(alpha: 0.55),
       shadow: enabled ? AppShadows.primaryButton : const [],
       onTap: enabled ? onPressed : null,
       child: loading
@@ -49,7 +49,7 @@ class PrimaryButton extends StatelessWidget {
   }
 }
 
-/// Mint button with teal text and no shadow.
+/// Terracotta-wash pill button with terracotta text.
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
     super.key,
@@ -65,13 +65,13 @@ class SecondaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _ButtonShell(
-      background: context.palette.mint,
+      background: context.palette.primarySoft,
       shadow: const [],
       onTap: onPressed,
       child: _ButtonLabel(
         label: label,
         icon: icon,
-        color: context.palette.tealDeep,
+        color: context.palette.primary,
       ),
     );
   }

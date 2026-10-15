@@ -5,7 +5,7 @@ import '../theme/app_theme.dart';
 
 enum _Kind { error, success, info }
 
-/// Inline message box for errors (coral), success (mint) or information (gold).
+/// Inline message box for errors (rose), success (sage) or information (mustard).
 class MessageBanner extends StatelessWidget {
   const MessageBanner.error(this.message, {super.key}) : _kind = _Kind.error;
 
@@ -21,9 +21,9 @@ class MessageBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final (background, iconColor, icon) = switch (_kind) {
-      _Kind.error => (p.coralSoft, p.coral, Icons.error_outline_rounded),
-      _Kind.success => (p.mint, p.tealDeep, Icons.check_circle_rounded),
-      _Kind.info => (p.goldSoft, p.gold, Icons.info_outline_rounded),
+      _Kind.error => (p.roseSoft, p.rose, Icons.error_outline_rounded),
+      _Kind.success => (p.sageSoft, p.sage, Icons.check_circle_rounded),
+      _Kind.info => (p.mustardSoft, p.mustard, Icons.info_outline_rounded),
     };
     return Container(
       padding: const EdgeInsets.all(14),

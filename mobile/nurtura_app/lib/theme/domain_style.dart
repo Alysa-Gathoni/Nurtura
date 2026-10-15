@@ -37,36 +37,34 @@ class DomainStyle {
 
   static DomainStyle of(String domain, NurturaPalette p) => switch (domain) {
     'Cognitive' => DomainStyle(
-      color: p.gold,
-      background: p.goldSoft,
-      onColor: AppColors.ink,
+      color: p.mustard,
+      background: p.mustardSoft,
+      onColor: p.ink == AppColors.ink ? AppColors.ink : p.onPrimary,
       icon: Icons.lightbulb_rounded,
     ),
     'Language' => DomainStyle(
-      color: p.sky,
-      background: p.skySoft,
-      onColor: Colors.white,
+      color: p.dusk,
+      background: p.duskSoft,
+      onColor: p.onPrimary,
       icon: Icons.chat_bubble_rounded,
     ),
     'Motor' => DomainStyle(
-      color: p.teal,
-      background: p.mint,
-      onColor: Colors.white,
+      color: p.sage,
+      background: p.sageSoft,
+      onColor: p.onPrimary,
       icon: Icons.directions_run_rounded,
     ),
     'Socio-Emotional' => DomainStyle(
-      color: p.coral,
-      background: p.coralSoft,
-      onColor: Colors.white,
+      color: p.rose,
+      background: p.roseSoft,
+      onColor: p.onPrimary,
       icon: Icons.favorite_rounded,
     ),
     // Sensory
     _ => DomainStyle(
-      color: const Color(0xFF9B7BEA),
-      background: p.paper == AppColors.paper
-          ? const Color(0xFFEDE6FF)
-          : const Color(0xFF2A2342),
-      onColor: Colors.white,
+      color: p.plum,
+      background: p.plumSoft,
+      onColor: p.onPrimary,
       icon: Icons.back_hand_rounded,
     ),
   };

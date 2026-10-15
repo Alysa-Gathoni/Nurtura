@@ -249,13 +249,12 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                 '${widget.child.name} · ${widget.child.ageDescription}',
                 style: AppText.quicksand(
                   size: 20,
-                  color: context.palette.tealDeep,
+                  color: context.palette.primary,
                 ),
               ),
               const SizedBox(height: 2),
               Text(
-                'Find a milestone from the CDC and WHO checklists, then tell '
-                'us how ${widget.child.name} is doing.',
+                'From the CDC and WHO checklists.',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: 14),
@@ -280,8 +279,8 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
               PillChip(
                 key: const Key('domain_All'),
                 label: 'All',
-                color: context.palette.tealDeep,
-                background: context.palette.mint,
+                color: context.palette.primary,
+                background: context.palette.primarySoft,
                 selected: _domain == null,
                 onTap: () => _setDomain(null),
               ),
@@ -443,7 +442,7 @@ class _MilestoneTile extends StatelessWidget {
     return AppCard(
       key: Key('milestone_${milestone.key}'),
       onTap: onTap,
-      borderColor: selected ? context.palette.tealDeep : null,
+      borderColor: selected ? context.palette.primary : null,
       child: Row(
         children: [
           Expanded(
@@ -475,7 +474,9 @@ class _MilestoneTile extends StatelessWidget {
             selected
                 ? Icons.check_circle_rounded
                 : Icons.radio_button_unchecked_rounded,
-            color: selected ? context.palette.tealDeep : context.palette.mint,
+            color: selected
+                ? context.palette.primary
+                : context.palette.primarySoft,
             size: 26,
           ),
         ],
@@ -499,21 +500,21 @@ class _StatusChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final (color, background, onColor, icon) = switch (status) {
       MilestoneStatus.achieved => (
-        context.palette.tealDeep,
-        context.palette.mint,
-        Colors.white,
+        context.palette.sage,
+        context.palette.sageSoft,
+        context.palette.card,
         Icons.check_circle_rounded,
       ),
       MilestoneStatus.emerging => (
-        context.palette.gold,
-        context.palette.goldSoft,
+        context.palette.mustard,
+        context.palette.mustardSoft,
         context.palette.ink,
         Icons.trending_up_rounded,
       ),
       MilestoneStatus.notYet => (
-        context.palette.coral,
-        context.palette.coralSoft,
-        Colors.white,
+        context.palette.rose,
+        context.palette.roseSoft,
+        context.palette.card,
         Icons.hourglass_bottom_rounded,
       ),
     };
@@ -561,11 +562,11 @@ class _Confirmation extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: context.palette.mint,
+                color: context.palette.primarySoft,
               ),
               child: Icon(
                 Icons.check_rounded,
-                color: context.palette.tealDeep,
+                color: context.palette.primary,
                 size: 44,
               ),
             ),
@@ -585,7 +586,7 @@ class _Confirmation extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: context.palette.goldSoft,
+                color: context.palette.mustardSoft,
                 borderRadius: BorderRadius.circular(AppRadii.field),
               ),
               child: Row(

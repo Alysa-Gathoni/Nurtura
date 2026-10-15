@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
-/// Labelled text field: white fill, 12px radius, 2px mint border.
+/// Labelled text field on a paper fill with a hairline linen border.
 class AppTextField extends StatelessWidget {
   const AppTextField({
     super.key,

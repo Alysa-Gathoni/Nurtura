@@ -171,10 +171,10 @@ class _Hero extends StatelessWidget {
             value: summary.badges.isEmpty
                 ? 0
                 : summary.unlocked / summary.badges.length,
-            color: p.gold,
+            color: p.mustard,
             size: 78,
             stroke: 9,
-            child: Icon(Icons.emoji_events_rounded, color: p.gold, size: 32),
+            child: Icon(Icons.emoji_events_rounded, color: p.mustard, size: 32),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -209,7 +209,7 @@ class _Hero extends StatelessWidget {
                     icon: const Icon(Icons.add_task_rounded),
                     label: const Text('Record a milestone'),
                     style: TextButton.styleFrom(
-                      foregroundColor: p.tealDeep,
+                      foregroundColor: p.primary,
                       padding: EdgeInsets.zero,
                       textStyle: AppText.nunito(
                         size: 14,
@@ -243,17 +243,17 @@ class _StreakCard extends StatelessWidget {
     final p = context.palette;
     return AppCard(
       key: const Key('streakCard'),
-      color: p.goldSoft,
+      color: p.mustardSoft,
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           Container(
             width: 48,
             height: 48,
-            decoration: BoxDecoration(color: p.gold, shape: BoxShape.circle),
-            child: const Icon(
+            decoration: BoxDecoration(color: p.mustard, shape: BoxShape.circle),
+            child: Icon(
               Icons.local_fire_department_rounded,
-              color: Colors.white,
+              color: p.card,
               size: 28,
             ),
           ),

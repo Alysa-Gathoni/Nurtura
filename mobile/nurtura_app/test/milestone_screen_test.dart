@@ -269,7 +269,7 @@ void main() {
       backend.to('/api/children/3/recommendations/').map((r) => r.method),
       ['GET', 'POST'],
     );
-    expect(find.text('Today\u2019s ideas'), findsOneWidget);
+    expect(find.text('From the village'), findsOneWidget);
     expect(find.text('Naming Everyday Objects'), findsOneWidget);
   });
 

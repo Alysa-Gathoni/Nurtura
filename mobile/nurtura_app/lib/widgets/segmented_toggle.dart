@@ -25,7 +25,10 @@ class SegmentedToggle extends StatelessWidget {
     final p = context.palette;
     return Container(
       padding: const EdgeInsets.all(4),
-      decoration: ShapeDecoration(color: p.mint, shape: const StadiumBorder()),
+      decoration: ShapeDecoration(
+        color: p.primarySoft,
+        shape: const StadiumBorder(),
+      ),
       child: Row(
         children: [
           for (var i = 0; i < options.length; i++)
@@ -34,7 +37,7 @@ class SegmentedToggle extends StatelessWidget {
                 duration: const Duration(milliseconds: 220),
                 curve: Curves.easeOut,
                 decoration: ShapeDecoration(
-                  color: i == selected ? p.tealDeep : Colors.transparent,
+                  color: i == selected ? p.primary : Colors.transparent,
                   shape: const StadiumBorder(),
                 ),
                 child: Material(
@@ -53,7 +56,7 @@ class SegmentedToggle extends StatelessWidget {
                             Icon(
                               icons![i],
                               size: 16,
-                              color: i == selected ? p.onPrimary : p.tealDeep,
+                              color: i == selected ? p.onPrimary : p.primary,
                             ),
                             const SizedBox(width: 6),
                           ],
@@ -65,7 +68,7 @@ class SegmentedToggle extends StatelessWidget {
                               style: AppText.nunito(
                                 size: 15,
                                 weight: FontWeight.w800,
-                                color: i == selected ? p.onPrimary : p.tealDeep,
+                                color: i == selected ? p.onPrimary : p.primary,
                               ),
                             ),
                           ),

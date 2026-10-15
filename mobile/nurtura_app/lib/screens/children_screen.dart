@@ -15,6 +15,7 @@ import '../widgets/message_banner.dart';
 import '../widgets/nurtura_app_bar.dart';
 import '../widgets/pill_chip.dart';
 import '../widgets/segmented_toggle.dart';
+import '../widgets/village.dart';
 import 'child_form_screen.dart';
 import 'milestone_screen.dart';
 
@@ -109,7 +110,6 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
   }
 
   Widget _body(ChildrenState state) {
-    final p = context.palette;
     if (!state.loaded && state.error == null) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -142,24 +142,9 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(
-                  width: 84,
-                  height: 84,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(bottom: 14),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      colors: [p.teal, p.tealLight],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.family_restroom_rounded,
-                    size: 44,
-                    color: Colors.white,
-                  ),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 14),
+                  child: Center(child: VillageMark(size: 88)),
                 ),
                 Text(
                   'Add your first child',
@@ -168,8 +153,7 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  "Tell us about your child, or the baby you're expecting, "
-                  'to get playful ideas and start tracking milestones.',
+                  'Tell us about your little one, or the baby on the way.',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
@@ -193,8 +177,7 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
         children: [
           if (state.offline) ...[
             const MessageBanner.info(
-              "You're offline, so this is the list saved on your phone. "
-              'Pull down to refresh when you are back online.',
+              "You're offline. This is the list saved on your phone.",
               key: Key('offlineChildrenNotice'),
             ),
             const SizedBox(height: 12),
@@ -274,7 +257,7 @@ class _ChildCard extends StatelessWidget {
     return AppCard(
       key: Key('child_${child.id}'),
       onTap: onTap,
-      borderColor: selected ? p.teal : null,
+      borderColor: selected ? p.primaryMid : null,
       child: Row(
         children: [
           ChildAvatar(child: child, size: 52),
@@ -296,8 +279,8 @@ class _ChildCard extends StatelessWidget {
                       const SizedBox(width: 8),
                       PillChip(
                         label: 'Expecting',
-                        color: p.gold,
-                        background: p.goldSoft,
+                        color: p.mustard,
+                        background: p.mustardSoft,
                         icon: Icons.favorite_rounded,
                       ),
                     ],

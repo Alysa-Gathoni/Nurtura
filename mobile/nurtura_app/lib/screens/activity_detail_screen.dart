@@ -112,7 +112,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
           content: Text(
             partial
                 ? 'Nice start! Saved as partly done.'
-                : 'Well done! ${_r.activityName} is marked as done.',
+                : 'Well done! Marked as done.',
           ),
         ),
       );
@@ -190,7 +190,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'About this activity',
+                          'How to play',
                           style: AppText.nunito(
                             size: 13,
                             weight: FontWeight.w800,
@@ -211,7 +211,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                 ],
                 const SizedBox(height: 16),
                 Text(
-                  'Suggested for ${widget.childName} on '
+                  'Picked for ${widget.childName} on '
                   '${formatDate(r.generatedAt.toLocal())}.',
                   key: const Key('suggestedOn'),
                   style: Theme.of(context).textTheme.bodySmall,
@@ -236,7 +236,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     return AppCard(
       key: const Key('doneCard'),
       padding: const EdgeInsets.all(16),
-      color: done == null ? null : p.mint,
+      color: done == null ? null : p.sageSoft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -277,7 +277,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                   done.partial
                       ? Icons.timelapse_rounded
                       : Icons.emoji_events_rounded,
-                  color: p.tealDeep,
+                  color: p.sage,
                   size: 30,
                 ),
                 const SizedBox(width: 10),
@@ -288,7 +288,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                     style: AppText.nunito(
                       size: 16,
                       weight: FontWeight.w800,
-                      color: p.tealDeep,
+                      color: p.sage,
                     ),
                   ),
                 ),
@@ -302,8 +302,8 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
             const SizedBox(height: 4),
             Text(
               done.partial
-                  ? "It may be suggested again so you can finish it."
-                  : "We won't suggest it again; new ideas will take its place.",
+                  ? 'It may come back so you can finish it.'
+                  : "It won't come up again; a new idea takes its place.",
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
@@ -341,7 +341,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                 ),
               ],
             ),
-            _Stars(rating: saved.rating, color: p.gold),
+            _Stars(rating: saved.rating, color: p.mustard),
             if (saved.comment.isNotEmpty) ...[
               const SizedBox(height: 6),
               Text(
@@ -361,13 +361,13 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Was this a good idea for ${widget.childName}?',
+            'How helpful was this?',
             style: AppText.nunito(size: 16, weight: FontWeight.w700),
           ),
           const SizedBox(height: 8),
           _Stars(
             rating: _rating,
-            color: p.gold,
+            color: p.mustard,
             onRate: _sendingFeedback
                 ? null
                 : (value) => setState(() {

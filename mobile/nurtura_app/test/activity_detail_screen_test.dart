@@ -22,10 +22,10 @@ void main() {
     expect(find.text('Naming Everyday Objects'), findsOneWidget);
     expect(find.text('Language'), findsOneWidget);
     expect(find.text('12–18 months'), findsOneWidget);
-    expect(find.text('About this activity'), findsOneWidget);
+    expect(find.text('How to play'), findsOneWidget);
     expect(find.text('Name things you see together.'), findsOneWidget);
     expect(find.byKey(const Key('explanationBox')), findsOneWidget);
-    expect(find.text('Suggested for Amani on 11 Oct 2026.'), findsOneWidget);
+    expect(find.text('Picked for Amani on 11 Oct 2026.'), findsOneWidget);
     // No further request: the detail uses what the list already had.
     expect(backend.requests, hasLength(1));
   });
