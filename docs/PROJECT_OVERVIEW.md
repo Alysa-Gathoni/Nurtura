@@ -2,7 +2,7 @@
 
 *An AI-based early childhood development activity recommender, and a component of the SOFIA platform (client: Webmasters Kenya).*
 
-> **Last updated: 2026-10-10.** The figures describe `main` at commit `9d5c2ed` (tag `sprint5-eval-v1`), after Sprint 5. They will go out of date as work continues; check the date before quoting them.
+> **Last updated: 2026-10-15.** The figures describe `main` at commit `8c547d1`, after Sprints 6–8. They will go out of date as work continues; check the date before quoting them.
 
 ---
 
@@ -30,22 +30,22 @@ Two principles guide the design:
  (child, milestones,    (CDC/WHO/ASQ rules)    (SBERT AI model)       (weighted              ("Suggested
   concerns, interests)  Which areas need       Which activities       combination, α = 0.7)  because…")
                         attention most?        match those needs?
-      BUILT                  BUILT                  BUILT              BUILT + EVALUATED       NEXT (Sprint 6)
+      BUILT                  BUILT                  BUILT              BUILT + EVALUATED       BUILT (reader test due)
 ```
 
 | Stage | What it does | Status |
 |---|---|---|
-| 1. Caregiver input | The caregiver creates a child profile (including a pregnancy profile) in the mobile app, and records milestones from a searchable checklist, e.g. *"Waves bye-bye: Not yet"*. | **Built.** Runs on an Android phone. |
+| 1. Caregiver input | The caregiver creates a child profile (including a pregnancy profile) in the mobile app, and records milestones from a searchable checklist, e.g. *"Waves bye-bye: Not yet"*. | **Built.** Runs on an Android phone against the real backend. |
 | 2. Rule engine | Compares the child's milestones with what CDC and WHO expect at that age, and gives each of the **five developmental areas** (Cognitive, Language, Motor, Sensory, Socio-Emotional) a priority score from 0 to 1. | **Built.** |
 | 3. Semantic search | An AI language model (Sentence-BERT, `all-MiniLM-L6-v2`) compares the meaning of the child's needs with every published activity. It works on meaning, not keywords. | **Built.** Sprint 4's hand check of sample results (#31) is still open. |
 | 4. Weighted ranking | Combines rule priority and semantic match, weighted by how well the activity's age range suits the child. The balance (α) was chosen experimentally. | **Built and evaluated** (Sprint 5, α = 0.7). |
-| 5. Explanation | A plain-language reason for each recommendation. | **Next** (Sprint 6). First, ranked recommendations are being connected end to end (#52). |
+| 5. Explanation | A plain-language reason for each recommendation, built from the milestone or concern that drove it, the activity's age fit and its approved plain-language aim. | **Built** (Sprint 6, tag `sprint6-explanations-v1`). The reader test with 5 non-technical readers is still to run. |
 
 ---
 
 ## 3. A worked example
 
-The child here is **hypothetical**, but the numbers come from running the real system (rule engine and ranking at α = 0.7) on the current catalogue, on 2026-10-10.
+The child here is **hypothetical**, but the numbers and the explanation come from running the real system (rule engine, ranking at α = 0.7 and explanations) on the current catalogue, on 2026-10-15. Nothing from the run was saved.
 
 **The child:** Amani, **6 months old**. Her caregiver adds one interest: *music*.
 
@@ -78,10 +78,14 @@ Every area starts at 1. After the rules, the scores are scaled so the most urgen
 4. *Naming Everyday Objects* (Language, 12–18 months)
 5. *Naming Pictures in a Book* (Language, 12–18 months)
 
-**Step 5: Explanation.** *(Sprint 6; illustrative.)* The caregiver would see something like:
+**Step 5: Explanation.** The app shows each activity with the reason it was suggested. For the top one:
 
 > **Turn-Taking Sound Games**
-> *Suggested because Amani hasn't started cooing yet, which most babies do by 4 months. Copying her sounds and pausing for her to reply builds the back-and-forth of early conversation.*
+> *You recorded “Makes sounds like ‘oooo’ or ‘aahh’ (cooing)” as not yet; most children do this by 4 months. It's designed for children aged 6–12 months, your child's age group. Its aim is to help your baby learn to take turns, like in a conversation.*
+
+The explanation is built only from what the caregiver told the app, the milestone guidelines and the activity's own details. It never shows scores or rankings.
+
+**Step 6: Feedback.** After trying the activity, the caregiver can mark it **Done** or **Partly done** and rate it from 1 to 5 stars with an optional comment. A done activity isn't suggested again; the next batch fills its place in the same ranked order.
 
 **Before birth:** an expecting parent can create a profile from the **due date** and choose an area they'd like support with. They then see only pregnancy activities, ranked for that area.
 
@@ -122,9 +126,11 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 | 3.5 Mobile shell | First app screens connected to the real backend, run on an Android phone | ✅ Complete |
 | 4. Semantic search | SBERT embeddings and similarity search | ✅ Built; hand check of results pending (#31) |
 | 5. Weighted ranking | Combine the signals, choose α on a held-out set | ✅ Complete (tag `sprint5-eval-v1`) |
-| 6. Explainability | Plain-language reasons for each recommendation | 🔄 Next: connecting ranked recommendations end to end (#52) |
-| 7–8 | Feedback, history, full mobile app | Planned |
-| 9–10 | Evaluation with caregivers, documentation | Planned |
+| 6. Explainability | Plain-language reasons for each recommendation | ✅ Built (tag `sprint6-explanations-v1`); reader test with 5 readers still to run |
+| 7. Feedback & history | Mark activities done, rate them, administrator review | ✅ Complete |
+| 8. Mobile app | Recommendations, activity details, progress, offline use, redesign, two-step sign-in | ✅ Built; the end-to-end test on a phone is still to run |
+| 9. Evaluation | Tests across requirements; relevance, personalisation, explainability, SUS and satisfaction with caregivers | Next |
+| 10. Documentation | Chapter 5, diagrams, defence preparation | Planned |
 
 ### By the numbers
 
@@ -132,8 +138,8 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 |---|---|
 | Activities | **54**, all reviewed and Published: Socio-Emotional 17, Language 12, Cognitive 10, Motor 8, Sensory 7; 8 of them for pregnancy |
 | Reference milestones | **133**: 127 CDC (2022 checklists) and 6 WHO (motor study). **25 verified** against the source: the 6 WHO ones and the 19 CDC ones used in the evaluation. The other 108 are still to check. |
-| Automated tests | **249** backend tests and **26** app tests, run on every change (GitHub Actions) |
-| Engineering history | **26** merged pull requests, **71** commits on `main` |
+| Automated tests | **378** backend tests and **78** app tests, run on every change (GitHub Actions), plus one end-to-end test against the real backend |
+| Engineering history | **53** merged pull requests, **137** commits on `main` |
 
 ### Highlights
 
@@ -142,6 +148,9 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 - **Two user roles.** Caregivers use the app and see only their own children. Administrators manage the activity library.
 - **Content review workflow (the SOFIA fix):** each activity moves Draft → Under Review → Published, and only Published activities can be recommended.
 - **Security basics:** strong-password rules, one account per email, and limited login attempts.
+- **Two-step sign-in:** on a new phone, a 6-digit code is emailed (valid 10 minutes, 5 tries). The caregiver can trust the phone for 30 days. Codes and phone IDs are stored only as hashes.
+- **Recommendations are stored in batches** with the scores, the ranking settings and the explanation version that produced them, so any recommendation can be traced back later.
+- **Feedback (FR-14 to FR-16):** caregivers mark activities done or partly done and rate them through a single `FeedbackManager`. Administrators review the feedback against each activity, read-only, without seeing the child's name or the caregiver's email.
 
 **Rule engine**
 - A custom IF-THEN engine. Weights follow the ASQ-3 scoring convention: Not yet = +10, Emerging = +5.
@@ -153,15 +162,25 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 - **Reproducible evaluation:** the labelling sheet records exactly which activities, rules and model it was built from, and the evaluation warns if anything has changed since.
 
 **Mobile app (Flutter)**
-- Four screens: register/log in, a list of children, create a child profile (including pregnancy), and record milestones from a searchable checklist.
-- Built to the agreed visual design: teal, coral and gold colours, rounded cards, Nunito and Quicksand fonts.
-- Runs on a real Android phone against the local backend.
+- **Sign in:** register or log in, with the emailed code on a new phone.
+- **Four tabs:**
+  - **Today:** the selected child's recommendations, with explanations;
+  - **Progress:** milestones celebrated, a ring for each area and badges, all from the child's own records and never compared with other children (NFR-15);
+  - **Milestones:** record from the searchable checklist;
+  - **Family:** children, theme and logout.
+- **Activity screen:** the full activity, then "How did it go?": Done or Partly done (with undo), and 1–5 stars with a comment.
+- **Offline (NFR-14):** the last recommendations and the child list are kept on the phone. Opening the app offline keeps the caregiver signed in and shows them, marked as saved.
+- **Look and feel:** a playful design with light and dark mode, a day streak and badges, inspired by Kinedu. It keeps the agreed teal, coral and gold colours, rounded cards, and the Nunito and Quicksand fonts.
+- Runs on a real Android phone against the backend.
 
 ---
 
 ## 6. What's next and open items
 
-- **Sprint 6, explanations:** first, connect the ranking end to end, so recommendations are generated, saved and served to the app (#52). Then write the plain-language explanations.
-- **Sprint 4 hand check (#31):** review the saved search results for the sample children.
+- **Explanation reader test (Sprint 6 definition of done):** 5 non-technical readers, materials ready in `docs/explanation_reader_test*.md`. Until it's scored, explanation wording and the evaluated ranking stay frozen.
+- **Sprint 4 hand check (#31):** the researcher marks the saved search results relevant or not.
+- **End-to-end test on a phone:** register, profiles, a milestone, recommendations, done and feedback, Progress and dark mode, with screenshots.
+- **Real email for sign-in codes:** SMTP details go in `backend/.env`. Until then, codes appear in the backend console.
+- **Sprint 9 evaluation:** recruit caregivers now (the longest lead time), then run relevance, personalisation, explainability, SUS and satisfaction. Map each requirement to its tests and fill the gaps.
+- **Language toggle (NFR-16):** build it, or record English-only as a limitation.
 - **Verify the remaining 108 CDC milestones** against the official checklists.
-- **Recruit caregivers for the Sprint 9 evaluation.** It has the longest lead time.
