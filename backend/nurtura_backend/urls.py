@@ -18,6 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+# Branding for the administrator site (#114).
+admin.site.site_header = "Nurtura"
+admin.site.site_title = "Nurtura admin"
+admin.site.index_title = "Content, milestones and feedback"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("profiles.urls")),

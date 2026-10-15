@@ -83,7 +83,8 @@ ROOT_URLCONF = "nurtura_backend.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        # Project templates: the admin's Nurtura branding (#114).
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -162,6 +163,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+# Project static files: the admin's Nurtura theme (#114).
+STATICFILES_DIRS = [BASE_DIR / "static"]
 
 
 # Email
