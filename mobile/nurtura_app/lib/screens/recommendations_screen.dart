@@ -188,13 +188,13 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
           const CircularProgressIndicator(),
           const SizedBox(height: 18),
           Text(
-            'Preparing recommendations...',
+            'Gathering ideas…',
             textAlign: TextAlign.center,
-            style: AppText.quicksand(size: 20, color: context.palette.tealDeep),
+            style: AppText.quicksand(size: 20, color: context.palette.primary),
           ),
           const SizedBox(height: 6),
           Text(
-            'This can take up to half a minute the first time.',
+            'The first time can take up to 30 seconds.',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodySmall,
           ),
@@ -230,8 +230,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
         padding: const EdgeInsets.all(20),
         child: Center(
           child: MessageBanner.info(
-            "We don't have activities to suggest for ${widget.child.name} "
-            'yet. Please check back later.',
+            'No ideas for ${widget.child.name} yet. Check back soon.',
             key: const Key('noRecommendations'),
           ),
         ),
@@ -249,8 +248,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
             children: [
               if (_savedAt != null) ...[
                 MessageBanner.info(
-                  'Saved recommendations from ${formatDate(_savedAt!)}. '
-                  "You're offline, so they may be out of date.",
+                  "Saved ideas from ${formatDate(_savedAt!)}. You're offline.",
                   key: const Key('savedRecommendationsNotice'),
                 ),
                 const SizedBox(height: 12),
@@ -259,8 +257,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Activities to try with ${widget.child.name}, chosen '
-                      "from what you've told us. Tap one for details.",
+                      'Tap an idea to see how to play.',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
@@ -270,7 +267,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                       tooltip: 'Refresh',
                       icon: Icon(
                         Icons.refresh_rounded,
-                        color: context.palette.tealDeep,
+                        color: context.palette.primary,
                       ),
                       onPressed: () => _load(regenerate: true),
                     ),
@@ -359,8 +356,8 @@ class RecommendationCard extends StatelessWidget {
                 PillChip(
                   key: Key('doneChip_${r.activityId}'),
                   label: r.completion!.label,
-                  color: context.palette.tealDeep,
-                  background: context.palette.mint,
+                  color: context.palette.sage,
+                  background: context.palette.sageSoft,
                   icon: r.completion!.partial
                       ? Icons.timelapse_rounded
                       : Icons.check_circle_rounded,
@@ -370,7 +367,7 @@ class RecommendationCard extends StatelessWidget {
                   key: Key('ratingChip_${r.activityId}'),
                   label: '${r.feedback!.rating}/5',
                   color: context.palette.ink,
-                  background: context.palette.goldSoft,
+                  background: context.palette.mustardSoft,
                   icon: Icons.star_rounded,
                 ),
             ],
@@ -402,13 +399,17 @@ class ExplanationBox extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: context.palette.goldSoft,
+        color: context.palette.mustardSoft,
         borderRadius: BorderRadius.circular(AppRadii.field),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.lightbulb_rounded, size: 20, color: context.palette.gold),
+          Icon(
+            Icons.lightbulb_rounded,
+            size: 20,
+            color: context.palette.mustard,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Column(

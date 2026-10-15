@@ -170,7 +170,7 @@ void main() {
       tester,
     ) async {
       await pumpApp(tester, backend(), savedToken: 'tok');
-      expect(find.text('Today’s ideas'), findsOneWidget);
+      expect(find.text('From the village'), findsOneWidget);
       expect(find.text('Tummy Time'), findsOneWidget);
       final streak = find.byKey(const Key('streakChip'));
       expect(

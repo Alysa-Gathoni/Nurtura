@@ -26,8 +26,8 @@ class PrimaryButton extends StatelessWidget {
     final enabled = onPressed != null && !loading;
     return _ButtonShell(
       background: enabled
-          ? context.palette.tealDeep
-          : context.palette.tealDeep.withValues(alpha: 0.55),
+          ? context.palette.primary
+          : context.palette.primary.withValues(alpha: 0.55),
       shadow: enabled ? AppShadows.primaryButton : const [],
       onTap: enabled ? onPressed : null,
       child: loading
@@ -65,13 +65,13 @@ class SecondaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _ButtonShell(
-      background: context.palette.mint,
+      background: context.palette.primarySoft,
       shadow: const [],
       onTap: onPressed,
       child: _ButtonLabel(
         label: label,
         icon: icon,
-        color: context.palette.tealDeep,
+        color: context.palette.primary,
       ),
     );
   }

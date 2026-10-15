@@ -7,7 +7,7 @@ import '../models/child_profile.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
-/// A child's initial in a gradient circle (coral-gold while expecting).
+/// A child's initial in a flat earthy circle (mustard while expecting).
 class ChildAvatar extends StatelessWidget {
   const ChildAvatar({super.key, required this.child, this.size = 48});
 
@@ -17,27 +17,26 @@ class ChildAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    // A flat earthy colour per child, steady across launches.
+    final colours = [p.sage, p.primaryMid, p.dusk, p.plum];
+    final colour = child.isExpecting
+        ? p.mustard
+        : colours[child.name.codeUnits.fold(0, (a, b) => a + b) %
+              colours.length];
     return Container(
       width: size,
       height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: LinearGradient(
-          colors: child.isExpecting ? [p.coral, p.gold] : [p.teal, p.tealLight],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.8),
-          width: 2,
-        ),
+        color: colour,
+        border: Border.all(color: p.card, width: 2),
       ),
       child: child.isExpecting
-          ? Icon(Icons.favorite_rounded, color: Colors.white, size: size * 0.45)
+          ? Icon(Icons.favorite_rounded, color: p.card, size: size * 0.45)
           : Text(
               child.name.isEmpty ? '?' : child.name[0].toUpperCase(),
-              style: AppText.quicksand(size: size * 0.42, color: Colors.white),
+              style: AppText.quicksand(size: size * 0.42, color: p.card),
             ),
     );
   }
@@ -63,7 +62,7 @@ class StreakChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         decoration: ShapeDecoration(
           shape: const StadiumBorder(),
-          color: onDark ? Colors.white.withValues(alpha: 0.18) : p.goldSoft,
+          color: onDark ? Colors.white.withValues(alpha: 0.18) : p.mustardSoft,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -71,7 +70,9 @@ class StreakChip extends StatelessWidget {
             Icon(
               Icons.local_fire_department_rounded,
               size: 18,
-              color: active ? p.gold : (onDark ? Colors.white70 : p.mutedText),
+              color: active
+                  ? p.mustard
+                  : (onDark ? Colors.white70 : p.mutedText),
             ),
             const SizedBox(width: 4),
             Text(
@@ -190,28 +191,15 @@ class BadgeTile extends StatelessWidget {
               height: 62,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: on
-                    ? LinearGradient(
-                        colors: [p.gold, p.coral],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      )
-                    : null,
-                color: on ? null : p.cardAlt,
-                border: on ? null : Border.all(color: p.border, width: 2),
-                boxShadow: on
-                    ? [
-                        BoxShadow(
-                          color: p.gold.withValues(alpha: 0.35),
-                          blurRadius: 14,
-                          offset: const Offset(0, 5),
-                        ),
-                      ]
-                    : null,
+                color: on ? p.mustard : p.cardAlt,
+                border: Border.all(
+                  color: on ? p.mustardSoft : p.border,
+                  width: on ? 4 : 2,
+                ),
               ),
               child: Icon(
                 on ? _badgeIcons[badge.icon] : Icons.lock_rounded,
-                color: on ? Colors.white : p.mutedText,
+                color: on ? p.card : p.mutedText,
                 size: on ? 30 : 22,
               ),
             ),

@@ -134,16 +134,12 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                       height: 84,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          colors: [p.headerStart, p.headerEnd],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
+                        color: p.primarySoft,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.mark_email_read_rounded,
-                        color: Colors.white,
-                        size: 42,
+                        color: p.primary,
+                        size: 40,
                       ),
                     ),
                   ),
@@ -155,8 +151,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'We sent a six-digit code to $hint. '
-                    'Enter it to finish signing in.',
+                    'Enter the 6-digit code we sent to $hint.',
                     key: const Key('codeHint'),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -188,10 +183,6 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                               weight: FontWeight.w700,
                               color: p.ink,
                             ),
-                          ),
-                          subtitle: Text(
-                            'Skip the code when you sign in here.',
-                            style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ),
                         if (_error != null) ...[
@@ -282,7 +273,7 @@ class _CodeBoxes extends StatelessWidget {
                         height: 56,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: i < text.length ? p.mint : p.cardAlt,
+                          color: i < text.length ? p.primarySoft : p.cardAlt,
                           borderRadius: BorderRadius.circular(AppRadii.field),
                           border: Border.all(
                             width: 2,
@@ -293,7 +284,7 @@ class _CodeBoxes extends StatelessWidget {
                                           0,
                                           VerifyCodeScreen.codeLength - 1,
                                         )
-                                ? p.teal
+                                ? p.primaryMid
                                 : p.border,
                           ),
                         ),

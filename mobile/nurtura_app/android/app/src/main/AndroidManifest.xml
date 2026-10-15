@@ -2,7 +2,7 @@
     <!-- The app talks to the Nurtura API. -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="nurtura_app"
+        android:label="Nurtura"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

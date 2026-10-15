@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Terracotta wash behind the launcher icon. -->
+    <color name="ic_launcher_background">#F4DFD2</color>
+    <!-- Linen cream (light) and evening brown (dark) behind the splash. -->
+    <color name="splash_background">#F7F0E3</color>
+    <color name="splash_background_dark">#1E1915</color>
+</resources>

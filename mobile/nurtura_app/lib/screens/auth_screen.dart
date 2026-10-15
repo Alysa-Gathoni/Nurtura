@@ -5,12 +5,12 @@ import '../services/api_client.dart';
 import '../state/auth_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
-import '../theme/domain_style.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
 import '../widgets/segmented_toggle.dart';
+import '../widgets/village.dart';
 
 /// Register or log in as a caregiver.
 class AuthScreen extends StatefulWidget {
@@ -204,14 +204,6 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 16),
-                        Text(
-                          _registering
-                              ? 'You are creating a caregiver account.'
-                              : 'New to Nurtura? Choose Register above.',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
                       ],
                     ),
                   ),
@@ -234,103 +226,37 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 }
 
-/// Gradient header with the brand and a row of colourful area "stickers".
+/// The brand on a watercolour wash, with the proverb Nurtura is built on.
 class _Hero extends StatelessWidget {
   const _Hero();
 
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [p.headerStart, p.headerEnd],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(36)),
-      ),
+    return VillageWash(
+      seed: 7,
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 28, 24, 62),
+          padding: const EdgeInsets.fromLTRB(24, 36, 24, 64),
           child: Column(
             children: [
-              Container(
-                width: 74,
-                height: 74,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.18),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.5),
-                    width: 2,
-                  ),
-                ),
-                child: const Icon(
-                  Icons.spa_rounded,
-                  color: Colors.white,
-                  size: 38,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'Nurtura',
-                style: AppText.quicksand(size: 36, color: Colors.white),
-              ),
+              const VillageMark(size: 92),
+              const SizedBox(height: 14),
+              Text('Nurtura', style: AppText.quicksand(size: 38, color: p.ink)),
               const SizedBox(height: 4),
               Text(
-                "Playful everyday ideas for your child's growth",
+                'It takes a village to raise a child.',
                 textAlign: TextAlign.center,
                 style: AppText.nunito(
-                  size: 15,
+                  size: 16,
                   weight: FontWeight.w600,
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: p.mutedText,
                 ),
-              ),
-              const SizedBox(height: 18),
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  for (final domain in developmentalDomains)
-                    _Sticker(domain: domain),
-                ],
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _Sticker extends StatelessWidget {
-  const _Sticker({required this.domain});
-
-  final String domain;
-
-  @override
-  Widget build(BuildContext context) {
-    final style = DomainStyle.of(domain, NurturaPalette.light);
-    return Tooltip(
-      message: domainLabels[domain] ?? domain,
-      child: Container(
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Icon(style.icon, color: style.color, size: 22),
       ),
     );
   }

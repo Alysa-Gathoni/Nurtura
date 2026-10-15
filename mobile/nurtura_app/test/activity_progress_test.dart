@@ -86,7 +86,7 @@ void main() {
     });
     expect(find.text('Done on 14 Oct 2026'), findsOneWidget);
     expect(find.textContaining('Well done!'), findsOneWidget);
-    expect(find.textContaining("We won't suggest it again"), findsOneWidget);
+    expect(find.textContaining("It won't come up again"), findsOneWidget);
     expect(engagement.checkedInToday, isTrue);
 
     await back(tester);

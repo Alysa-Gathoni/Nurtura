@@ -21,9 +21,9 @@ class MessageBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final (background, iconColor, icon) = switch (_kind) {
-      _Kind.error => (p.coralSoft, p.coral, Icons.error_outline_rounded),
-      _Kind.success => (p.mint, p.tealDeep, Icons.check_circle_rounded),
-      _Kind.info => (p.goldSoft, p.gold, Icons.info_outline_rounded),
+      _Kind.error => (p.roseSoft, p.rose, Icons.error_outline_rounded),
+      _Kind.success => (p.primarySoft, p.primary, Icons.check_circle_rounded),
+      _Kind.info => (p.mustardSoft, p.mustard, Icons.info_outline_rounded),
     };
     return Container(
       padding: const EdgeInsets.all(14),

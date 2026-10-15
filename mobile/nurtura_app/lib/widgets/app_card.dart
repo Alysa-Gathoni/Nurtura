@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 
-/// Rounded card with a soft shadow (and a hairline border in dark mode).
+/// A paper card on the linen background: a hairline edge and, in light
+/// mode, a faint warm lift.
 class AppCard extends StatelessWidget {
   const AppCard({
     super.key,
@@ -34,9 +35,7 @@ class AppCard extends StatelessWidget {
         boxShadow: dark ? null : AppShadows.card,
         border: borderColor != null
             ? Border.all(color: borderColor!, width: 2)
-            : dark
-            ? Border.all(color: p.border)
-            : null,
+            : Border.all(color: p.border),
       ),
       child: Material(
         color: Colors.transparent,

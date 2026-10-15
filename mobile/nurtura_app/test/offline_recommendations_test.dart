@@ -40,7 +40,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const Key('savedRecommendationsNotice')), findsOneWidget);
-    expect(find.textContaining('Saved recommendations from'), findsOneWidget);
+    expect(find.textContaining('Saved ideas from'), findsOneWidget);
     expect(find.text('Tummy Time'), findsOneWidget);
     expect(find.byKey(const Key('explanationBox')), findsOneWidget);
     expect(find.byKey(const Key('recommendationsError')), findsNothing);

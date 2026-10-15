@@ -210,7 +210,7 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
                               tooltip: 'Add interest',
                               icon: Icon(
                                 Icons.add_circle_rounded,
-                                color: context.palette.tealDeep,
+                                color: context.palette.primary,
                               ),
                               onPressed: _addInterest,
                             ),
@@ -225,8 +225,8 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
                                   PillChip(
                                     key: Key('interest_$interest'),
                                     label: interest,
-                                    color: context.palette.gold,
-                                    background: context.palette.goldSoft,
+                                    color: context.palette.mustard,
+                                    background: context.palette.mustardSoft,
                                     icon: Icons.star_rounded,
                                     trailingIcon: Icons.close_rounded,
                                     onTap: () => setState(
@@ -274,7 +274,7 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
                               style: AppText.nunito(
                                 size: 12.5,
                                 weight: FontWeight.w700,
-                                color: context.palette.coral,
+                                color: context.palette.rose,
                               ),
                             ),
                           ],

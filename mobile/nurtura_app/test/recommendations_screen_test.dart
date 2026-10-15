@@ -178,7 +178,7 @@ void main() {
     });
   }
 
-  testWidgets('shows "Preparing recommendations..." while generating', (
+  testWidgets('shows "Gathering ideas…" while generating', (
     tester,
   ) async {
     final post = Completer<http.Response>();
@@ -191,15 +191,15 @@ void main() {
     await tester.pump();
 
     expect(find.byKey(const Key('preparingRecommendations')), findsOneWidget);
-    expect(find.text('Preparing recommendations...'), findsOneWidget);
+    expect(find.text('Gathering ideas…'), findsOneWidget);
     expect(
-      find.text('This can take up to half a minute the first time.'),
+      find.text('The first time can take up to 30 seconds.'),
       findsOneWidget,
     );
 
     post.complete(json(batch([card('ACT-0001', 'Tummy Time')]), 201));
     await tester.pumpAndSettle();
-    expect(find.text('Preparing recommendations...'), findsNothing);
+    expect(find.text('Gathering ideas…'), findsNothing);
     expect(find.text('Tummy Time'), findsOneWidget);
   });
 
