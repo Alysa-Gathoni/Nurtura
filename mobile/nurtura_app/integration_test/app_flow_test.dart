@@ -15,6 +15,7 @@
 // Registering emails a sign-in code (#91). With the console mailer the code
 // is printed by runserver; type it into the app within three minutes.
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -47,8 +48,28 @@ Future<void> pumpUntil(
   throw TestFailure('Timed out waiting for $finder');
 }
 
+/// Pumps frames until [finder] matches nothing (e.g. a snackbar has gone).
+Future<void> pumpUntilGone(
+  WidgetTester tester,
+  Finder finder, {
+  Duration timeout = const Duration(seconds: 15),
+}) async {
+  final end = DateTime.now().add(timeout);
+  while (DateTime.now().isBefore(end)) {
+    if (finder.evaluate().isEmpty) return;
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+  throw TestFailure('Timed out waiting for $finder to go away');
+}
+
 Future<void> tap(WidgetTester tester, Finder finder) async {
   await pumpUntil(tester, finder);
+  // On a phone the keyboard stays up after typing and squeezes the screen,
+  // so close it first or the tap can land on something else.
+  if (FocusManager.instance.primaryFocus?.hasFocus ?? false) {
+    FocusManager.instance.primaryFocus!.unfocus();
+    await tester.pump(const Duration(milliseconds: 600));
+  }
   await tester.ensureVisible(finder);
   await tester.pump(const Duration(milliseconds: 300));
   await tester.tap(finder);
@@ -85,18 +106,49 @@ Finder keyStartingWith(String prefix) => find.byWidgetPredicate(
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  // A tap that misses its target fails the run there, not several steps on.
+  WidgetController.hitTestWarningShouldBeFatal = true;
+
+  late WidgetTester tester;
+
+  // On Android the app's surface must be turned into an image once before
+  // screenshots can be taken; the web needs nothing.
+  var surfaceConverted = kIsWeb;
+
+  // Once converted, the phone's screen stops updating live, so the tester
+  // couldn't see the code they type. On Android, screenshots therefore
+  // start only after the code step (the earlier screens are skipped).
+  var humanStepsDone = kIsWeb;
 
   Future<void> screenshot(String name) async {
-    await binding.takeScreenshot(name);
+    if (!humanStepsDone) {
+      debugPrint('Screenshot $name skipped: the tester still has to type');
+      return;
+    }
+    if (!surfaceConverted) {
+      await binding.convertFlutterSurfaceToImage();
+      surfaceConverted = true;
+    }
+    // The capture waits for a new frame, and in a test frames are drawn
+    // only when pumped: keep pumping until it's done.
+    var done = false;
+    final shot = binding.takeScreenshot(name).whenComplete(() => done = true);
+    while (!done) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    await shot;
   }
 
-  testWidgets('the Sprint 8 round trip on the real backend', (tester) async {
+  testWidgets('the Sprint 8 round trip on the real backend', (t) async {
+    tester = t;
     expect(email, isNotEmpty, reason: 'pass --dart-define=E2E_EMAIL=...');
 
     await tester.pumpWidget(
       NurturaApp(
         api: ApiClient(baseUrl: apiBaseUrl),
-        tokenStore: SecureTokenStore(),
+        // In memory, so the run starts signed out and leaves the phone's
+        // saved session alone.
+        tokenStore: MemoryTokenStore(),
         recommendationCache: MemoryRecommendationCache(),
         preferences: MemoryPreferences(),
         deviceIds: MemoryDeviceIdStore(),
@@ -119,6 +171,7 @@ void main() {
       find.text('Add your first child'),
       timeout: const Duration(minutes: 3),
     );
+    humanStepsDone = true;
     await screenshot('04_no_children_yet');
 
     // 2. Log out and back in: this phone is now trusted, so no code.
@@ -185,6 +238,9 @@ void main() {
     await screenshot('12_activity_detail');
     await tapOnDetail(tester, find.byKey(const Key('markDoneButton')));
     await pumpUntil(tester, find.byKey(const Key('doneStatus')));
+    // The "Well done!" message covers the bottom of the screen for a few
+    // seconds; a caregiver would wait for it too.
+    await pumpUntilGone(tester, find.byType(SnackBar));
     await tapOnDetail(tester, find.byKey(const Key('star_4')));
     await type(tester, 'feedbackComment', 'Lots of smiles. (E2E test)');
     await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
@@ -193,6 +249,7 @@ void main() {
 
     await tester.pageBack();
     await pumpUntil(tester, keyStartingWith('doneChip_'));
+    await tester.pump(const Duration(milliseconds: 800)); // finish the slide
     expect(keyStartingWith('ratingChip_'), findsOneWidget);
     await screenshot('14_card_done_and_rated');
 
