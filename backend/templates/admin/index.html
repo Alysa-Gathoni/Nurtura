@@ -1,0 +1,5 @@
+{% extends "admin/index.html" %}
+{% load insights %}
+
+{# The analytics dashboard sits above the usual list of admin sections (#116). #}
+{% block content_title %}{{ block.super }}{% nurtura_dashboard %}{% endblock %}

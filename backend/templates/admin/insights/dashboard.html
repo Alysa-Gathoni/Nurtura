@@ -1,0 +1,161 @@
+{% load insights %}
+<section class="nd" aria-label="How Nurtura is being used">
+
+  <div class="nd-kpis">
+    <div class="nd-tile">
+      <span class="nd-label">Caregivers</span>
+      <span class="nd-value">{{ d.caregivers }}</span>
+      <span class="nd-note">{{ d.active_caregivers }} active in the last {{ d.active_days }} days</span>
+    </div>
+    <div class="nd-tile">
+      <span class="nd-label">Children</span>
+      <span class="nd-value">{{ d.children }}</span>
+      <span class="nd-note">{{ d.children_born }} born · {{ d.children_expecting }} expected</span>
+    </div>
+    <div class="nd-tile">
+      <span class="nd-label">Idea batches</span>
+      <span class="nd-value">{{ d.batches }}</span>
+      <span class="nd-note">{{ d.batches_recent }} in the last {{ d.active_days }} days · {{ d.recommended }} activities</span>
+    </div>
+    <div class="nd-tile">
+      <span class="nd-label">Published activities</span>
+      <span class="nd-value">{{ d.library_total }}</span>
+      <span class="nd-note">{% for p in d.pipeline %}{% if not forloop.first %} · {% endif %}{{ p.count }} {{ p.label|lower }}{% endfor %}</span>
+    </div>
+  </div>
+
+  <div class="nd-grid nd-grid-charts">
+
+    <div class="nd-card nd-hero">
+      <span class="nd-label">Average rating</span>
+      {% if d.ratings_average is not None %}
+        <span class="nd-hero-value">{{ d.ratings_average }}<span class="nd-hero-unit"> / 5</span></span>
+        <span class="nd-note">from {{ d.ratings_count }} rating{{ d.ratings_count|pluralize }}</span>
+      {% else %}
+        <span class="nd-hero-value nd-empty-value">–</span>
+        <span class="nd-note">No ratings yet</span>
+      {% endif %}
+
+      <span class="nd-label nd-gap">Activities tried</span>
+      <div class="nd-meter" role="img" aria-label="{{ d.tried_share }}% of recommended activities marked done or partly done">
+        {% if d.tried_share %}<span class="nd-meter-fill" style="width: {{ d.tried_share }}%" title="{{ d.done }} done, {{ d.partly }} partly done, of {{ d.recommended }} recommended"></span>{% endif %}
+      </div>
+      <span class="nd-note"><b>{{ d.tried_share }}%</b> of recommended activities · {{ d.done }} done, {{ d.partly }} partly</span>
+    </div>
+
+    <div class="nd-card">
+      <h3 class="nd-title">Ratings</h3>
+      <p class="nd-sub">How caregivers rated the activities they were given</p>
+      {% if d.ratings_count %}
+        <div class="nd-columns" role="img" aria-label="Ratings from 1 to 5 stars">
+          {% for b in d.rating_bars %}
+            <div class="nd-col" title="{{ b.count }} rating{{ b.count|pluralize }} of {{ b.rating }} star{{ b.rating|pluralize }}">
+              <span class="nd-col-track">
+                <span class="nd-col-bar{% if not b.count %} nd-zero{% endif %}" style="height: {{ b.width }}%"></span>
+                <span class="nd-col-value" style="bottom: calc({{ b.width }}% + 4px)">{{ b.count }}</span>
+              </span>
+              <span class="nd-col-label">{{ b.rating }}★</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="nd-empty">Ratings will appear here once caregivers rate their activities.</p>
+      {% endif %}
+    </div>
+
+    <div class="nd-card">
+      <h3 class="nd-title">Library by area</h3>
+      <p class="nd-sub">Published activities caregivers can be given</p>
+      <ul class="nd-bars">
+        {% for b in d.library_bars %}
+          <li title="{{ b.count }} published {{ b.label }} activit{{ b.count|pluralize:'y,ies' }}">
+            <span class="nd-bar-label">{{ b.label }}</span>
+            <span class="nd-bar-track"><span class="nd-bar{% if not b.count %} nd-zero{% endif %}" style="width: {{ b.width }}%"></span><span class="nd-bar-value">{{ b.count }}</span></span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="nd-card">
+      <h3 class="nd-title">Milestones recorded</h3>
+      <p class="nd-sub">{{ d.milestones_total }} record{{ d.milestones_total|pluralize }} by caregivers, by status</p>
+      {% if d.milestones_total %}
+        <div class="nd-stack" role="img" aria-label="Milestone records by status">
+          {% for m in d.milestone_parts %}{% if m.count %}<span class="nd-seg nd-{{ m.key }}" style="flex-grow: {{ m.count }}" title="{{ m.label }}: {{ m.count }} ({{ m.share }}%)"></span>{% endif %}{% endfor %}
+        </div>
+        <ul class="nd-legend">
+          {% for m in d.milestone_parts %}
+            <li><span class="nd-swatch nd-{{ m.key }}"></span>{{ m.label }} <b>{{ m.count }}</b> <span class="nd-muted">{{ m.share }}%</span></li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="nd-empty">No milestones recorded yet.</p>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <div class="nd-grid nd-grid-lists">
+    <div class="nd-card">
+      <h3 class="nd-title">Top rated</h3>
+      {% if d.top_rated %}
+        <table class="nd-table">
+          <thead><tr><th>Activity</th><th class="nd-num">Average</th><th class="nd-num">Ratings</th></tr></thead>
+          <tbody>
+            {% for a in d.top_rated %}
+              <tr>
+                <td><a href="{% url 'admin:activities_developmentalactivity_change' a.pk %}">{{ a.name }}</a> <span class="nd-muted nd-id">{{ a.activity_id }}</span></td>
+                <td class="nd-num">{{ a.average }}</td>
+                <td class="nd-num">{{ a.ratings }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="nd-empty">No rated activities yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="nd-card">
+      <h3 class="nd-title">Needs attention</h3>
+      <p class="nd-sub">Average rating of {{ d.needs_attention_at }} or below</p>
+      {% if d.needs_attention %}
+        <table class="nd-table">
+          <thead><tr><th>Activity</th><th class="nd-num">Average</th><th class="nd-num">Ratings</th></tr></thead>
+          <tbody>
+            {% for a in d.needs_attention %}
+              <tr>
+                <td><a href="{% url 'admin:activities_developmentalactivity_change' a.pk %}">{{ a.name }}</a> <span class="nd-muted nd-id">{{ a.activity_id }}</span></td>
+                <td class="nd-num">{{ a.average }}</td>
+                <td class="nd-num">{{ a.ratings }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="nd-empty">Nothing rated that low.</p>
+      {% endif %}
+    </div>
+
+    <div class="nd-card">
+      <h3 class="nd-title">Latest feedback</h3>
+      {% if d.recent_feedback %}
+        <ul class="nd-feed">
+          {% for f in d.recent_feedback %}
+            <li>
+              <span class="nd-stars" aria-label="{{ f.rating }} out of 5">{{ f.rating|stars }}</span>
+              <a href="{% url 'admin:activities_developmentalactivity_change' f.activity_pk %}">{{ f.name }}</a>
+              {% if f.comment %}<span class="nd-quote">“{{ f.comment }}”</span>{% endif %}
+              <span class="nd-muted">{{ f.date|date:"j M Y" }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+        <a class="nd-more" href="{% url 'admin:feedback_feedback_changelist' %}">All feedback →</a>
+      {% else %}
+        <p class="nd-empty">No feedback yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <p class="nd-footnote">Active means a caregiver generated ideas, recorded a milestone, or marked an activity done or rated it. Figures are totals across all families; no individual child or caregiver is shown.</p>
+</section>

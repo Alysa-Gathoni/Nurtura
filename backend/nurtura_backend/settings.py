@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "activities",
     "recommendations",
     "feedback",
+    "insights",
 ]
 
 MIDDLEWARE = [
