@@ -227,3 +227,204 @@ select,
   border-radius: 20px;
   overflow: hidden;
 }
+
+
+/* ------------------------------------------------------------------
+   Admin home dashboard (#116). Single-series charts use one hue
+   (terracotta); milestone statuses use a validated three-colour set
+   (light and dark checked for colour-blind separation). Values sit in
+   text colours, never in the mark's colour.
+   ------------------------------------------------------------------ */
+:root {
+  --nd-mark: #B4583A;
+  --nd-achieved: #5A8C4C;
+  --nd-emerging: #CF9B33;
+  --nd-not-yet: #BC5F55;
+  --nd-track: #EFE4D2;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --nd-mark: #E38D69;
+    --nd-achieved: #3E9E7C;
+    --nd-emerging: #BB8418;
+    --nd-not-yet: #D4566E;
+    --nd-track: #3A3028;
+  }
+}
+html[data-theme="dark"] {
+  --nd-mark: #E38D69;
+  --nd-achieved: #3E9E7C;
+  --nd-emerging: #BB8418;
+  --nd-not-yet: #D4566E;
+  --nd-track: #3A3028;
+}
+
+.nd { display: flex; flex-direction: column; gap: 16px; margin: 4px 0 28px; }
+.nd-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.nd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+.nd-tile, .nd-card {
+  background: var(--n-paper);
+  border: 1px solid var(--n-line);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.nd-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--n-muted);
+}
+.nd-gap { margin-top: 14px; }
+.nd-value {
+  font-family: "Quicksand", "Nunito", system-ui, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--n-ink);
+}
+.nd-note, .nd-sub { color: var(--n-muted); font-size: 0.82rem; margin: 0; }
+.nd-note b { color: var(--n-ink); }
+.nd-title {
+  margin: 0;
+  font-family: "Quicksand", "Nunito", system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--n-ink);
+  background: none;
+  padding: 0;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.nd-hero-value {
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--n-ink);
+}
+.nd-hero-unit { font-size: 1.1rem; font-weight: 700; color: var(--n-muted); }
+.nd-empty-value { color: var(--n-muted); }
+.nd-empty { color: var(--n-muted); font-size: 0.85rem; margin: 8px 0 0; }
+.nd-muted { color: var(--n-muted); font-size: 0.8rem; }
+
+/* Meter: share of recommended activities tried. */
+.nd-meter {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--nd-track);
+  overflow: hidden;
+  margin: 4px 0 2px;
+}
+.nd-meter-fill {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  background: var(--nd-achieved);
+  border-radius: 999px;
+}
+
+/* Columns: ratings 1-5, one hue, value on each cap. */
+.nd-columns {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+  border-bottom: 1px solid var(--n-line);
+}
+.nd-col { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.nd-col-track { position: relative; height: 120px; width: 100%; }
+.nd-col-bar {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  min-height: 2px;
+  background: var(--nd-mark);
+  border-radius: 4px 4px 0 0;
+}
+.nd-col-value {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--n-ink);
+}
+.nd-col-label {
+  font-size: 0.8rem;
+  color: var(--n-muted);
+  padding-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Horizontal bars: library by area, one hue, value at the tip. */
+.nd-bars { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.nd-bars li {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  font-size: 0.85rem;
+}
+.nd-bar-label { color: var(--n-ink); }
+.nd-bar-track { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.nd-bar {
+  height: 14px;
+  min-width: 2px;
+  max-width: calc(100% - 2.5rem);
+  background: var(--nd-mark);
+  border-radius: 0 4px 4px 0;
+}
+.nd-bar-value { font-weight: 700; color: var(--n-ink); font-variant-numeric: tabular-nums; }
+
+/* Stacked bar: milestone records by status, 2px surface gaps. */
+.nd-stack { display: flex; gap: 2px; height: 16px; margin-top: 10px; }
+.nd-seg { min-width: 4px; }
+.nd-seg:last-child { border-radius: 0 4px 4px 0; }
+.nd-achieved { background: var(--nd-achieved); }
+.nd-emerging { background: var(--nd-emerging); }
+.nd-not_yet { background: var(--nd-not-yet); }
+.nd-legend { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.nd-legend li { display: flex; align-items: center; gap: 6px; padding: 0; font-size: 0.85rem; color: var(--n-ink); }
+.nd-swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+
+/* Lists. */
+.nd-table { width: 100%; margin-top: 6px; border: 0; }
+.nd-table th { background: none; color: var(--n-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.nd-table td, .nd-table th { padding: 6px 4px; border-bottom: 1px solid var(--n-line); }
+.nd-table tr:last-child td { border-bottom: 0; }
+.nd-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.nd-feed { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.nd-feed li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; padding: 0; font-size: 0.85rem; }
+.nd-stars { color: var(--nd-emerging); letter-spacing: 1px; }
+.nd-quote { flex-basis: 100%; color: var(--n-ink); font-style: italic; }
+.nd-more { margin-top: 8px; font-weight: 700; font-size: 0.85rem; }
+.nd-footnote { color: var(--n-muted); font-size: 0.78rem; margin: 0; }
+
+/* The admin home reserves a right margin for "Recent actions"; let the
+   dashboard use the full width above it (Django's own breakpoints). */
+.colMS .nd { margin-right: -300px; }
+@media (max-width: 1024px) { .colMS .nd { margin-right: -290px; } }
+@media (max-width: 767px) { .colMS .nd { margin-right: 0; } }
+.nd-columns { margin-top: 26px; }
+.nd-id { white-space: nowrap; }
+.nd-bar.nd-zero, .nd-col-bar.nd-zero { visibility: hidden; }
+
+/* Four chart cards: a balanced 2 x 2, one column on narrow screens. */
+.nd-grid-charts { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
