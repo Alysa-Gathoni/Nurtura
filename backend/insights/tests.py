@@ -157,16 +157,19 @@ class DashboardPageTests(DashboardTestCase):
         page = self.client.get(reverse("admin:index"))
         self.assertEqual(page.status_code, 200)
         for text in (
-            "Average rating",
-            "2.7",
-            "Ratings",
-            "Library by area",
+            "Overview",
+            "Recommended activities",
+            "Recent activity",
+            "Most recommended activities",
+            "System health",
+            "Work waiting",
+            "Library coverage",
+            "Average 2.7 from 3 ratings",
             "Milestones recorded",
-            "Top rated",
             "Needs attention",
             "Singing Together",
-            "She loved it",
-            "Developmental activities",  # the usual admin sections still follow
+            "Developmental activities",  # the admin's sections, in the sidebar
+            "nurtura/dashboard.js",
         ):
             self.assertContains(page, text)
 

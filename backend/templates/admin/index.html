@@ -1,5 +1,9 @@
 {% extends "admin/index.html" %}
 {% load insights %}
 
-{# The analytics dashboard sits above the usual list of admin sections (#116). #}
-{% block content_title %}{{ block.super }}{% nurtura_dashboard %}{% endblock %}
+{# The admin home is the operations overview (#116, #120): a sidebar of #}
+{# admin sections, then the dashboard. Recent actions are in its timeline. #}
+{% block coltype %}colM{% endblock %}
+{% block content_title %}{% endblock %}
+{% block content %}{% nurtura_dashboard %}{% endblock %}
+{% block sidebar %}{% endblock %}

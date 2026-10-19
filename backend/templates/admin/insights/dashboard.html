@@ -1,161 +1,284 @@
-{% load insights %}
-<section class="nd" aria-label="How Nurtura is being used">
+{% load static insights %}
+<div class="od">
 
-  <div class="nd-kpis">
-    <div class="nd-tile">
-      <span class="nd-label">Caregivers</span>
-      <span class="nd-value">{{ d.caregivers }}</span>
-      <span class="nd-note">{{ d.active_caregivers }} active in the last {{ d.active_days }} days</span>
-    </div>
-    <div class="nd-tile">
-      <span class="nd-label">Children</span>
-      <span class="nd-value">{{ d.children }}</span>
-      <span class="nd-note">{{ d.children_born }} born · {{ d.children_expecting }} expected</span>
-    </div>
-    <div class="nd-tile">
-      <span class="nd-label">Idea batches</span>
-      <span class="nd-value">{{ d.batches }}</span>
-      <span class="nd-note">{{ d.batches_recent }} in the last {{ d.active_days }} days · {{ d.recommended }} activities</span>
-    </div>
-    <div class="nd-tile">
-      <span class="nd-label">Published activities</span>
-      <span class="nd-value">{{ d.library_total }}</span>
-      <span class="nd-note">{% for p in d.pipeline %}{% if not forloop.first %} · {% endif %}{{ p.count }} {{ p.label|lower }}{% endfor %}</span>
-    </div>
-  </div>
+  {# Sidebar: the admin's own sections, as navigation. #}
+  <nav class="od-side" aria-label="Admin sections">
+    <a class="od-nav od-nav-current" href="{% url 'admin:index' %}">
+      <svg class="od-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h7V4H4zm0 7h7v-5H4zm9 0h7v-9h-7zm0-16v5h7V4z"/></svg>
+      Dashboard
+    </a>
+    {% for app in app_list %}
+      <p class="od-nav-group">{{ app.name }}</p>
+      {% for model in app.models %}
+        {% if model.admin_url %}
+          <a class="od-nav" href="{{ model.admin_url }}">
+            <span class="od-nav-dot" aria-hidden="true"></span>{{ model.name }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  </nav>
 
-  <div class="nd-grid nd-grid-charts">
+  <div class="od-main">
 
-    <div class="nd-card nd-hero">
-      <span class="nd-label">Average rating</span>
-      {% if d.ratings_average is not None %}
-        <span class="nd-hero-value">{{ d.ratings_average }}<span class="nd-hero-unit"> / 5</span></span>
-        <span class="nd-note">from {{ d.ratings_count }} rating{{ d.ratings_count|pluralize }}</span>
-      {% else %}
-        <span class="nd-hero-value nd-empty-value">–</span>
-        <span class="nd-note">No ratings yet</span>
-      {% endif %}
+    {# Row 1: overview with trend chart, and outcomes donut. #}
+    <div class="od-row od-row-hero">
+      <section class="od-card od-overview">
+        <header class="od-card-head">
+          <div>
+            <h2 class="od-h">Overview</h2>
+            <p class="od-sub">How Nurtura was used in the last {{ o.range }} days</p>
+          </div>
+          <div class="od-tabs" role="tablist" aria-label="Period">
+            {% for r in o.ranges %}
+              <a role="tab" class="od-tab{% if r == o.range %} od-tab-on{% endif %}" aria-selected="{% if r == o.range %}true{% else %}false{% endif %}" href="?range={{ r }}">{{ r }} days</a>
+            {% endfor %}
+          </div>
+        </header>
 
-      <span class="nd-label nd-gap">Activities tried</span>
-      <div class="nd-meter" role="img" aria-label="{{ d.tried_share }}% of recommended activities marked done or partly done">
-        {% if d.tried_share %}<span class="nd-meter-fill" style="width: {{ d.tried_share }}%" title="{{ d.done }} done, {{ d.partly }} partly done, of {{ d.recommended }} recommended"></span>{% endif %}
-      </div>
-      <span class="nd-note"><b>{{ d.tried_share }}%</b> of recommended activities · {{ d.done }} done, {{ d.partly }} partly</span>
-    </div>
-
-    <div class="nd-card">
-      <h3 class="nd-title">Ratings</h3>
-      <p class="nd-sub">How caregivers rated the activities they were given</p>
-      {% if d.ratings_count %}
-        <div class="nd-columns" role="img" aria-label="Ratings from 1 to 5 stars">
-          {% for b in d.rating_bars %}
-            <div class="nd-col" title="{{ b.count }} rating{{ b.count|pluralize }} of {{ b.rating }} star{{ b.rating|pluralize }}">
-              <span class="nd-col-track">
-                <span class="nd-col-bar{% if not b.count %} nd-zero{% endif %}" style="height: {{ b.width }}%"></span>
-                <span class="nd-col-value" style="bottom: calc({{ b.width }}% + 4px)">{{ b.count }}</span>
-              </span>
-              <span class="nd-col-label">{{ b.rating }}★</span>
+        <div class="od-overview-body">
+          <div class="od-headline">
+            <div>
+              <span class="od-big">{{ o.range_totals.ideas }}</span>
+              <span class="od-big-label">idea batches generated</span>
             </div>
-          {% endfor %}
-        </div>
-      {% else %}
-        <p class="nd-empty">Ratings will appear here once caregivers rate their activities.</p>
-      {% endif %}
-    </div>
+            <div>
+              <span class="od-big od-big-2">{{ o.range_totals.milestones }}</span>
+              <span class="od-big-label">milestones recorded</span>
+            </div>
+            <a class="od-btn" href="{% url 'admin:feedback_feedback_changelist' %}">Review feedback</a>
+          </div>
 
-    <div class="nd-card">
-      <h3 class="nd-title">Library by area</h3>
-      <p class="nd-sub">Published activities caregivers can be given</p>
-      <ul class="nd-bars">
-        {% for b in d.library_bars %}
-          <li title="{{ b.count }} published {{ b.label }} activit{{ b.count|pluralize:'y,ies' }}">
-            <span class="nd-bar-label">{{ b.label }}</span>
-            <span class="nd-bar-track"><span class="nd-bar{% if not b.count %} nd-zero{% endif %}" style="width: {{ b.width }}%"></span><span class="nd-bar-value">{{ b.count }}</span></span>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <div class="nd-card">
-      <h3 class="nd-title">Milestones recorded</h3>
-      <p class="nd-sub">{{ d.milestones_total }} record{{ d.milestones_total|pluralize }} by caregivers, by status</p>
-      {% if d.milestones_total %}
-        <div class="nd-stack" role="img" aria-label="Milestone records by status">
-          {% for m in d.milestone_parts %}{% if m.count %}<span class="nd-seg nd-{{ m.key }}" style="flex-grow: {{ m.count }}" title="{{ m.label }}: {{ m.count }} ({{ m.share }}%)"></span>{% endif %}{% endfor %}
+          <figure class="od-trend" data-od-trend>
+            <ul class="od-legend" aria-label="Series">
+              {% for line in o.trend.lines %}
+                <li><span class="od-key od-s-{{ line.key }}"></span>{{ line.label }} <b>{{ line.total }}</b></li>
+              {% endfor %}
+            </ul>
+            <svg viewBox="0 0 {{ o.trend.width }} {{ o.trend.height }}" class="od-trend-svg" role="img" aria-label="Daily ideas, milestones and feedback over the last {{ o.range }} days">
+              {% for t in o.trend.ticks %}
+                <line class="od-grid" x1="{{ o.trend.plot_left }}" x2="{{ o.trend.width }}" y1="{{ t.y }}" y2="{{ t.y }}"/>
+                <text class="od-tick" x="{{ o.trend.plot_left|add:'-8' }}" y="{{ t.y }}" dy="4" text-anchor="end">{{ t.value }}</text>
+              {% endfor %}
+              {% for l in o.trend.x_labels %}
+                <text class="od-tick" x="{{ l.x }}" y="{{ o.trend.height }}" dy="-4" text-anchor="middle">{{ l.text }}</text>
+              {% endfor %}
+              {% for line in o.trend.lines %}
+                <polyline class="od-line od-s-{{ line.key }}" points="{{ line.points }}"/>
+                <circle class="od-end od-s-{{ line.key }}" cx="{{ line.end_x }}" cy="{{ line.end_y }}" r="4"/>
+              {% endfor %}
+              <line class="od-cross" data-od-cross x1="0" x2="0" y1="{{ o.trend.plot_top }}" y2="{{ o.trend.plot_bottom }}" visibility="hidden"/>
+              {% for h in o.trend.hover %}
+                <rect class="od-hit" x="{{ h.x }}" y="0" width="{{ h.w }}" height="{{ o.trend.plot_bottom }}"
+                      data-cx="{{ h.cx }}" data-label="{{ h.label }}"
+                      data-ideas="{{ h.values.ideas }}" data-milestones="{{ h.values.milestones }}" data-feedback="{{ h.values.feedback }}">
+                  <title>{{ h.label }}: {{ h.values.ideas }} ideas, {{ h.values.milestones }} milestones, {{ h.values.feedback }} feedback</title>
+                </rect>
+              {% endfor %}
+            </svg>
+            <div class="od-tip" data-od-tip hidden></div>
+          </figure>
         </div>
-        <ul class="nd-legend">
-          {% for m in d.milestone_parts %}
-            <li><span class="nd-swatch nd-{{ m.key }}"></span>{{ m.label }} <b>{{ m.count }}</b> <span class="nd-muted">{{ m.share }}%</span></li>
+
+        <ul class="od-mini">
+          <li><span class="od-mini-ico od-c-dusk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm-8 1a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm8 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4zm-8 0c-.3 0-.7 0-1.1.1A5 5 0 0 1 9 18v2H1v-2c0-2.2 4.4-4 7-4z"/></svg></span>
+            <span><b>{{ d.caregivers }}</b><small>Caregivers · {{ d.active_caregivers }} active this week</small></span></li>
+          <li><span class="od-mini-ico od-c-plum"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M5 21a7 7 0 0 1 14 0z"/></svg></span>
+            <span><b>{{ d.children }}</b><small>Children · {{ d.children_born }} born, {{ d.children_expecting }} expected</small></span></li>
+          <li><span class="od-mini-ico od-c-terracotta"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 6.9H22l-6 4.5 2.3 7L12 16l-6.3 4.4 2.3-7-6-4.5h7.6z"/></svg></span>
+            <span><b>{{ d.recommended }}</b><small>Activities recommended</small></span></li>
+          <li><span class="od-mini-ico od-c-sage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.4-1.4z"/></svg></span>
+            <span><b>{{ d.tried_share }}%</b><small>Tried · {{ d.done }} done, {{ d.partly }} partly</small></span></li>
+        </ul>
+      </section>
+
+      <section class="od-card od-donut-card">
+        <header class="od-card-head"><div><h2 class="od-h">Recommended activities</h2><p class="od-sub">What families did with them</p></div></header>
+        <div class="od-donut-wrap">
+          <svg viewBox="0 0 100 100" class="od-donut" role="img" aria-label="{{ d.tried_share }}% of recommended activities tried">
+            <circle class="od-donut-track" cx="50" cy="50" r="{{ outcomes.radius }}"/>
+            {% for a in outcomes.arcs %}{% if a.visible %}
+              <circle class="od-arc od-o-{{ a.key }}" cx="50" cy="50" r="{{ outcomes.radius }}" stroke-dasharray="{{ a.dash }}" stroke-dashoffset="{{ a.offset }}" transform="rotate(-90 50 50)"><title>{{ a.label }}: {{ a.count }} ({{ a.share }}%)</title></circle>
+            {% endif %}{% endfor %}
+          </svg>
+          <div class="od-donut-center"><b>{{ d.tried_share }}%</b><small>tried</small></div>
+        </div>
+        <ul class="od-donut-legend">
+          {% for a in outcomes.arcs %}
+            <li><b>{{ a.share }}<sup>%</sup></b><span><span class="od-key od-o-{{ a.key }}"></span>{{ a.label }}</span></li>
           {% endfor %}
         </ul>
-      {% else %}
-        <p class="nd-empty">No milestones recorded yet.</p>
-      {% endif %}
+        <p class="od-foot">{{ outcomes.total }} recommended in all</p>
+      </section>
     </div>
 
-  </div>
+    {# Row 2: gradient summary cards with 14-day sparklines. #}
+    <div class="od-row od-row-stats">
+      {% for key, label in stat_cards %}
+        <section class="od-stat od-g-{{ key }}">
+          <span class="od-stat-label">{{ label }}</span>
+          <div class="od-stat-body">
+            <svg class="od-spark" viewBox="0 0 {{ o.sparks|get_item:key|get_item:'width' }} {{ o.sparks|get_item:key|get_item:'height' }}" aria-hidden="true">
+              <polyline points="{{ o.sparks|get_item:key|get_item:'points' }}"/>
+            </svg>
+            <span class="od-stat-value">{{ spark_totals|get_item:key }}</span>
+          </div>
+          <span class="od-stat-note">Last {{ o.spark_days }} days</span>
+        </section>
+      {% endfor %}
+    </div>
 
-  <div class="nd-grid nd-grid-lists">
-    <div class="nd-card">
-      <h3 class="nd-title">Top rated</h3>
-      {% if d.top_rated %}
-        <table class="nd-table">
-          <thead><tr><th>Activity</th><th class="nd-num">Average</th><th class="nd-num">Ratings</th></tr></thead>
-          <tbody>
-            {% for a in d.top_rated %}
-              <tr>
-                <td><a href="{% url 'admin:activities_developmentalactivity_change' a.pk %}">{{ a.name }}</a> <span class="nd-muted nd-id">{{ a.activity_id }}</span></td>
-                <td class="nd-num">{{ a.average }}</td>
-                <td class="nd-num">{{ a.ratings }}</td>
-              </tr>
+    {# Row 3: recent activity and the most recommended activities. #}
+    <div class="od-row od-row-lists">
+      <section class="od-card">
+        <header class="od-card-head"><div><h2 class="od-h">Recent activity</h2><p class="od-sub">Newest first; families are never named</p></div></header>
+        {% if o.events %}
+          <ol class="od-timeline">
+            {% for e in o.events %}
+              <li class="od-ev od-ev-{{ e.kind }}">
+                <span class="od-ev-when">{{ e.when|timesince }} ago</span>
+                <span class="od-ev-dot" aria-hidden="true"></span>
+                <span class="od-ev-text"><b>{{ e.title }}</b>{% if e.detail %}<small>{{ e.detail }}</small>{% endif %}</span>
+              </li>
             {% endfor %}
-          </tbody>
-        </table>
-      {% else %}
-        <p class="nd-empty">No rated activities yet.</p>
-      {% endif %}
+          </ol>
+        {% else %}
+          <p class="od-empty">Nothing has happened yet.</p>
+        {% endif %}
+      </section>
+
+      <section class="od-card">
+        <header class="od-card-head">
+          <div><h2 class="od-h">Most recommended activities</h2><p class="od-sub">How often each was suggested, tried and rated</p></div>
+          <a class="od-btn od-btn-quiet" href="{% url 'admin:activities_developmentalactivity_changelist' %}">All activities</a>
+        </header>
+        {% if o.table %}
+          <div class="od-table-wrap">
+            <table class="od-table">
+              <thead><tr><th>Activity</th><th>Area</th><th class="od-num">Recommended</th><th class="od-num">Done</th><th class="od-num">Rating</th><th>Status</th></tr></thead>
+              <tbody>
+                {% for a in o.table %}
+                  <tr>
+                    <td><a href="{% url 'admin:activities_developmentalactivity_change' a.pk %}">{{ a.name }}</a><small class="od-id">{{ a.activity_id }}</small></td>
+                    <td><span class="od-area">{{ a.domain }}</span></td>
+                    <td class="od-num">{{ a.times }}</td>
+                    <td class="od-num">{{ a.done_share }}%</td>
+                    <td class="od-num">{% if a.average is not None %}{{ a.average }}★{% else %}–{% endif %}</td>
+                    <td><span class="od-pill od-p-{{ a.status_key }}">{{ a.status }}</span></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="od-empty">No activities have been recommended yet.</p>
+        {% endif %}
+      </section>
     </div>
 
-    <div class="nd-card">
-      <h3 class="nd-title">Needs attention</h3>
-      <p class="nd-sub">Average rating of {{ d.needs_attention_at }} or below</p>
-      {% if d.needs_attention %}
-        <table class="nd-table">
-          <thead><tr><th>Activity</th><th class="nd-num">Average</th><th class="nd-num">Ratings</th></tr></thead>
-          <tbody>
-            {% for a in d.needs_attention %}
-              <tr>
-                <td><a href="{% url 'admin:activities_developmentalactivity_change' a.pk %}">{{ a.name }}</a> <span class="nd-muted nd-id">{{ a.activity_id }}</span></td>
-                <td class="nd-num">{{ a.average }}</td>
-                <td class="nd-num">{{ a.ratings }}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      {% else %}
-        <p class="nd-empty">Nothing rated that low.</p>
-      {% endif %}
-    </div>
-
-    <div class="nd-card">
-      <h3 class="nd-title">Latest feedback</h3>
-      {% if d.recent_feedback %}
-        <ul class="nd-feed">
-          {% for f in d.recent_feedback %}
-            <li>
-              <span class="nd-stars" aria-label="{{ f.rating }} out of 5">{{ f.rating|stars }}</span>
-              <a href="{% url 'admin:activities_developmentalactivity_change' f.activity_pk %}">{{ f.name }}</a>
-              {% if f.comment %}<span class="nd-quote">“{{ f.comment }}”</span>{% endif %}
-              <span class="nd-muted">{{ f.date|date:"j M Y" }}</span>
+    {# Row 4: system health, work waiting and library coverage. #}
+    <div class="od-row od-row-ops">
+      <section class="od-card">
+        <header class="od-card-head"><div><h2 class="od-h">System health</h2><p class="od-sub">Checked each time this page loads</p></div></header>
+        <ul class="od-health">
+          {% for h in o.health %}
+            <li class="od-h-{{ h.status }}">
+              <span class="od-h-ico" aria-hidden="true">{% if h.status == 'good' %}<svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.4-1.4z"/></svg>{% elif h.status == 'warning' %}<svg viewBox="0 0 24 24"><path d="M11 7h2v7h-2zm0 9h2v2h-2z"/></svg>{% else %}<svg viewBox="0 0 24 24"><path d="M18.3 5.7L12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3l6.3 6.3 6.3-6.3z"/></svg>{% endif %}</span>
+              <span><b>{{ h.title }}</b><small>{{ h.detail }}</small></span>
+              <span class="od-h-label">{% if h.status == 'good' %}OK{% elif h.status == 'warning' %}Check{% else %}Fix{% endif %}</span>
             </li>
           {% endfor %}
         </ul>
-        <a class="nd-more" href="{% url 'admin:feedback_feedback_changelist' %}">All feedback →</a>
-      {% else %}
-        <p class="nd-empty">No feedback yet.</p>
-      {% endif %}
-    </div>
-  </div>
+      </section>
 
-  <p class="nd-footnote">Active means a caregiver generated ideas, recorded a milestone, or marked an activity done or rated it. Figures are totals across all families; no individual child or caregiver is shown.</p>
-</section>
+      <section class="od-card">
+        <header class="od-card-head"><div><h2 class="od-h">Work waiting</h2><p class="od-sub">Content that needs an administrator</p></div></header>
+        <ul class="od-work">
+          <li>
+            <span class="od-work-n">{{ o.waiting.drafts|add:o.waiting.under_review }}</span>
+            <span><b>Activities to review</b><small>{{ o.waiting.drafts }} draft · {{ o.waiting.under_review }} under review</small></span>
+            <a href="{% url 'admin:activities_developmentalactivity_changelist' %}?content_status__exact=under_review">Open</a>
+          </li>
+          <li>
+            <span class="od-work-n">{{ o.waiting.unverified }}</span>
+            <span><b>Milestones to verify</b><small>{{ o.waiting.verified_share }}% of {{ o.waiting.milestones_total }} checked against the source</small>
+              <span class="od-meter" role="img" aria-label="{{ o.waiting.verified_share }}% verified"><span style="width: {{ o.waiting.verified_share }}%"></span></span></span>
+            <a href="{% url 'admin:profiles_referencemilestone_changelist' %}?verified__exact=0">Open</a>
+          </li>
+          <li>
+            <span class="od-work-n">{{ o.coverage.gaps }}</span>
+            <span><b>Library gaps</b><small>Area and age with no Published activity</small></span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="od-card od-coverage-card">
+        <header class="od-card-head"><div><h2 class="od-h">Library coverage</h2><p class="od-sub">Published activities by area and age · plus {{ o.coverage.prenatal }} for pregnancy</p></div></header>
+        <div class="od-table-wrap">
+          <table class="od-heat">
+            <thead><tr><th></th>{% for age in o.coverage.ages %}<th>{{ age }}</th>{% endfor %}</tr></thead>
+            <tbody>
+              {% for row in o.coverage.rows %}
+                <tr><th>{{ row.label }}</th>
+                  {% for c in row.cells %}<td class="od-l{{ c.level }}" title="{{ row.label }}, {{ c.age }}: {{ c.count }} activit{{ c.count|pluralize:'y,ies' }}{% if not c.count %} (gap){% endif %}">{{ c.count }}</td>{% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <p class="od-foot">Age in months. <span class="od-heat-key"><i class="od-l1"></i><i class="od-l2"></i><i class="od-l3"></i><i class="od-l4"></i></span> fewer to more · <span class="od-gap-key">0</span> a gap</p>
+      </section>
+    </div>
+
+    {# Row 5: ratings, milestone statuses, needs attention. #}
+    <div class="od-row od-row-ops">
+      <section class="od-card">
+        <header class="od-card-head"><div><h2 class="od-h">Ratings</h2><p class="od-sub">{% if d.ratings_count %}Average {{ d.ratings_average }} from {{ d.ratings_count }} rating{{ d.ratings_count|pluralize }}{% else %}No ratings yet{% endif %}</p></div></header>
+        {% if d.ratings_count %}
+          <div class="od-cols" role="img" aria-label="Ratings from 1 to 5 stars">
+            {% for b in d.rating_bars %}
+              <div class="od-col" title="{{ b.count }} rating{{ b.count|pluralize }} of {{ b.rating }}★">
+                <span class="od-col-track"><span class="od-col-bar{% if not b.count %} od-zero{% endif %}" style="height: {{ b.width }}%"></span><span class="od-col-v" style="bottom: calc({{ b.width }}% + 4px)">{{ b.count }}</span></span>
+                <span class="od-col-x">{{ b.rating }}★</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="od-empty">Ratings will appear here once caregivers rate activities.</p>
+        {% endif %}
+      </section>
+
+      <section class="od-card">
+        <header class="od-card-head"><div><h2 class="od-h">Milestones recorded</h2><p class="od-sub">{{ d.milestones_total }} record{{ d.milestones_total|pluralize }}, by status</p></div></header>
+        {% if d.milestones_total %}
+          <div class="od-stack" role="img" aria-label="Milestone records by status">
+            {% for m in d.milestone_parts %}{% if m.count %}<span class="od-seg od-m-{{ m.key }}" style="flex-grow: {{ m.count }}" title="{{ m.label }}: {{ m.count }} ({{ m.share }}%)"></span>{% endif %}{% endfor %}
+          </div>
+          <ul class="od-legend od-legend-col">
+            {% for m in d.milestone_parts %}
+              <li><span class="od-key od-m-{{ m.key }}"></span>{{ m.label }} <b>{{ m.count }}</b> <small>{{ m.share }}%</small></li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="od-empty">No milestones recorded yet.</p>
+        {% endif %}
+      </section>
+
+      <section class="od-card">
+        <header class="od-card-head"><div><h2 class="od-h">Needs attention</h2><p class="od-sub">Average rating of {{ d.needs_attention_at }} or below</p></div></header>
+        {% if d.needs_attention %}
+          <ul class="od-attn">
+            {% for a in d.needs_attention %}
+              <li><a href="{% url 'admin:activities_developmentalactivity_change' a.pk %}">{{ a.name }}</a><small class="od-id">{{ a.activity_id }}</small><span class="od-attn-r">{{ a.average }}★ · {{ a.ratings }}</span></li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="od-empty">Nothing rated that low.</p>
+        {% endif %}
+      </section>
+    </div>
+
+    <p class="od-note">Figures are totals across all families; no individual child or caregiver is shown. "Active" means a caregiver generated ideas, recorded a milestone, or marked an activity done or rated it.</p>
+  </div>
+</div>
+<script src="{% static 'nurtura/dashboard.js' %}" defer></script>
