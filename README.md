@@ -1,26 +1,33 @@
 # Nurtura
 
-Nurtura is an AI-based recommendation system that suggests evidence-based early childhood developmental activities (prenatal to 36 months) matched to a child's age and developmental needs. It uses SBERT sentence embeddings to match caregivers' needs to a curated activity library.
+Nurtura is an AI-based recommendation system that suggests evidence-based early childhood developmental activities (prenatal to 36 months) matched to a child's age and developmental needs. A rule engine turns the milestones a caregiver records into developmental priorities, Sentence-BERT (SBERT) matches those needs to a curated activity library, a weighted ranking orders the results, and each recommendation comes with a plain-language explanation.
 
 **Relationship to SOFIA:** Nurtura is the developmental-activity recommendation component of SOFIA, a larger platform built for Webmasters Kenya.
+
+**Where things stand:** see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) for the project in plain language, [docs/sprint_ii_review.md](docs/sprint_ii_review.md) for the current sprint status, and [docs/known_limitations.md](docs/known_limitations.md) for known limitations and open defects.
 
 ## Repository layout
 
 ```
 nurtura/
-├── backend/            Django + Django REST Framework API
-│   ├── nurtura_backend/    project settings and URLs
-│   ├── profiles/           child / caregiver profiles
-│   ├── activities/         activity library
-│   ├── recommendations/    SBERT-based recommendation logic
-│   ├── feedback/           caregiver feedback on activities
-│   ├── setup_sbert.py      downloads + verifies the SBERT model
-│   └── models/             cached SBERT model (gitignored, created by setup_sbert.py)
-├── mobile/nurtura_app/ Flutter app (Android, iOS, web)
-├── data/               activity dataset + cleaning script (see data/README.md)
-├── docs/               project documentation
-├── .github/workflows/  CI (Django checks, Flutter analyze + test)
-└── Makefile            shortcuts for the commands below
+├── backend/                Django + Django REST Framework API and admin
+│   ├── nurtura_backend/        settings, URLs, admin branding tests
+│   ├── profiles/               caregivers, children, milestones, rule engine, two-step sign-in
+│   ├── activities/             activity library and content review workflow
+│   ├── recommendations/        SBERT retrieval, weighted ranking, explanations, evaluation
+│   ├── feedback/               "done" marks and ratings (FeedbackManager), admin review
+│   ├── insights/               analytics dashboard on the admin home page
+│   ├── templates/, static/     admin theme and dashboard
+│   ├── setup_sbert.py          downloads + verifies the SBERT model
+│   └── models/                 cached SBERT model (gitignored, created by setup_sbert.py)
+├── mobile/nurtura_app/     Flutter app (Android, iOS, web)
+│   ├── lib/                    screens, state, services, theme
+│   ├── test/                   widget and unit tests
+│   └── integration_test/       end-to-end test against the real backend
+├── data/                   activity dataset, milestone catalogue, evaluation labels (see data/README.md)
+├── docs/                   project documentation (index below)
+├── .github/workflows/      CI (Django checks and tests, Flutter analyze + test)
+└── Makefile                shortcuts for the commands below
 ```
 
 ## Prerequisites
@@ -29,8 +36,9 @@ nurtura/
 |---|---|---|
 | Git | 2.x | |
 | Python | 3.13 | |
-| Flutter | 3.47 (stable) | run `flutter doctor`; Android SDK and/or Chrome needed |
-| PostgreSQL | 18 | optional for basic checks; the backend falls back to SQLite when `DB_NAME` is unset |
+| Flutter | 3.47 (stable) | run `flutter doctor`; Android SDK (for a phone or emulator) and/or Chrome |
+| PostgreSQL | 18 | used for development and the full test suite; SQLite is a fallback for basic checks when `DB_NAME` is unset |
+| Android phone or emulator | Android 7+ | optional; for running the app on a device. `adb` comes with the Android SDK |
 
 ## Backend setup
 
@@ -56,25 +64,47 @@ pip install -r requirements.txt       # includes PyTorch; large download
 cp .env.example .env                  # Windows PowerShell: copy .env.example .env
 python setup_sbert.py                 # downloads all-MiniLM-L6-v2 to backend/models/ (~90 MB)
 python manage.py migrate
+python manage.py createsuperuser      # your administrator account
 python manage.py runserver            # http://127.0.0.1:8000
 ```
 
 > **Slow or unreliable connection?** If pip reports `No matching distribution found ... (from versions: none)` for a package that clearly exists, it is usually a network timeout, not a missing package. Retry with:
 > `pip install --timeout 600 --retries 20 --resume-retries 50 -r requirements.txt`
 
+### From an empty database to working recommendations
+
+A fresh database has no activities or milestones. Run these once, in order, with the venv active (from `backend/` unless noted):
+
+1. **Load the activity library and milestone catalogue:** `make seed-data` from the repo root, or:
+   ```bash
+   cd ../data/scripts && python clean_activities.py "../raw/activities_batch*.csv" ../processed/activities_clean.csv && cd ../../backend
+   python manage.py seed_activities      # activities arrive as Draft
+   python manage.py seed_milestones      # CDC/WHO milestone catalogue
+   ```
+2. **Review and publish the activities** in the admin (`/admin/` → Developmental activities): select them, run *Submit selected activities for review*, then *Publish selected activities*. Only Published activities can be recommended.
+3. **Load the approved plain-language aims** used in explanations: `python manage.py load_plain_aims`.
+4. **Embed the Published activities** for semantic search: `python manage.py embed_activities` (re-run after publishing or editing activities).
+
+The app can then register caregivers, record milestones and generate recommendations.
+
 ### Environment variables (`backend/.env`)
 
-`.env` is gitignored; never commit it. `.env.example` lists every variable:
+`.env` is gitignored; never commit it. `.env.example` lists every variable with a safe placeholder:
 
 | Variable | Purpose |
 |---|---|
 | `DEBUG` | `True` for local development |
 | `SECRET_KEY` | Django secret key. Required when `DEBUG` is not `True` |
-| `ALLOWED_HOSTS` | Comma-separated hostnames |
+| `ALLOWED_HOSTS` | Comma-separated hostnames the server answers to |
+| `CORS_ALLOWED_ORIGINS` | Browser origins allowed to call the API in production (any `localhost` port is allowed when `DEBUG=True`) |
 | `DB_NAME` | PostgreSQL database name. **Leave empty to use SQLite** |
 | `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` | PostgreSQL connection |
+| `NURTURA_MODEL_WARMUP` | `1` loads the SBERT model when the server starts so the first recommendation is fast; unset means off in development, on otherwise |
+| `RANKING_ALPHA` | Weight of rule priority in the ranking. Leave unset to use the evaluated value, 0.7 |
+| `SBERT_MODEL_PATH` | Where the SBERT model is stored. Leave unset for `backend/models/` |
+| `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS`, `DEFAULT_FROM_EMAIL` | SMTP for the two-step sign-in codes. **Leave `EMAIL_HOST` empty in development**: codes are then printed in the `runserver` output |
 
-### PostgreSQL (optional for basic checks)
+### PostgreSQL
 
 After installing PostgreSQL, create a database and user (choose your own password):
 
@@ -96,52 +126,66 @@ ALTER USER nurtura_user CREATEDB;
 
 There are two roles:
 
-- **Caregiver**: uses the mobile app through the API. Anyone can register as a caregiver.
-- **Administrator**: manages the activity repository (including publishing) in the Django admin at `/admin/`. Only administrators can sign in to the admin.
+- **Caregiver**: uses the mobile app through the API. Anyone can register as a caregiver; a new phone needs a 6-digit code sent by email.
+- **Administrator**: works in the Django admin at `/admin/`. The admin home page shows an analytics dashboard (use, ratings, library, milestones, latest feedback; aggregates only, no family details). Administrators manage and publish activities and review feedback read-only. Only administrators can sign in to the admin.
 
 Create the first administrator with `python manage.py createsuperuser`; it is given the Administrator role automatically. Further administrators can be added from the admin's Users page.
 
 ### API
 
-All endpoints are under `/api/` and, apart from register and login, need an `Authorization: Token <token>` header.
+All endpoints are under `/api/` and, apart from registration and the sign-in steps, need an `Authorization: Token <token>` header. Caregivers only ever reach their own children; another caregiver's child is a 404, and administrators get 403.
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| POST | `/api/auth/register/` | Create a caregiver account (`username`, `email`, `password`); returns a token. Each email can only be used once (case-insensitive) |
-| POST | `/api/auth/login/` | Exchange `username` and `password` for a token. Limited to 5 attempts per minute per client (`429 Too Many Requests` after that) |
+| POST | `/api/auth/register/` | Create a caregiver account (`username`, `email`, `password`, `device_id`). Returns a challenge, and a 6-digit code is emailed. Each email can only be used once (case-insensitive) |
+| POST | `/api/auth/login/` | Sign in with `username`, `password` and `device_id`. A trusted phone gets a token straight away; a new one gets a challenge and an emailed code. Limited to 5 attempts per minute per client |
+| POST | `/api/auth/login/verify/` | Exchange the challenge and code for a token; `remember_device` trusts the phone for 30 days. Codes last 10 minutes and allow 5 tries |
+| POST | `/api/auth/login/resend/` | Email a new code for a challenge (after 30 s; at most 3 times) |
 | POST | `/api/auth/logout/` | Invalidate the current token |
 | GET | `/api/auth/me/` | Current user, including `role` |
-| GET, POST | `/api/children/` | List or create the caregiver's own child profiles (`concerns` is a list of domains the caregiver is worried about, e.g. `["Sensory"]`) |
+| GET, POST | `/api/children/` | List or create the caregiver's own child profiles (`concerns` is a list of domains, e.g. `["Sensory"]`; a future date of birth is a due date) |
 | GET, PATCH, PUT, DELETE | `/api/children/<id>/` | One of the caregiver's own child profiles |
-| GET | `/api/children/<id>/candidates/?limit=10` | Published activities closest in meaning to the child's developmental profile (SBERT retrieval candidates, before ranking). Needs `embed_activities` to have been run |
+| GET, POST | `/api/children/<id>/milestones/` | The child's recorded milestones, or record one (`reference`, `status`: `achieved`, `emerging` or `not_yet`) |
+| GET | `/api/children/<id>/profile/` | The rule engine's developmental priorities for the child |
+| GET | `/api/reference-milestones/?search=&domain=` | The CDC/WHO milestone catalogue |
+| GET, POST | `/api/children/<id>/recommendations/` | GET the newest stored batch; POST ranks, explains and stores a new batch (or returns the identical newest one) |
+| GET | `/api/children/<id>/candidates/?limit=10` | SBERT retrieval candidates before ranking (for inspection) |
+| PUT, DELETE | `/api/recommendations/<id>/completion/` | Mark a recommended activity done (`status`: `completed` or `partially_completed`), or undo it |
+| GET, PUT | `/api/recommendations/<id>/feedback/` | Read or submit the caregiver's rating (1–5) and comment |
 
 ## Mobile setup
 
-Start the backend first (`python manage.py runserver`), then:
+Start the backend first (`python manage.py runserver`), then from `mobile/nurtura_app`:
 
 ```bash
-cd mobile/nurtura_app
 flutter pub get
-flutter run -d chrome        # or: flutter devices, then flutter run -d <device-id>
 ```
 
-The app calls the API at `http://127.0.0.1:8000` (web and desktop) or `http://10.0.2.2:8000` (Android emulator, which reaches your computer at that address). To use another server, pass `--dart-define=API_BASE_URL=https://your-server`. In development the backend accepts browser requests from any `localhost` port (CORS), so `flutter run -d chrome` works without extra setup.
+The server address is built into the app with `--dart-define=API_BASE_URL=...`. Without it, the app uses `http://127.0.0.1:8000` (web and desktop) or `http://10.0.2.2:8000` (Android emulator).
 
-App identifier: `com.sofia.nurtura_app` (Android), `com.sofia.nurturaApp` (iOS).
+| Where | How |
+|---|---|
+| **Android phone over USB** (used for the demos) | Enable USB debugging, plug in, then `adb reverse tcp:8000 tcp:8000` (repeat after re-plugging) and `flutter run -d <device-id> --dart-define=API_BASE_URL=http://127.0.0.1:8000`. `flutter devices` lists device IDs |
+| Android emulator | `flutter run -d <emulator-id>` |
+| Chrome | `flutter run -d chrome` (any `localhost` port is allowed by CORS in development) |
 
-### End-to-end test (real backend, real browser)
+App identifier: `com.sofia.nurtura_app` (Android), `com.sofia.nurturaApp` (iOS). The app is named **Nurtura** on the home screen.
 
-`integration_test/app_flow_test.dart` drives the app in Chrome against the running backend: it registers a new caregiver, logs out and back in, creates an expecting and a born child profile, searches the milestone catalogue and records a milestone. Screenshots are saved to `build/e2e_screenshots/`.
+### End-to-end test (real backend)
 
-1. Start the backend: `cd backend && python manage.py runserver`
-2. Download the [ChromeDriver](https://googlechromelabs.github.io/chrome-for-testing/) that matches your Chrome version and start it: `chromedriver --port=4444`
-3. From `mobile/nurtura_app`, using an email that isn't registered yet:
-   ```bash
-   flutter drive -d web-server --browser-name=chrome --no-headless \
-     --driver=test_driver/integration_test.dart \
-     --target=integration_test/app_flow_test.dart \
-     --dart-define=E2E_EMAIL=new-tester@nurtura.test
-   ```
+`integration_test/app_flow_test.dart` drives the whole Sprint 8 round trip against the running backend: register (a person types the emailed code), log back in on the trusted phone, create an expecting and a born child profile, record a milestone, get ranked recommendations with explanations, mark one done, rate it, and check Progress and dark mode. It saves screenshots to `build/e2e_screenshots/`. Use an email that isn't registered yet (a Gmail `+alias` works).
+
+On a phone over USB (after `adb reverse tcp:8000 tcp:8000`):
+
+```bash
+flutter drive -d <device-id> \
+  --driver=test_driver/integration_test.dart \
+  --target=integration_test/app_flow_test.dart \
+  --dart-define=API_BASE_URL=http://127.0.0.1:8000 \
+  --dart-define=E2E_EMAIL=someone-new@example.com
+```
+
+In Chrome, start [ChromeDriver](https://googlechromelabs.github.io/chrome-for-testing/) on port 4444 and use `-d chrome` instead. `flutter drive` replaces the app on the phone with a test build; run `flutter run` again afterwards.
 
 ## Git hooks
 
@@ -165,22 +209,41 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | Clean activity data | (first half of `make seed-data`) | `cd data/scripts && python clean_activities.py "../raw/activities_batch*.csv" ../processed/activities_clean.csv` |
 | Load activities into the database | `make seed-data` (cleans, then loads) | `cd backend && python manage.py seed_activities` (add `--dry-run` to preview) |
 | Load the guideline milestone catalogue | (part of `make seed-data`) | `cd backend && python manage.py seed_milestones` (add `--dry-run` to preview) |
+| Load approved plain-language aims | | `cd backend && python manage.py load_plain_aims` (`--dry-run` to preview) |
+| Embed Published activities for semantic retrieval | | `cd backend && python manage.py embed_activities` (re-run after publishing or editing activities; `--dry-run` to preview, `--force` to re-embed all) |
 | Backend checks | `make test` (runs all checks) | `cd backend && python manage.py check && python manage.py makemigrations --check --dry-run && python manage.py test` |
 | Flutter checks | (included in `make test`) | `cd mobile/nurtura_app && flutter analyze && flutter test` |
 | Format Python | (automatic on commit) | `pre-commit run --all-files` |
 | Apply migrations | | `cd backend && python manage.py migrate` |
 | Verify SBERT model | | `cd backend && python setup_sbert.py` |
-| Embed Published activities for semantic retrieval | | `cd backend && python manage.py embed_activities` (re-run after publishing or editing activities; `--dry-run` to preview, `--force` to re-embed all) |
-| Spot-check retrieval relevance (Sprint 4) | | `cd backend && python manage.py spot_check_retrieval` (sample children, top activities, domain match; `--alpha 0.5` shows the weighted ranking with each score's parts; `--markdown` for the report, `--preview-unpublished` to preview before content review; nothing is saved) |
-| Write the relevance-labelling template (Sprint 5) | | `cd backend && python manage.py export_relevance_template` (writes `data/evaluation/relevance_labels_template.csv`; won't overwrite without `--force`; see [data/evaluation/README.md](data/evaluation/README.md)) |
+| Re-run the ranking evaluation | | `cd backend && python manage.py evaluate_alpha_grid` (see [docs/sprint5_alpha_results.md](docs/sprint5_alpha_results.md)) |
+| Check nothing evaluated has changed | | `cd backend && python manage.py evaluate_alpha_grid --check-provenance` (run before any change to `backend/` during the explanation reader test) |
+| Spot-check retrieval relevance (Sprint 4) | | `cd backend && python manage.py spot_check_retrieval` (`--markdown` for the report; nothing is saved) |
+| Write the relevance-labelling template (Sprint 5) | | `cd backend && python manage.py export_relevance_template` (see [data/evaluation/README.md](data/evaluation/README.md)) |
 
 ## Continuous integration
 
 `.github/workflows/ci.yml` runs on every push to `main` and on pull requests:
 
-- **Backend:** installs `backend/requirements.txt` (with CPU-only PyTorch), then runs `manage.py check`, `makemigrations --check --dry-run` and `manage.py test` against SQLite. Tests that need the SBERT model are skipped there, since the model isn't downloaded in CI.
+- **Backend:** installs `backend/requirements.txt` (with CPU-only PyTorch), then runs `manage.py check`, `makemigrations --check --dry-run` and `manage.py test`, plus the PostgreSQL-only concurrency test. Tests that need the SBERT model are skipped there, since the model isn't downloaded in CI.
 - **Mobile:** `flutter pub get`, `flutter analyze`, `flutter test`.
+
+## Documentation
+
+| Document | What it covers |
+|---|---|
+| [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) | The project in plain language: pipeline, a worked example, results, status |
+| [docs/sprint_ii_review.md](docs/sprint_ii_review.md) | Sprint II requirements against their evidence; tasks done and outstanding; next steps |
+| [docs/testing_and_evaluation_record.md](docs/testing_and_evaluation_record.md) | Tests run, expected and actual results, defects and corrections, evaluation so far |
+| [docs/known_limitations.md](docs/known_limitations.md) | Known limitations and outstanding defects |
+| [docs/deployment_requirements.md](docs/deployment_requirements.md) | What hosting needs (Sprint III) |
+| [docs/ai_assistance_log.md](docs/ai_assistance_log.md) | AI suggestions that were checked, and what was accepted or rejected |
+| [docs/demo_checklist.md](docs/demo_checklist.md) | Running a live demo on a phone |
+| [docs/sprint5_alpha_results.md](docs/sprint5_alpha_results.md) | The ranking evaluation (held-out children, nDCG, choice of α) |
+| [docs/explanation_reader_test.md](docs/explanation_reader_test.md) | The explanation reader test (Sprint 6) |
+| [docs/DEVELOPMENT_PLAN.md](docs/DEVELOPMENT_PLAN.md) | The sprint plan and GitHub workflow |
+| [data/README.md](data/README.md) | Activity data: schema, sources, cleaning, ethics |
 
 ## Data
 
-See [data/README.md](data/README.md) for the activity schema, controlled vocabularies and cleaning workflow. Activities must be traceable to WHO, CDC, UNICEF, Montessori or Pathways.org guidance.
+See [data/README.md](data/README.md) for the activity schema, controlled vocabularies, cleaning workflow, sources and ethics. Activities must be traceable to WHO, CDC, UNICEF, Montessori or Pathways.org guidance.
