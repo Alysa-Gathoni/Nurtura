@@ -237,7 +237,6 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/testing_and_evaluation_record.md](docs/testing_and_evaluation_record.md) | Tests run, expected and actual results, defects and corrections, evaluation so far |
 | [docs/known_limitations.md](docs/known_limitations.md) | Known limitations and outstanding defects |
 | [docs/deployment_requirements.md](docs/deployment_requirements.md) | What hosting needs (Sprint III) |
-| [docs/ai_assistance_log.md](docs/ai_assistance_log.md) | AI suggestions that were checked, and what was accepted or rejected |
 | [docs/demo_checklist.md](docs/demo_checklist.md) | Running a live demo on a phone |
 | [docs/sprint5_alpha_results.md](docs/sprint5_alpha_results.md) | The ranking evaluation (held-out children, nDCG, choice of α) |
 | [docs/explanation_reader_test.md](docs/explanation_reader_test.md) | The explanation reader test (Sprint 6) |

@@ -30,7 +30,7 @@
 | Up-to-date repository, run instructions, reproducible version | Met | README; tags `sprint5-eval-v1` (evaluated ranking) and `sprint6-explanations-v1`; CI on every change |
 | Known limitations and outstanding defects documented honestly | Met | [known_limitations.md](known_limitations.md) |
 | Deployment requirements identified for Sprint III | Met | [deployment_requirements.md](deployment_requirements.md): what runs, measured memory, production settings, the deploy check's warnings, platform options |
-| An AI suggestion that was checked, with what was accepted or rejected | Met | [ai_assistance_log.md](ai_assistance_log.md): 8 checked examples. 3 were rejected outright, 1 was replaced by a better explanation and 1 was corrected before committing |
+| An AI suggestion that was checked, with what was accepted or rejected | **Author** | To present at the review |
 
 ## Evaluation workflow (how the AI/ML guidance applies)
 
