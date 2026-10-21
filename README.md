@@ -16,12 +16,12 @@ nurtura/
 │   ├── activities/             activity library and content review workflow
 │   ├── recommendations/        SBERT retrieval, weighted ranking, explanations, evaluation
 │   ├── feedback/               "done" marks and ratings (FeedbackManager), admin review
-│   ├── insights/               analytics dashboard on the admin home page
+│   ├── insights/               admin analytics: the app's admin API and the web admin's dashboard
 │   ├── templates/, static/     admin theme and dashboard
 │   ├── setup_sbert.py          downloads + verifies the SBERT model
 │   └── models/                 cached SBERT model (gitignored, created by setup_sbert.py)
 ├── mobile/nurtura_app/     Flutter app (Android, iOS, web)
-│   ├── lib/                    screens, state, services, theme
+│   ├── lib/                    caregiver and administrator screens, state, services, theme
 │   ├── test/                   widget and unit tests
 │   └── integration_test/       end-to-end test against the real backend
 ├── data/                   activity dataset, milestone catalogue, evaluation labels (see data/README.md)
@@ -81,7 +81,7 @@ A fresh database has no activities or milestones. Run these once, in order, with
    python manage.py seed_activities      # activities arrive as Draft
    python manage.py seed_milestones      # CDC/WHO milestone catalogue
    ```
-2. **Review and publish the activities** in the admin (`/admin/` → Developmental activities): select them, run *Submit selected activities for review*, then *Publish selected activities*. Only Published activities can be recommended.
+2. **Review and publish the activities** in the app's Activities tab (signed in as an administrator: open an activity, *Submit for review*, then *Publish*), or in bulk in the web admin (`/admin/` → Developmental activities: select them, run *Submit selected activities for review*, then *Publish selected activities*). Only Published activities can be recommended.
 3. **Load the approved plain-language aims** used in explanations: `python manage.py load_plain_aims`.
 4. **Embed the Published activities** for semantic search: `python manage.py embed_activities` (re-run after publishing or editing activities).
 
@@ -127,9 +127,14 @@ ALTER USER nurtura_user CREATEDB;
 There are two roles:
 
 - **Caregiver**: uses the mobile app through the API. Anyone can register as a caregiver; a new phone needs a 6-digit code sent by email.
-- **Administrator**: works in the Django admin at `/admin/`. The admin home page shows an analytics dashboard (use, ratings, library, milestones, latest feedback; aggregates only, no family details). Administrators manage and publish activities and review feedback read-only. Only administrators can sign in to the admin.
+- **Administrator**: uses the same mobile app, with the same two-step sign-in. An administrator account opens the admin screens instead of the caregiver ones:
+  - **Dashboard:** use over 7, 30 or 90 days, outcomes, system health (with *Update search index*), work waiting, library coverage, recent changes, ratings and milestone progress. Aggregates only, no family details.
+  - **Activities:** search and filter the library, add activities as Draft, edit them, and move them through review. Editing reviewed content returns it to Draft.
+  - **Feedback:** caregivers' ratings and comments against each activity, read-only, without the child's name or the caregiver's email.
 
-Create the first administrator with `python manage.py createsuperuser`; it is given the Administrator role automatically. Further administrators can be added from the admin's Users page.
+  The Django admin at `/admin/` stays as a backup, with the same dashboard. It is also where users, tokens and milestone verification are managed. Only administrators can sign in to it.
+
+Create the first administrator with `python manage.py createsuperuser`; it is given the Administrator role automatically. Further administrators can be added from the web admin's Users page.
 
 ### API
 
@@ -152,6 +157,18 @@ All endpoints are under `/api/` and, apart from registration and the sign-in ste
 | GET | `/api/children/<id>/candidates/?limit=10` | SBERT retrieval candidates before ranking (for inspection) |
 | PUT, DELETE | `/api/recommendations/<id>/completion/` | Mark a recommended activity done (`status`: `completed` or `partially_completed`), or undo it |
 | GET, PUT | `/api/recommendations/<id>/feedback/` | Read or submit the caregiver's rating (1–5) and comment |
+
+The administrator endpoints are under `/api/admin/`; caregivers get 403.
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/admin/overview/?range=30` | The dashboard's figures for the last 7, 30 or 90 days |
+| POST | `/api/admin/search-index/` | Embed Published activities that aren't searchable yet (`embed_activities`) |
+| GET, POST | `/api/admin/activities/?status=&domain=&search=` | List activities, or add one (always as Draft, with the next `ACT-` ID) |
+| GET, PATCH | `/api/admin/activities/<id>/` | One activity; editing reviewed content returns it to Draft |
+| POST | `/api/admin/activities/<id>/status/` | Move it through review (`status`: `draft`, `under_review` or `published`) |
+| GET | `/api/admin/choices/` | Areas, ages, difficulty levels, sources, statuses and the allowed status moves |
+| GET | `/api/admin/feedback/?rating=&domain=&activity=&limit=&offset=` | Ratings and comments against each activity, newest first, without family details |
 
 ## Mobile setup
 

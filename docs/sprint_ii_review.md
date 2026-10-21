@@ -13,7 +13,7 @@
 | Git with meaningful commits; no secrets in the repository | Met | 150 commits on `main`, 59 merged pull requests; an issue, branch and Conventional Commit message for each change. `.env` is gitignored, `.env.example` holds placeholders only, and the secret key comes from the environment. A scan of tracked files found no keys or passwords (2026-10-19) |
 | Data prepared and checked; source, preparation and ethics documented | Met | [data/README.md](../data/README.md): schema, controlled vocabularies, the validating cleaning script, sources, and "Access, privacy and ethics". Milestone catalogue with citations; evaluation labels with a provenance file |
 | Automation where it helps | Met | Makefile (`setup`, `seed-data`, `test`); GitHub Actions running backend and app tests on every change; black on commit; idempotent seeding commands; a provenance check for the evaluated state; an end-to-end test on a real phone |
-| Earlier chapters corrected; Chapter 4 matches the system | **Author** | Report chapters are kept outside the repository. Design changes to reflect: two-step sign-in, the tabbed app and offline use, the analytics dashboard, and preference/contextual weighting recorded as out of scope (#53) |
+| Earlier chapters corrected; Chapter 4 matches the system | **Author** | Report chapters are kept outside the repository. Design changes to reflect: two-step sign-in, the tabbed app and offline use, the administrator screens in the app (with the web admin as a backup), and preference/contextual weighting recorded as out of scope (#53) |
 
 ## Sprint II: core functionality, integration and initial testing
 
@@ -58,6 +58,7 @@ Nurtura uses a **pretrained** sentence model (`all-MiniLM-L6-v2`) without fine-t
 | Two-step sign-in by emailed code | Security | #86, #91 |
 | End-to-end test on a real phone | Testing | #104, #108 |
 | Testing and evaluation record; analytics dashboard; village restyle | Evidence; usability | #110, #116, #112, #114 |
+| Administrator screens in the app: dashboard, activity management, feedback review | FR-13, FR-16 | #122, #123 |
 
 **In progress / waiting:**
 
@@ -79,4 +80,4 @@ Nurtura uses a **pretrained** sentence model (`all-MiniLM-L6-v2`) without fine-t
 
 ## Demonstrating at the review
 
-Follow [demo_checklist.md](demo_checklist.md): backend on the laptop, phone over USB, the round trip on the phone, then the admin dashboard and feedback review in the browser. The screenshots in [evidence/e2e_2026-10-15](evidence/e2e_2026-10-15/) are the fallback if anything fails on the day.
+Follow [demo_checklist.md](demo_checklist.md): backend on the laptop, phone over USB, the round trip on the phone, then the administrator's dashboard, activities and feedback on the same phone, with the web admin as a backup. The screenshots in [evidence/e2e_2026-10-15](evidence/e2e_2026-10-15/) are the fallback if anything fails on the day.
