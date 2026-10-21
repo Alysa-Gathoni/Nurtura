@@ -143,9 +143,12 @@ All endpoints are under `/api/` and, apart from registration and the sign-in ste
 | Method | Endpoint | Purpose |
 |---|---|---|
 | POST | `/api/auth/register/` | Create a caregiver account (`username`, `email`, `password`, `device_id`). Returns a challenge, and a 6-digit code is emailed. Each email can only be used once (case-insensitive) |
-| POST | `/api/auth/login/` | Sign in with `username`, `password` and `device_id`. A trusted phone gets a token straight away; a new one gets a challenge and an emailed code. Limited to 5 attempts per minute per client |
+| POST | `/api/auth/login/` | Sign in with `username`, `password` and `device_id`. The app sends the email as `username`; an account whose username is different (e.g. an administrator from `createsuperuser`) is found by its email. A trusted phone gets a token straight away; a new one gets a challenge and an emailed code. Limited to 5 attempts per minute per client |
 | POST | `/api/auth/login/verify/` | Exchange the challenge and code for a token; `remember_device` trusts the phone for 30 days. Codes last 10 minutes and allow 5 tries |
 | POST | `/api/auth/login/resend/` | Email a new code for a challenge (after 30 s; at most 3 times) |
+| POST | `/api/auth/password-reset/` | Email a 6-digit code for choosing a new password (`email`). The reply is the same whether or not the email has an account. Limited to 5 per minute per client |
+| POST | `/api/auth/password-reset/resend/` | Email a new reset code for a challenge (same limits as the login code) |
+| POST | `/api/auth/password-reset/confirm/` | Set `new_password` with the `challenge` and `code` (the password rules apply). Signs the account out on every other device and returns a token for this one; `device_id` and `remember_device` work as at login |
 | POST | `/api/auth/logout/` | Invalidate the current token |
 | GET | `/api/auth/me/` | Current user, including `role` |
 | GET, POST | `/api/children/` | List or create the caregiver's own child profiles (`concerns` is a list of domains, e.g. `["Sensory"]`; a future date of birth is a due date) |

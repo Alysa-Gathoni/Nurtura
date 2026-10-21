@@ -34,7 +34,8 @@ None known. Every defect found so far has been fixed and is recorded with its co
 - **The server address is built into the app** at build time (`--dart-define=API_BASE_URL`). A new address means rebuilding the app.
 - **Android debug builds only.** No signed release build yet; iOS hasn't been run (the app has been tested on an Android phone and in Chrome).
 - **Offline use is partial.** The last recommendations and the child list are kept on the phone and shown offline. Recording milestones, Progress, and marking done or rating need a connection, and actions taken offline aren't queued.
-- **No password reset and no account deletion** for caregivers yet. The app can add a child but not edit or delete one; the API supports both (`PATCH` and `DELETE` on `/api/children/<id>/`).
+- **No account deletion** for caregivers yet. A forgotten password can be reset in the app with an emailed code (#126). The app can add a child but not edit or delete one; the API supports both (`PATCH` and `DELETE` on `/api/children/<id>/`).
+- **Registration says when an email is already registered,** so an address's account can be confirmed there, although the password-reset request deliberately doesn't say.
 - **Sign-in codes need email.** With no internet, codes can only be read from the backend console (development). The Gmail account used for sending has a daily sending limit (about 500 messages).
 - **"Active caregivers" is approximate.** Token sign-ins don't update Django's `last_login`, so the admin dashboard counts a caregiver as active if they generated ideas, recorded a milestone, or marked done or rated in the last 7 days.
 - **Memory and start-up.** With the SBERT model loaded, the backend committed about 1.2 GB of memory on the development laptop. Without the warm-up, the first recommendation after a start takes about 14–15 s ([performance_recommendations.md](performance_recommendations.md)).

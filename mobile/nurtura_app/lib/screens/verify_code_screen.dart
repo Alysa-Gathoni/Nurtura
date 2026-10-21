@@ -162,7 +162,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        _CodeBoxes(
+                        CodeBoxes(
                           controller: _code,
                           focusNode: _focus,
                           enabled: !_submitting,
@@ -237,9 +237,10 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
 }
 
 /// Six boxes over one hidden text field, so paste and the SMS/email
-/// autofill suggestion still work.
-class _CodeBoxes extends StatelessWidget {
-  const _CodeBoxes({
+/// autofill suggestion still work. Also used to reset a password (#126).
+class CodeBoxes extends StatelessWidget {
+  const CodeBoxes({
+    super.key,
     required this.controller,
     required this.focusNode,
     required this.enabled,

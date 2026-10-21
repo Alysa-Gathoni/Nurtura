@@ -156,6 +156,72 @@ class AuthService {
     }
   }
 
+  /// Emails a code for choosing a new password (#126). The server answers
+  /// the same way whether or not the email has an account.
+  Future<CodeChallenge> requestPasswordReset(String email) async {
+    try {
+      return CodeChallenge.fromJson(
+        await _api.post('/api/auth/password-reset/', {
+          'email': _normalize(email),
+        }) as Map<String, dynamic>,
+      );
+    } on ApiException catch (e) {
+      throw ApiException(
+        e.field('email') ?? e.message,
+        statusCode: e.statusCode,
+      );
+    }
+  }
+
+  /// Emails a fresh reset code for the same challenge.
+  Future<CodeChallenge> resendPasswordReset(CodeChallenge challenge) async {
+    try {
+      return CodeChallenge.fromJson(
+        await _api.post('/api/auth/password-reset/resend/', {
+          'challenge': challenge.id,
+        }) as Map<String, dynamic>,
+      );
+    } on ApiException catch (e) {
+      throw ApiException(
+        e.field('code') ?? e.message,
+        statusCode: e.statusCode,
+      );
+    }
+  }
+
+  /// Sets the new password with the emailed code, and signs in. A problem
+  /// with the password comes back as a `new_password` field error; one with
+  /// the code, as the message.
+  Future<AuthResult> confirmPasswordReset(
+    CodeChallenge challenge,
+    String code,
+    String newPassword, {
+    String? deviceId,
+    bool remember = true,
+  }) async {
+    try {
+      return _result(
+        await _api.post('/api/auth/password-reset/confirm/', {
+          'challenge': challenge.id,
+          'code': code.replaceAll(RegExp(r'\s'), ''),
+          'new_password': newPassword,
+          'device_id': ?deviceId,
+          'remember_device': remember,
+        }),
+      );
+    } on ApiException catch (e) {
+      final password = e.fieldErrors['new_password'];
+      throw ApiException(
+        e.field('code') ??
+            (password == null
+                ? e.message
+                : 'Please choose a different password.'),
+        statusCode: e.statusCode,
+        fieldErrors: {'new_password': ?password},
+      );
+    }
+  }
+
   Future<void> logout() => _api.post('/api/auth/logout/');
 
   Future<AppUser> me() async =>

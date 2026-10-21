@@ -1,3 +1,4 @@
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from django.db.models import Q
@@ -12,8 +13,8 @@ from rest_framework.views import APIView
 
 from activities.choices import Domain
 
-from . import two_factor
-from .models import LoginChallenge, ReferenceMilestone
+from . import password_reset, two_factor
+from .models import LoginChallenge, ReferenceMilestone, User
 from .permissions import IsCaregiver
 from .serializers import (
     ChildProfileSerializer,
@@ -74,9 +75,11 @@ class LoginView(ObtainAuthToken):
     throttle_scope = "login"
 
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(
-            data=request.data, context={"request": request}
-        )
+        data = {
+            "username": _username_for(request.data.get("username")),
+            "password": request.data.get("password"),
+        }
+        serializer = self.serializer_class(data=data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
         if two_factor.is_trusted(user, request.data.get("device_id")):
@@ -96,6 +99,27 @@ class LoginView(ObtainAuthToken):
         )
 
 
+def _username_for(login):
+    """The app signs in with an email. Caregivers' usernames are their email,
+    but an account made another way (e.g. an administrator from
+    createsuperuser) may have a different username, so an email that isn't
+    a username is looked up as an email (#126).
+    """
+    login = login if isinstance(login, str) else ""
+    if "@" in login and not User.objects.filter(username=login).exists():
+        account = password_reset.account_for(login)
+        if account is not None:
+            return account.username
+    return login
+
+
+def _code_error(exc, purposes=two_factor.SIGN_IN):
+    """A ChallengeError's message; a malformed challenge ID reads as used."""
+    if isinstance(exc, two_factor.ChallengeError):
+        return str(exc)
+    return f"This code has already been used. {two_factor.start_again(purposes)}"
+
+
 class VerifyLoginView(APIView):
     """Exchange the emailed code for an API token (#86)."""
 
@@ -111,12 +135,7 @@ class VerifyLoginView(APIView):
         try:
             verified = two_factor.verify(challenge_id, request.data.get("code"))
         except (two_factor.ChallengeError, DjangoValidationError) as exc:
-            message = (
-                str(exc)
-                if isinstance(exc, two_factor.ChallengeError)
-                else "This code has already been used. Please log in again."
-            )
-            raise ValidationError({"code": [message]})
+            raise ValidationError({"code": [_code_error(exc)]})
         device_id = request.data.get("device_id")
         remember = request.data.get("remember_device", True) is not False
         until = None
@@ -137,13 +156,89 @@ class ResendCodeView(APIView):
         try:
             challenge = two_factor.resend(request.data.get("challenge"))
         except (two_factor.ChallengeError, DjangoValidationError) as exc:
-            message = (
-                str(exc)
-                if isinstance(exc, two_factor.ChallengeError)
-                else "This code has already been used. Please log in again."
-            )
-            raise ValidationError({"code": [message]})
+            raise ValidationError({"code": [_code_error(exc)]})
         return Response(two_factor.challenge_payload(challenge))
+
+
+class PasswordResetView(APIView):
+    """Email a code for choosing a new password (#126).
+
+    The reply is the same whether or not the email has an account.
+    """
+
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "password_reset"
+
+    def post(self, request):
+        email = request.data.get("email")
+        if not isinstance(email, str) or "@" not in email:
+            raise ValidationError({"email": ["Enter your email address."]})
+        return Response(
+            password_reset.request_code(email), status=status.HTTP_202_ACCEPTED
+        )
+
+
+class PasswordResetResendView(APIView):
+    """Email a fresh reset code (#126)."""
+
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "two_factor"
+
+    def post(self, request):
+        try:
+            challenge = two_factor.resend(
+                request.data.get("challenge"), two_factor.RESET
+            )
+        except (two_factor.ChallengeError, DjangoValidationError) as exc:
+            raise ValidationError({"code": [_code_error(exc, two_factor.RESET)]})
+        return Response(two_factor.challenge_payload(challenge))
+
+
+class PasswordResetConfirmView(APIView):
+    """Check the reset code, set the new password and sign in (#126).
+
+    The password rules are checked before the code, so a weak password
+    doesn't use up one of the tries. Other phones are signed out. With
+    `device_id` and `remember_device` (default on), this phone is trusted
+    as after a sign-in code.
+    """
+
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "two_factor"
+
+    def post(self, request):
+        challenge_id = request.data.get("challenge")
+        password = request.data.get("new_password")
+        if not challenge_id:
+            raise ValidationError({"challenge": ["This field is required."]})
+        if not isinstance(password, str) or not password:
+            raise ValidationError({"new_password": ["Enter a new password."]})
+        try:
+            challenge = two_factor.open_challenge(challenge_id, two_factor.RESET)
+        except (two_factor.ChallengeError, DjangoValidationError) as exc:
+            raise ValidationError({"code": [_code_error(exc, two_factor.RESET)]})
+        try:
+            validate_password(password, user=challenge.user)
+        except DjangoValidationError as exc:
+            raise ValidationError({"new_password": list(exc.messages)})
+        try:
+            user = password_reset.confirm(
+                challenge_id, request.data.get("code"), password
+            )
+        except two_factor.ChallengeError as exc:
+            raise ValidationError({"code": [str(exc)]})
+        device_id = request.data.get("device_id")
+        remember = request.data.get("remember_device", True) is not False
+        until = None
+        if remember and two_factor.valid_device_id(device_id):
+            until = two_factor.trust(user, device_id)
+        return Response(_signed_in(user, until))
 
 
 class LogoutView(APIView):
