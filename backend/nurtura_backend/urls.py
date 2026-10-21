@@ -28,4 +28,6 @@ urlpatterns = [
     path("api/", include("profiles.urls")),
     path("api/", include("recommendations.urls")),
     path("api/", include("feedback.urls")),
+    # Administrator features in the app (#122).
+    path("api/admin/", include("insights.urls")),
 ]

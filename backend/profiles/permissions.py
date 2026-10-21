@@ -9,3 +9,13 @@ class IsCaregiver(BasePermission):
     def has_permission(self, request, view):
         user = request.user
         return bool(user and user.is_authenticated and user.is_caregiver)
+
+
+class IsAdministrator(BasePermission):
+    """Allow only authenticated users with the Administrator role (#122)."""
+
+    message = "Only administrator accounts can use the admin features."
+
+    def has_permission(self, request, view):
+        user = request.user
+        return bool(user and user.is_authenticated and user.is_administrator)
