@@ -16,6 +16,21 @@ urlpatterns = [
     path("auth/login/", views.LoginView.as_view(), name="login"),
     path("auth/login/verify/", views.VerifyLoginView.as_view(), name="login-verify"),
     path("auth/login/resend/", views.ResendCodeView.as_view(), name="login-resend"),
+    path(
+        "auth/password-reset/",
+        views.PasswordResetView.as_view(),
+        name="password-reset",
+    ),
+    path(
+        "auth/password-reset/resend/",
+        views.PasswordResetResendView.as_view(),
+        name="password-reset-resend",
+    ),
+    path(
+        "auth/password-reset/confirm/",
+        views.PasswordResetConfirmView.as_view(),
+        name="password-reset-confirm",
+    ),
     path("auth/logout/", views.LogoutView.as_view(), name="logout"),
     path("auth/me/", views.MeView.as_view(), name="me"),
     path("", include(router.urls)),

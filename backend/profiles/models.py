@@ -265,7 +265,8 @@ class DevelopmentalProfile(models.Model):
 
 
 class LoginChallenge(models.Model):
-    """One emailed verification code for logging in or registering (#86).
+    """One emailed code for logging in, registering (#86) or resetting a
+    password (#126).
 
     Only a keyed hash of the code is stored. A challenge expires after
     TWO_FACTOR_CODE_TTL, allows a few attempts, and is used at most once.
@@ -274,6 +275,7 @@ class LoginChallenge(models.Model):
     class Purpose(models.TextChoices):
         LOGIN = "login", "Login"
         REGISTER = "register", "Registration"
+        RESET = "reset", "Password reset"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(

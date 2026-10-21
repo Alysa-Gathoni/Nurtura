@@ -32,8 +32,21 @@ TRUSTED_DEVICE_DAYS = 30
 MIN_DEVICE_ID_LENGTH = 16
 
 
+# Which codes each step accepts: a reset code can't be used to log in, and
+# a login code can't reset a password (#126).
+SIGN_IN = (LoginChallenge.Purpose.LOGIN, LoginChallenge.Purpose.REGISTER)
+RESET = (LoginChallenge.Purpose.RESET,)
+
+
 class ChallengeError(Exception):
     """A code that can't be accepted, with a caregiver-readable reason."""
+
+
+def start_again(purposes):
+    """What to do after a code can't be used."""
+    if purposes == RESET:
+        return "Please ask for a new reset code."
+    return "Please log in again."
 
 
 def _hash_code(challenge_id, code):
@@ -87,18 +100,22 @@ def _new_code():
 
 def _send(challenge, code):
     minutes = int(TWO_FACTOR_CODE_TTL.total_seconds() // 60)
-    action = (
-        "finish creating your account"
-        if challenge.purpose == LoginChallenge.Purpose.REGISTER
-        else "log in"
-    )
+    action, ignore = {
+        LoginChallenge.Purpose.REGISTER: (
+            "finish creating your account",
+            "nobody can sign in without it.",
+        ),
+        LoginChallenge.Purpose.RESET: (
+            "choose a new password",
+            "your password hasn't changed.",
+        ),
+    }.get(challenge.purpose, ("log in", "nobody can sign in without it."))
     send_mail(
         subject=f"Your Nurtura code: {code}",
         message=(
             f"Your Nurtura verification code is {code}.\n\n"
             f"Enter it in the app to {action}. It expires in {minutes} minutes.\n\n"
-            "If you didn't ask for this code, you can ignore this email: "
-            "nobody can sign in without it."
+            f"If you didn't ask for this code, you can ignore this email: {ignore}"
         ),
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[challenge.user.email],
@@ -122,27 +139,33 @@ def start(user, purpose=LoginChallenge.Purpose.LOGIN):
     return challenge
 
 
-def _open(challenge_id):
+def open_challenge(challenge_id, purposes=SIGN_IN):
+    """The open challenge with this ID for one of [purposes].
+
+    Raises ChallengeError, or Django's ValidationError for an ID that isn't
+    a UUID.
+    """
+    again = start_again(purposes)
     challenge = (
         LoginChallenge.objects.select_related("user")
-        .filter(pk=challenge_id, used_at__isnull=True)
+        .filter(pk=challenge_id, used_at__isnull=True, purpose__in=purposes)
         .first()
     )
     if challenge is None:
-        raise ChallengeError("This code has already been used. Please log in again.")
+        raise ChallengeError(f"This code has already been used. {again}")
     if challenge.expires_at <= timezone.now():
-        raise ChallengeError("This code has expired. Please log in again.")
+        raise ChallengeError(f"This code has expired. {again}")
     if challenge.attempts >= MAX_ATTEMPTS:
-        raise ChallengeError("Too many wrong codes. Please log in again.")
+        raise ChallengeError(f"Too many wrong codes. {again}")
     return challenge
 
 
-def resend(challenge_id):
+def resend(challenge_id, purposes=SIGN_IN):
     """Email a fresh code for the same challenge (rate limited)."""
-    challenge = _open(challenge_id)
+    challenge = open_challenge(challenge_id, purposes)
     now = timezone.now()
     if challenge.sends >= MAX_SENDS:
-        raise ChallengeError("No more codes can be sent. Please log in again.")
+        raise ChallengeError(f"No more codes can be sent. {start_again(purposes)}")
     wait = challenge.last_sent_at + RESEND_AFTER - now
     if wait.total_seconds() > 0:
         raise ChallengeError(
@@ -166,16 +189,16 @@ class Verified:
     purpose: str
 
 
-def verify(challenge_id, code):
+def verify(challenge_id, code, purposes=SIGN_IN):
     """Check a code; on success the challenge is used up."""
-    challenge = _open(challenge_id)
+    challenge = open_challenge(challenge_id, purposes)
     code = "".join(str(code or "").split())
     if not constant_time_compare(_hash_code(challenge.id, code), challenge.code_hash):
         challenge.attempts += 1
         challenge.save(update_fields=["attempts"])
         left = MAX_ATTEMPTS - challenge.attempts
         if left <= 0:
-            raise ChallengeError("Too many wrong codes. Please log in again.")
+            raise ChallengeError(f"Too many wrong codes. {start_again(purposes)}")
         raise ChallengeError(
             f"That code isn't right. You have {left} "
             f"{'try' if left == 1 else 'tries'} left."

@@ -11,6 +11,7 @@ import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
 import '../widgets/segmented_toggle.dart';
 import '../widgets/village.dart';
+import 'forgot_password_screen.dart';
 
 /// Register or log in as a caregiver.
 class AuthScreen extends StatefulWidget {
@@ -199,6 +200,25 @@ class _AuthScreenState extends State<AuthScreen> {
                                     loading: _submitting,
                                     onPressed: _submit,
                                   ),
+                                  if (!_registering) ...[
+                                    const SizedBox(height: 4),
+                                    Center(
+                                      child: TextButton(
+                                        key: const Key('forgotPasswordButton'),
+                                        onPressed: _submitting
+                                            ? null
+                                            : () => Navigator.of(context).push(
+                                                MaterialPageRoute<void>(
+                                                  builder: (_) =>
+                                                      ForgotPasswordScreen(
+                                                        email: _email.text,
+                                                      ),
+                                                ),
+                                              ),
+                                        child: const Text('Forgot password?'),
+                                      ),
+                                    ),
+                                  ],
                                 ],
                               ),
                             ),

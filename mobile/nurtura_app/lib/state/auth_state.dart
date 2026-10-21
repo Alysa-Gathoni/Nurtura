@@ -120,6 +120,31 @@ class AuthState extends ChangeNotifier {
     return challenge;
   }
 
+  /// Emails a password-reset code (#126).
+  Future<CodeChallenge> requestPasswordReset(String email) =>
+      _auth.requestPasswordReset(email);
+
+  Future<CodeChallenge> resendPasswordReset(CodeChallenge challenge) =>
+      _auth.resendPasswordReset(challenge);
+
+  /// Sets the new password and signs in on this phone.
+  Future<void> resetPassword(
+    CodeChallenge challenge,
+    String code,
+    String newPassword, {
+    bool rememberDevice = true,
+  }) async {
+    await _signIn(
+      await _auth.confirmPasswordReset(
+        challenge,
+        code,
+        newPassword,
+        deviceId: await _deviceIds.id(),
+        remember: rememberDevice,
+      ),
+    );
+  }
+
   /// Back to the login form ("use a different account").
   void cancelChallenge() => _setSignedOut();
 

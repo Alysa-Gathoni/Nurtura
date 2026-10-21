@@ -215,6 +215,8 @@ REST_FRAMEWORK = {
         "login": "5/minute",
         # Entering or resending the emailed login code (#86).
         "two_factor": "10/minute",
+        # Asking for a password-reset code (#126).
+        "password_reset": "5/minute",
     },
 }
 

@@ -56,6 +56,7 @@ Nurtura uses a **pretrained** sentence model (`all-MiniLM-L6-v2`) without fine-t
 | Mobile: recommendations, activity details, done and feedback, progress | Sprint 8; NFR-15 | #82, #84, #100, #90 |
 | Offline use | NFR-14 | #85, #102 |
 | Two-step sign-in by emailed code | Security | #86, #91 |
+| Password reset by emailed code | Security | #126 |
 | End-to-end test on a real phone | Testing | #104, #108 |
 | Testing and evaluation record; analytics dashboard; village restyle | Evidence; usability | #110, #116, #112, #114 |
 | Administrator screens in the app: dashboard, activity management, feedback review | FR-13, FR-16 | #122, #123 |
@@ -76,7 +77,7 @@ Nurtura uses a **pretrained** sentence model (`all-MiniLM-L6-v2`) without fine-t
 | Full requirement-to-test map | Needs the Chapter 3 requirement list |
 | Language toggle (NFR-16) or English-only as a limitation | Decision needed |
 | Verify the remaining 108 CDC milestones | After the reader test (the catalogue is frozen until then) |
-| Password reset; app-side child editing | Not yet built ([known_limitations.md](known_limitations.md)) |
+| App-side child editing; account deletion | Not yet built ([known_limitations.md](known_limitations.md)) |
 
 ## Demonstrating at the review
 
