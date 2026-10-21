@@ -7,7 +7,11 @@ class AppUser {
     role: (json['role'] as String?) ?? '',
   );
 
+  static const administratorRole = 'administrator';
+
   final int id;
   final String email;
   final String role;
+
+  bool get isAdministrator => role == administratorRole;
 }

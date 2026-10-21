@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../models/child_profile.dart';
 import '../state/auth_state.dart';
 import '../state/children_state.dart';
-import '../state/theme_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../theme/domain_style.dart';
@@ -14,7 +13,7 @@ import '../widgets/gamification.dart';
 import '../widgets/message_banner.dart';
 import '../widgets/nurtura_app_bar.dart';
 import '../widgets/pill_chip.dart';
-import '../widgets/segmented_toggle.dart';
+import '../widgets/theme_picker.dart';
 import '../widgets/village.dart';
 import 'child_form_screen.dart';
 import 'milestone_screen.dart';
@@ -203,7 +202,7 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
             const SizedBox(height: 26),
             Text('Appearance', style: AppText.quicksand(size: 20)),
             const SizedBox(height: 10),
-            const _ThemePicker(),
+            const ThemePicker(),
             const SizedBox(height: 26),
             SecondaryButton(
               key: const Key('logoutButton'),
@@ -214,28 +213,6 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
           ],
         ],
       ),
-    );
-  }
-}
-
-class _ThemePicker extends StatelessWidget {
-  const _ThemePicker();
-
-  static const _modes = [ThemeMode.system, ThemeMode.light, ThemeMode.dark];
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = context.watch<ThemeState>();
-    return SegmentedToggle(
-      key: const Key('themePicker'),
-      options: const ['System', 'Light', 'Dark'],
-      icons: const [
-        Icons.brightness_auto_rounded,
-        Icons.light_mode_rounded,
-        Icons.dark_mode_rounded,
-      ],
-      selected: _modes.indexOf(theme.mode),
-      onChanged: (i) => theme.set(_modes[i]),
     );
   }
 }
