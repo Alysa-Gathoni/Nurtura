@@ -4,6 +4,7 @@ import '../models/app_user.dart';
 import '../services/api_client.dart';
 import '../services/auth_service.dart';
 import 'device_id_store.dart';
+import 'preferences.dart';
 import 'token_store.dart';
 
 enum AuthStatus { unknown, signedOut, codeRequired, signedIn }
@@ -15,8 +16,14 @@ class AuthState extends ChangeNotifier {
     required this._store,
     required this._deviceIds,
     this.onSessionCleared,
+    Preferences? preferences,
   }) : _api = api,
+       _prefs = preferences,
        _auth = AuthService(api);
+
+  /// Where the signed-in user's role is kept, so an administrator who opens
+  /// the app offline still lands on the admin screens (#123).
+  static const roleKey = 'nurtura.role';
 
   /// Called when the user logs out or the server ends the session (401), to
   /// forget data saved on the device for this account. Not called when a
@@ -27,8 +34,14 @@ class AuthState extends ChangeNotifier {
   final TokenStore _store;
   final DeviceIdStore _deviceIds;
   final AuthService _auth;
+  final Preferences? _prefs;
+  String? _savedRole;
 
   AuthStatus status = AuthStatus.unknown;
+
+  /// Administrators get the admin screens; everyone else the caregiver app.
+  bool get isAdministrator =>
+      (user?.role ?? _savedRole) == AppUser.administratorRole;
 
   /// Null when the app was opened offline with a saved session.
   AppUser? user;
@@ -43,10 +56,12 @@ class AuthState extends ChangeNotifier {
     _api.token = token;
     try {
       user = await _auth.me();
+      await _rememberRole(user!.role);
       status = AuthStatus.signedIn;
       notifyListeners();
     } on ApiException catch (e) {
       if (e.statusCode == null) {
+        _savedRole = await _prefs?.getString(roleKey);
         // Offline: the saved session can't be checked, so keep it and open
         // the app with what's saved on the phone (#102). The first request
         // that reaches the server signs out if the token has ended (401).
@@ -56,11 +71,22 @@ class AuthState extends ChangeNotifier {
       }
       if (e.statusCode == 401) {
         await _store.clear();
+        await _forgetRole();
         await onSessionCleared?.call();
       }
       _api.token = null;
       _setSignedOut();
     }
+  }
+
+  Future<void> _rememberRole(String role) async {
+    _savedRole = role;
+    await _prefs?.setString(roleKey, role);
+  }
+
+  Future<void> _forgetRole() async {
+    _savedRole = null;
+    await _prefs?.remove(roleKey);
   }
 
   Future<void> register(String email, String password) async => _handle(
@@ -104,6 +130,7 @@ class AuthState extends ChangeNotifier {
       // The token is discarded locally either way.
     }
     await _store.clear();
+    await _forgetRole();
     await onSessionCleared?.call();
     _api.token = null;
     _setSignedOut();
@@ -113,6 +140,7 @@ class AuthState extends ChangeNotifier {
   /// server again, so the app shows the login screen.
   Future<void> sessionExpired() async {
     await _store.clear();
+    await _forgetRole();
     await onSessionCleared?.call();
     _api.token = null;
     _setSignedOut();
@@ -131,6 +159,7 @@ class AuthState extends ChangeNotifier {
 
   Future<void> _signIn(AuthResult result) async {
     await _store.write(result.token);
+    await _rememberRole(result.user.role);
     _api.token = result.token;
     user = result.user;
     challenge = null;

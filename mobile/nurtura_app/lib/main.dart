@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'config.dart';
+import 'screens/admin/admin_shell.dart';
 import 'screens/auth_screen.dart';
 import 'screens/home_shell.dart';
 import 'screens/verify_code_screen.dart';
@@ -59,6 +60,7 @@ class NurturaApp extends StatelessWidget {
             api: api,
             store: tokenStore,
             deviceIds: deviceIds,
+            preferences: preferences,
             // Forget this account's data on the phone when it signs out.
             onSessionCleared: () async {
               await recommendationCache.clear();
@@ -89,13 +91,16 @@ class AuthGate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return switch (context.watch<AuthState>().status) {
+    final auth = context.watch<AuthState>();
+    return switch (auth.status) {
       AuthStatus.unknown => const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       ),
       AuthStatus.signedOut => const AuthScreen(),
       AuthStatus.codeRequired => const VerifyCodeScreen(),
-      AuthStatus.signedIn => const HomeShell(),
+      // Administrators get the admin screens (#123); caregivers the app.
+      AuthStatus.signedIn =>
+        auth.isAdministrator ? const AdminShell() : const HomeShell(),
     };
   }
 }

@@ -25,6 +25,10 @@ const _months = [
 String formatDate(DateTime date) =>
     '${date.day} ${_months[date.month - 1]} ${date.year}';
 
+/// Day and month for chart axes: 5 Oct.
+String formatShortDate(DateTime date) =>
+    '${date.day} ${_months[date.month - 1]}';
+
 /// The API's date format, e.g. "2027-02-01".
 String apiDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-'
