@@ -7,6 +7,7 @@ A short guide for showing Nurtura working on a phone against the backend on a la
 - [ ] Merge the open pull requests, then `git pull` on `main`.
 - [ ] **Reinstall the normal app on the phone.** Running the end-to-end test (`flutter drive`) replaces it with a test build. Steps 3–4 below reinstall it.
 - [ ] **Prepare a demo account:** register on the phone, type the emailed code, and leave "Trust this phone for 30 days" on. On the day, logging in then needs no code, so the demo doesn't depend on email arriving quickly.
+- [ ] **Prepare an administrator account** the same way: sign in on the phone with it, type the code, trust the phone, then log out. (Create one with `python manage.py createsuperuser` if needed.)
 - [ ] Charge the phone and keep its USB cable with the laptop.
 - [ ] Keep the backup evidence to hand: [`docs/evidence/e2e_2026-10-15/`](evidence/e2e_2026-10-15/) (16 screenshots) and [`testing_and_evaluation_record.md`](testing_and_evaluation_record.md).
 
@@ -53,7 +54,12 @@ A prepared demo account on a trusted phone (see "The day before") needs no code 
 5. **Open the top activity:** "Why this?" explains the reason in plain language.
 6. **Done!** and a **star rating** with a comment; back on Today the card shows Done and the rating.
 7. **Progress:** the child's own records and the streak, with no comparison to other children.
-8. **Admin** (on the laptop, `http://127.0.0.1:8000/admin/`, with an administrator account): Feedback shows the rating against the activity, without the child's name or the caregiver's email.
+8. **Admin** (on the same phone): log out from Family, then sign in with the administrator account. The admin screens open instead of the caregiver ones.
+   - **Dashboard:** the idea batch, milestone and rating you just made appear in the figures. Point out system health and work waiting.
+   - **Feedback:** the rating appears against the activity, without the child's name or the caregiver's email.
+   - **Activities:** open one to show the review steps (Draft → Under Review → Published).
+
+   The web admin (`http://127.0.0.1:8000/admin/` on the laptop) is the backup if the phone fails.
 
 ## If something goes wrong
 

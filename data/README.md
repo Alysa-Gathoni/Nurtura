@@ -104,3 +104,12 @@ Sources:
 - **WHO** Multicentre Growth Reference Study, Motor Development Study (*Acta Paediatrica* Suppl 2006;450:86-95): 6 gross motor milestones. The expected age is the end of the WHO window of achievement (99th percentile).
 
 The entries were written from these publications and **must each be checked against the source document**. Load them with `python manage.py seed_milestones` (also part of `make seed-data`); every entry starts unverified. An administrator marks entries verified in the Django admin (**Reference milestones**, "Mark selected milestones as verified"). Re-loading keeps the verified flag unless an entry's content changed, in which case it is marked unverified for re-checking.
+
+## Access, privacy and ethics
+
+- **Open, published sources only.** Activities are written in our own words from published WHO, CDC, UNICEF, Montessori and Pathways.org guidance, each with its source (and, where available, a link). The milestone catalogue cites the CDC 2022 checklists and the WHO Motor Development Study. No licensed or restricted dataset is used, and nothing needs an access agreement.
+- **Not yet fully verified.** 25 of the 133 catalogue milestones have been checked against the source documents: the 6 WHO ones and the 19 CDC ones used in the evaluation. The other 108 are still to check (see the guideline section above).
+- **No personal data in the repository.** Caregiver accounts, child profiles, milestones and feedback live only in the running database, which is never committed (`.env` and local databases are gitignored). Test accounts made during development and end-to-end runs are deleted afterwards.
+- **Evaluation data uses constructed children.** The held-out children in `evaluation/heldout_labels.csv` and the sample children are realistic but hypothetical profiles built from real catalogue milestones. No real child's data was used, and the relevance labels are the researcher's own judgements.
+- **Studies with people are anonymous.** The explanation reader test and the planned caregiver evaluation record no names: readers are R1–R5, forms are anonymous, verbal or written consent is asked first, people can stop at any time, and responses are kept out of the repository (see `docs/explanation_reader_test.md`).
+- **To confirm with the client:** how responsibility for protecting caregivers' data is divided between Nurtura and Webmasters Kenya once SOFIA hosts it (IR-10).

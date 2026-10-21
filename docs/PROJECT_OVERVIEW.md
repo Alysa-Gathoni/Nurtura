@@ -145,7 +145,7 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 
 **Backend (Django + PostgreSQL)**
 - All six core classes from the design are implemented: Child Profile, Developmental Activity, Developmental Milestone, Recommendation, Completed Activity and Feedback.
-- **Two user roles.** Caregivers use the app and see only their own children. Administrators manage the activity library.
+- **Two user roles.** Caregivers use the app and see only their own children. Administrators manage the activity library from the same app, with the Django admin as a backup.
 - **Content review workflow (the SOFIA fix):** each activity moves Draft → Under Review → Published, and only Published activities can be recommended.
 - **Security basics:** strong-password rules, one account per email, and limited login attempts.
 - **Two-step sign-in:** on a new phone, a 6-digit code is emailed (valid 10 minutes, 5 tries). The caregiver can trust the phone for 30 days. Codes and phone IDs are stored only as hashes.
@@ -168,6 +168,7 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
   - **Progress:** milestones celebrated, a ring for each area and badges, all from the child's own records and never compared with other children (NFR-15);
   - **Milestones:** record from the searchable checklist;
   - **Family:** children, theme and logout.
+- **Administrator screens:** an administrator account opens Dashboard, Activities, Feedback and Account tabs instead. Together they cover the system's use and health, adding, editing and publishing activities, and reviewing ratings without family details.
 - **Activity screen:** the full activity, then "How did it go?": Done or Partly done (with undo), and 1–5 stars with a comment.
 - **Offline (NFR-14):** the last recommendations and the child list are kept on the phone. Opening the app offline keeps the caregiver signed in and shows them, marked as saved.
 - **Look and feel:** a playful design with light and dark mode, a day streak and badges, inspired by Kinedu. It keeps the agreed teal, coral and gold colours, rounded cards, and the Nunito and Quicksand fonts.

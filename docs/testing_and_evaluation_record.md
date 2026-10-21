@@ -1,6 +1,6 @@
 # Testing and evaluation record
 
-> **Last updated: 2026-10-15.** Describes `main` at commit `8c547d1`, plus the end-to-end test fixes in #109. Every result below comes from a real run, log or pull request; nothing is estimated.
+> **Last updated: 2026-10-19.** The phone run (section 1) is from 2026-10-15; the automated test counts and results are from `main` at commit `cddefe5`, run on 2026-10-16. Every result below comes from a real run, log or pull request; nothing is estimated.
 
 This record covers what has been tested so far, the results (expected and actual), the defects found and how they were corrected, and the initial evaluation evidence. What is still to evaluate is listed at the end.
 
@@ -45,9 +45,9 @@ The table follows the run step by step. *HTTP* is the backend's own log of the r
 
 ## 2. Automated tests
 
-All of these run on every change (GitHub Actions) and **all passed** on `main` at `8c547d1` on 2026-10-15.
+All of these run on every change (GitHub Actions) and **all passed** on `main` at `cddefe5` on 2026-10-16.
 
-### Backend (Django): 378 tests
+### Backend (Django): 388 tests
 
 | Area | Tests | What they check |
 |---|---|---|
@@ -55,6 +55,8 @@ All of these run on every change (GitHub Actions) and **all passed** on `main` a
 | Profiles | 117 | Caregiver/administrator roles (FR-01, FR-02); registration, login and two-step codes (expiry, 5 tries, resend limits, trusted phones, hashing); child profiles, including pregnancy; milestone recording; the rule engine's priority scores (FR-05) |
 | Recommendations | 193 | Embeddings and similarity retrieval (FR-06); the weighted ranking and its tie-breaks (FR-07); explanations (FR-11); stored batches and when a new one is made; completed activities left out; evaluation harness and provenance checks; access (another caregiver's child → 404, administrators → 403) |
 | Feedback | 32 | Mark done / partly done / undo (FR-14); `FeedbackManager` rating and comment rules (FR-15); administrator review, read-only, without the child or the caregiver shown (FR-16) |
+| Insights | 7 | The admin dashboard's figures (people, activity, ratings, library, milestones), what counts as active, the page itself, empty states, and that no child or caregiver is shown |
+| Admin theme | 3 | The admin's login and pages carry the Nurtura theme and branding |
 
 ### App (Flutter): 78 tests
 
@@ -68,6 +70,44 @@ All of these run on every change (GitHub Actions) and **all passed** on `main` a
 
 The app's test runner reports 78; one test is generated for two status codes.
 
+### Invalid inputs and failure conditions
+
+These rows are a selection of the automated tests above that check what happens when input is wrong or something fails. Each passed on 2026-10-16; the *Correction* column names the defect a test was written for, where there was one.
+
+| Area | Test | Input or condition | Expected | Actual | Correction |
+|---|---|---|---|---|---|
+| Registration | `profiles/test_api.py::test_weak_passwords_rejected` | A short or common password | 400 with the password rules broken | As expected | – |
+| Registration | `profiles/test_api.py::test_register_rejects_email_in_use_ignoring_case` | An email already registered, in different case | 400; no second account | As expected | – |
+| Registration | `profiles/test_api.py::test_cannot_self_register_as_administrator` | Asking to register with the administrator role | Account is a caregiver regardless | As expected | – |
+| Sign-in | `profiles/test_api.py::test_login_with_wrong_password_fails` | Wrong password | 400 "unable to log in"; no token | As expected | – |
+| Sign-in | `profiles/test_api.py::test_login_throttled_after_five_attempts_per_minute` | A 6th attempt within a minute | 429 Too Many Requests | As expected | – |
+| Sign-in | `profiles/test_two_factor.py::test_wrong_password_sends_nothing` | Wrong password on a new phone | No code emailed, no challenge | As expected | – |
+| Two-step code | `profiles/test_two_factor.py::test_wrong_codes_count_down_then_lock` | Wrong codes, 5 times | Tries count down, then the challenge locks | As expected | – |
+| Two-step code | `profiles/test_two_factor.py::test_unknown_or_malformed_challenge` | A made-up or malformed challenge ID | 400; no token | As expected | – |
+| Two-step code | `profiles/test_two_factor.py::test_at_most_three_resends` | A 4th "send a new code" | Refused | As expected | – |
+| Access control | `profiles/test_api.py::test_unauthenticated_requests_rejected` | No token | 401 | As expected | – |
+| Access control | `profiles/test_api.py::test_caregiver_cannot_access_another_caregivers_child` | Another family's child ID | 404; nothing revealed | As expected | – |
+| Access control | `profiles/test_api.py::test_administrators_cannot_use_child_profile_api` | An administrator calling caregiver endpoints | 403 | As expected | – |
+| Access control | `profiles/test_api.py::test_caregiver_cannot_use_admin_site` | A caregiver opening `/admin/` | Redirected to the admin login | As expected | – |
+| Privacy | `feedback/test_admin.py::test_the_family_is_not_shown` | Admin feedback list, detail and completions pages | No child name or caregiver email | As expected | D4: the detail page title showed the child's name (#99) |
+| Privacy | `insights/tests.py::test_no_child_or_caregiver_is_shown` | Admin dashboard | No child name or caregiver email | As expected | – |
+| Milestones | `profiles/test_milestone_api.py::test_prenatal_profiles_cannot_record_milestones_yet` | Recording a milestone for an expected baby | 400 with a plain message | As expected | – |
+| Milestones | `profiles/tests.py::test_record_milestone_rejects_invalid_values` | An unknown domain ("Visual") or status ("done") | Rejected; nothing saved | As expected | – |
+| Rule engine | `profiles/test_rules.py::test_future_observations_ignored` | A later observation dated in the future | Ignored; the current one counts | As expected | – |
+| Feedback | `feedback/test_api.py::test_invalid_input_is_a_400_with_field_messages` | Rating 9, rating "great", no rating, comment over 1000 characters | 400 with a message for the field | As expected | – |
+| Feedback | `feedback/test_api.py::test_unknown_status_is_rejected` | Completion status "skipped" | 400; nothing saved | As expected | – |
+| Data loading | `activities/test_seed.py::test_invalid_row_means_nothing_is_written` | One invalid row in the activities CSV | Nothing written | As expected | – |
+| Data loading | `activities/test_seed.py::test_duplicates_in_file_rejected` | A repeated `activity_id` | Rejected | As expected | – |
+| Content workflow | `activities/tests.py::test_invalid_transitions_rejected` | Draft straight to Published; Published back to Under Review | Refused; status unchanged | As expected | – |
+| Evaluation | `recommendations/test_heldout.py::test_unlabelled_sheet_cannot_choose_alpha` | Choosing α with no labels | Refused | As expected | – |
+| App: sign-in | `auth_screen_test.dart` "mismatched confirmation is caught before any request" | Passwords that don't match | Message; nothing sent | As expected | – |
+| App: sign-in | `auth_screen_test.dart` "an unreachable server is reported, not a silent failure" | Server down | Plain "can't reach the server" message | As expected | – |
+| App: code screen | `verify_code_screen_test.dart` "letters are ignored and a short code is not sent" | Letters and a 5-digit code | Letters dropped; asks for all 6 digits | As expected | – |
+| App: offline | `offline_launch_test.dart` "opened offline, the saved session and ideas are still there" | App opened with no connection | Stays signed in; saved ideas shown with a notice | As expected | D3: it used to show the login screen (#102) |
+| App: session end | `offline_launch_test.dart` "an ended session (401) still signs out and forgets the list" | Server rejects the saved token | Signed out; saved data cleared | As expected | – |
+| App: feedback | `activity_progress_test.dart` "offline, nothing is pretended to be saved" | Marking done with no connection | Error shown; not shown as done | As expected | – |
+| App: errors | `recommendations_screen_test.dart` "403 and 404 get plain messages" | Server answers 403 or 404 | A plain message, no crash | As expected | – |
+
 ### End-to-end (real backend): 1 test
 
 `integration_test/app_flow_test.dart`, as in section 1.
@@ -75,7 +115,7 @@ The app's test runner reports 78; one test is generated for two status codes.
 ### Running them
 
 ```
-cd backend && python manage.py test                 # 378 tests
+cd backend && python manage.py test                 # 388 tests
 cd mobile/nurtura_app && flutter test               # 78 tests
 # End-to-end: see the header of integration_test/app_flow_test.dart
 ```

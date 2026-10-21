@@ -1,0 +1,42 @@
+# Known limitations and outstanding defects
+
+> **Last updated: 2026-10-19,** for `main` at `cddefe5`. Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
+
+## Outstanding defects
+
+None known. Every defect found so far has been fixed and is recorded with its correction in [testing_and_evaluation_record.md](testing_and_evaluation_record.md) (section 3).
+
+## Evaluation not yet done
+
+| Item | State | Planned |
+|---|---|---|
+| Explanation reader test (5 non-technical readers) | Materials ready ([explanation_reader_test.md](explanation_reader_test.md)); not run. Until it's scored, explanation wording and the evaluated ranking stay frozen | Before Sprint 9 |
+| Hand check of retrieval results (#31) | Results generated; the researcher's relevant / not relevant judgements are still to do | Before Sprint 9 |
+| Evaluation with caregivers: relevance, personalisation, explainability, usability (SUS), satisfaction | Not started; participants still to recruit | Sprint 9 |
+| Requirement-by-requirement test map | Tests reference the requirement IDs found in the repository; the full list from Chapter 3 is needed to map all of them | Sprint 9 |
+
+## Evaluation limits
+
+- **Small and constructed.** α was chosen on 11 tune children and checked on 8 test children. They are realistic but hypothetical profiles, labelled by one rater who also designed the system, with no agreement measure. The results describe these children only and support no statistical claims ([sprint5_alpha_results.md](sprint5_alpha_results.md)).
+- **α is a reasonable default, not an optimum.** The test set preferred the α = 0 ablation (nDCG@5 0.873 against 0.814 for α = 0.7), and the tune curve is flat from 0.4 to 1.0.
+- **Only the top 5 were labelled,** so the metrics can't be extended beyond k = 5.
+
+## Content
+
+- **54 Published activities.** Coverage is uneven: Socio-Emotional 17, Language 12, Cognitive 10, Motor 8, Sensory 7, and 8 of them for pregnancy. Some age and area combinations have nothing. For example, there is no Sensory activity for 18–24 months, which made one held-out child (H17) a content-gap case.
+- **Sensory has no guideline milestones.** The CDC and WHO checklists have no Sensory category, so Sensory priority comes only from caregiver concerns and interests.
+- **108 of 133 catalogue milestones are not yet verified** against the source documents (the 6 WHO ones and 19 CDC ones used in the evaluation are).
+- **English only.** A language toggle (NFR-16) is undecided; if it isn't built, English-only is a stated limitation.
+
+## App and backend
+
+- **Not hosted yet.** The backend runs on a laptop. The phone reaches it over USB (`adb reverse`), because campus Wi-Fi blocks devices from reaching each other. Hosting is Sprint III ([deployment_requirements.md](deployment_requirements.md)).
+- **The server address is built into the app** at build time (`--dart-define=API_BASE_URL`). A new address means rebuilding the app.
+- **Android debug builds only.** No signed release build yet; iOS hasn't been run (the app has been tested on an Android phone and in Chrome).
+- **Offline use is partial.** The last recommendations and the child list are kept on the phone and shown offline. Recording milestones, Progress, and marking done or rating need a connection, and actions taken offline aren't queued.
+- **No password reset and no account deletion** for caregivers yet. The app can add a child but not edit or delete one; the API supports both (`PATCH` and `DELETE` on `/api/children/<id>/`).
+- **Sign-in codes need email.** With no internet, codes can only be read from the backend console (development). The Gmail account used for sending has a daily sending limit (about 500 messages).
+- **"Active caregivers" is approximate.** Token sign-ins don't update Django's `last_login`, so the admin dashboard counts a caregiver as active if they generated ideas, recorded a milestone, or marked done or rated in the last 7 days.
+- **Memory and start-up.** With the SBERT model loaded, the backend committed about 1.2 GB of memory on the development laptop. Without the warm-up, the first recommendation after a start takes about 14–15 s ([performance_recommendations.md](performance_recommendations.md)).
+- **The end-to-end test needs a person** to type the emailed code. It can't run unattended in CI.
+- **The admin's fonts come from Google Fonts.** Offline, the admin falls back to system fonts.
