@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../services/api_client.dart';
@@ -137,7 +138,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         _password.text,
         rememberDevice: _remember,
       );
-      // Signed in: the app underneath now shows the home screens.
+      // Saved: let the password manager offer to store the new password,
+      // then the app underneath shows the home screens.
+      TextInput.finishAutofillContext();
       navigator.popUntil((route) => route.isFirst);
     } on ApiException catch (e) {
       if (!mounted) return;
@@ -267,7 +270,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           prefixIcon: Icons.mail_outline_rounded,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.done,
-          autofillHints: const [AutofillHints.email],
+          autofillHints: const [AutofillHints.username, AutofillHints.email],
           onSubmitted: (_) => _sendCode(),
           validator: (v) {
             final email = v?.trim() ?? '';
@@ -310,6 +313,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // The account the new password is for, so "Suggest strong
+            // password" and saving the password work.
+            AppTextField(
+              key: const Key('resetAccountField'),
+              label: 'Account',
+              controller: _email,
+              prefixIcon: Icons.mail_outline_rounded,
+              readOnly: true,
+              autofillHints: const [
+                AutofillHints.username,
+                AutofillHints.email,
+              ],
+            ),
+            const SizedBox(height: 18),
             CodeBoxes(
               controller: _code,
               focusNode: _codeFocus,
@@ -340,6 +357,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               prefixIcon: Icons.lock_outline_rounded,
               obscureText: !_showPassword,
               textInputAction: TextInputAction.done,
+              autofillHints: const [AutofillHints.newPassword],
               onSubmitted: (_) => _reset(),
               validator: (v) =>
                   v != _password.text ? "Passwords don't match." : null,
