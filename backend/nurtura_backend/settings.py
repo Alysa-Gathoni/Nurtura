@@ -198,6 +198,12 @@ else:
     }
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Nurtura <noreply@localhost>")
 
+# Continue with Google (#130): the OAuth web client ID(s) Google ID tokens
+# must be issued for, comma-separated. Empty turns Google sign-in off.
+GOOGLE_OAUTH_CLIENT_IDS = [
+    c.strip() for c in os.getenv("GOOGLE_OAUTH_CLIENT_IDS", "").split(",") if c.strip()
+]
+
 
 # Django REST Framework
 REST_FRAMEWORK = {

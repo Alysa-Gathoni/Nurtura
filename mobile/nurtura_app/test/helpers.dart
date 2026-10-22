@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:nurtura_app/services/google_auth.dart';
 import 'package:nurtura_app/main.dart';
 import 'package:nurtura_app/services/api_client.dart';
 import 'package:nurtura_app/state/device_id_store.dart';
@@ -56,6 +57,7 @@ Future<MemoryTokenStore> pumpApp(
   RecommendationCache? cache,
   Preferences? preferences,
   DeviceIdStore? deviceIds,
+  GoogleIdTokens? google,
 }) async {
   AppText.useGoogleFonts = false;
   final store = MemoryTokenStore(savedToken);
@@ -66,6 +68,7 @@ Future<MemoryTokenStore> pumpApp(
       recommendationCache: cache ?? MemoryRecommendationCache(),
       preferences: preferences ?? MemoryPreferences(),
       deviceIds: deviceIds ?? MemoryDeviceIdStore(testDeviceId),
+      google: google,
     ),
   );
   await tester.pumpAndSettle();
