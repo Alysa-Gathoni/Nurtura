@@ -165,4 +165,59 @@ void main() {
     await tapVisible(tester, find.byKey(const Key('resetBack')));
     expect(find.byKey(const Key('submitButton')), findsOneWidget);
   });
+
+  // Password managers (e.g. Google's "Suggest strong password") need the
+  // account and both new-password fields in one autofill group (#128).
+  Iterable<String>? hintsOf(WidgetTester tester, String key) => tester
+      .widget<TextField>(
+        find.descendant(
+          of: find.byKey(Key(key)),
+          matching: find.byType(TextField),
+        ),
+      )
+      .autofillHints;
+
+  testWidgets(
+    'the reset step offers the account and new passwords to autofill',
+    (tester) async {
+      await pumpApp(tester, resetBackend());
+      await askForCode(tester);
+      final account = tester.widget<TextField>(
+        find.descendant(
+          of: find.byKey(const Key('resetAccountField')),
+          matching: find.byType(TextField),
+        ),
+      );
+      expect(account.readOnly, isTrue);
+      expect(account.controller!.text, 'Wanjiru@Example.com');
+      expect(account.autofillHints, contains(AutofillHints.username));
+      for (final key in ['newPasswordField', 'confirmNewPasswordField']) {
+        expect(hintsOf(tester, key), [AutofillHints.newPassword]);
+      }
+      for (final key in [
+        'resetAccountField',
+        'newPasswordField',
+        'confirmNewPasswordField',
+      ]) {
+        expect(
+          find.ancestor(
+            of: find.byKey(Key(key)),
+            matching: find.byType(AutofillGroup),
+          ),
+          findsOneWidget,
+        );
+      }
+    },
+  );
+
+  testWidgets(
+    'registering offers the email and both new passwords to autofill',
+    (tester) async {
+      await pumpApp(tester, resetBackend());
+      await tapVisible(tester, find.text('Register'));
+      expect(hintsOf(tester, 'emailField'), contains(AutofillHints.username));
+      expect(hintsOf(tester, 'passwordField'), [AutofillHints.newPassword]);
+      expect(hintsOf(tester, 'confirmField'), [AutofillHints.newPassword]);
+    },
+  );
 }

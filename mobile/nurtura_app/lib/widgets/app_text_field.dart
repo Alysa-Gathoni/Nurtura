@@ -21,6 +21,7 @@ class AppTextField extends StatelessWidget {
     this.prefixIcon,
     this.suffix,
     this.enabled = true,
+    this.readOnly = false,
   });
 
   final String label;
@@ -37,6 +38,9 @@ class AppTextField extends StatelessWidget {
   final IconData? prefixIcon;
   final Widget? suffix;
   final bool enabled;
+
+  /// Shown and offered to autofill, but not editable.
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +64,7 @@ class AppTextField extends StatelessWidget {
           onFieldSubmitted: onSubmitted,
           onChanged: onChanged,
           enabled: enabled,
+          readOnly: readOnly,
           style: AppText.nunito(size: 15.5, weight: FontWeight.w600),
           decoration: InputDecoration(
             hintText: hint,

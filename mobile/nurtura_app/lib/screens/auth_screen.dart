@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../services/api_client.dart';
@@ -61,6 +62,8 @@ class _AuthScreenState extends State<AuthScreen> {
       } else {
         await auth.login(_email.text, _password.text);
       }
+      // Accepted: let the password manager offer to save it.
+      TextInput.finishAutofillContext();
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e);
     } finally {
@@ -124,7 +127,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                     prefixIcon: Icons.mail_outline_rounded,
                                     keyboardType: TextInputType.emailAddress,
                                     textInputAction: TextInputAction.next,
-                                    autofillHints: const [AutofillHints.email],
+                                    autofillHints: const [
+                                      AutofillHints.username,
+                                      AutofillHints.email,
+                                    ],
                                     errorText: _error?.field('email'),
                                     validator: _validateEmail,
                                   ),
@@ -178,6 +184,11 @@ class _AuthScreenState extends State<AuthScreen> {
                                       prefixIcon: Icons.lock_outline_rounded,
                                       obscureText: !_showPassword,
                                       textInputAction: TextInputAction.done,
+                                      // Lets a suggested strong password
+                                      // fill both fields.
+                                      autofillHints: const [
+                                        AutofillHints.newPassword,
+                                      ],
                                       onSubmitted: (_) => _submit(),
                                       validator: (v) => v != _password.text
                                           ? "Passwords don't match."
