@@ -171,7 +171,7 @@ Explanations are generated for every recommendation; section 1, step 8, shows a 
 
 - **Explanation reader test** with 5 readers (Sprint 6 definition of done).
 - **Hand check of retrieval results** (#31).
-- **Evaluation with caregivers (Sprint 9):** relevance and personalisation from their own children's recommendations, explainability, usability (SUS) and satisfaction. Participants still need to be recruited.
+- **Evaluation with caregivers (Sprint 9):** relevance and personalisation from their own children's recommendations, explainability, usability (SUS) and satisfaction. The plan, consent form, questionnaire and session sheet are drafted in [`caregiver_evaluation.md`](caregiver_evaluation.md); participants still need to be recruited.
 - **Requirement-by-requirement test mapping:** the table in section 2 names the requirements the repo references; the full list from Chapter 3 is needed to map every requirement to its tests and fill any gaps.
 - **Light mode on a phone:** covered by widget tests; not yet captured on the device.
 - **Remaining 108 CDC milestones** to verify against the official checklists.
