@@ -4,12 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:nurtura_app/models/recommendation.dart';
+import 'package:nurtura_app/services/google_auth.dart';
 import 'package:nurtura_app/state/recommendation_cache.dart';
 import 'package:nurtura_app/utils/dates.dart' as dates;
 
 import 'helpers.dart';
 
 // Editing and deleting a child, and deleting the account (#134).
+
+/// Counts sign-outs from Google (#130).
+class SignOutCounter implements GoogleIdTokens {
+  int signOuts = 0;
+
+  @override
+  Future<String?> idToken() async => null;
+
+  @override
+  Future<void> signOut() async => signOuts++;
+}
 
 Map<String, dynamic> childJson({
   int id = 3,
@@ -324,7 +336,7 @@ void main() {
       expect(find.text('Amani'), findsWidgets);
     });
 
-    testWidgets('an account with no password confirms with its email', (
+    testWidgets('a Google account (no password) confirms with its email', (
       tester,
     ) async {
       final backend = backendWith((r) async {
@@ -334,16 +346,24 @@ void main() {
           'email': ['Type the email address of this account.'],
         }, 400);
       }, children: [childJson()]);
-      final store = await pumpApp(tester, backend, savedToken: 'tok');
+      final google = SignOutCounter();
+      final store = await pumpApp(
+        tester,
+        backend,
+        savedToken: 'tok',
+        google: google,
+      );
       await openFamily(tester);
       await openDeleteAccount(tester);
       await confirmWith(tester, 'anything');
+      expect(google.signOuts, 0);
 
       expect(find.text('Your email'), findsOneWidget);
       await confirmWith(tester, ' wanjiru@example.com ');
       final deletes = backend.requests.where((r) => r.method == 'DELETE');
       expect(body(deletes.last), {'email': 'wanjiru@example.com'});
       expect(store.token, isNull);
+      expect(google.signOuts, 1);
     });
 
     testWidgets('a caregiver with no children can delete the account too', (

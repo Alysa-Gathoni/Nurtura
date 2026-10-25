@@ -57,6 +57,7 @@ Nurtura uses a **pretrained** sentence model (`all-MiniLM-L6-v2`) without fine-t
 | Offline use | NFR-14 | #85, #102 |
 | Two-step sign-in by emailed code | Security | #86, #91 |
 | Password reset by emailed code | Security | #126 |
+| Continue with Google, as a choice next to email; password-manager support | Usability | #128, #130 |
 | End-to-end test on a real phone | Testing | #104, #108 |
 | Testing and evaluation record; analytics dashboard; village restyle | Evidence; usability | #110, #116, #112, #114 |
 | Administrator screens in the app: dashboard, activity management, feedback review | FR-13, FR-16 | #122, #123 |

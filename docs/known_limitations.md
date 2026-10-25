@@ -12,7 +12,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 |---|---|---|
 | Explanation reader test (5 non-technical readers) | Materials ready ([explanation_reader_test.md](explanation_reader_test.md)); not run. Until it's scored, explanation wording and the evaluated ranking stay frozen | Before Sprint 9 |
 | Hand check of retrieval results (#31) | Results generated; the researcher's relevant / not relevant judgements are still to do | Before Sprint 9 |
-| Evaluation with caregivers: relevance, personalisation, explainability, usability (SUS), satisfaction | Not started; participants still to recruit | Sprint 9 |
+| Evaluation with caregivers: relevance, personalisation, explainability, usability (SUS), satisfaction | Materials drafted ([caregiver_evaluation.md](caregiver_evaluation.md)); ethics question and sample size to confirm with the supervisor; participants still to recruit | Sprint 9 |
 | Requirement-by-requirement test map | Tests reference the requirement IDs found in the repository; the full list from Chapter 3 is needed to map all of them | Sprint 9 |
 
 ## Evaluation limits
@@ -34,7 +34,8 @@ None known. Every defect found so far has been fixed and is recorded with its co
 - **The server address is built into the app** at build time (`--dart-define=API_BASE_URL`). A new address means rebuilding the app.
 - **Android debug builds only.** No signed release build yet; iOS hasn't been run (the app has been tested on an Android phone and in Chrome).
 - **Offline use is partial.** The last recommendations and the child list are kept on the phone and shown offline. Recording milestones, Progress, and marking done or rating need a connection, and actions taken offline aren't queued.
-- **Deleting an account is immediate and final** (#134). A caregiver deletes their account, with all their children's data, from the Family tab after confirming their password; there is no grace period or undo, and administrators are removed in the Django admin instead. Children can be edited or deleted from the Family tab. A forgotten password can be reset in the app with an emailed code (#126).
+- **Deleting an account is immediate and final** (#134). A caregiver deletes their account, with all their children's data, from the Family tab after confirming their password (or, for an account made with Google that has no password, its email); there is no grace period or undo, and administrators are removed in the Django admin instead. Children can be edited or deleted from the Family tab. A forgotten password can be reset in the app with an emailed code (#126).
+- **Continue with Google is Android only** (#130). Chrome and iOS need their own OAuth clients and set-up. Each signing key (every laptop's debug key, and the release key) needs its SHA-1 registered, and while the consent screen is in *Testing* only listed test users (up to 100) can use it.
 - **Registration says when an email is already registered,** so an address's account can be confirmed there, although the password-reset request deliberately doesn't say.
 - **Sign-in codes need email.** With no internet, codes can only be read from the backend console (development). The Gmail account used for sending has a daily sending limit (about 500 messages).
 - **"Active caregivers" is approximate.** Token sign-ins don't update Django's `last_login`, so the admin dashboard counts a caregiver as active if they generated ideas, recorded a milestone, or marked done or rated in the last 7 days.

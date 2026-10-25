@@ -222,6 +222,29 @@ class AuthService {
     }
   }
 
+  /// Signs in (or registers) with a Google ID token (#130). No emailed code
+  /// is needed; [remember] trusts this phone.
+  Future<AuthResult> google(
+    String idToken, {
+    String? deviceId,
+    bool remember = true,
+  }) async {
+    try {
+      return _result(
+        await _api.post('/api/auth/google/', {
+          'id_token': idToken,
+          'device_id': ?deviceId,
+          'remember_device': remember,
+        }),
+      );
+    } on ApiException catch (e) {
+      throw ApiException(
+        e.field('non_field_errors') ?? e.message,
+        statusCode: e.statusCode,
+      );
+    }
+  }
+
   Future<void> logout() => _api.post('/api/auth/logout/');
 
   /// Deletes the signed-in account and everything it owns (#134).

@@ -103,6 +103,7 @@ The app can then register caregivers, record milestones and generate recommendat
 | `RANKING_ALPHA` | Weight of rule priority in the ranking. Leave unset to use the evaluated value, 0.7 |
 | `SBERT_MODEL_PATH` | Where the SBERT model is stored. Leave unset for `backend/models/` |
 | `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS`, `DEFAULT_FROM_EMAIL` | SMTP for the two-step sign-in codes. **Leave `EMAIL_HOST` empty in development**: codes are then printed in the `runserver` output |
+| `GOOGLE_OAUTH_CLIENT_IDS` | The **web** OAuth client ID(s) for Continue with Google, comma-separated. Empty turns Google sign-in off (see "Continue with Google" below) |
 
 ### PostgreSQL
 
@@ -126,7 +127,7 @@ ALTER USER nurtura_user CREATEDB;
 
 There are two roles:
 
-- **Caregiver**: uses the mobile app through the API. Anyone can register as a caregiver; a new phone needs a 6-digit code sent by email.
+- **Caregiver**: uses the mobile app through the API. Anyone can register as a caregiver, with an email and password (a new phone needs a 6-digit code sent by email) or with **Continue with Google** (no code; the Google account's verified email is used). It's one account per email either way: someone who registered with email can later use Google, and an account made with Google can set a password with *Forgot password?*.
 - **Administrator**: uses the same mobile app, with the same two-step sign-in. An administrator account opens the admin screens instead of the caregiver ones:
   - **Dashboard:** use over 7, 30 or 90 days, outcomes, system health (with *Update search index*), work waiting, library coverage, recent changes, ratings and milestone progress. Aggregates only, no family details.
   - **Activities:** search and filter the library, add activities as Draft, edit them, and move them through review. Editing reviewed content returns it to Draft.
@@ -149,6 +150,7 @@ All endpoints are under `/api/` and, apart from registration and the sign-in ste
 | POST | `/api/auth/password-reset/` | Email a 6-digit code for choosing a new password (`email`). The reply is the same whether or not the email has an account. Limited to 5 per minute per client |
 | POST | `/api/auth/password-reset/resend/` | Email a new reset code for a challenge (same limits as the login code) |
 | POST | `/api/auth/password-reset/confirm/` | Set `new_password` with the `challenge` and `code` (the password rules apply). Signs the account out on every other device and returns a token for this one; `device_id` and `remember_device` work as at login |
+| POST | `/api/auth/google/` | Continue with Google: exchange a Google ID token (`id_token`, plus `device_id` and `remember_device`) for a token. Signs in the account with the token's verified email, or creates a caregiver (201). Administrators are refused. 503 until `GOOGLE_OAUTH_CLIENT_IDS` is set |
 | POST | `/api/auth/logout/` | Invalidate the current token |
 | GET, DELETE | `/api/auth/me/` | GET the current user, including `role`. DELETE a caregiver's own account with everything it owns (children, milestones, recommendations, completions, ratings, codes, trusted phones), confirmed with `password` (or `email` for an account with no password); 204. Administrators get 403. Limited to 5 per minute |
 | GET, POST | `/api/children/` | List or create the caregiver's own child profiles (`concerns` is a list of domains, e.g. `["Sensory"]`; a future date of birth is a due date) |
@@ -190,6 +192,22 @@ The server address is built into the app with `--dart-define=API_BASE_URL=...`. 
 | Chrome | `flutter run -d chrome` (any `localhost` port is allowed by CORS in development) |
 
 App identifier: `com.sofia.nurtura_app` (Android), `com.sofia.nurturaApp` (iOS). The app is named **Nurtura** on the home screen.
+
+### Continue with Google (optional, Android)
+
+The button only appears in a build given the web client ID, and the backend only accepts Google tokens once it has the same ID. Setting it up is free (no billing account):
+
+1. In [Google Cloud Console](https://console.cloud.google.com/), create a project, then **APIs & Services → OAuth consent screen**: External, app name Nurtura, your support email, and the `email`, `profile` and `openid` scopes. While it's in *Testing*, add the Google accounts that will try it as test users (up to 100).
+2. **Credentials → Create credentials → OAuth client ID → Android**: package name `com.sofia.nurtura_app` and the SHA-1 of the key the app is signed with. For debug builds on a laptop:
+   ```bash
+   keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+   ```
+   Each laptop has its own debug key, and a release build needs the release key's SHA-1 too (add another Android client).
+3. **Create credentials → OAuth client ID → Web application** (no URIs needed). This client ID is the one both sides use:
+   - `backend/.env`: `GOOGLE_OAUTH_CLIENT_IDS=<web client ID>`, then restart the backend;
+   - the app: add `--dart-define=GOOGLE_SERVER_CLIENT_ID=<web client ID>` to `flutter run` or `flutter build`.
+
+Only the Google account's verified email is used and stored; Google's name and photo are not kept.
 
 ### End-to-end test (real backend)
 
