@@ -113,7 +113,11 @@ class _HomeShellState extends State<HomeShell> {
                   today => RecommendationsScreen(
                     child: child,
                     embedded: true,
-                    refresh: _refreshIdeas,
+                    // After the profile was edited, ask for ideas that fit
+                    // it (#134). The flag is taken once: `refresh` is only
+                    // read when this screen is created.
+                    refresh:
+                        _refreshIdeas || state.takeIdeasOutOfDate(child.id),
                   ),
                   progress => ProgressScreen(
                     child: child,

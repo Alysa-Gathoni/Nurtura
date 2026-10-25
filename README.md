@@ -150,7 +150,7 @@ All endpoints are under `/api/` and, apart from registration and the sign-in ste
 | POST | `/api/auth/password-reset/resend/` | Email a new reset code for a challenge (same limits as the login code) |
 | POST | `/api/auth/password-reset/confirm/` | Set `new_password` with the `challenge` and `code` (the password rules apply). Signs the account out on every other device and returns a token for this one; `device_id` and `remember_device` work as at login |
 | POST | `/api/auth/logout/` | Invalidate the current token |
-| GET | `/api/auth/me/` | Current user, including `role` |
+| GET, DELETE | `/api/auth/me/` | GET the current user, including `role`. DELETE a caregiver's own account with everything it owns (children, milestones, recommendations, completions, ratings, codes, trusted phones), confirmed with `password` (or `email` for an account with no password); 204. Administrators get 403. Limited to 5 per minute |
 | GET, POST | `/api/children/` | List or create the caregiver's own child profiles (`concerns` is a list of domains, e.g. `["Sensory"]`; a future date of birth is a due date) |
 | GET, PATCH, PUT, DELETE | `/api/children/<id>/` | One of the caregiver's own child profiles |
 | GET, POST | `/api/children/<id>/milestones/` | The child's recorded milestones, or record one (`reference`, `status`: `achieved`, `emerging` or `not_yet`) |

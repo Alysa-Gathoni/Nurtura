@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/child_profile.dart';
 import '../services/api_client.dart';
 import '../state/children_state.dart';
+import '../state/recommendation_cache.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../theme/domain_style.dart';
@@ -15,9 +17,14 @@ import '../widgets/nurtura_app_bar.dart';
 import '../widgets/pill_chip.dart';
 import '../widgets/segmented_toggle.dart';
 
-/// Creates a child profile; pops with the saved child.
+/// Creates a child profile, or edits [child]'s (#134); pops with the saved
+/// child. When editing, the profile can also be deleted: the screen then
+/// pops with null.
 class ChildFormScreen extends StatefulWidget {
-  const ChildFormScreen({super.key});
+  const ChildFormScreen({super.key, this.child});
+
+  /// The child being edited; null to add a new one.
+  final ChildProfile? child;
 
   @override
   State<ChildFormScreen> createState() => _ChildFormScreenState();
@@ -34,8 +41,24 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
   final _concerns = <String>{};
 
   bool _submitting = false;
+  bool _deleting = false;
   bool _dateMissing = false;
   ApiException? _error;
+
+  bool get _editing => widget.child != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final child = widget.child;
+    if (child != null) {
+      _name.text = child.name;
+      _expecting = child.isExpecting;
+      _date = child.dateOfBirth;
+      _interests.addAll(child.interests);
+      _concerns.addAll(child.concerns);
+    }
+  }
 
   @override
   void dispose() {
@@ -90,7 +113,7 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
   }
 
   Future<void> _save() async {
-    if (_submitting) return;
+    if (_submitting || _deleting) return;
     _addInterest(); // keep anything typed but not yet added
     final valid = _formKey.currentState!.validate();
     setState(() {
@@ -101,17 +124,69 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
 
     setState(() => _submitting = true);
     try {
-      final child = await context.read<ChildrenState>().create(
-        name: _name.text,
-        dateOfBirth: _date!,
-        interests: List.of(_interests),
-        concerns: developmentalDomains.where(_concerns.contains).toList(),
-      );
+      final children = context.read<ChildrenState>();
+      final concerns = developmentalDomains.where(_concerns.contains).toList();
+      final child = _editing
+          ? await children.update(
+              widget.child!,
+              name: _name.text,
+              dateOfBirth: _date!,
+              interests: List.of(_interests),
+              concerns: concerns,
+            )
+          : await children.create(
+              name: _name.text,
+              dateOfBirth: _date!,
+              interests: List.of(_interests),
+              concerns: concerns,
+            );
       if (mounted) Navigator.of(context).pop(child);
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e);
     } finally {
       if (mounted) setState(() => _submitting = false);
+    }
+  }
+
+  Future<void> _delete() async {
+    if (_submitting || _deleting) return;
+    final child = widget.child!;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Delete ${child.name}'s profile?"),
+        content: const Text(
+          'Their milestones, ideas and ratings are deleted too. '
+          "This can't be undone.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            key: const Key('confirmDeleteChild'),
+            style: TextButton.styleFrom(foregroundColor: context.palette.rose),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    setState(() {
+      _deleting = true;
+      _error = null;
+    });
+    try {
+      final cache = context.read<RecommendationCache>();
+      await context.read<ChildrenState>().delete(child);
+      await cache.remove(child.id);
+      if (mounted) Navigator.of(context).pop();
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e);
+    } finally {
+      if (mounted) setState(() => _deleting = false);
     }
   }
 
@@ -137,7 +212,7 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
             : null);
 
     return Scaffold(
-      appBar: const NurturaAppBar(title: 'Add a child'),
+      appBar: NurturaAppBar(title: _editing ? 'Edit profile' : 'Add a child'),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -291,8 +366,30 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
                       label: 'Save profile',
                       icon: Icons.check_rounded,
                       loading: _submitting,
-                      onPressed: _save,
+                      onPressed: _deleting ? null : _save,
                     ),
+                    if (_editing) ...[
+                      const SizedBox(height: 14),
+                      Center(
+                        child: TextButton.icon(
+                          key: const Key('deleteChildButton'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: context.palette.rose,
+                          ),
+                          onPressed: _submitting || _deleting ? null : _delete,
+                          icon: _deleting
+                              ? const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.2,
+                                  ),
+                                )
+                              : const Icon(Icons.delete_outline_rounded),
+                          label: const Text('Delete this profile'),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
               ),

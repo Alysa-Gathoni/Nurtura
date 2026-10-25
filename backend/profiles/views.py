@@ -4,7 +4,7 @@ from django.db import transaction
 from django.db.models import Q
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
@@ -250,10 +250,48 @@ class LogoutView(APIView):
 
 
 class MeView(generics.RetrieveAPIView):
+    """The signed-in user; a caregiver can also delete their account (#134).
+
+    DELETE needs the current password, or the account's email when it has
+    no usable password. Deleting the user cascades to their children (and so
+    milestones, profiles, recommendations, completions and ratings), sign-in
+    codes, trusted phones and token. Administrators are managed in the
+    Django admin instead, so the last one can't be removed by accident.
+    Only DELETE is throttled, since it checks a password.
+    """
+
     serializer_class = UserSerializer
+    throttle_scope = "account_delete"
+
+    def get_throttles(self):
+        if self.request.method == "DELETE":
+            return [ScopedRateThrottle()]
+        return super().get_throttles()
 
     def get_object(self):
         return self.request.user
+
+    def delete(self, request):
+        user = request.user
+        if user.is_administrator:
+            raise PermissionDenied(
+                "Administrator accounts are removed in the admin site."
+            )
+        if user.has_usable_password():
+            password = request.data.get("password")
+            if not isinstance(password, str) or not user.check_password(password):
+                raise ValidationError({"password": ["That password isn't right."]})
+        else:
+            email = request.data.get("email")
+            if not isinstance(email, str) or (
+                email.strip().lower() != user.email.lower()
+            ):
+                raise ValidationError(
+                    {"email": ["Type the email address of this account."]}
+                )
+        with transaction.atomic():
+            user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ChildProfileViewSet(viewsets.ModelViewSet):
