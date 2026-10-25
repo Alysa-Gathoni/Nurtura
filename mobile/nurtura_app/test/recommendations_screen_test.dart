@@ -178,9 +178,7 @@ void main() {
     });
   }
 
-  testWidgets('shows "Gathering ideas…" while generating', (
-    tester,
-  ) async {
+  testWidgets('shows "Gathering ideas…" while generating', (tester) async {
     final post = Completer<http.Response>();
     final backend = FakeBackend((r) async {
       if (r.method == 'GET') return json(emptyBatch);
