@@ -52,7 +52,8 @@ class ApiClient {
   Future<dynamic> patch(String path, Object? body) =>
       _send('PATCH', path, body: body);
 
-  Future<dynamic> delete(String path) => _send('DELETE', path);
+  Future<dynamic> delete(String path, [Object? body]) =>
+      _send('DELETE', path, body: body);
 
   Future<dynamic> _send(
     String method,

@@ -89,6 +89,51 @@ class ChildrenState extends ChangeNotifier {
     return child;
   }
 
+  /// Saves changes to a child; throws [ApiException] with field errors.
+  ///
+  /// The child's ideas were picked for the old profile, so the Today tab is
+  /// told to ask for a fresh batch ([takeIdeasOutOfDate]).
+  Future<ChildProfile> update(
+    ChildProfile child, {
+    required String name,
+    required DateTime dateOfBirth,
+    required List<String> interests,
+    required List<String> concerns,
+  }) async {
+    final updated = await _service.update(
+      child.id,
+      name: name,
+      dateOfBirth: dateOfBirth,
+      interests: interests,
+      concerns: concerns,
+    );
+    children = [for (final c in children) c.id == updated.id ? updated : c]
+      ..sort((a, b) => a.name.compareTo(b.name));
+    _ideasOutOfDate.add(updated.id);
+    notifyListeners();
+    await _save();
+    return updated;
+  }
+
+  /// Deletes a child's profile, with its milestones, ideas and ratings.
+  Future<void> delete(ChildProfile child) async {
+    await _service.delete(child.id);
+    children = [
+      for (final c in children)
+        if (c.id != child.id) c,
+    ];
+    if (_selectedId == child.id) _selectedId = null;
+    _ideasOutOfDate.remove(child.id);
+    notifyListeners();
+    await _save();
+  }
+
+  final _ideasOutOfDate = <int>{};
+
+  /// True, once, if the child's profile was edited since their ideas were
+  /// last fetched.
+  bool takeIdeasOutOfDate(int childId) => _ideasOutOfDate.remove(childId);
+
   Future<void> _save() => _prefs.setString(
     savedKey,
     jsonEncode([for (final c in children) c.toJson()]),
@@ -113,6 +158,7 @@ class ChildrenState extends ChangeNotifier {
   void clear() {
     children = const [];
     _selectedId = null;
+    _ideasOutOfDate.clear();
     loaded = false;
     offline = false;
     error = null;

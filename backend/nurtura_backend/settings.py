@@ -217,6 +217,8 @@ REST_FRAMEWORK = {
         "two_factor": "10/minute",
         # Asking for a password-reset code (#126).
         "password_reset": "5/minute",
+        # Deleting an account checks the password (#134).
+        "account_delete": "5/minute",
     },
 }
 
