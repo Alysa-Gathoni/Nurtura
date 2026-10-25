@@ -12,6 +12,7 @@ import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
 import '../widgets/segmented_toggle.dart';
 import '../widgets/village.dart';
+import '../widgets/google_button.dart';
 import 'forgot_password_screen.dart';
 
 /// Register or log in as a caregiver.
@@ -47,6 +48,21 @@ class _AuthScreenState extends State<AuthScreen> {
       _registering = registering;
       _error = null;
     });
+  }
+
+  Future<void> _google() async {
+    if (_submitting) return;
+    setState(() {
+      _error = null;
+      _submitting = true;
+    });
+    try {
+      await context.read<AuthState>().continueWithGoogle();
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e);
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
   }
 
   Future<void> _submit() async {
@@ -230,6 +246,17 @@ class _AuthScreenState extends State<AuthScreen> {
                                       ),
                                     ),
                                   ],
+                                  if (context
+                                      .watch<AuthState>()
+                                      .googleAvailable) ...[
+                                    const SizedBox(height: 10),
+                                    const _OrDivider(),
+                                    const SizedBox(height: 14),
+                                    GoogleButton(
+                                      key: const Key('googleButton'),
+                                      onPressed: _submitting ? null : _google,
+                                    ),
+                                  ],
                                 ],
                               ),
                             ),
@@ -254,6 +281,33 @@ class _AuthScreenState extends State<AuthScreen> {
       return "That doesn't look like an email address.";
     }
     return null;
+  }
+}
+
+/// "or", between the email form and Continue with Google.
+class _OrDivider extends StatelessWidget {
+  const _OrDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    return Row(
+      children: [
+        Expanded(child: Divider(color: p.border)),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Text(
+            'or',
+            style: AppText.nunito(
+              size: 13.5,
+              weight: FontWeight.w700,
+              color: p.mutedText,
+            ),
+          ),
+        ),
+        Expanded(child: Divider(color: p.border)),
+      ],
+    );
   }
 }
 
