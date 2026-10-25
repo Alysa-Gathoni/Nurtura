@@ -79,7 +79,9 @@ Write the answer **word for word**. Don't hint or rephrase.
 
 ## Part D: Questionnaire
 
-Questionnaire handed over: ☐   Returned with every item answered: ☐ (if not, which items were left blank: ________)
+Participant number and QR code given: ☐   Form submitted before leaving: ☐ (if not, why, e.g. no internet: ________)
+
+Phone used: ☐ participant's own ☐ session phone
 
 ---
 
