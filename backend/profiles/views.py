@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 
 from activities.choices import Domain
 
-from . import password_reset, two_factor
+from . import google_sign_in, password_reset, two_factor
 from .models import LoginChallenge, ReferenceMilestone, User
 from .permissions import IsCaregiver
 from .serializers import (
@@ -239,6 +239,49 @@ class PasswordResetConfirmView(APIView):
         if remember and two_factor.valid_device_id(device_id):
             until = two_factor.trust(user, device_id)
         return Response(_signed_in(user, until))
+
+
+class GoogleSignInView(APIView):
+    """Continue with Google (#130): a Google ID token for an API token.
+
+    Signs in the account with the token's verified email, or creates a
+    caregiver account (201). No emailed code is needed. With `device_id`
+    and `remember_device` (default on) this phone is trusted, so a later
+    email-and-password login on it needs no code either. Off (503) until
+    GOOGLE_OAUTH_CLIENT_IDS is set.
+    """
+
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "login"
+
+    def post(self, request):
+        if not google_sign_in.enabled():
+            return Response(
+                {"detail": "Google sign-in isn't set up on this server."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
+        try:
+            email = google_sign_in.verified_email(request.data.get("id_token"))
+            with transaction.atomic():
+                user, created = google_sign_in.account_for(email)
+        except google_sign_in.GoogleUnavailable:
+            return Response(
+                {"detail": "Couldn't reach Google. Please try again."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
+        except google_sign_in.GoogleSignInError as exc:
+            raise ValidationError({"non_field_errors": [str(exc)]})
+        device_id = request.data.get("device_id")
+        remember = request.data.get("remember_device", True) is not False
+        until = None
+        if remember and two_factor.valid_device_id(device_id):
+            until = two_factor.trust(user, device_id)
+        return Response(
+            {**_signed_in(user, until), "created": created},
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+        )
 
 
 class LogoutView(APIView):

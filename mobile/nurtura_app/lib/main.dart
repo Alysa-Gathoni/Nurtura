@@ -7,6 +7,7 @@ import 'screens/auth_screen.dart';
 import 'screens/home_shell.dart';
 import 'screens/verify_code_screen.dart';
 import 'services/api_client.dart';
+import 'services/google_auth.dart';
 import 'state/auth_state.dart';
 import 'state/children_state.dart';
 import 'state/device_id_store.dart';
@@ -25,6 +26,9 @@ void main() {
       recommendationCache: SharedPrefsRecommendationCache(),
       preferences: SharedPrefsPreferences(),
       deviceIds: SecureDeviceIdStore(),
+      google: googleSignInConfigured
+          ? GooglePlayIdTokens(googleServerClientId)
+          : null,
     ),
   );
 }
@@ -37,6 +41,7 @@ class NurturaApp extends StatelessWidget {
     required this.recommendationCache,
     required this.preferences,
     required this.deviceIds,
+    this.google,
   });
 
   final ApiClient api;
@@ -44,6 +49,9 @@ class NurturaApp extends StatelessWidget {
   final RecommendationCache recommendationCache;
   final Preferences preferences;
   final DeviceIdStore deviceIds;
+
+  /// Null hides "Continue with Google".
+  final GoogleIdTokens? google;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +69,7 @@ class NurturaApp extends StatelessWidget {
             store: tokenStore,
             deviceIds: deviceIds,
             preferences: preferences,
+            google: google,
             // Forget this account's data on the phone when it signs out.
             onSessionCleared: () async {
               await recommendationCache.clear();

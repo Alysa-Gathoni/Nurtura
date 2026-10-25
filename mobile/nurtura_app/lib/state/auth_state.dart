@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../models/app_user.dart';
 import '../services/api_client.dart';
 import '../services/auth_service.dart';
+import '../services/google_auth.dart';
 import 'device_id_store.dart';
 import 'preferences.dart';
 import 'token_store.dart';
@@ -17,6 +18,7 @@ class AuthState extends ChangeNotifier {
     required this._deviceIds,
     this.onSessionCleared,
     Preferences? preferences,
+    this._google,
   }) : _api = api,
        _prefs = preferences,
        _auth = AuthService(api);
@@ -35,6 +37,10 @@ class AuthState extends ChangeNotifier {
   final DeviceIdStore _deviceIds;
   final AuthService _auth;
   final Preferences? _prefs;
+  final GoogleIdTokens? _google;
+
+  /// Whether "Continue with Google" is offered (#130).
+  bool get googleAvailable => _google != null;
   String? _savedRole;
 
   AuthStatus status = AuthStatus.unknown;
@@ -120,6 +126,22 @@ class AuthState extends ChangeNotifier {
     return challenge;
   }
 
+  /// Signs in or registers with the Google account the person picks (#130).
+  /// Does nothing if they close Google's chooser.
+  Future<void> continueWithGoogle() async {
+    final google = _google;
+    if (google == null) return;
+    final token = await google.idToken();
+    if (token == null) return;
+    try {
+      await _signIn(await _auth.google(token, deviceId: await _deviceIds.id()));
+    } on ApiException {
+      // Let them pick a different account next time.
+      await google.signOut();
+      rethrow;
+    }
+  }
+
   /// Emails a password-reset code (#126).
   Future<CodeChallenge> requestPasswordReset(String email) =>
       _auth.requestPasswordReset(email);
@@ -157,6 +179,7 @@ class AuthState extends ChangeNotifier {
     await _store.clear();
     await _forgetRole();
     await onSessionCleared?.call();
+    await _google?.signOut();
     _api.token = null;
     _setSignedOut();
   }
