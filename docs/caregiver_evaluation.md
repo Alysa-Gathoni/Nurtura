@@ -13,7 +13,7 @@ The fifth dimension, **personalisation effectiveness** (diversity, novelty and c
 
 **The materials:**
 - [`caregiver_evaluation_consent.md`](caregiver_evaluation_consent.md): information sheet and consent form, given to the participant first.
-- [`caregiver_evaluation_questionnaire.md`](caregiver_evaluation_questionnaire.md): the participant's questionnaire (SUS, then satisfaction).
+- [`caregiver_evaluation_form.md`](caregiver_evaluation_form.md): the participant's questionnaire (SUS, then satisfaction), an anonymous Google Form built by [`scripts/caregiver_questionnaire_form.gs`](../scripts/caregiver_questionnaire_form.gs) and scored by [`scripts/score_caregiver_questionnaire.py`](../scripts/score_caregiver_questionnaire.py).
 - [`caregiver_evaluation_session_sheet.md`](caregiver_evaluation_session_sheet.md): the researcher's sheet for one session (tasks, relevance ratings, the explanation question).
 
 > **Status: draft.** Confirm the two open decisions at the end with the supervisor before the first session.
@@ -47,7 +47,7 @@ The fifth dimension, **personalisation effectiveness** (diversity, novelty and c
    - **Problems:** note anything that confused or slowed them, in their own words where possible.
    - Don't explain how Nurtura works, before or during the tasks.
 4. **Relevance and explanation (5 min).** On the list of 5 suggestions, ask the two questions in Part C of the session sheet.
-5. **Questionnaire (5 min).** Hand over the questionnaire. The participant fills it in alone. The researcher doesn't read it or comment on the answers.
+5. **Questionnaire (5 min).** Give the participant their number and the form's QR code. They fill in the Google Form alone, on their own phone if they're happy to, otherwise on the session phone after the app is closed. The researcher doesn't read the answers or comment on them. See [`caregiver_evaluation_form.md`](caregiver_evaluation_form.md) for what to do with no internet.
 6. **Close.** Thank the participant. Afterwards, **delete the session account** in the Django admin. This deletes its child, milestones, recommendations, completions and ratings.
 
 ## Measures and scoring
@@ -59,7 +59,7 @@ The standard 10-item System Usability Scale (Brooke, 1996), with "system" replac
 - Responses run 1 (strongly disagree) to 5 (strongly agree).
 - **Score per participant:** for odd items (1, 3, 5, 7, 9), take the response minus 1. For even items (2, 4, 6, 8, 10), take 5 minus the response. Add the ten numbers and multiply by 2.5. This gives a score from 0 to 100.
 - **Report:** each participant's score, the mean and the range. A SUS score is **not a percentage**. Around 68 is commonly treated as average.
-- **A missing item:** ask the participant to answer it before they leave. If it's still blank, report that participant's score as incomplete and leave it out of the mean.
+- **Missing items** can't happen in a submitted form: every item is required. The scorer still reports any incomplete response and leaves it out of the mean.
 
 ### Satisfaction (NFR-13)
 
@@ -101,11 +101,12 @@ For the top suggestion only, the caregiver opens it, reads "Why this?", and then
 
 This follows "Access, privacy and ethics" in [`data/README.md`](../data/README.md).
 
-- **Consent forms** are the only sheets with names. They are kept apart from the session sheets and questionnaires, which carry only the participant number.
-- **Paper sheets** stay with the researcher. They're typed into a spreadsheet keyed by participant number, kept **outside the repository**.
+- **Consent forms** are the only records with names. They are kept apart from the session sheets and the form responses, which carry only the participant number.
+- **Questionnaire responses** are collected in the researcher's Google account by an anonymous form that doesn't collect email addresses or require sign-in. After the last session, the responses are exported as CSV and kept **outside the repository**.
+- **Session sheets** stay with the researcher. They're typed into a spreadsheet keyed by participant number, also kept **outside the repository**.
 - **Only aggregated results** (scores, counts, short anonymous quotes) are committed or put in the report.
 - **App data** is deleted at the end of each session, with the session account.
-- **Retention:** paper sheets and the spreadsheet are kept until the project has been assessed, then destroyed. Confirm this period with the supervisor.
+- **Retention:** consent forms, session sheets, the spreadsheet, the exported CSV and the form's responses (delete them in Google Forms) are kept until the project has been assessed, then destroyed. Confirm this period with the supervisor.
 
 ## Open decisions (confirm with the supervisor before the first session)
 

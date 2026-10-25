@@ -11,7 +11,7 @@
 **What you'll do (about 30 minutes).**
 - Use the app on my phone to do a few short tasks: add a child, record something your child can or can't do yet, and look at the activities the app suggests.
 - Tell me how useful each suggestion seems for your child, and why you think the app suggested one of them.
-- Fill in a short questionnaire about the app.
+- Fill in a short online questionnaire (a Google Form) about the app, on your phone or mine.
 
 I'm testing the app, not you. There are no right or wrong answers, and if something is hard to do, that tells me what to fix.
 
@@ -23,7 +23,8 @@ I'm testing the app, not you. There are no right or wrong answers, and if someth
 - Your answers are recorded under a number (for example P03), not your name. Your name appears only on this consent form, which is kept separately.
 - Everything you enter in the app is deleted at the end of the session.
 - Only combined results and short anonymous quotes are used, in my project report.
-- The paper sheets are kept by me and destroyed after the project is assessed.
+- The questionnaire is anonymous: it doesn't collect your name, email or Google account. Its answers are stored in my Google account under your participant number.
+- My notes and your questionnaire answers are kept by me and destroyed after the project is assessed.
 
 **Taking part is voluntary.** You can skip any question, stop at any time, or ask me to remove your answers before [date results are finalised], without giving a reason. To do that, quote your participant number: **P____**.
 
