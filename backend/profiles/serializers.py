@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils import timezone
 from rest_framework import serializers
 
+from . import privacy
 from .models import (
     ChildProfile,
     DevelopmentalMilestone,
@@ -15,10 +16,25 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
+    # Whether the app must show the privacy notice before anything else (#136).
+    privacy_consent_required = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ["id", "username", "email", "first_name", "last_name", "role"]
+        fields = [
+            "id",
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "role",
+            "privacy_consent_required",
+            "privacy_agreed_at",
+        ]
         read_only_fields = fields
+
+    def get_privacy_consent_required(self, user):
+        return privacy.consent_required(user)
 
 
 class RegisterSerializer(serializers.ModelSerializer):

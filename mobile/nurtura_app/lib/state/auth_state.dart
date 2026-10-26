@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../models/app_user.dart';
+import '../models/privacy_notice.dart';
 import '../services/api_client.dart';
 import '../services/auth_service.dart';
 import '../services/google_auth.dart';
@@ -48,6 +49,18 @@ class AuthState extends ChangeNotifier {
   /// Administrators get the admin screens; everyone else the caregiver app.
   bool get isAdministrator =>
       (user?.role ?? _savedRole) == AppUser.administratorRole;
+
+  /// A caregiver who hasn't agreed to the current privacy notice sees it
+  /// before anything else (#136). Unknown offline, so not asked then.
+  bool get needsPrivacyConsent => user?.privacyConsentRequired ?? false;
+
+  Future<PrivacyNotice> privacyNotice() => _auth.privacyNotice();
+
+  /// Records agreement to the notice [version] shown; throws [ApiException].
+  Future<void> agreeToPrivacy(String version) async {
+    user = await _auth.agreeToPrivacy(version);
+    notifyListeners();
+  }
 
   /// Null when the app was opened offline with a saved session.
   AppUser? user;

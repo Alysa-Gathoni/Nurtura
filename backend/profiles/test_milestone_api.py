@@ -10,6 +10,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from . import privacy
 from .models import ChildProfile, DevelopmentalMilestone, DevelopmentalProfile
 from .models import ReferenceMilestone
 
@@ -27,6 +28,7 @@ class MilestoneAPITestCase(APITestCase):
         cls.caregiver = User.objects.create_user(
             username="wanjiru@example.com", password="x-test-pass"
         )
+        privacy.record_consent(cls.caregiver)  # #136
         cls.waves = ReferenceMilestone.objects.get(milestone_key="CDC-12M-LA-01")
 
     def setUp(self):

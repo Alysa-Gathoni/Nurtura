@@ -21,6 +21,7 @@ from rest_framework.test import APITestCase
 
 from activities.choices import Domain
 
+from . import privacy
 from .models import ChildProfile, DevelopmentalMilestone, ReferenceMilestone
 from .rules import GUIDELINE_RULES, RuleEngine, build_profile, child_facts
 from .rules.guidelines import (
@@ -190,6 +191,7 @@ class ConcernsAPITests(APITestCase):
         caregiver = get_user_model().objects.create_user(
             username="wanjiru", password="x-test-pass"
         )
+        privacy.record_consent(caregiver)  # #136
         self.client.force_authenticate(caregiver)
         url = reverse("child-list")
         data = {"name": "Amani", "date_of_birth": "2025-06-01"}
