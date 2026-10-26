@@ -168,10 +168,17 @@ void main() {
     await screenshot('03_code_screen');
     await pumpUntil(
       tester,
-      find.text('Add your first child'),
+      find.byKey(const Key('privacyAgreeCheckbox')),
       timeout: const Duration(minutes: 3),
     );
     humanStepsDone = true;
+
+    // A new caregiver agrees to the privacy notice before anything else
+    // (#136); it isn't asked again at the next login.
+    await screenshot('04a_privacy_notice');
+    await tap(tester, find.byKey(const Key('privacyAgreeCheckbox')));
+    await tap(tester, find.byKey(const Key('privacyAgreeButton')));
+    await pumpUntil(tester, find.text('Add your first child'));
     await screenshot('04_no_children_yet');
 
     // 2. Log out and back in: this phone is now trusted, so no code.
