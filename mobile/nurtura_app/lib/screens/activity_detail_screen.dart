@@ -20,8 +20,8 @@ import 'recommendations_screen.dart';
 /// Longest comment the server accepts (FeedbackManager).
 const maxFeedbackComment = 1000;
 
-/// One suggested activity in full, from the fields the recommendations API
-/// already returns, with "How did it go?": mark it done (FR-14) and leave
+/// One suggested activity in full: the steps, what's needed, how it fits at
+/// home and its source (#138), then "How did it go?": mark it done (FR-14) and leave
 /// feedback (FR-15).
 class ActivityDetailScreen extends StatefulWidget {
   const ActivityDetailScreen({
@@ -183,28 +183,34 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                   ],
                 ),
                 const SizedBox(height: 18),
-                if (r.shortDescription.isNotEmpty)
-                  AppCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'How to play',
-                          style: AppText.nunito(
-                            size: 13,
-                            weight: FontWeight.w800,
-                            color: context.palette.mutedText,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          r.shortDescription,
-                          style: AppText.nunito(size: 16, height: 1.4),
-                        ),
-                      ],
-                    ),
+                if (r.howToPlay.isNotEmpty)
+                  _DetailCard(
+                    key: const Key('howToPlay'),
+                    icon: Icons.format_list_bulleted_rounded,
+                    title: 'How to play',
+                    body: r.howToPlay,
+                    large: true,
                   ),
+                if (r.description.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  _DetailCard(
+                    key: const Key('materials'),
+                    icon: Icons.shopping_basket_outlined,
+                    title: "What you'll need",
+                    body:
+                        r.materialsNeeded ??
+                        'Nothing special: just you and ${widget.childName}.',
+                  ),
+                ],
+                if (r.culturalRelevance.trim().isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  _DetailCard(
+                    key: const Key('atHome'),
+                    icon: Icons.home_outlined,
+                    title: 'Making it work at home',
+                    body: r.culturalRelevance.trim(),
+                  ),
+                ],
                 if (r.hasExplanation) ...[
                   const SizedBox(height: 14),
                   ExplanationBox(r.explanation),
@@ -216,6 +222,16 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                   key: const Key('suggestedOn'),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
+                if (r.source.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    r.sourceUrl.isEmpty
+                        ? 'Based on guidance from ${r.source}.'
+                        : 'Based on guidance from ${r.source}: ${r.sourceUrl}',
+                    key: const Key('activitySource'),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
                 const SizedBox(height: 24),
                 Text('How did it go?', style: AppText.quicksand(size: 20)),
                 const SizedBox(height: 10),
@@ -435,6 +451,51 @@ class _Stars extends StatelessWidget {
             disabledColor: i <= rating ? color : context.palette.mutedText,
           ),
       ],
+    );
+  }
+}
+
+/// A titled block of the activity: the steps, the materials, the home note.
+class _DetailCard extends StatelessWidget {
+  const _DetailCard({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.body,
+    this.large = false,
+  });
+
+  final IconData icon;
+  final String title;
+  final String body;
+  final bool large;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    return AppCard(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 18, color: p.primary),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: AppText.nunito(
+                  size: 13,
+                  weight: FontWeight.w800,
+                  color: p.mutedText,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(body, style: AppText.nunito(size: large ? 16 : 15, height: 1.4)),
+        ],
+      ),
     );
   }
 }

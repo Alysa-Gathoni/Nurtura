@@ -158,7 +158,7 @@ All endpoints are under `/api/` and, apart from registration and the sign-in ste
 | GET, POST | `/api/children/<id>/milestones/` | The child's recorded milestones, or record one (`reference`, `status`: `achieved`, `emerging` or `not_yet`) |
 | GET | `/api/children/<id>/profile/` | The rule engine's developmental priorities for the child |
 | GET | `/api/reference-milestones/?search=&domain=` | The CDC/WHO milestone catalogue |
-| GET, POST | `/api/children/<id>/recommendations/` | GET the newest stored batch; POST ranks, explains and stores a new batch (or returns the identical newest one) |
+| GET, POST | `/api/children/<id>/recommendations/` | GET the newest stored batch; POST ranks, explains and stores a new batch (or returns the identical newest one). Each recommendation carries the activity in full (`description`, `materials`, `cultural_relevance`, `source`, `source_url`) as well as a `short_description` for lists, the explanation, and any completion and feedback; no scores |
 | GET | `/api/children/<id>/candidates/?limit=10` | SBERT retrieval candidates before ranking (for inspection) |
 | PUT, DELETE | `/api/recommendations/<id>/completion/` | Mark a recommended activity done (`status`: `completed` or `partially_completed`), or undo it |
 | GET, PUT | `/api/recommendations/<id>/feedback/` | Read or submit the caregiver's rating (1–5) and comment |

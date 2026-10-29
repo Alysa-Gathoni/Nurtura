@@ -114,6 +114,12 @@ void main() {
     );
     expect(prefs.values.containsKey(ChildrenState.savedKey), isTrue);
     await tapVisible(tester, find.byKey(const Key('tab_family')));
+    // Below the fold since the Account card (#138).
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('logoutButton')),
+      200,
+      scrollable: find.byType(Scrollable).last,
+    );
     await tapVisible(tester, find.byKey(const Key('logoutButton')));
     expect(find.byKey(const Key('emailField')), findsOneWidget);
     expect(prefs.values.containsKey(ChildrenState.savedKey), isFalse);

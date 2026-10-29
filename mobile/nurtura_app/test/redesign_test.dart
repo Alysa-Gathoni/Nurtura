@@ -230,6 +230,12 @@ void main() {
         Brightness.light,
       );
       await tapVisible(tester, find.byKey(const Key('tab_family')));
+      // Below the fold since the Account card (#138).
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('toggle_Dark')),
+        200,
+        scrollable: find.byType(Scrollable).last,
+      );
       await tapVisible(tester, find.byKey(const Key('toggle_Dark')));
       expect(
         Theme.of(tester.element(find.byKey(const Key('tab_today')))).brightness,
