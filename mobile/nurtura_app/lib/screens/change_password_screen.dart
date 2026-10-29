@@ -10,6 +10,7 @@ import '../widgets/app_text_field.dart';
 import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
 import '../widgets/nurtura_app_bar.dart';
+import '../widgets/password_strength_meter.dart';
 import 'forgot_password_screen.dart';
 
 /// Opens the right screen for the signed-in account (#142): Change password,
@@ -32,7 +33,7 @@ String passwordSettingsLabel(BuildContext context) =>
     : 'Change password';
 
 /// Change the password while signed in (#142): the current one, then a new
-/// one. Other phones are signed out.
+/// one with the strength meter (#147). Other phones are signed out.
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
 
@@ -46,6 +47,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _password = TextEditingController();
   final _confirm = TextEditingController();
 
+  /// For the meter's "Not like your email" (#147).
+  late final _email = TextEditingController(
+    text: context.read<AuthState>().user?.email ?? '',
+  );
+
   bool _show = false;
   bool _saving = false;
   ApiException? _error;
@@ -55,6 +61,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     _current.dispose();
     _password.dispose();
     _confirm.dispose();
+    _email.dispose();
     super.dispose();
   }
 
@@ -160,8 +167,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               ? 'Enter a new password.'
                               : null,
                         ),
-                        // The strength meter (#140) goes here once
-                        // that PR is merged.
+                        PasswordStrengthMeter(
+                          password: _password,
+                          email: _email,
+                        ),
                         const SizedBox(height: 14),
                         AppTextField(
                           key: const Key('confirmNewPasswordField'),
