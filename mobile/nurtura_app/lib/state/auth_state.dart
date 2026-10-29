@@ -215,17 +215,23 @@ class AuthState extends ChangeNotifier {
   void cancelChallenge() => _setSignedOut();
 
   Future<void> logout() async {
+    // Show the login screen first (#152). Cleaning up first left the home
+    // screen up for a couple of seconds, and its reload, made with the
+    // token the server had just deleted, flashed "Your session has ended".
+    final token = _api.token;
+    _setSignedOut();
     try {
       await _auth.logout();
     } on ApiException {
       // The token is discarded locally either way.
     }
-    await _store.clear();
+    // Don't undo a log-in made while this was running.
+    if (_api.token == token) _api.token = null;
+    if (await _store.read() == token) await _store.clear();
+    if (status == AuthStatus.signedIn) return;
     await _forgetRole();
     await onSessionCleared?.call();
     await _google?.signOut();
-    _api.token = null;
-    _setSignedOut();
   }
 
   /// Deletes the account on the server, then forgets everything saved on
