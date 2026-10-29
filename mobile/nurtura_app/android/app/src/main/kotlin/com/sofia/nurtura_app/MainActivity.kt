@@ -1,5 +1,6 @@
 package com.sofia.nurtura_app
 
-import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 
-class MainActivity : FlutterActivity()
+// A FragmentActivity, which the fingerprint prompt (local_auth) needs (#150).
+class MainActivity : FlutterFragmentActivity()
