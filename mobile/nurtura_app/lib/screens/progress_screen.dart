@@ -90,7 +90,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
       onRefresh: _load,
       child: ListView(
         key: const Key('progressList'),
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
         children: [
           _Hero(
             summary: summary,

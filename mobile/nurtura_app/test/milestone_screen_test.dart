@@ -174,7 +174,10 @@ void main() {
     tester,
   ) async {
     await openMilestoneScreen(tester);
-    expect(find.text('Amani · 13 months'), findsOneWidget);
+    // The header names the child; the list doesn't repeat it (#138).
+    expect(find.text('13 months'), findsOneWidget);
+    expect(find.text('Amani · 13 months'), findsNothing);
+    expect(find.text('From the CDC and WHO checklists.'), findsOneWidget);
     expect(visibleMilestoneKeys(tester), [
       'CDC-12M-LA-01', // 1 month away
       'CDC-09M-MO-04', // 4

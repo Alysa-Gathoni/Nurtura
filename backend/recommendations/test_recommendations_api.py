@@ -87,6 +87,11 @@ CARD_FIELDS = {
     "developmental_domain",
     "age_range",
     "short_description",
+    "description",
+    "materials",
+    "cultural_relevance",
+    "source",
+    "source_url",
     "explanation",
     "completion",
     "feedback",
@@ -313,6 +318,20 @@ class GenerateTests(RecommendationAPITestCase):
             self.assertEqual(card["generated_at"], body["generated_at"])
         self.assertEqual(Recommendation.objects.count(), 5)
         self.assertEqual(len({str(r.batch) for r in Recommendation.objects.all()}), 1)
+
+    def test_cards_carry_the_full_activity(self):
+        # The activity screen shows the whole activity (#138), not only the
+        # short description used on the list.
+        cards = self.post().json()["recommendations"]
+        for card in cards:
+            activity = DevelopmentalActivity.objects.get(
+                activity_id=card["activity_id"]
+            )
+            self.assertEqual(card["description"], activity.description)
+            self.assertEqual(card["materials"], activity.materials)
+            self.assertEqual(card["cultural_relevance"], activity.cultural_relevance)
+            self.assertEqual(card["source"], activity.source)
+            self.assertEqual(card["source_url"], activity.source_url)
 
     def test_stored_scores_match_the_ranking(self):
         self.post()
