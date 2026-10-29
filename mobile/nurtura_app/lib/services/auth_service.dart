@@ -266,6 +266,16 @@ class AuthService {
   Future<void> deleteAccount({String? password, String? email}) =>
       _api.delete('/api/auth/me/', {'password': ?password, 'email': ?email});
 
+  /// Changes the password while signed in (#142). The server replaces the
+  /// token, signing out other phones, and returns the new one.
+  Future<AuthResult> changePassword(String current, String newPassword) async =>
+      _result(
+        await _api.post('/api/auth/password/', {
+          'current_password': current,
+          'new_password': newPassword,
+        }),
+      );
+
   Future<AppUser> me() async =>
       AppUser.fromJson(await _api.get('/api/auth/me/') as Map<String, dynamic>);
 

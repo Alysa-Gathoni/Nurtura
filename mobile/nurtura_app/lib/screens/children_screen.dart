@@ -17,6 +17,7 @@ import '../widgets/nurtura_app_bar.dart';
 import '../widgets/pill_chip.dart';
 import '../widgets/theme_picker.dart';
 import '../widgets/village.dart';
+import 'change_password_screen.dart';
 import 'child_form_screen.dart';
 import 'milestone_screen.dart';
 import 'privacy_notice_screen.dart';
@@ -489,28 +490,44 @@ class _AccountCard extends StatelessWidget {
     final email = context.watch<AuthState>().user?.email;
     return AppCard(
       key: const Key('accountCard'),
-      padding: const EdgeInsets.all(16),
-      child: Row(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: p.primarySoft,
-            child: Icon(Icons.person_rounded, color: p.primary),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  email ?? 'Signed in',
-                  key: const Key('accountEmail'),
-                  overflow: TextOverflow.ellipsis,
-                  style: AppText.nunito(size: 15, weight: FontWeight.w800),
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: p.primarySoft,
+                child: Icon(Icons.person_rounded, color: p.primary),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      email ?? 'Signed in',
+                      key: const Key('accountEmail'),
+                      overflow: TextOverflow.ellipsis,
+                      style: AppText.nunito(size: 15, weight: FontWeight.w800),
+                    ),
+                    Text(
+                      'Caregiver',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
                 ),
-                Text('Caregiver', style: Theme.of(context).textTheme.bodySmall),
-              ],
-            ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Divider(color: p.border, height: 1),
+          TextButton.icon(
+            key: const Key('passwordSettingsButton'),
+            onPressed: () => openPasswordSettings(context),
+            icon: const Icon(Icons.lock_reset_rounded),
+            label: Text(passwordSettingsLabel(context)),
           ),
         ],
       ),

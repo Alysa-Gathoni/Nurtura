@@ -34,6 +34,7 @@ urlpatterns = [
     path("auth/google/", views.GoogleSignInView.as_view(), name="google-sign-in"),
     path("auth/logout/", views.LogoutView.as_view(), name="logout"),
     path("auth/me/", views.MeView.as_view(), name="me"),
+    path("auth/password/", views.ChangePasswordView.as_view(), name="change-password"),
     path(
         "auth/privacy-consent/",
         views.PrivacyConsentView.as_view(),
