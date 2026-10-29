@@ -198,13 +198,44 @@ class PasswordResetResendView(APIView):
         return Response(two_factor.challenge_payload(challenge))
 
 
-class PasswordResetConfirmView(APIView):
-    """Check the reset code, set the new password and sign in (#126).
+class PasswordResetVerifyView(APIView):
+    """Check the reset code and return a reset pass (#146).
 
-    The password rules are checked before the code, so a weak password
-    doesn't use up one of the tries. Other phones are signed out. With
-    `device_id` and `remember_device` (default on), this phone is trusted
-    as after a sign-in code.
+    The first of the app's two steps: a wrong code counts down the tries
+    as before. The pass (`reset_token`) lasts 10 minutes and works for one
+    password change.
+    """
+
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "two_factor"
+
+    def post(self, request):
+        challenge_id = request.data.get("challenge")
+        if not challenge_id:
+            raise ValidationError({"challenge": ["This field is required."]})
+        try:
+            token = password_reset.issue_pass(challenge_id, request.data.get("code"))
+        except (two_factor.ChallengeError, DjangoValidationError) as exc:
+            raise ValidationError({"code": [_code_error(exc, two_factor.RESET)]})
+        return Response(
+            {
+                "reset_token": token,
+                "expires_in": int(password_reset.RESET_PASS_TTL.total_seconds()),
+            }
+        )
+
+
+class PasswordResetConfirmView(APIView):
+    """Set the new password and sign in (#126).
+
+    Takes the `reset_token` from /verify/ (#146). Installed app builds from
+    before that send `challenge` and `code` instead, which still works: the
+    password rules are then checked before the code, so a weak password
+    doesn't use up a try. Other phones are signed out. With `device_id` and
+    `remember_device` (default on), this phone is trusted as after a
+    sign-in code.
     """
 
     permission_classes = [permissions.AllowAny]
@@ -215,10 +246,22 @@ class PasswordResetConfirmView(APIView):
     def post(self, request):
         challenge_id = request.data.get("challenge")
         password = request.data.get("new_password")
-        if not challenge_id:
-            raise ValidationError({"challenge": ["This field is required."]})
+        reset_token = request.data.get("reset_token")
+        if not challenge_id and not reset_token:
+            raise ValidationError({"reset_token": ["This field is required."]})
         if not isinstance(password, str) or not password:
             raise ValidationError({"new_password": ["Enter a new password."]})
+        if reset_token:
+            try:
+                user = password_reset.user_for_pass(reset_token)
+            except password_reset.ResetPassError as exc:
+                raise ValidationError({"reset_token": [str(exc)]})
+            try:
+                validate_password(password, user=user)
+            except DjangoValidationError as exc:
+                raise ValidationError({"new_password": list(exc.messages)})
+            password_reset.set_password(user, password)
+            return Response(self._signed_in(request, user))
         try:
             challenge = two_factor.open_challenge(challenge_id, two_factor.RESET)
         except (two_factor.ChallengeError, DjangoValidationError) as exc:
@@ -233,12 +276,16 @@ class PasswordResetConfirmView(APIView):
             )
         except two_factor.ChallengeError as exc:
             raise ValidationError({"code": [str(exc)]})
+        return Response(self._signed_in(request, user))
+
+    @staticmethod
+    def _signed_in(request, user):
         device_id = request.data.get("device_id")
         remember = request.data.get("remember_device", True) is not False
         until = None
         if remember and two_factor.valid_device_id(device_id):
             until = two_factor.trust(user, device_id)
-        return Response(_signed_in(user, until))
+        return _signed_in(user, until)
 
 
 class GoogleSignInView(APIView):
