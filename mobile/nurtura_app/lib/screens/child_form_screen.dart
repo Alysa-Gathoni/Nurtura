@@ -34,6 +34,7 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _interest = TextEditingController();
+  final _dateFocus = FocusNode();
 
   bool _expecting = false;
   DateTime? _date;
@@ -64,6 +65,7 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
   void dispose() {
     _name.dispose();
     _interest.dispose();
+    _dateFocus.dispose();
     super.dispose();
   }
 
@@ -76,6 +78,10 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
   }
 
   Future<void> _pickDate() async {
+    // Closing the picker gives the focus back to whatever had it, so the
+    // next thing typed (an interest) went into the name (#138). The date
+    // field takes the focus first, so that's where it comes back to.
+    _dateFocus.requestFocus();
     final now = today();
     final first = _expecting
         ? now.add(const Duration(days: 1))
@@ -214,7 +220,8 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
     return Scaffold(
       appBar: NurturaAppBar(title: _editing ? 'Edit profile' : 'Add a child'),
       body: SafeArea(
-        child: Center(
+        child: Align(
+          alignment: Alignment.topCenter,
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: ConstrainedBox(
@@ -254,6 +261,7 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
                                 : 'Date of birth',
                             value: _date,
                             errorText: dateError,
+                            focusNode: _dateFocus,
                             onTap: _pickDate,
                           ),
                           if (_expecting) ...[
@@ -408,12 +416,14 @@ class _DateField extends StatelessWidget {
     required this.value,
     required this.onTap,
     this.errorText,
+    this.focusNode,
   });
 
   final String label;
   final DateTime? value;
   final VoidCallback onTap;
   final String? errorText;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -429,6 +439,7 @@ class _DateField extends StatelessWidget {
         ),
         InkWell(
           key: const Key('dateField'),
+          focusNode: focusNode,
           borderRadius: BorderRadius.circular(AppRadii.field),
           onTap: onTap,
           child: InputDecorator(

@@ -69,6 +69,13 @@ def _card(recommendation):
         "developmental_domain": activity.developmental_domain,
         "age_range": activity.age_range,
         "short_description": short_description(activity.description),
+        # The full activity for the app's activity screen (#138). Display
+        # only: none of these feeds the ranking or the explanation.
+        "description": activity.description,
+        "materials": activity.materials,
+        "cultural_relevance": activity.cultural_relevance,
+        "source": activity.source,
+        "source_url": activity.source_url,
         "explanation": recommendation.explanation,
         # Read-only state recorded by the caregiver (FR-14).
         "completion": completion_json(getattr(recommendation, "completion", None)),
