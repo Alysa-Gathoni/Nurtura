@@ -18,7 +18,7 @@ from django.core import signing
 from django.utils.crypto import constant_time_compare, salted_hmac
 from rest_framework.authtoken.models import Token
 
-from . import two_factor
+from . import fingerprint, two_factor
 from .models import LoginChallenge
 
 User = get_user_model()
@@ -106,4 +106,7 @@ def set_password(user, password):
     user.set_password(password)
     user.save(update_fields=["password"])
     Token.objects.filter(user=user).delete()
+    # The account may have been taken over: no phone keeps fingerprint
+    # log-in (#150).
+    fingerprint.revoke(user)
     return user
