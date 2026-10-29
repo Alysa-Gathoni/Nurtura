@@ -162,17 +162,19 @@ class AuthState extends ChangeNotifier {
   Future<CodeChallenge> resendPasswordReset(CodeChallenge challenge) =>
       _auth.resendPasswordReset(challenge);
 
-  /// Sets the new password and signs in on this phone.
+  /// Checks the reset code; returns the pass for [resetPassword] (#146).
+  Future<String> checkResetCode(CodeChallenge challenge, String code) =>
+      _auth.checkResetCode(challenge, code);
+
+  /// Sets the new password with the reset pass and signs in on this phone.
   Future<void> resetPassword(
-    CodeChallenge challenge,
-    String code,
+    String resetToken,
     String newPassword, {
     bool rememberDevice = true,
   }) async {
     await _signIn(
       await _auth.confirmPasswordReset(
-        challenge,
-        code,
+        resetToken,
         newPassword,
         deviceId: await _deviceIds.id(),
         remember: rememberDevice,
