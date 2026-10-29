@@ -288,6 +288,51 @@ class PasswordResetConfirmView(APIView):
         return _signed_in(user, until)
 
 
+class ChangePasswordView(APIView):
+    """Change the password while signed in (#142), for either role.
+
+    Needs the current password, so an account made with Google (no usable
+    password) sets one through the emailed-code reset instead. The new
+    password must pass the password rules and differ from the current one.
+    Every other phone is signed out: the token is replaced, and the new one
+    is returned for this phone. Limited like login, as it checks a password.
+    """
+
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "login"
+
+    def post(self, request):
+        user = request.user
+        if not user.has_usable_password():
+            raise ValidationError(
+                {
+                    "current_password": [
+                        "This account has no password yet. Set one with an "
+                        "emailed code instead."
+                    ]
+                }
+            )
+        current = request.data.get("current_password")
+        if not isinstance(current, str) or not user.check_password(current):
+            raise ValidationError({"current_password": ["That password isn't right."]})
+        new = request.data.get("new_password")
+        if not isinstance(new, str) or not new:
+            raise ValidationError({"new_password": ["Enter a new password."]})
+        if new == current:
+            raise ValidationError(
+                {"new_password": ["Choose a password different from your current one."]}
+            )
+        try:
+            validate_password(new, user=user)
+        except DjangoValidationError as exc:
+            raise ValidationError({"new_password": list(exc.messages)})
+        with transaction.atomic():
+            user.set_password(new)
+            user.save(update_fields=["password"])
+            Token.objects.filter(user=user).delete()
+        return Response(_signed_in(user))
+
+
 class GoogleSignInView(APIView):
     """Continue with Google (#130): a Google ID token for an API token.
 

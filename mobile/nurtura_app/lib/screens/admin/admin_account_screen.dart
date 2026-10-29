@@ -7,6 +7,7 @@ import '../../theme/app_theme.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/theme_picker.dart';
+import '../change_password_screen.dart';
 
 /// The administrator's account: who is signed in, theme and log out.
 class AdminAccountScreen extends StatelessWidget {
@@ -50,6 +51,13 @@ class AdminAccountScreen extends StatelessWidget {
               ),
             ],
           ),
+        ),
+        const SizedBox(height: 10),
+        SecondaryButton(
+          key: const Key('passwordSettingsButton'),
+          label: 'Change password',
+          icon: Icons.lock_reset_rounded,
+          onPressed: () => openPasswordSettings(context),
         ),
         const SizedBox(height: 22),
         Text('Appearance', style: AppText.quicksand(size: 20)),

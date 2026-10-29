@@ -12,13 +12,18 @@ console email backend prints the email itself.
 """
 
 import hashlib
+import logging
 import secrets
+import smtplib
 from dataclasses import dataclass
 from datetime import timedelta
 
 from django.conf import settings
 from django.core.mail import send_mail
+from django.db import transaction
 from django.utils import timezone
+from rest_framework import status
+from rest_framework.exceptions import APIException
 from django.utils.crypto import constant_time_compare, salted_hmac
 
 from .models import LoginChallenge, TrustedDevice
@@ -36,6 +41,20 @@ MIN_DEVICE_ID_LENGTH = 16
 # a login code can't reset a password (#126).
 SIGN_IN = (LoginChallenge.Purpose.LOGIN, LoginChallenge.Purpose.REGISTER)
 RESET = (LoginChallenge.Purpose.RESET,)
+
+
+logger = logging.getLogger(__name__)
+
+
+class EmailNotSent(APIException):
+    """The code email couldn't be sent (#144): 503 with a plain reason,
+    instead of a 500 from the mail library."""
+
+    status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+    default_detail = (
+        "We couldn't send the email just now. Please try again in a few minutes."
+    )
+    default_code = "email_not_sent"
 
 
 class ChallengeError(Exception):
@@ -110,6 +129,20 @@ def _send(challenge, code):
             "your password hasn't changed.",
         ),
     }.get(challenge.purpose, ("log in", "nobody can sign in without it."))
+    try:
+        _send_mail(challenge, code, action, ignore, minutes)
+    except (smtplib.SMTPException, OSError) as exc:
+        # Logged without the code; the operator sees the mail server's reason.
+        logger.error(
+            "Couldn't email a %s code to user %s: %r",
+            challenge.purpose,
+            challenge.user_id,
+            exc,
+        )
+        raise EmailNotSent() from exc
+
+
+def _send_mail(challenge, code, action, ignore, minutes):
     send_mail(
         subject=f"Your Nurtura code: {code}",
         message=(
@@ -134,8 +167,10 @@ def start(user, purpose=LoginChallenge.Purpose.LOGIN):
     )
     code = _new_code()
     challenge.code_hash = _hash_code(challenge.id, code)
-    challenge.save()
-    _send(challenge, code)
+    # Saved and sent together: if the email fails, nothing is kept (#144).
+    with transaction.atomic():
+        challenge.save()
+        _send(challenge, code)
     return challenge
 
 
@@ -178,8 +213,10 @@ def resend(challenge_id, purposes=SIGN_IN):
     challenge.expires_at = now + TWO_FACTOR_CODE_TTL
     challenge.sends += 1
     challenge.attempts = 0
-    challenge.save()
-    _send(challenge, code)
+    # If the email fails, the code already in the inbox stays valid (#144).
+    with transaction.atomic():
+        challenge.save()
+        _send(challenge, code)
     return challenge
 
 
