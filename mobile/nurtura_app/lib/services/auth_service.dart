@@ -259,6 +259,13 @@ class AuthService {
         as Map<String, dynamic>,
   );
 
+  /// Deletes the signed-in account and everything it owns (#134).
+  ///
+  /// Confirmed with the [password], or with the account's [email] when it
+  /// has no password; a 400 names the field that was wrong.
+  Future<void> deleteAccount({String? password, String? email}) =>
+      _api.delete('/api/auth/me/', {'password': ?password, 'email': ?email});
+
   Future<AppUser> me() async =>
       AppUser.fromJson(await _api.get('/api/auth/me/') as Map<String, dynamic>);
 

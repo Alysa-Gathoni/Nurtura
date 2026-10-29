@@ -197,6 +197,16 @@ class AuthState extends ChangeNotifier {
     _setSignedOut();
   }
 
+  /// Deletes the account on the server, then forgets everything saved on
+  /// the phone as at logout, including the Google account (#130). Throws
+  /// [ApiException] (nothing is forgotten) if the server refuses, for
+  /// example a wrong password.
+  Future<void> deleteAccount({String? password, String? email}) async {
+    await _auth.deleteAccount(password: password, email: email);
+    await sessionExpired();
+    await _google?.signOut();
+  }
+
   /// The server rejected the token (401): forget it without calling the
   /// server again, so the app shows the login screen.
   Future<void> sessionExpired() async {
