@@ -37,6 +37,12 @@ urlpatterns = [
         name="password-reset-confirm",
     ),
     path("auth/google/", views.GoogleSignInView.as_view(), name="google-sign-in"),
+    path("auth/fingerprint/", views.FingerprintView.as_view(), name="fingerprint"),
+    path(
+        "auth/fingerprint/login/",
+        views.FingerprintLoginView.as_view(),
+        name="fingerprint-login",
+    ),
     path("auth/logout/", views.LogoutView.as_view(), name="logout"),
     path("auth/me/", views.MeView.as_view(), name="me"),
     path("auth/password/", views.ChangePasswordView.as_view(), name="change-password"),

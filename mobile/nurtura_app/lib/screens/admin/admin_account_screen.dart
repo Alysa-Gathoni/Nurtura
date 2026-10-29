@@ -6,6 +6,7 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/buttons.dart';
+import '../../widgets/fingerprint_lock_tile.dart';
 import '../../widgets/theme_picker.dart';
 import '../change_password_screen.dart';
 
@@ -59,6 +60,8 @@ class AdminAccountScreen extends StatelessWidget {
           icon: Icons.lock_reset_rounded,
           onPressed: () => openPasswordSettings(context),
         ),
+        const SizedBox(height: 4),
+        const FingerprintLockTile(),
         const SizedBox(height: 22),
         Text('Appearance', style: AppText.quicksand(size: 20)),
         const SizedBox(height: 10),

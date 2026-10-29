@@ -286,13 +286,53 @@ class AuthService {
 
   /// Changes the password while signed in (#142). The server replaces the
   /// token, signing out other phones, and returns the new one.
-  Future<AuthResult> changePassword(String current, String newPassword) async =>
-      _result(
-        await _api.post('/api/auth/password/', {
-          'current_password': current,
-          'new_password': newPassword,
+  Future<AuthResult> changePassword(
+    String current,
+    String newPassword, {
+    String? deviceId,
+  }) async => _result(
+    await _api.post('/api/auth/password/', {
+      'current_password': current,
+      'new_password': newPassword,
+      // This phone keeps fingerprint log-in; the others lose it (#150).
+      'device_id': ?deviceId,
+    }),
+  );
+
+  /// A new fingerprint log-in key for this phone (#150).
+  Future<String> issueFingerprintKey(String deviceId) async {
+    final data = await _api.post('/api/auth/fingerprint/', {
+      'device_id': deviceId,
+    }) as Map<String, dynamic>;
+    return data['key'] as String;
+  }
+
+  Future<void> revokeFingerprintKey(String deviceId) =>
+      _api.delete('/api/auth/fingerprint/', {'device_id': deviceId});
+
+  /// Logs in with this phone's key, after the phone's fingerprint check.
+  /// A revoked key comes back as a `key` field error.
+  Future<AuthResult> logInWithFingerprintKey(
+    String deviceId,
+    String key,
+  ) async {
+    try {
+      return _result(
+        await _api.post('/api/auth/fingerprint/login/', {
+          'device_id': deviceId,
+          'key': key,
         }),
       );
+    } on ApiException catch (e) {
+      final keyError = e.fieldErrors['key'];
+      if (keyError == null) rethrow;
+      throw ApiException(
+        keyError.join(' '),
+        statusCode: e.statusCode,
+        fieldErrors: {'key': keyError},
+      );
+    }
+  }
 
   Future<AppUser> me() async =>
       AppUser.fromJson(await _api.get('/api/auth/me/') as Map<String, dynamic>);

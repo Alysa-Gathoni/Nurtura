@@ -11,6 +11,7 @@ import '../theme/domain_style.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/buttons.dart';
+import '../widgets/fingerprint_lock_tile.dart';
 import '../widgets/gamification.dart';
 import '../widgets/message_banner.dart';
 import '../widgets/nurtura_app_bar.dart';
@@ -529,6 +530,7 @@ class _AccountCard extends StatelessWidget {
             icon: const Icon(Icons.lock_reset_rounded),
             label: Text(passwordSettingsLabel(context)),
           ),
+          const FingerprintLockTile(),
         ],
       ),
     );
