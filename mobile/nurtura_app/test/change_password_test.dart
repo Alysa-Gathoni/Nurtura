@@ -67,6 +67,8 @@ void main() {
       expect(body(sent!), {
         'current_password': 'old-password',
         'new_password': newPassword,
+        // So this phone keeps fingerprint log-in (#150).
+        'device_id': testDeviceId,
       });
       expect(store.token, 'tok-new');
       expect(find.byKey(const Key('currentPasswordField')), findsNothing);

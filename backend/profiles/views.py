@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 
 from activities.choices import Domain
 
-from . import google_sign_in, password_reset, privacy, two_factor
+from . import fingerprint, google_sign_in, password_reset, privacy, two_factor
 from .models import LoginChallenge, ReferenceMilestone, User
 from .permissions import HasPrivacyConsent, IsCaregiver
 from .serializers import (
@@ -330,6 +330,52 @@ class ChangePasswordView(APIView):
             user.set_password(new)
             user.save(update_fields=["password"])
             Token.objects.filter(user=user).delete()
+            # Other phones are signed out, so they lose fingerprint log-in
+            # too; this one (`device_id`) keeps it (#150).
+            fingerprint.revoke_others(user, request.data.get("device_id"))
+        return Response(_signed_in(user))
+
+
+class FingerprintView(APIView):
+    """Turn fingerprint log-in on or off for this phone (#150).
+
+    POST {device_id} returns a new `key` for the phone to keep in its secure
+    storage (201); any key this phone had is replaced. DELETE {device_id}
+    revokes it (204). Either role.
+    """
+
+    def post(self, request):
+        device_id = request.data.get("device_id")
+        if not two_factor.valid_device_id(device_id):
+            raise ValidationError({"device_id": ["A valid device ID is required."]})
+        key = fingerprint.issue(request.user, device_id)
+        return Response({"key": key}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request):
+        device_id = request.data.get("device_id")
+        if not two_factor.valid_device_id(device_id):
+            raise ValidationError({"device_id": ["A valid device ID is required."]})
+        fingerprint.revoke(request.user, device_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FingerprintLoginView(APIView):
+    """Log in with this phone's fingerprint key (#150): a token, as after a
+    password. The phone sends the key only after its own fingerprint check.
+    Limited like login."""
+
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "login"
+
+    def post(self, request):
+        try:
+            user = fingerprint.user_for(
+                request.data.get("device_id"), request.data.get("key")
+            )
+        except fingerprint.FingerprintError as exc:
+            raise ValidationError({"key": [str(exc)]})
         return Response(_signed_in(user))
 
 

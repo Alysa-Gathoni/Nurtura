@@ -323,3 +323,26 @@ class TrustedDevice(models.Model):
 
     def __str__(self):
         return f"Trusted device for {self.user} until {self.trusted_until:%Y-%m-%d}"
+
+
+class FingerprintKey(models.Model):
+    """Lets one phone log back in after a fingerprint (#150).
+
+    Issued when the caregiver or administrator turns on "Unlock with
+    fingerprint". The phone keeps the key in its secure storage and sends it
+    only after the phone's own fingerprint check passes; the fingerprint
+    never reaches the server. Only hashes of the key and the device ID are
+    stored. One key per phone: turning it on again, for any account,
+    replaces it.
+    """
+
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="fingerprint_keys"
+    )
+    device_hash = models.CharField(max_length=64, unique=True)
+    key_hash = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_used_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Fingerprint log-in for {self.user}"

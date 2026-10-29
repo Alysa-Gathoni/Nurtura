@@ -8,6 +8,7 @@ import 'package:nurtura_app/main.dart';
 import 'package:nurtura_app/services/api_client.dart';
 import 'package:nurtura_app/services/biometrics.dart';
 import 'package:nurtura_app/state/device_id_store.dart';
+import 'package:nurtura_app/state/fingerprint_store.dart';
 import 'package:nurtura_app/state/preferences.dart';
 import 'package:nurtura_app/state/recommendation_cache.dart';
 import 'package:nurtura_app/state/token_store.dart';
@@ -60,6 +61,7 @@ Future<MemoryTokenStore> pumpApp(
   DeviceIdStore? deviceIds,
   GoogleIdTokens? google,
   Biometrics biometrics = const NoBiometrics(),
+  FingerprintStore? fingerprints,
 }) async {
   AppText.useGoogleFonts = false;
   final store = MemoryTokenStore(savedToken);
@@ -72,6 +74,7 @@ Future<MemoryTokenStore> pumpApp(
       deviceIds: deviceIds ?? MemoryDeviceIdStore(testDeviceId),
       google: google,
       biometrics: biometrics,
+      fingerprints: fingerprints,
     ),
   );
   await tester.pumpAndSettle();

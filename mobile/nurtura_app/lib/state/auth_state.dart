@@ -18,6 +18,7 @@ class AuthState extends ChangeNotifier {
     required this._store,
     required this._deviceIds,
     this.onSessionCleared,
+    this.onAccountDeleted,
     Preferences? preferences,
     this._google,
   }) : _api = api,
@@ -32,6 +33,9 @@ class AuthState extends ChangeNotifier {
   /// forget data saved on the device for this account. Not called when a
   /// launch merely fails to reach the server.
   final Future<void> Function()? onSessionCleared;
+
+  /// Called after the account is deleted, to forget its fingerprint key.
+  final Future<void> Function()? onAccountDeleted;
 
   final ApiClient _api;
   final TokenStore _store;
@@ -185,7 +189,26 @@ class AuthState extends ChangeNotifier {
   /// Changes the password and keeps this phone signed in with the new
   /// token (#142); other phones are signed out by the server.
   Future<void> changePassword(String current, String newPassword) async {
-    await _signIn(await _auth.changePassword(current, newPassword));
+    await _signIn(
+      await _auth.changePassword(
+        current,
+        newPassword,
+        deviceId: await _deviceIds.id(),
+      ),
+    );
+  }
+
+  /// Fingerprint log-in for this phone (#150); see AppLock.
+  Future<String> issueFingerprintKey() async =>
+      _auth.issueFingerprintKey(await _deviceIds.id());
+
+  Future<void> revokeFingerprintKey() async =>
+      _auth.revokeFingerprintKey(await _deviceIds.id());
+
+  Future<void> logInWithFingerprintKey(String key) async {
+    await _signIn(
+      await _auth.logInWithFingerprintKey(await _deviceIds.id(), key),
+    );
   }
 
   /// Back to the login form ("use a different account").
@@ -213,6 +236,7 @@ class AuthState extends ChangeNotifier {
     await _auth.deleteAccount(password: password, email: email);
     await sessionExpired();
     await _google?.signOut();
+    await onAccountDeleted?.call();
   }
 
   /// The server rejected the token (401): forget it without calling the

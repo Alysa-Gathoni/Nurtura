@@ -16,6 +16,7 @@ import 'state/auth_state.dart';
 import 'state/children_state.dart';
 import 'state/device_id_store.dart';
 import 'state/engagement.dart';
+import 'state/fingerprint_store.dart';
 import 'state/preferences.dart';
 import 'state/recommendation_cache.dart';
 import 'state/theme_state.dart';
@@ -34,6 +35,7 @@ void main() {
           ? GooglePlayIdTokens(googleServerClientId)
           : null,
       biometrics: LocalAuthBiometrics(),
+      fingerprints: SecureFingerprintStore(),
     ),
   );
 }
@@ -48,6 +50,7 @@ class NurturaApp extends StatelessWidget {
     required this.deviceIds,
     this.google,
     this.biometrics = const NoBiometrics(),
+    this.fingerprints,
   });
 
   final ApiClient api;
@@ -62,33 +65,41 @@ class NurturaApp extends StatelessWidget {
   /// The phone's fingerprint check for "Unlock with fingerprint" (#150).
   final Biometrics biometrics;
 
+  /// Where this phone's fingerprint log-in key is kept (#150).
+  final FingerprintStore? fingerprints;
+
   @override
   Widget build(BuildContext context) {
     final engagement = EngagementState(preferences)..load();
     final children = ChildrenState(api, preferences);
-    final appLock = AppLock(biometrics, preferences)..load();
+    late final AppLock appLock;
+    final auth = AuthState(
+      api: api,
+      store: tokenStore,
+      deviceIds: deviceIds,
+      preferences: preferences,
+      google: google,
+      // Forget this account's data on the phone when it signs out.
+      onSessionCleared: () async {
+        await recommendationCache.clear();
+        await engagement.clear();
+        await children.clearSaved();
+        appLock.sessionEnded();
+      },
+      onAccountDeleted: () => appLock.accountDeleted(),
+    )..restore();
+    appLock = AppLock(
+      biometrics,
+      fingerprints ?? MemoryFingerprintStore(),
+      auth,
+    )..load();
     return MultiProvider(
       providers: [
         Provider.value(value: api),
         Provider.value(value: recommendationCache),
         ChangeNotifierProvider(create: (_) => ThemeState(preferences)..load()),
         ChangeNotifierProvider.value(value: engagement),
-        ChangeNotifierProvider(
-          create: (_) => AuthState(
-            api: api,
-            store: tokenStore,
-            deviceIds: deviceIds,
-            preferences: preferences,
-            google: google,
-            // Forget this account's data on the phone when it signs out.
-            onSessionCleared: () async {
-              await recommendationCache.clear();
-              await engagement.clear();
-              await children.clearSaved();
-              await appLock.forget();
-            },
-          )..restore(),
-        ),
+        ChangeNotifierProvider.value(value: auth),
         ChangeNotifierProvider.value(value: children),
         ChangeNotifierProvider.value(value: appLock),
       ],
