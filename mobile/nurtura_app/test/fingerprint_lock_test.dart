@@ -1,15 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:nurtura_app/services/biometrics.dart';
-import 'package:nurtura_app/state/app_lock.dart';
-import 'package:nurtura_app/state/preferences.dart';
+import 'package:nurtura_app/state/fingerprint_store.dart';
 
+import 'auth_screen_test.dart' show success;
 import 'edit_and_delete_test.dart'
     show backendWith, childJson, openFamily, tapVisible;
 import 'helpers.dart';
 
-// Unlock with fingerprint (#150).
+// Fingerprint log-in and lock (#150).
 
 /// Stands in for the phone's fingerprint prompt.
 class FakeBiometrics implements Biometrics {
@@ -31,12 +33,43 @@ class FakeBiometrics implements Biometrics {
   }
 }
 
-FakeBackend familyBackend() => backendWith((r) async {
-  if (r.url.path == '/api/auth/logout/') return http.Response('', 204);
+const wanjiru = 'wanjiru@example.com';
+
+SavedFingerprint savedKey([String key = 'key-1']) =>
+    SavedFingerprint(email: wanjiru, key: key);
+
+/// The caregiver backend, plus the fingerprint routes: "key-1" logs in.
+FakeBackend fingerprintBackend() => backendWith((r) async {
+  switch ((r.method, r.url.path)) {
+    case ('POST', '/api/auth/fingerprint/'):
+      return json({'key': 'key-1'}, 201);
+    case ('DELETE', '/api/auth/fingerprint/'):
+      return http.Response('', 204);
+    case ('POST', '/api/auth/fingerprint/login/'):
+      final body = jsonDecode(r.body) as Map;
+      return body['key'] == 'key-1'
+          ? json(success)
+          : json({
+              'key': [
+                'Fingerprint log-in is off on this phone. Log in with your '
+                    'password.',
+              ],
+            }, 400);
+    case ('POST', '/api/auth/logout/'):
+      return http.Response('', 204);
+  }
   return null;
 }, children: [childJson()]);
 
-MemoryPreferences lockedOn() => MemoryPreferences({AppLock.prefKey: 'on'});
+Future<void> logOut(WidgetTester tester) async {
+  await openFamily(tester);
+  await tester.scrollUntilVisible(
+    find.byKey(const Key('logoutButton')),
+    200,
+    scrollable: find.byType(Scrollable).last,
+  );
+  await tapVisible(tester, find.byKey(const Key('logoutButton')));
+}
 
 void main() {
   setUpAll(() => WidgetController.hitTestWarningShouldBeFatal = true);
@@ -47,7 +80,7 @@ void main() {
     ) async {
       await pumpApp(
         tester,
-        familyBackend(),
+        fingerprintBackend(),
         savedToken: 'tok',
         biometrics: FakeBiometrics(isAvailable: false),
       );
@@ -55,74 +88,174 @@ void main() {
       expect(find.byKey(const Key('fingerprintLockSwitch')), findsNothing);
     });
 
-    testWidgets('turns on after a successful scan', (tester) async {
-      final prefs = MemoryPreferences();
+    testWidgets('turns on after a scan and keeps the key securely', (
+      tester,
+    ) async {
+      final store = MemoryFingerprintStore();
       final bio = FakeBiometrics();
+      final backend = fingerprintBackend();
       await pumpApp(
         tester,
-        familyBackend(),
+        backend,
         savedToken: 'tok',
-        preferences: prefs,
         biometrics: bio,
+        fingerprints: store,
       );
       await openFamily(tester);
       await tapVisible(tester, find.byKey(const Key('fingerprintLockSwitch')));
 
-      expect(bio.reasons, ['Confirm your fingerprint to lock Nurtura']);
-      expect(prefs.values[AppLock.prefKey], 'on');
+      expect(bio.reasons, ['Confirm your fingerprint for Nurtura']);
+      expect(jsonDecode(backend.to('/api/auth/fingerprint/').single.body), {
+        'device_id': testDeviceId,
+      });
+      expect(store.saved?.email, wanjiru);
+      expect(store.saved?.key, 'key-1');
       expect(
-        find.textContaining('will ask for your fingerprint'),
+        find.text('Fingerprint log-in is on for this phone.'),
         findsOneWidget,
       );
-      // Turning it on doesn't lock the app straight away.
       expect(find.byKey(const Key('lockScreen')), findsNothing);
     });
 
-    testWidgets('stays off if the scan fails', (tester) async {
-      final prefs = MemoryPreferences();
+    testWidgets('stays off if the scan fails, and asks the server nothing', (
+      tester,
+    ) async {
+      final store = MemoryFingerprintStore();
+      final backend = fingerprintBackend();
       await pumpApp(
         tester,
-        familyBackend(),
+        backend,
         savedToken: 'tok',
-        preferences: prefs,
         biometrics: FakeBiometrics(pass: false),
+        fingerprints: store,
       );
       await openFamily(tester);
       await tapVisible(tester, find.byKey(const Key('fingerprintLockSwitch')));
 
-      expect(prefs.values.containsKey(AppLock.prefKey), isFalse);
-      expect(find.text("Fingerprint lock wasn't turned on."), findsOneWidget);
+      expect(store.saved, isNull);
+      expect(backend.to('/api/auth/fingerprint/'), isEmpty);
+      expect(find.text("Fingerprint log-in wasn't turned on."), findsOneWidget);
+    });
+
+    testWidgets('turning it off revokes the key', (tester) async {
+      final store = MemoryFingerprintStore(savedKey());
+      final backend = fingerprintBackend();
+      await pumpApp(
+        tester,
+        backend,
+        savedToken: 'tok',
+        biometrics: FakeBiometrics(),
+        fingerprints: store,
+      );
+      await openFamily(tester);
+      await tapVisible(tester, find.byKey(const Key('fingerprintLockSwitch')));
+
+      expect(store.saved, isNull);
+      expect(
+        backend.to('/api/auth/fingerprint/').map((r) => r.method),
+        contains('DELETE'),
+      );
+    });
+  });
+
+  group('log in with fingerprint', () {
+    testWidgets('logging out keeps it, and the login screen offers it', (
+      tester,
+    ) async {
+      final store = MemoryFingerprintStore(savedKey());
+      final bio = FakeBiometrics();
+      final backend = fingerprintBackend();
+      final tokens = await pumpApp(
+        tester,
+        backend,
+        savedToken: 'tok',
+        biometrics: bio,
+        fingerprints: store,
+      );
+      // Opening the app unlocks with the fingerprint.
+      expect(bio.reasons, ['Unlock Nurtura']);
+
+      await logOut(tester);
+      expect(store.saved, isNotNull);
+      // Logging out on purpose doesn't pop the prompt up again.
+      expect(bio.reasons, ['Unlock Nurtura']);
+      expect(find.text('Log in with fingerprint'), findsOneWidget);
+      expect(find.text(wanjiru), findsOneWidget);
+
+      await tapVisible(tester, find.byKey(const Key('fingerprintLoginButton')));
+      expect(bio.reasons.last, 'Log in to Nurtura');
+      expect(
+        jsonDecode(backend.to('/api/auth/fingerprint/login/').single.body),
+        {'device_id': testDeviceId, 'key': 'key-1'},
+      );
+      expect(tokens.token, 'tok-123');
+      expect(find.byKey(const Key('tab_family')), findsOneWidget);
+    });
+
+    testWidgets('opening the app logged out asks for the fingerprint', (
+      tester,
+    ) async {
+      final bio = FakeBiometrics();
+      final tokens = await pumpApp(
+        tester,
+        fingerprintBackend(),
+        biometrics: bio,
+        fingerprints: MemoryFingerprintStore(savedKey()),
+      );
+      expect(bio.reasons, ['Log in to Nurtura']);
+      expect(tokens.token, 'tok-123');
+    });
+
+    testWidgets('a closed prompt leaves the password form', (tester) async {
+      final tokens = await pumpApp(
+        tester,
+        fingerprintBackend(),
+        biometrics: FakeBiometrics(pass: false),
+        fingerprints: MemoryFingerprintStore(savedKey()),
+      );
+      expect(tokens.token, isNull);
+      expect(find.byKey(const Key('emailField')), findsOneWidget);
+      expect(find.text('Log in with fingerprint'), findsOneWidget);
+    });
+
+    testWidgets('a revoked key says so and stops offering it', (tester) async {
+      final store = MemoryFingerprintStore(savedKey('key-old'));
+      final tokens = await pumpApp(
+        tester,
+        fingerprintBackend(),
+        biometrics: FakeBiometrics(),
+        fingerprints: store,
+      );
+      expect(tokens.token, isNull);
+      expect(store.saved, isNull);
+      expect(find.textContaining('Fingerprint log-in is off'), findsOneWidget);
+      expect(find.byKey(const Key('fingerprintLoginButton')), findsNothing);
+    });
+
+    testWidgets('is not offered when registering', (tester) async {
+      await pumpApp(
+        tester,
+        fingerprintBackend(),
+        biometrics: FakeBiometrics(pass: false),
+        fingerprints: MemoryFingerprintStore(savedKey()),
+      );
+      await tapVisible(tester, find.byKey(const Key('toggle_Register')));
+      expect(find.byKey(const Key('fingerprintLoginButton')), findsNothing);
     });
   });
 
   group('the lock screen', () {
-    testWidgets('opens the app on a good fingerprint', (tester) async {
-      final bio = FakeBiometrics();
-      await pumpApp(
-        tester,
-        familyBackend(),
-        savedToken: 'tok',
-        preferences: lockedOn(),
-        biometrics: bio,
-      );
-      // The prompt opens by itself and passes, so the app shows.
-      expect(bio.reasons, ['Unlock Nurtura']);
-      expect(find.byKey(const Key('lockScreen')), findsNothing);
-      expect(find.byKey(const Key('tab_family')), findsOneWidget);
-    });
-
-    testWidgets('stays locked when the prompt is closed, and can try again', (
+    testWidgets('stays locked when the prompt is closed, and can retry', (
       tester,
     ) async {
       final bio = FakeBiometrics(pass: false);
       await pumpApp(
         tester,
-        familyBackend(),
+        fingerprintBackend(),
         savedToken: 'tok',
-        preferences: lockedOn(),
         biometrics: bio,
+        fingerprints: MemoryFingerprintStore(savedKey()),
       );
-      expect(find.byKey(const Key('lockScreen')), findsOneWidget);
       expect(find.text('Nurtura is locked'), findsOneWidget);
       expect(find.byKey(const Key('tab_family')), findsNothing);
 
@@ -134,101 +267,59 @@ void main() {
     testWidgets('explains a lockout', (tester) async {
       await pumpApp(
         tester,
-        familyBackend(),
+        fingerprintBackend(),
         savedToken: 'tok',
-        preferences: lockedOn(),
         biometrics: FakeBiometrics(error: 'Too many tries.'),
+        fingerprints: MemoryFingerprintStore(savedKey()),
       );
       expect(find.text('Too many tries.'), findsOneWidget);
     });
 
-    testWidgets('"Use password instead" logs out and turns the lock off', (
-      tester,
-    ) async {
-      final prefs = lockedOn();
-      final backend = familyBackend();
-      final store = await pumpApp(
-        tester,
-        backend,
-        savedToken: 'tok',
-        preferences: prefs,
-        biometrics: FakeBiometrics(pass: false),
-      );
-      await tapVisible(tester, find.byKey(const Key('usePasswordInstead')));
-
-      expect(find.byKey(const Key('emailField')), findsOneWidget);
-      expect(store.token, isNull);
-      expect(prefs.values.containsKey(AppLock.prefKey), isFalse);
-      expect(backend.to('/api/auth/logout/'), hasLength(1));
-    });
-
-    testWidgets('never shows without a saved sign-in', (tester) async {
-      await pumpApp(
-        tester,
-        FakeBackend((_) async => json({})),
-        preferences: lockedOn(),
-        biometrics: FakeBiometrics(pass: false),
-      );
-      expect(find.byKey(const Key('lockScreen')), findsNothing);
-      expect(find.byKey(const Key('emailField')), findsOneWidget);
-    });
+    testWidgets(
+      '"Use password instead" logs out but keeps fingerprint log-in',
+      (tester) async {
+        final store = MemoryFingerprintStore(savedKey());
+        final tokens = await pumpApp(
+          tester,
+          fingerprintBackend(),
+          savedToken: 'tok',
+          biometrics: FakeBiometrics(pass: false),
+          fingerprints: store,
+        );
+        await tapVisible(tester, find.byKey(const Key('usePasswordInstead')));
+        expect(tokens.token, isNull);
+        expect(find.byKey(const Key('emailField')), findsOneWidget);
+        expect(store.saved, isNotNull);
+      },
+    );
   });
 
-  group('locking again after time away', () {
-    late DateTime now;
-    late AppLock lock;
-
-    setUp(() async {
-      now = DateTime(2026, 10, 30, 9);
-      lock = AppLock(FakeBiometrics(), lockedOn(), clock: () => now);
-      await lock.load();
-      await lock.unlock();
-    });
-
-    test('a minute or more away locks', () {
-      lock.appLeft();
-      now = now.add(AppLock.relockAfter);
-      lock.appReturned();
-      expect(lock.locked, isTrue);
-    });
-
-    test('a quick switch away does not', () {
-      lock.appLeft();
-      now = now.add(const Duration(seconds: 20));
-      lock.appReturned();
-      expect(lock.locked, isFalse);
-    });
-
-    test('nothing locks when the lock is off', () async {
-      await lock.disable();
-      lock.appLeft();
-      now = now.add(const Duration(hours: 1));
-      lock.appReturned();
-      expect(lock.locked, isFalse);
-    });
-  });
-
-  testWidgets('logging out turns the lock off for the next account', (
-    tester,
-  ) async {
-    final prefs = MemoryPreferences();
+  testWidgets('deleting the account forgets the key', (tester) async {
+    final store = MemoryFingerprintStore(savedKey());
     await pumpApp(
       tester,
-      familyBackend(),
+      backendWith((r) async {
+        if (r.method == 'DELETE' && r.url.path == '/api/auth/me/') {
+          return http.Response('', 204);
+        }
+        return null;
+      }, children: [childJson()]),
       savedToken: 'tok',
-      preferences: prefs,
       biometrics: FakeBiometrics(),
+      fingerprints: store,
     );
     await openFamily(tester);
-    await tapVisible(tester, find.byKey(const Key('fingerprintLockSwitch')));
-    expect(prefs.values[AppLock.prefKey], 'on');
-
     await tester.scrollUntilVisible(
-      find.byKey(const Key('logoutButton')),
+      find.byKey(const Key('deleteAccountButton')),
       200,
       scrollable: find.byType(Scrollable).last,
     );
-    await tapVisible(tester, find.byKey(const Key('logoutButton')));
-    expect(prefs.values.containsKey(AppLock.prefKey), isFalse);
+    await tapVisible(tester, find.byKey(const Key('deleteAccountButton')));
+    await tester.enterText(
+      find.byKey(const Key('deleteAccountField')).last,
+      'x-test-pass',
+    );
+    await tapVisible(tester, find.byKey(const Key('confirmDeleteAccount')));
+    expect(store.saved, isNull);
   });
 }

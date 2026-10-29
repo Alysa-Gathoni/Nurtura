@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../services/api_client.dart';
+import '../state/app_lock.dart';
 import '../state/auth_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
@@ -37,6 +38,28 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _submitting = false;
   bool _showPassword = false;
   ApiException? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    // When the app opens with fingerprint log-in on, ask straight away
+    // (not after logging out on purpose) (#150).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && context.read<AppLock>().takeLaunchOffer()) {
+        _fingerprint();
+      }
+    });
+  }
+
+  Future<void> _fingerprint() async {
+    if (_submitting) return;
+    setState(() {
+      _error = null;
+      _submitting = true;
+    });
+    await context.read<AppLock>().logIn();
+    if (mounted) setState(() => _submitting = false);
+  }
 
   @override
   void dispose() {
@@ -237,6 +260,30 @@ class _AuthScreenState extends State<AuthScreen> {
                                     loading: _submitting,
                                     onPressed: _submit,
                                   ),
+                                  if (!_registering &&
+                                      context.watch<AppLock>().canLogIn) ...[
+                                    const SizedBox(height: 10),
+                                    _FingerprintLogIn(
+                                      email: context
+                                          .watch<AppLock>()
+                                          .saved!
+                                          .email,
+                                      onPressed: _submitting
+                                          ? null
+                                          : _fingerprint,
+                                    ),
+                                  ],
+                                  // Shown even once the button is gone, e.g.
+                                  // "fingerprint log-in is off" (#150).
+                                  if (!_registering &&
+                                      context.watch<AppLock>().error !=
+                                          null) ...[
+                                    const SizedBox(height: 10),
+                                    MessageBanner.error(
+                                      context.watch<AppLock>().error!,
+                                      key: const Key('fingerprintLoginError'),
+                                    ),
+                                  ],
                                   if (!_registering) ...[
                                     const SizedBox(height: 4),
                                     Center(
@@ -291,6 +338,62 @@ class _AuthScreenState extends State<AuthScreen> {
       return "That doesn't look like an email address.";
     }
     return null;
+  }
+}
+
+/// "Log in with fingerprint" for the account saved on this phone (#150).
+class _FingerprintLogIn extends StatelessWidget {
+  const _FingerprintLogIn({required this.email, required this.onPressed});
+
+  final String email;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Material(
+          color: p.primarySoft,
+          borderRadius: BorderRadius.circular(AppRadii.card),
+          child: InkWell(
+            key: const Key('fingerprintLoginButton'),
+            borderRadius: BorderRadius.circular(AppRadii.card),
+            onTap: onPressed,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                children: [
+                  Icon(Icons.fingerprint_rounded, size: 34, color: p.primary),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Log in with fingerprint',
+                          style: AppText.nunito(
+                            size: 15.5,
+                            weight: FontWeight.w800,
+                            color: p.primary,
+                          ),
+                        ),
+                        Text(
+                          email,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
