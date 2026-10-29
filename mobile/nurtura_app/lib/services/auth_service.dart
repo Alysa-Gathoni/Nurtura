@@ -190,12 +190,30 @@ class AuthService {
     }
   }
 
-  /// Sets the new password with the emailed code, and signs in. A problem
-  /// with the password comes back as a `new_password` field error; one with
-  /// the code, as the message.
+  /// Checks the emailed reset code (#146) and returns a reset pass for
+  /// [confirmPasswordReset]. A wrong, used or expired code comes back as the
+  /// message.
+  Future<String> checkResetCode(CodeChallenge challenge, String code) async {
+    try {
+      final data = await _api.post('/api/auth/password-reset/verify/', {
+        'challenge': challenge.id,
+        'code': code.replaceAll(RegExp(r'\s'), ''),
+      }) as Map<String, dynamic>;
+      return data['reset_token'] as String;
+    } on ApiException catch (e) {
+      throw ApiException(
+        e.field('code') ?? e.message,
+        statusCode: e.statusCode,
+      );
+    }
+  }
+
+  /// Sets the new password with the reset pass, and signs in. A problem
+  /// with the password comes back as a `new_password` field error; an
+  /// expired or used pass as a `reset_token` one, so the screen can start
+  /// again.
   Future<AuthResult> confirmPasswordReset(
-    CodeChallenge challenge,
-    String code,
+    String resetToken,
     String newPassword, {
     String? deviceId,
     bool remember = true,
@@ -203,8 +221,7 @@ class AuthService {
     try {
       return _result(
         await _api.post('/api/auth/password-reset/confirm/', {
-          'challenge': challenge.id,
-          'code': code.replaceAll(RegExp(r'\s'), ''),
+          'reset_token': resetToken,
           'new_password': newPassword,
           'device_id': ?deviceId,
           'remember_device': remember,
@@ -212,13 +229,14 @@ class AuthService {
       );
     } on ApiException catch (e) {
       final password = e.fieldErrors['new_password'];
+      final pass = e.fieldErrors['reset_token'];
       throw ApiException(
-        e.field('code') ??
+        pass?.join(' ') ??
             (password == null
                 ? e.message
                 : 'Please choose a different password.'),
         statusCode: e.statusCode,
-        fieldErrors: {'new_password': ?password},
+        fieldErrors: {'new_password': ?password, 'reset_token': ?pass},
       );
     }
   }

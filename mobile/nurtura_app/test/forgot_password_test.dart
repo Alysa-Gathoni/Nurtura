@@ -15,29 +15,42 @@ Map<String, dynamic> resetChallenge({int resendAfter = 30}) => {
   'resend_after': resendAfter,
 };
 
-/// A backend that sends reset codes and accepts [goodCode].
-FakeBackend resetBackend({String goodCode = '123456', int resendAfter = 30}) =>
-    FakeBackend((r) async {
-      switch (r.url.path) {
-        case '/api/auth/password-reset/':
-          return json(resetChallenge(resendAfter: resendAfter), 202);
-        case '/api/auth/password-reset/resend/':
-          return json(resetChallenge(resendAfter: resendAfter));
-        case '/api/auth/password-reset/confirm/':
-          final body = jsonDecode(r.body) as Map;
-          if (body['new_password'] == 'password') {
-            return json({
-              'new_password': ['This password is too common.'],
+/// A backend that sends reset codes, swaps [goodCode] for [passToken]
+/// (#146), and sets a password with the pass "pass-1".
+FakeBackend resetBackend({
+  String goodCode = '123456',
+  int resendAfter = 30,
+  String passToken = 'pass-1',
+}) => FakeBackend((r) async {
+  switch (r.url.path) {
+    case '/api/auth/password-reset/':
+      return json(resetChallenge(resendAfter: resendAfter), 202);
+    case '/api/auth/password-reset/resend/':
+      return json(resetChallenge(resendAfter: resendAfter));
+    case '/api/auth/password-reset/verify/':
+      final body = jsonDecode(r.body) as Map;
+      return body['code'] == goodCode
+          ? json({'reset_token': passToken, 'expires_in': 600})
+          : json({
+              'code': ["That code isn't right. You have 4 tries left."],
             }, 400);
-          }
-          return body['code'] == goodCode
-              ? json({...success, 'device_trusted_until': null})
-              : json({
-                  'code': ["That code isn't right. You have 4 tries left."],
-                }, 400);
+    case '/api/auth/password-reset/confirm/':
+      final body = jsonDecode(r.body) as Map;
+      if (body['new_password'] == 'password') {
+        return json({
+          'new_password': ['This password is too common.'],
+        }, 400);
       }
-      return http.Response('', 404);
-    });
+      return body['reset_token'] == 'pass-1'
+          ? json({...success, 'device_trusted_until': null})
+          : json({
+              'reset_token': [
+                'This reset has expired. Ask for a new code to try again.',
+              ],
+            }, 400);
+  }
+  return http.Response('', 404);
+});
 
 Future<void> openReset(WidgetTester tester, {String email = ''}) async {
   if (email.isNotEmpty) {
@@ -51,19 +64,37 @@ Future<void> askForCode(WidgetTester tester) async {
   await tapVisible(tester, find.byKey(const Key('sendResetCodeButton')));
 }
 
+/// Step 2: typing the sixth digit checks the code (#146).
+Future<void> enterCode(WidgetTester tester, [String code = '123456']) async {
+  await tester.enterText(find.byKey(const Key('codeField')), code);
+  await tester.pumpAndSettle();
+}
+
+/// Step 3: the new password, then save.
+Future<void> fillPasswords(
+  WidgetTester tester, {
+  String password = 'Fresh-Passw0rd-2026',
+  String? confirm,
+}) async {
+  await tester.enterText(find.byKey(const Key('newPasswordField')), password);
+  await tester.enterText(
+    find.byKey(const Key('confirmNewPasswordField')),
+    confirm ?? password,
+  );
+  // Let the strength meter finish opening: it moves the button.
+  await tester.pumpAndSettle();
+  await tapVisible(tester, find.byKey(const Key('resetPasswordButton')));
+}
+
+/// Steps 2 and 3: the code, then the new password.
 Future<void> fillReset(
   WidgetTester tester, {
   String code = '123456',
   String password = 'Fresh-Passw0rd-2026',
   String? confirm,
 }) async {
-  await tester.enterText(find.byKey(const Key('codeField')), code);
-  await tester.enterText(find.byKey(const Key('newPasswordField')), password);
-  await tester.enterText(
-    find.byKey(const Key('confirmNewPasswordField')),
-    confirm ?? password,
-  );
-  await tapVisible(tester, find.byKey(const Key('resetPasswordButton')));
+  await enterCode(tester, code);
+  await fillPasswords(tester, password: password, confirm: confirm);
 }
 
 void main() {
@@ -80,12 +111,19 @@ void main() {
     expect(find.text('Check your email'), findsOneWidget);
     expect(find.textContaining('w***@example.com'), findsOneWidget);
 
-    await fillReset(tester);
+    await enterCode(tester);
+    expect(
+      jsonDecode(backend.to('/api/auth/password-reset/verify/').single.body),
+      {'challenge': 'reset-abc', 'code': '123456'},
+    );
+    expect(find.text('Choose a new password'), findsOneWidget);
+    expect(find.byKey(const Key('codeField')), findsNothing);
+
+    await fillPasswords(tester);
     expect(
       jsonDecode(backend.to('/api/auth/password-reset/confirm/').single.body),
       {
-        'challenge': 'reset-abc',
-        'code': '123456',
+        'reset_token': 'pass-1',
         'new_password': 'Fresh-Passw0rd-2026',
         'device_id': testDeviceId,
         'remember_device': true,
@@ -123,8 +161,26 @@ void main() {
     final backend = resetBackend();
     final store = await pumpApp(tester, backend);
     await askForCode(tester);
-    await fillReset(tester, code: '000000');
+    await enterCode(tester, '000000');
     expect(find.textContaining('4 tries left'), findsOneWidget);
+    // Still on the code step, with the boxes empty for another try.
+    expect(find.text('Check your email'), findsOneWidget);
+    expect(find.byKey(const Key('newPasswordField')), findsNothing);
+    expect(
+      tester
+          .widget<TextField>(find.byKey(const Key('codeField')))
+          .controller!
+          .text,
+      isEmpty,
+    );
+    // The keyboard comes back for the next try.
+    expect(
+      tester
+          .widget<TextField>(find.byKey(const Key('codeField')))
+          .focusNode!
+          .hasFocus,
+      isTrue,
+    );
     expect(store.token, isNull);
   });
 
@@ -159,6 +215,40 @@ void main() {
     expect(find.text('A new code is on its way.'), findsOneWidget);
   });
 
+  testWidgets('Continue with part of the code asks for all six digits', (
+    tester,
+  ) async {
+    final backend = resetBackend();
+    await pumpApp(tester, backend);
+    await askForCode(tester);
+    await enterCode(tester, '123');
+    await tapVisible(tester, find.byKey(const Key('checkResetCodeButton')));
+    expect(find.text('Enter all six digits from the email.'), findsOneWidget);
+    expect(backend.to('/api/auth/password-reset/verify/'), isEmpty);
+  });
+
+  testWidgets('an expired pass goes back to ask for a new code', (
+    tester,
+  ) async {
+    final backend = resetBackend(passToken: 'pass-old');
+    final store = await pumpApp(tester, backend);
+    await askForCode(tester);
+    await fillReset(tester);
+    expect(find.textContaining('This reset has expired'), findsOneWidget);
+    expect(find.byKey(const Key('sendResetCodeButton')), findsOneWidget);
+    expect(store.token, isNull);
+  });
+
+  testWidgets('the dots show which of the three steps this is', (tester) async {
+    await pumpApp(tester, resetBackend());
+    await openReset(tester, email: 'wanjiru@example.com');
+    expect(find.bySemanticsLabel('Step 1 of 3'), findsOneWidget);
+    await tapVisible(tester, find.byKey(const Key('sendResetCodeButton')));
+    expect(find.bySemanticsLabel('Step 2 of 3'), findsOneWidget);
+    await enterCode(tester);
+    expect(find.bySemanticsLabel('Step 3 of 3'), findsOneWidget);
+  });
+
   testWidgets('back returns to the login form', (tester) async {
     await pumpApp(tester, resetBackend());
     await openReset(tester);
@@ -182,6 +272,7 @@ void main() {
     (tester) async {
       await pumpApp(tester, resetBackend());
       await askForCode(tester);
+      await enterCode(tester);
       final account = tester.widget<TextField>(
         find.descendant(
           of: find.byKey(const Key('resetAccountField')),

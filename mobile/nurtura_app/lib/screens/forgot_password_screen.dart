@@ -16,8 +16,9 @@ import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
 import 'verify_code_screen.dart';
 
-/// Choosing a new password with an emailed code (#126): the email first,
-/// then the code and the new password. Success signs in on this phone.
+/// Choosing a new password with an emailed code (#126), in three steps
+/// (#146): the email, then the code (checked as soon as it's typed), then
+/// the new password. Success signs in on this phone.
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({
     super.key,
@@ -36,9 +37,11 @@ class ForgotPasswordScreen extends StatefulWidget {
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
+enum _Step { email, code, password }
+
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emailForm = GlobalKey<FormState>();
-  final _resetForm = GlobalKey<FormState>();
+  final _passwordForm = GlobalKey<FormState>();
   late final _email = TextEditingController(text: widget.email.trim());
   final _code = TextEditingController();
   final _codeFocus = FocusNode();
@@ -46,6 +49,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _confirm = TextEditingController();
 
   CodeChallenge? _challenge;
+
+  /// The pass from a checked code (#146); set means the password step.
+  String? _resetToken;
   bool _busy = false;
   bool _showPassword = false;
   bool _remember = true;
@@ -54,6 +60,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   String? _notice;
   int _wait = 0;
   Timer? _timer;
+
+  _Step get _step => _resetToken != null
+      ? _Step.password
+      : _challenge != null
+      ? _Step.code
+      : _Step.email;
 
   @override
   void dispose() {
@@ -74,6 +86,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (!mounted) return t.cancel();
       setState(() => _wait--);
       if (_wait <= 0) t.cancel();
+    });
+  }
+
+  /// Back to the email step, e.g. for another address or an expired pass.
+  void _startAgain({String? error}) {
+    _timer?.cancel();
+    _code.clear();
+    _password.clear();
+    _confirm.clear();
+    setState(() {
+      _challenge = null;
+      _resetToken = null;
+      _error = error;
+      _notice = null;
+      _passwordError = null;
     });
   }
 
@@ -123,27 +150,56 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     }
   }
 
-  Future<void> _reset() async {
+  /// Step 2: the sixth digit checks the code; a right one opens step 3.
+  Future<void> _checkCode() async {
     final challenge = _challenge;
     if (challenge == null || _busy) return;
+    if (_code.text.length != VerifyCodeScreen.codeLength) {
+      setState(() => _error = 'Enter all six digits from the email.');
+      return;
+    }
+    setState(() {
+      _busy = true;
+      _error = null;
+      _notice = null;
+    });
+    try {
+      final token = await context.read<AuthState>().checkResetCode(
+        challenge,
+        _code.text,
+      );
+      if (!mounted) return;
+      _timer?.cancel();
+      setState(() => _resetToken = token);
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      _code.clear();
+      setState(() => _error = e.message);
+      // The boxes are disabled while checking, so bring the keyboard back
+      // once they're enabled again, for the next try.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _codeFocus.requestFocus();
+      });
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// Step 3: the new password.
+  Future<void> _savePassword() async {
+    final token = _resetToken;
+    if (token == null || _busy) return;
     setState(() {
       _error = null;
       _passwordError = null;
-      _notice = null;
     });
-    final codeOk = _code.text.length == VerifyCodeScreen.codeLength;
-    final formOk = _resetForm.currentState!.validate();
-    if (!codeOk) {
-      setState(() => _error = 'Enter all six digits from the email.');
-    }
-    if (!codeOk || !formOk) return;
+    if (!_passwordForm.currentState!.validate()) return;
 
     setState(() => _busy = true);
     final navigator = Navigator.of(context);
     try {
       await context.read<AuthState>().resetPassword(
-        challenge,
-        _code.text,
+        token,
         _password.text,
         rememberDevice: _remember,
       );
@@ -154,14 +210,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     } on ApiException catch (e) {
       if (!mounted) return;
       final passwordErrors = e.fieldErrors['new_password'];
-      setState(() {
-        if (passwordErrors != null) {
-          _passwordError = passwordErrors.join(' ');
-        } else {
-          _error = e.message;
-          _code.clear();
-        }
-      });
+      if (passwordErrors != null) {
+        setState(() => _passwordError = passwordErrors.join(' '));
+      } else if (e.fieldErrors.containsKey('reset_token')) {
+        // Expired or already used: ask for a new code.
+        _startAgain(error: e.message);
+      } else {
+        setState(() => _error = e.message);
+      }
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -171,6 +227,30 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     final p = context.palette;
     final challenge = _challenge;
+    final (icon, title, hint) = switch (_step) {
+      _Step.email => (
+        Icons.key_rounded,
+        widget.settingPassword ? 'Set a password' : 'Forgot your password?',
+        widget.settingPassword
+            ? "We'll email you a code to check it's you. Then you can also "
+                  'log in with your email.'
+            : "We'll email you a code to choose a new one.",
+      ),
+      _Step.code => (
+        Icons.mark_email_read_rounded,
+        'Check your email',
+        'If ${challenge!.emailHint} has a Nurtura account, we sent it a '
+            '6-digit code.',
+      ),
+      _Step.password => (
+        Icons.lock_reset_rounded,
+        widget.settingPassword
+            ? 'Choose your password'
+            : 'Choose a new password',
+        "Code accepted. Pick a phrase you'll remember; other phones will be "
+            'signed out.',
+      ),
+    };
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -181,7 +261,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
       ),
       body: SafeArea(
-        child: Center(
+        child: Align(
+          alignment: Alignment.topCenter,
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
             child: ConstrainedBox(
@@ -189,6 +270,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  _StepDots(step: _step.index),
+                  const SizedBox(height: 18),
                   Center(
                     child: Container(
                       width: 84,
@@ -197,34 +280,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         shape: BoxShape.circle,
                         color: p.mustardSoft,
                       ),
-                      child: Icon(
-                        challenge == null
-                            ? Icons.key_rounded
-                            : Icons.mark_email_read_rounded,
-                        color: p.mustard,
-                        size: 40,
-                      ),
+                      child: Icon(icon, color: p.mustard, size: 40),
                     ),
                   ),
                   const SizedBox(height: 18),
                   Text(
-                    challenge != null
-                        ? 'Check your email'
-                        : widget.settingPassword
-                        ? 'Set a password'
-                        : 'Forgot your password?',
+                    title,
+                    key: const Key('resetTitle'),
                     textAlign: TextAlign.center,
                     style: AppText.quicksand(size: 28, color: p.ink),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    challenge == null
-                        ? widget.settingPassword
-                              ? "We'll email you a code to check it's you. "
-                                    'Then you can also log in with your email.'
-                              : "We'll email you a code to choose a new one."
-                        : 'If ${challenge.emailHint} has a Nurtura account, '
-                              'we sent it a 6-digit code.',
+                    hint,
                     key: const Key('resetHint'),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -232,9 +300,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   const SizedBox(height: 22),
                   AppCard(
                     padding: const EdgeInsets.all(18),
-                    child: challenge == null ? _emailStep() : _resetStep(),
+                    child: switch (_step) {
+                      _Step.email => _emailStep(),
+                      _Step.code => _codeStep(),
+                      _Step.password => _passwordStep(),
+                    },
                   ),
-                  if (challenge != null) ...[
+                  if (_step == _Step.code) ...[
                     const SizedBox(height: 16),
                     TextButton(
                       key: const Key('resetResendButton'),
@@ -248,18 +320,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     if (!widget.settingPassword)
                       TextButton(
                         key: const Key('resetDifferentEmail'),
-                        onPressed: _busy
-                            ? null
-                            : () {
-                                _timer?.cancel();
-                                _code.clear();
-                                setState(() {
-                                  _challenge = null;
-                                  _error = null;
-                                  _notice = null;
-                                  _passwordError = null;
-                                });
-                              },
+                        onPressed: _busy ? null : _startAgain,
                         child: const Text('Use a different email'),
                       ),
                   ],
@@ -313,7 +374,38 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     ),
   );
 
-  Widget _resetStep() {
+  Widget _codeStep() => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      CodeBoxes(
+        controller: _code,
+        focusNode: _codeFocus,
+        enabled: !_busy,
+        onChanged: (value) {
+          setState(() => _error = null);
+          if (value.length == VerifyCodeScreen.codeLength) _checkCode();
+        },
+      ),
+      if (_error != null) ...[
+        const SizedBox(height: 14),
+        MessageBanner.error(_error!, key: const Key('resetError')),
+      ],
+      if (_notice != null && _error == null) ...[
+        const SizedBox(height: 14),
+        MessageBanner.success(_notice!),
+      ],
+      const SizedBox(height: 18),
+      PrimaryButton(
+        key: const Key('checkResetCodeButton'),
+        label: 'Continue',
+        icon: Icons.arrow_forward_rounded,
+        loading: _busy,
+        onPressed: _checkCode,
+      ),
+    ],
+  );
+
+  Widget _passwordStep() {
     final p = context.palette;
     final toggle = IconButton(
       tooltip: _showPassword ? 'Hide password' : 'Show password',
@@ -324,7 +416,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       onPressed: () => setState(() => _showPassword = !_showPassword),
     );
     return Form(
-      key: _resetForm,
+      key: _passwordForm,
       child: AutofillGroup(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -341,13 +433,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 AutofillHints.username,
                 AutofillHints.email,
               ],
-            ),
-            const SizedBox(height: 18),
-            CodeBoxes(
-              controller: _code,
-              focusNode: _codeFocus,
-              enabled: !_busy,
-              onChanged: (_) => setState(() => _error = null),
             ),
             const SizedBox(height: 18),
             AppTextField(
@@ -375,7 +460,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               obscureText: !_showPassword,
               textInputAction: TextInputAction.done,
               autofillHints: const [AutofillHints.newPassword],
-              onSubmitted: (_) => _reset(),
+              onSubmitted: (_) => _savePassword(),
               validator: (v) =>
                   v != _password.text ? "Passwords don't match." : null,
             ),
@@ -398,20 +483,49 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               const SizedBox(height: 8),
               MessageBanner.error(_error!, key: const Key('resetError')),
             ],
-            if (_notice != null && _error == null) ...[
-              const SizedBox(height: 8),
-              MessageBanner.success(_notice!),
-            ],
             const SizedBox(height: 16),
             PrimaryButton(
               key: const Key('resetPasswordButton'),
               label: 'Save and sign in',
               icon: Icons.lock_reset_rounded,
               loading: _busy,
-              onPressed: _reset,
+              onPressed: _savePassword,
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Three dots for email, code and password; the current one is wide.
+class _StepDots extends StatelessWidget {
+  const _StepDots({required this.step});
+
+  final int step;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    return Semantics(
+      label: 'Step ${step + 1} of 3',
+      child: Row(
+        key: const Key('resetSteps'),
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (var i = 0; i < 3; i++) ...[
+            if (i > 0) const SizedBox(width: 6),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 220),
+              width: i == step ? 22 : 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: i <= step ? p.primary : p.border,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
