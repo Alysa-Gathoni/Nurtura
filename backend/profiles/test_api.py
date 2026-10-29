@@ -18,6 +18,7 @@ from activities.choices import ContentStatus
 from activities.models import DevelopmentalActivity
 from activities.tests import activity_fields
 
+from . import privacy
 from .models import ChildProfile
 
 User = get_user_model()
@@ -150,6 +151,8 @@ class ChildProfileAPITests(APITestCase):
         self.administrator = User.objects.create_user(
             username="admin", password="x-test-pass", role=User.Role.ADMINISTRATOR
         )
+        for caregiver in (self.caregiver, self.other_caregiver):
+            privacy.record_consent(caregiver)  # #136
         self.others_child = ChildProfile.objects.create(
             caregiver=self.other_caregiver,
             name="Baraka",

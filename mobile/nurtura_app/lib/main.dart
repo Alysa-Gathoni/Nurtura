@@ -5,6 +5,7 @@ import 'config.dart';
 import 'screens/admin/admin_shell.dart';
 import 'screens/auth_screen.dart';
 import 'screens/home_shell.dart';
+import 'screens/privacy_notice_screen.dart';
 import 'screens/verify_code_screen.dart';
 import 'services/api_client.dart';
 import 'services/google_auth.dart';
@@ -107,9 +108,14 @@ class AuthGate extends StatelessWidget {
       ),
       AuthStatus.signedOut => const AuthScreen(),
       AuthStatus.codeRequired => const VerifyCodeScreen(),
-      // Administrators get the admin screens (#123); caregivers the app.
+      // Administrators get the admin screens (#123); caregivers the app,
+      // once they've agreed to the privacy notice (#136).
       AuthStatus.signedIn =>
-        auth.isAdministrator ? const AdminShell() : const HomeShell(),
+        auth.isAdministrator
+            ? const AdminShell()
+            : auth.needsPrivacyConsent
+            ? const PrivacyNoticeScreen(consent: true)
+            : const HomeShell(),
     };
   }
 }

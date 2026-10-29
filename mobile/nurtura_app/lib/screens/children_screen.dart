@@ -19,6 +19,7 @@ import '../widgets/theme_picker.dart';
 import '../widgets/village.dart';
 import 'child_form_screen.dart';
 import 'milestone_screen.dart';
+import 'privacy_notice_screen.dart';
 
 /// The caregiver's children and app settings.
 ///
@@ -243,7 +244,20 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
             Text('Appearance', style: AppText.quicksand(size: 20)),
             const SizedBox(height: 10),
             const ThemePicker(),
-            const SizedBox(height: 26),
+            const SizedBox(height: 14),
+            Center(
+              child: TextButton.icon(
+                key: const Key('privacyNoticeButton'),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const PrivacyNoticeScreen(),
+                  ),
+                ),
+                icon: const Icon(Icons.privacy_tip_outlined),
+                label: const Text('Privacy notice'),
+              ),
+            ),
+            const SizedBox(height: 12),
             SecondaryButton(
               key: const Key('logoutButton'),
               label: 'Log out',

@@ -197,6 +197,8 @@ else:
         },
     }
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "Nurtura <noreply@localhost>")
+# Who caregivers contact about their data, named in the privacy notice (#136).
+PRIVACY_CONTACT = os.getenv("PRIVACY_CONTACT", "nurtura.sofia@gmail.com")
 
 # Continue with Google (#130): the OAuth web client ID(s) Google ID tokens
 # must be issued for, comma-separated. Empty turns Google sign-in off.
