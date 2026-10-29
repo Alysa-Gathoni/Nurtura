@@ -132,6 +132,30 @@ void main() {
     });
   });
 
+  testWidgets('the strength meter checks the new password (#147)', (
+    tester,
+  ) async {
+    final backend = backendWith((r) async => null, children: [childJson()]);
+    await pumpApp(tester, backend, savedToken: 'tok');
+    await openFamily(tester);
+    await tapVisible(tester, find.byKey(const Key('passwordSettingsButton')));
+
+    await tester.enterText(
+      find.byKey(const Key('newPasswordField')).last,
+      'wanjiru2026',
+    );
+    await tester.pumpAndSettle();
+    // Like the account's email (wanjiru@example.com), so not accepted.
+    expect(find.text('Too weak'), findsOneWidget);
+
+    await tester.enterText(
+      find.byKey(const Key('newPasswordField')).last,
+      newPassword,
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Strong'), findsOneWidget);
+  });
+
   testWidgets('an administrator changes it from the Account tab', (
     tester,
   ) async {
