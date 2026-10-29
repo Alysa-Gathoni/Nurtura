@@ -29,4 +29,23 @@ class ChildService {
     });
     return ChildProfile.fromJson(data as Map<String, dynamic>);
   }
+
+  Future<ChildProfile> update(
+    int id, {
+    required String name,
+    required DateTime dateOfBirth,
+    required List<String> interests,
+    required List<String> concerns,
+  }) async {
+    final data = await _api.patch('/api/children/$id/', {
+      'name': name.trim(),
+      'date_of_birth': apiDate(dateOfBirth),
+      'interests': interests,
+      'concerns': concerns,
+    });
+    return ChildProfile.fromJson(data as Map<String, dynamic>);
+  }
+
+  /// Deletes the profile with its milestones, ideas and ratings.
+  Future<void> delete(int id) => _api.delete('/api/children/$id/');
 }

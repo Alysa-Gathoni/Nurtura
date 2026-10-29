@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/child_profile.dart';
+import '../services/api_client.dart';
 import '../state/auth_state.dart';
 import '../state/children_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../theme/domain_style.dart';
 import '../widgets/app_card.dart';
+import '../widgets/app_text_field.dart';
 import '../widgets/buttons.dart';
 import '../widgets/gamification.dart';
 import '../widgets/message_banner.dart';
@@ -23,7 +25,8 @@ import 'privacy_notice_screen.dart';
 ///
 /// Standalone (before there is a child) it is a full screen with loading,
 /// errors and "Add your first child". In the home shell ([embedded]) it is
-/// the Family tab: the children, light/dark mode and logging out.
+/// the Family tab: the children (each can be edited or deleted), light/dark
+/// mode, logging out and deleting the account (#134).
 class ChildrenScreen extends StatefulWidget {
   const ChildrenScreen({
     super.key,
@@ -63,6 +66,21 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
     _openMilestones(child, justCreated: true);
   }
 
+  Future<void> _editChild(ChildProfile child) async {
+    await Navigator.of(context).push<ChildProfile>(
+      MaterialPageRoute(builder: (_) => ChildFormScreen(child: child)),
+    );
+    if (!mounted) return;
+    final kept = context.read<ChildrenState>().children.any(
+      (c) => c.id == child.id,
+    );
+    if (!kept) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("${child.name}'s profile was deleted.")),
+      );
+    }
+  }
+
   void _openChild(ChildProfile child) {
     if (widget.onOpenChild != null) return widget.onOpenChild!(child);
     _openMilestones(child);
@@ -81,6 +99,15 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
   Future<void> _logout() async {
     context.read<ChildrenState>().clear();
     await context.read<AuthState>().logout();
+  }
+
+  Future<void> _deleteAccount() async {
+    final children = context.read<ChildrenState>();
+    final deleted = await showDialog<bool>(
+      context: context,
+      builder: (_) => const _DeleteAccountDialog(),
+    );
+    if (deleted == true) children.clear();
   }
 
   @override
@@ -102,6 +129,18 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
             tooltip: 'Log out',
             icon: const Icon(Icons.logout_rounded),
             onPressed: _logout,
+          ),
+          PopupMenuButton<VoidCallback>(
+            key: const Key('accountMenu'),
+            tooltip: 'Account',
+            onSelected: (action) => action(),
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                key: const Key('deleteAccountButton'),
+                value: _deleteAccount,
+                child: const Text('Delete account'),
+              ),
+            ],
           ),
         ],
       ),
@@ -190,6 +229,7 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
               child: child,
               selected: widget.embedded && child.id == state.selected?.id,
               onTap: () => _openChild(child),
+              onEdit: () => _editChild(child),
             ),
             const SizedBox(height: 12),
           ],
@@ -224,6 +264,18 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
               icon: Icons.logout_rounded,
               onPressed: _logout,
             ),
+            const SizedBox(height: 10),
+            Center(
+              child: TextButton.icon(
+                key: const Key('deleteAccountButton'),
+                style: TextButton.styleFrom(
+                  foregroundColor: context.palette.rose,
+                ),
+                onPressed: _deleteAccount,
+                icon: const Icon(Icons.delete_outline_rounded),
+                label: const Text('Delete account'),
+              ),
+            ),
           ],
         ],
       ),
@@ -235,11 +287,13 @@ class _ChildCard extends StatelessWidget {
   const _ChildCard({
     required this.child,
     required this.onTap,
+    required this.onEdit,
     this.selected = false,
   });
 
   final ChildProfile child;
   final VoidCallback onTap;
+  final VoidCallback onEdit;
   final bool selected;
 
   @override
@@ -293,9 +347,130 @@ class _ChildCard extends StatelessWidget {
               ],
             ),
           ),
-          Icon(Icons.chevron_right_rounded, color: p.mutedText),
+          IconButton(
+            key: Key('editChild_${child.id}'),
+            tooltip: 'Edit ${child.name}',
+            icon: Icon(Icons.edit_rounded, color: p.mutedText),
+            onPressed: onEdit,
+          ),
         ],
       ),
+    );
+  }
+}
+
+/// Confirms deleting the account with the password (#134).
+///
+/// An account with no password (for example one made with Google) is
+/// confirmed with its email instead: the server says which, and the field
+/// switches. Pops true once the account is deleted and the session ended.
+class _DeleteAccountDialog extends StatefulWidget {
+  const _DeleteAccountDialog();
+
+  @override
+  State<_DeleteAccountDialog> createState() => _DeleteAccountDialogState();
+}
+
+class _DeleteAccountDialogState extends State<_DeleteAccountDialog> {
+  final _field = TextEditingController();
+  bool _byEmail = false;
+  bool _deleting = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _field.dispose();
+    super.dispose();
+  }
+
+  Future<void> _confirm() async {
+    if (_deleting) return;
+    final value = _field.text;
+    if (value.trim().isEmpty) {
+      return setState(
+        () => _error = _byEmail ? 'Type your email.' : 'Type your password.',
+      );
+    }
+    setState(() {
+      _deleting = true;
+      _error = null;
+    });
+    final navigator = Navigator.of(context);
+    try {
+      await context.read<AuthState>().deleteAccount(
+        password: _byEmail ? null : value,
+        email: _byEmail ? value.trim() : null,
+      );
+      navigator.pop(true);
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      final emailError = e.field('email');
+      setState(() {
+        _deleting = false;
+        if (emailError != null && !_byEmail) {
+          // No password on this account: ask for its email instead.
+          _byEmail = true;
+          _field.clear();
+          _error = null;
+        } else {
+          _error = e.field(_byEmail ? 'email' : 'password') ?? e.message;
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Delete your account?'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              "This deletes your account and everything in it: your children's "
+              "profiles, milestones, ideas and ratings. This can't be undone.",
+            ),
+            const SizedBox(height: 16),
+            if (_byEmail) ...[
+              const Text(
+                "Your account doesn't have a password, so type its email "
+                'address to confirm.',
+              ),
+              const SizedBox(height: 10),
+            ],
+            AppTextField(
+              key: const Key('deleteAccountField'),
+              label: _byEmail ? 'Your email' : 'Your password',
+              controller: _field,
+              obscureText: !_byEmail,
+              keyboardType: _byEmail ? TextInputType.emailAddress : null,
+              prefixIcon: _byEmail ? Icons.mail_rounded : Icons.lock_rounded,
+              errorText: _error,
+              onSubmitted: (_) => _confirm(),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _deleting ? null : () => Navigator.pop(context, false),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          key: const Key('confirmDeleteAccount'),
+          style: TextButton.styleFrom(foregroundColor: context.palette.rose),
+          onPressed: _deleting ? null : _confirm,
+          child: _deleting
+              ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2.2),
+                )
+              : const Text('Delete account'),
+        ),
+      ],
     );
   }
 }
