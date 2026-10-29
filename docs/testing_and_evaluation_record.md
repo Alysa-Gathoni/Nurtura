@@ -1,6 +1,6 @@
 # Testing and evaluation record
 
-> **Last updated: 2026-10-19.** The phone run (section 1) is from 2026-10-15; the automated test counts and results are from `main` at commit `cddefe5`, run on 2026-10-16. Every result below comes from a real run, log or pull request; nothing is estimated.
+> **Last updated: 2026-10-19.** The phone run (section 1) is from 2026-10-15; the automated test counts and results are from `main` at commit `cddefe5`, run on 2026-10-16; defects D10–D12 were added on 2026-10-29. Every result below comes from a real run, log or pull request; nothing is estimated.
 
 This record covers what has been tested so far, the results (expected and actual), the defects found and how they were corrected, and the initial evaluation evidence. What is still to evaluate is listed at the end.
 
@@ -135,6 +135,9 @@ cd mobile/nurtura_app && flutter test               # 78 tests
 | D7 | Phone run 2 | Screenshots saved | Android needs a surface conversion first, and the capture waited for frames that never came | Convert once, and draw frames during each capture | #109 |
 | D8 | Phone runs 3–4 | Taps land on the button named | The keyboard and the "Well done!" message covered targets; two taps missed silently | Close the keyboard before taps; wait for the message; a missed tap now fails at once | #109 |
 | D9 | The tester, run 5 | The tester sees the code as they type | The phone's display was frozen by screenshot capture | On Android, screenshots start after the code step | #109 |
+| D10 | Phone walkthrough, 29 Oct 2026 | The activity screen shows the whole activity | The steps were cut at 160 characters, and materials, the home note and the source never reached the app | Recommendations carry the full activity; the screen shows steps, materials, home note and source; 5 tests | #138 |
+| D11 | Phone walkthrough, 29 Oct 2026 | After choosing a date, typing goes where the caregiver taps next | Closing the date picker gave the focus back to the name, so an interest was typed into the child's name | The date field takes the focus before the picker opens; a test fails without the fix | #138 |
+| D12 | Phone, password reset, 29 Oct 2026 | If the code email can't be sent, the app says so | The Gmail app password had been revoked; the mail error escaped and the request failed with a 500 | A failed send returns 503 with a plain reason, keeps no half-made account or replaced code, and is logged without the code; 4 backend and 2 app tests | #144 |
 
 D6–D9 were faults in the test, not the app; the app behaved correctly in each case.
 

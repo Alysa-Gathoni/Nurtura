@@ -234,6 +234,60 @@ class ResendTests(TwoFactorAPITestCase):
         self.assertEqual(len(mail.outbox), 4)
 
 
+class EmailFailureTests(TwoFactorAPITestCase):
+    """A code email that can't be sent is a 503, not a crash (#144)."""
+
+    def failing(self, exc):
+        return mock.patch.object(two_factor, "send_mail", side_effect=exc)
+
+    def test_login_says_the_email_failed(self):
+        import smtplib
+
+        for exc in (
+            smtplib.SMTPServerDisconnected("Connection unexpectedly closed"),
+            smtplib.SMTPAuthenticationError(535, b"bad credentials"),
+            ConnectionRefusedError(),
+        ):
+            with self.subTest(exc=type(exc).__name__):
+                with self.failing(exc), self.assertLogs(
+                    "profiles.two_factor", "ERROR"
+                ) as logs:
+                    response = self.login()
+                self.assertEqual(
+                    response.status_code, status.HTTP_503_SERVICE_UNAVAILABLE
+                )
+                self.assertIn("try again in a few minutes", response.data["detail"])
+                # Logged for the operator, without any code.
+                self.assertIn("login code", logs.output[0])
+                self.assertIsNone(re.search(r"\b\d{6}\b", logs.output[0]))
+        # No usable challenge was left behind.
+        self.assertFalse(LoginChallenge.objects.filter(used_at__isnull=True).exists())
+
+    def test_a_failed_resend_keeps_the_code_already_sent(self):
+        challenge = self.login().data["challenge"]
+        first = code_from(mail.outbox[-1])
+        LoginChallenge.objects.update(
+            last_sent_at=timezone.now() - two_factor.RESEND_AFTER
+        )
+        with self.failing(OSError("smtp down")), self.assertLogs(
+            "profiles.two_factor", "ERROR"
+        ):
+            response = self.resend(challenge)
+        self.assertEqual(response.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
+        self.assertEqual(self.verify(challenge, first).status_code, status.HTTP_200_OK)
+
+    def test_password_reset_says_the_email_failed(self):
+        with self.failing(OSError("smtp down")), self.assertLogs(
+            "profiles.two_factor", "ERROR"
+        ):
+            response = self.client.post(
+                reverse("password-reset"),
+                {"email": "wanjiru@example.com"},
+                format="json",
+            )
+        self.assertEqual(response.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
+
+
 class RegistrationTests(APITestCase):
     def setUp(self):
         cache.clear()
@@ -264,19 +318,22 @@ class RegistrationTests(APITestCase):
         self.assertTrue(TrustedDevice.objects.filter(user=user).exists())
 
     def test_a_failed_email_creates_no_account(self):
+        # 503 with a plain reason, not a 500 (#144); the email can register
+        # again once sending works.
         with mock.patch.object(
             two_factor, "send_mail", side_effect=OSError("smtp down")
         ):
-            with self.assertRaises(OSError):
-                self.client.post(
-                    reverse("register"),
-                    {
-                        "username": "amina",
-                        "email": "amina@example.com",
-                        "password": PASSWORD,
-                    },
-                    format="json",
-                )
+            response = self.client.post(
+                reverse("register"),
+                {
+                    "username": "amina",
+                    "email": "amina@example.com",
+                    "password": PASSWORD,
+                },
+                format="json",
+            )
+        self.assertEqual(response.status_code, status.HTTP_503_SERVICE_UNAVAILABLE)
+        self.assertIn("couldn't send the email", response.data["detail"])
         self.assertFalse(User.objects.filter(username="amina").exists())
 
 

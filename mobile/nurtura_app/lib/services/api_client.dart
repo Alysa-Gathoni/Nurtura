@@ -138,6 +138,11 @@ class ApiClient {
         statusCode: status,
       );
     }
+    // A 503 with a reason (an email that couldn't be sent, #144, or Google
+    // sign-in being unavailable) says what happened; other 5xx don't.
+    if (status == 503 && detail != null) {
+      return ApiException(detail, statusCode: status);
+    }
     if (status >= 500) {
       return ApiException(
         'The server had a problem ($status). Please try again shortly.',
