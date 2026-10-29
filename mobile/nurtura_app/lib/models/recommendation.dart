@@ -126,6 +126,13 @@ class Recommendation {
   String get howToPlay =>
       description.trim().isNotEmpty ? description.trim() : shortDescription;
 
+  /// The source link's site ("cdc.gov"), or null without a link. The whole
+  /// link is too long to read on a phone.
+  String? get sourceSite {
+    final host = Uri.tryParse(sourceUrl.trim())?.host ?? '';
+    return host.isEmpty ? null : host.replaceFirst(RegExp(r'^www\.'), '');
+  }
+
   /// What's needed, or null when nothing is ("None") or it isn't known.
   String? get materialsNeeded {
     final m = materials.trim();

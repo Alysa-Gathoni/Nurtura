@@ -225,9 +225,10 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                 if (r.source.isNotEmpty) ...[
                   const SizedBox(height: 4),
                   Text(
-                    r.sourceUrl.isEmpty
+                    r.sourceSite == null
                         ? 'Based on guidance from ${r.source}.'
-                        : 'Based on guidance from ${r.source}: ${r.sourceUrl}',
+                        : 'Based on guidance from ${r.source} '
+                              '(${r.sourceSite}).',
                     key: const Key('activitySource'),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
