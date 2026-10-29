@@ -212,7 +212,7 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
     return RefreshIndicator(
       onRefresh: state.load,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
         children: [
           if (state.offline) ...[
             const MessageBanner.info(
@@ -240,6 +240,10 @@ class _ChildrenScreenState extends State<ChildrenScreen> {
             onPressed: _addChild,
           ),
           if (widget.embedded) ...[
+            const SizedBox(height: 26),
+            Text('Account', style: AppText.quicksand(size: 20)),
+            const SizedBox(height: 10),
+            const _AccountCard(),
             const SizedBox(height: 26),
             Text('Appearance', style: AppText.quicksand(size: 20)),
             const SizedBox(height: 10),
@@ -471,6 +475,45 @@ class _DeleteAccountDialogState extends State<_DeleteAccountDialog> {
               : const Text('Delete account'),
         ),
       ],
+    );
+  }
+}
+
+/// Who is signed in, so a shared phone shows whose family this is (#138).
+class _AccountCard extends StatelessWidget {
+  const _AccountCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final email = context.watch<AuthState>().user?.email;
+    return AppCard(
+      key: const Key('accountCard'),
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 22,
+            backgroundColor: p.primarySoft,
+            child: Icon(Icons.person_rounded, color: p.primary),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  email ?? 'Signed in',
+                  key: const Key('accountEmail'),
+                  overflow: TextOverflow.ellipsis,
+                  style: AppText.nunito(size: 15, weight: FontWeight.w800),
+                ),
+                Text('Caregiver', style: Theme.of(context).textTheme.bodySmall),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

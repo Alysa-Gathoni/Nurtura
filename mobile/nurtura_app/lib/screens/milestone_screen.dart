@@ -237,7 +237,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 0),
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -245,14 +245,17 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                 _savedBanner(),
                 const SizedBox(height: 12),
               ],
-              Text(
-                '${widget.child.name} · ${widget.child.ageDescription}',
-                style: AppText.quicksand(
-                  size: 20,
-                  color: context.palette.primary,
+              // In the tabs the header already names the child (#138).
+              if (!widget.embedded) ...[
+                Text(
+                  '${widget.child.name} · ${widget.child.ageDescription}',
+                  style: AppText.quicksand(
+                    size: 20,
+                    color: context.palette.primary,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 2),
+                const SizedBox(height: 2),
+              ],
               Text(
                 'From the CDC and WHO checklists.',
                 style: Theme.of(context).textTheme.bodySmall,

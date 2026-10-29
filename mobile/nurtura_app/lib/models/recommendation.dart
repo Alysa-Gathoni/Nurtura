@@ -60,6 +60,11 @@ class Recommendation {
     required this.domain,
     required this.ageRange,
     required this.shortDescription,
+    this.description = '',
+    this.materials = '',
+    this.culturalRelevance = '',
+    this.source = '',
+    this.sourceUrl = '',
     required this.explanation,
     this.completion,
     this.feedback,
@@ -75,6 +80,11 @@ class Recommendation {
     domain: json['developmental_domain'] as String,
     ageRange: json['age_range'] as String,
     shortDescription: json['short_description'] as String? ?? '',
+    description: json['description'] as String? ?? '',
+    materials: json['materials'] as String? ?? '',
+    culturalRelevance: json['cultural_relevance'] as String? ?? '',
+    source: json['source'] as String? ?? '',
+    sourceUrl: json['source_url'] as String? ?? '',
     explanation: json['explanation'] as String? ?? '',
     completion: json['completion'] == null
         ? null
@@ -95,6 +105,14 @@ class Recommendation {
   final String domain;
   final String ageRange;
   final String shortDescription;
+
+  /// The full activity (#138). Empty in ideas saved on the phone before the
+  /// API sent them, so the screen falls back to [shortDescription].
+  final String description;
+  final String materials;
+  final String culturalRelevance;
+  final String source;
+  final String sourceUrl;
   final String explanation;
   final Completion? completion;
   final ActivityFeedback? feedback;
@@ -103,6 +121,24 @@ class Recommendation {
 
   /// "Prenatal" as is; "6-12 months" with an en dash.
   String get ageLabel => ageRange.replaceAll('-', '–');
+
+  /// The full steps when known, otherwise the shortened ones.
+  String get howToPlay =>
+      description.trim().isNotEmpty ? description.trim() : shortDescription;
+
+  /// The source link's site ("cdc.gov"), or null without a link. The whole
+  /// link is too long to read on a phone.
+  String? get sourceSite {
+    final host = Uri.tryParse(sourceUrl.trim())?.host ?? '';
+    return host.isEmpty ? null : host.replaceFirst(RegExp(r'^www\.'), '');
+  }
+
+  /// What's needed, or null when nothing is ("None") or it isn't known.
+  String? get materialsNeeded {
+    final m = materials.trim();
+    if (m.isEmpty || m.toLowerCase().replaceAll('.', '') == 'none') return null;
+    return m;
+  }
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -114,6 +150,11 @@ class Recommendation {
     'developmental_domain': domain,
     'age_range': ageRange,
     'short_description': shortDescription,
+    'description': description,
+    'materials': materials,
+    'cultural_relevance': culturalRelevance,
+    'source': source,
+    'source_url': sourceUrl,
     'explanation': explanation,
     'completion': completion?.toJson(),
     'feedback': feedback?.toJson(),
@@ -133,6 +174,11 @@ class Recommendation {
     domain: domain,
     ageRange: ageRange,
     shortDescription: shortDescription,
+    description: description,
+    materials: materials,
+    culturalRelevance: culturalRelevance,
+    source: source,
+    sourceUrl: sourceUrl,
     explanation: explanation,
     completion: completion == null ? this.completion : completion(),
     feedback: feedback ?? this.feedback,

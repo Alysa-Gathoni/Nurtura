@@ -333,6 +333,11 @@ void main() {
       expect(find.text("That password isn't right."), findsOneWidget);
       expect(store.token, 'tok');
       await tapVisible(tester, find.text('Cancel'));
+      await tester.scrollUntilVisible(
+        find.text('Amani'),
+        -200,
+        scrollable: find.byType(Scrollable).last,
+      );
       expect(find.text('Amani'), findsWidgets);
     });
 

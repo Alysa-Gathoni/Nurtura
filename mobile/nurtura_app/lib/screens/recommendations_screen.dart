@@ -238,7 +238,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
     }
     return ListView.separated(
       key: const Key('recommendationsList'),
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
       itemCount: items.length + 1,
       separatorBuilder: (_, _) => const SizedBox(height: 12),
       itemBuilder: (context, i) {
