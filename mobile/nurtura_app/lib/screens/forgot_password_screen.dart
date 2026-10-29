@@ -9,6 +9,7 @@ import '../services/auth_service.dart';
 import '../state/auth_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import '../widgets/password_strength_meter.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/buttons.dart';
@@ -18,10 +19,18 @@ import 'verify_code_screen.dart';
 /// Choosing a new password with an emailed code (#126): the email first,
 /// then the code and the new password. Success signs in on this phone.
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key, this.email = ''});
+  const ForgotPasswordScreen({
+    super.key,
+    this.email = '',
+    this.settingPassword = false,
+  });
 
   /// What was typed on the login form, to start from.
   final String email;
+
+  /// A signed-in account made with Google setting its first password
+  /// (#142): the email is its own and can't be changed.
+  final bool settingPassword;
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -199,16 +208,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                   const SizedBox(height: 18),
                   Text(
-                    challenge == null
-                        ? 'Forgot your password?'
-                        : 'Check your email',
+                    challenge != null
+                        ? 'Check your email'
+                        : widget.settingPassword
+                        ? 'Set a password'
+                        : 'Forgot your password?',
                     textAlign: TextAlign.center,
                     style: AppText.quicksand(size: 28, color: p.ink),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     challenge == null
-                        ? "We'll email you a code to choose a new one."
+                        ? widget.settingPassword
+                              ? "We'll email you a code to check it's you. "
+                                    'Then you can also log in with your email.'
+                              : "We'll email you a code to choose a new one."
                         : 'If ${challenge.emailHint} has a Nurtura account, '
                               'we sent it a 6-digit code.',
                     key: const Key('resetHint'),
@@ -231,22 +245,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             : 'Send a new code',
                       ),
                     ),
-                    TextButton(
-                      key: const Key('resetDifferentEmail'),
-                      onPressed: _busy
-                          ? null
-                          : () {
-                              _timer?.cancel();
-                              _code.clear();
-                              setState(() {
-                                _challenge = null;
-                                _error = null;
-                                _notice = null;
-                                _passwordError = null;
-                              });
-                            },
-                      child: const Text('Use a different email'),
-                    ),
+                    if (!widget.settingPassword)
+                      TextButton(
+                        key: const Key('resetDifferentEmail'),
+                        onPressed: _busy
+                            ? null
+                            : () {
+                                _timer?.cancel();
+                                _code.clear();
+                                setState(() {
+                                  _challenge = null;
+                                  _error = null;
+                                  _notice = null;
+                                  _passwordError = null;
+                                });
+                              },
+                        child: const Text('Use a different email'),
+                      ),
                   ],
                 ],
               ),
@@ -264,6 +279,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       children: [
         AppTextField(
           key: const Key('resetEmailField'),
+          readOnly: widget.settingPassword,
           label: 'Email',
           hint: 'you@example.com',
           controller: _email,
@@ -337,7 +353,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             AppTextField(
               key: const Key('newPasswordField'),
               label: 'New password',
-              hint: 'At least 8 characters',
+              hint: "A phrase you'll remember",
               controller: _password,
               prefixIcon: Icons.lock_outline_rounded,
               obscureText: !_showPassword,
@@ -348,6 +364,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               validator: (v) =>
                   (v == null || v.isEmpty) ? 'Enter a new password.' : null,
             ),
+            PasswordStrengthMeter(password: _password, email: _email),
             const SizedBox(height: 14),
             AppTextField(
               key: const Key('confirmNewPasswordField'),
