@@ -267,7 +267,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                       email: context
                                           .watch<AppLock>()
                                           .saved!
-                                          .email,
+                                          .maskedEmail,
                                       onPressed: _submitting
                                           ? null
                                           : _fingerprint,

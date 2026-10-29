@@ -72,6 +72,21 @@ Future<void> logOut(WidgetTester tester) async {
 }
 
 void main() {
+  test('the saved email is shown partly hidden', () {
+    expect(savedKey().maskedEmail, 'w***@example.com');
+    expect(
+      const SavedFingerprint(
+        email: 'alysa.macharia@strathmore.edu',
+        key: 'k',
+      ).maskedEmail,
+      'a***@strathmore.edu',
+    );
+    expect(
+      const SavedFingerprint(email: 'broken', key: 'k').maskedEmail,
+      'your account',
+    );
+  });
+
   setUpAll(() => WidgetController.hitTestWarningShouldBeFatal = true);
 
   group('the switch', () {
@@ -180,7 +195,9 @@ void main() {
       // Logging out on purpose doesn't pop the prompt up again.
       expect(bio.reasons, ['Unlock Nurtura']);
       expect(find.text('Log in with fingerprint'), findsOneWidget);
-      expect(find.text(wanjiru), findsOneWidget);
+      // Partly hidden: anyone holding the phone can see this screen.
+      expect(find.text('w***@example.com'), findsOneWidget);
+      expect(find.text(wanjiru), findsNothing);
 
       await tapVisible(tester, find.byKey(const Key('fingerprintLoginButton')));
       expect(bio.reasons.last, 'Log in to Nurtura');
