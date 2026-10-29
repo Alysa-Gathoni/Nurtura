@@ -180,6 +180,12 @@ class AuthState extends ChangeNotifier {
     );
   }
 
+  /// Changes the password and keeps this phone signed in with the new
+  /// token (#142); other phones are signed out by the server.
+  Future<void> changePassword(String current, String newPassword) async {
+    await _signIn(await _auth.changePassword(current, newPassword));
+  }
+
   /// Back to the login form ("use a different account").
   void cancelChallenge() => _setSignedOut();
 

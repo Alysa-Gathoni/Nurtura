@@ -18,6 +18,9 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     # Whether the app must show the privacy notice before anything else (#136).
     privacy_consent_required = serializers.SerializerMethodField()
+    # False for an account made with Google (#130), which signs in without
+    # one; the app then offers "Set a password" (#142).
+    has_password = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -30,11 +33,15 @@ class UserSerializer(serializers.ModelSerializer):
             "role",
             "privacy_consent_required",
             "privacy_agreed_at",
+            "has_password",
         ]
         read_only_fields = fields
 
     def get_privacy_consent_required(self, user):
         return privacy.consent_required(user)
+
+    def get_has_password(self, user):
+        return user.has_usable_password()
 
 
 class RegisterSerializer(serializers.ModelSerializer):
