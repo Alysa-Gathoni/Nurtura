@@ -42,6 +42,9 @@ class User(AbstractUser):
         ADMINISTRATOR = "administrator", "Administrator"
 
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.CAREGIVER)
+    # The privacy notice version the user agreed to, and when (#136).
+    privacy_notice_version = models.CharField(max_length=20, blank=True)
+    privacy_agreed_at = models.DateTimeField(null=True, blank=True)
 
     objects = NurturaUserManager()
 

@@ -1,4 +1,5 @@
 import '../models/app_user.dart';
+import '../models/privacy_notice.dart';
 import 'api_client.dart';
 
 class AuthResult {
@@ -246,6 +247,17 @@ class AuthService {
   }
 
   Future<void> logout() => _api.post('/api/auth/logout/');
+
+  /// The current privacy notice (#136).
+  Future<PrivacyNotice> privacyNotice() async => PrivacyNotice.fromJson(
+    await _api.get('/api/privacy-notice/') as Map<String, dynamic>,
+  );
+
+  /// Records agreement to the notice [version]; returns the updated user.
+  Future<AppUser> agreeToPrivacy(String version) async => AppUser.fromJson(
+    await _api.post('/api/auth/privacy-consent/', {'version': version})
+        as Map<String, dynamic>,
+  );
 
   /// Deletes the signed-in account and everything it owns (#134).
   ///

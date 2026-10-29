@@ -13,9 +13,9 @@ from rest_framework.views import APIView
 
 from activities.choices import Domain
 
-from . import google_sign_in, password_reset, two_factor
+from . import google_sign_in, password_reset, privacy, two_factor
 from .models import LoginChallenge, ReferenceMilestone, User
-from .permissions import IsCaregiver
+from .permissions import HasPrivacyConsent, IsCaregiver
 from .serializers import (
     ChildProfileSerializer,
     DevelopmentalMilestoneSerializer,
@@ -292,6 +292,37 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class PrivacyNoticeView(APIView):
+    """The current privacy notice (#136). Public, so it can be read first."""
+
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
+
+    def get(self, request):
+        return Response(privacy.notice())
+
+
+class PrivacyConsentView(APIView):
+    """Record that the signed-in user agreed to the privacy notice (#136).
+
+    `version` must be the current one, so nobody agrees to wording they
+    weren't shown. Returns the user, as /auth/me/ does.
+    """
+
+    def post(self, request):
+        if request.data.get("version") != privacy.NOTICE_VERSION:
+            raise ValidationError(
+                {
+                    "version": [
+                        "The privacy notice has changed. Please read the new "
+                        "version."
+                    ]
+                }
+            )
+        privacy.record_consent(request.user)
+        return Response(UserSerializer(request.user).data)
+
+
 class MeView(generics.RetrieveAPIView):
     """The signed-in user; a caregiver can also delete their account (#134).
 
@@ -338,10 +369,14 @@ class MeView(generics.RetrieveAPIView):
 
 
 class ChildProfileViewSet(viewsets.ModelViewSet):
-    """Caregivers manage only their own children's profiles."""
+    """Caregivers manage only their own children's profiles.
+
+    Adding a child, changing one or recording a milestone needs the current
+    privacy notice agreed (#136); reading and deleting don't.
+    """
 
     serializer_class = ChildProfileSerializer
-    permission_classes = [IsCaregiver]
+    permission_classes = [IsCaregiver, HasPrivacyConsent]
 
     def get_queryset(self):
         return self.request.user.children.all()
