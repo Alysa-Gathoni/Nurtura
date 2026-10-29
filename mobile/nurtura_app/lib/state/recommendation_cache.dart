@@ -10,6 +10,9 @@ import '../models/recommendation.dart';
 abstract class RecommendationCache {
   Future<CachedBatch?> read(int childId);
   Future<void> write(int childId, RecommendationBatch batch);
+
+  /// Forgets one child's batch (the child was deleted).
+  Future<void> remove(int childId);
   Future<void> clear();
 }
 
@@ -54,6 +57,10 @@ class SharedPrefsRecommendationCache implements RecommendationCache {
   }
 
   @override
+  Future<void> remove(int childId) async =>
+      (await _prefs).remove('$_prefix$childId');
+
+  @override
   Future<void> clear() async {
     final prefs = await _prefs;
     for (final key in prefs.getKeys().where((k) => k.startsWith(_prefix))) {
@@ -72,6 +79,9 @@ class MemoryRecommendationCache implements RecommendationCache {
   @override
   Future<void> write(int childId, RecommendationBatch batch) async =>
       entries[childId] = CachedBatch(batch, DateTime.now());
+
+  @override
+  Future<void> remove(int childId) async => entries.remove(childId);
 
   @override
   Future<void> clear() async => entries.clear();
