@@ -50,7 +50,7 @@ void main() {
       await tester.scrollUntilVisible(source, 200);
       expect(
         tester.widget<Text>(source).data,
-        'Based on guidance from CDC: https://www.cdc.gov/act-early/',
+        'Based on guidance from CDC (cdc.gov).',
       );
     });
 
