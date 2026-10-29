@@ -9,6 +9,7 @@ import '../services/auth_service.dart';
 import '../state/auth_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import '../widgets/password_strength_meter.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/buttons.dart';
@@ -337,7 +338,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             AppTextField(
               key: const Key('newPasswordField'),
               label: 'New password',
-              hint: 'At least 8 characters',
+              hint: "A phrase you'll remember",
               controller: _password,
               prefixIcon: Icons.lock_outline_rounded,
               obscureText: !_showPassword,
@@ -348,6 +349,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               validator: (v) =>
                   (v == null || v.isEmpty) ? 'Enter a new password.' : null,
             ),
+            PasswordStrengthMeter(password: _password, email: _email),
             const SizedBox(height: 14),
             AppTextField(
               key: const Key('confirmNewPasswordField'),

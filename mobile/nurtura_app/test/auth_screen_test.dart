@@ -29,6 +29,8 @@ Future<void> fillAndSubmit(
       confirm ?? password,
     );
   }
+  // Let the strength meter finish opening first: it moves the button.
+  await tester.pumpAndSettle();
   await tester.ensureVisible(find.byKey(const Key('submitButton')));
   await tester.pumpAndSettle();
   await tester.tap(find.byKey(const Key('submitButton')));
@@ -201,6 +203,8 @@ void main() {
 
     await tester.enterText(find.byKey(const Key('emailField')).last, 'a@b.co');
     await tester.enterText(find.byKey(const Key('passwordField')).last, 'pw');
+    await tester.ensureVisible(find.byKey(const Key('submitButton')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('submitButton')));
     await tester.pump();
     expect(find.byKey(const Key('buttonSpinner')), findsOneWidget);
