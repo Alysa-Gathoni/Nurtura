@@ -1,6 +1,6 @@
 # Known limitations and outstanding defects
 
-> **Last updated: 2026-10-19,** for `main` at `cddefe5`. Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
+> **Last updated: 2026-10-29.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
 
 ## Outstanding defects
 
@@ -34,7 +34,8 @@ None known. Every defect found so far has been fixed and is recorded with its co
 - **The server address is built into the app** at build time (`--dart-define=API_BASE_URL`). A new address means rebuilding the app.
 - **Android debug builds only.** No signed release build yet; iOS hasn't been run (the app has been tested on an Android phone and in Chrome).
 - **Offline use is partial.** The last recommendations and the child list are kept on the phone and shown offline. Recording milestones, Progress, and marking done or rating need a connection, and actions taken offline aren't queued.
-- **Deleting an account is immediate and final** (#134). A caregiver deletes their account, with all their children's data, from the Family tab after confirming their password (or, for an account made with Google that has no password, its email); there is no grace period or undo, and administrators are removed in the Django admin instead. Children can be edited or deleted from the Family tab. A forgotten password can be reset in the app with an emailed code (#126).
+- **Deleting an account is immediate and final** (#134). A caregiver deletes their account, with all their children's data, from the Family tab after confirming their password (or, for an account made with Google that has no password, its email); there is no grace period or undo, and administrators are removed in the Django admin instead. Children can be edited or deleted from the Family tab. A forgotten password can be reset in the app with an emailed code (#126), and a signed-in caregiver or administrator can change theirs from Family or the Account tab; an account made with Google sets one with an emailed code (#142).
+- **The email address can't be changed** in the app. Doing it safely needs a code sent to the new address first, so nobody can take over an account by typing someone else's email. A caregiver can delete the account and register again, or ask the privacy contact (the Data Protection Act's right to correction); an administrator's email is changed in the Django admin.
 - **Continue with Google is Android only** (#130). Chrome and iOS need their own OAuth clients and set-up. Each signing key (every laptop's debug key, and the release key) needs its SHA-1 registered, and while the consent screen is in *Testing* only listed test users (up to 100) can use it.
 - **The privacy notice gates only a child's own data** (#136). Until a caregiver agrees to the current notice, adding or changing a child and recording milestones are refused; generating ideas, marking done and rating for children who already exist are not. Accounts made before the notice are asked at their next sign-in. The notice says where to complain (the Data Protection Commissioner) but hasn't been reviewed by a lawyer, and the contact address comes from `PRIVACY_CONTACT`.
 - **Registration says when an email is already registered,** so an address's account can be confirmed there, although the password-reset request deliberately doesn't say.
