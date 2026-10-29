@@ -45,13 +45,10 @@ void main() {
   });
 
   group('on the sign-in screen (#140)', () {
-    testWidgets('greets per mode, and promises what the app gives', (
-      tester,
-    ) async {
+    testWidgets('greets per mode', (tester) async {
       await pumpApp(tester, FakeBackend((_) async => json({})));
       expect(find.text('Welcome back'), findsOneWidget);
       expect(find.byKey(const Key('authVillage')), findsOneWidget);
-      expect(find.byKey(const Key('authPromises')), findsOneWidget);
 
       await tester.tap(find.byKey(const Key('toggle_Register')));
       await tester.pumpAndSettle();

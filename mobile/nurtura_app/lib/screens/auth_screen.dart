@@ -272,8 +272,6 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 18),
-                        const _Promises(),
                       ],
                     ),
                   ),
@@ -360,53 +358,6 @@ class _Greeting extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// Three short promises under the form: what a caregiver gets.
-class _Promises extends StatelessWidget {
-  const _Promises();
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.palette;
-    const items = [
-      (Icons.wb_sunny_rounded, 'Ideas for today'),
-      (Icons.lightbulb_rounded, 'A reason for each'),
-      (Icons.verified_rounded, 'CDC & WHO guidance'),
-    ];
-    return Row(
-      key: const Key('authPromises'),
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (final (icon, label) in items)
-          Expanded(
-            child: Column(
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: p.primarySoft,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(icon, size: 18, color: p.primary),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: AppText.nunito(
-                    size: 12.5,
-                    weight: FontWeight.w700,
-                    color: p.mutedText,
-                  ),
-                ),
-              ],
-            ),
-          ),
-      ],
     );
   }
 }
