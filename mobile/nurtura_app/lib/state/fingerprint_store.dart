@@ -6,6 +6,15 @@ class SavedFingerprint {
 
   final String email;
 
+  /// The email partly hidden, "a***@example.com", for the login screen,
+  /// which anyone holding the phone can see. Same rule as the backend's
+  /// `two_factor.mask_email`.
+  String get maskedEmail {
+    final at = email.indexOf('@');
+    if (at < 1) return 'your account';
+    return '${email[0]}***${email.substring(at)}';
+  }
+
   /// From the server; sent back only after the phone's fingerprint check.
   final String key;
 }
