@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -6,10 +8,12 @@ import '../services/api_client.dart';
 import '../state/auth_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import '../theme/domain_style.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_text_field.dart';
 import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
+import '../widgets/password_strength_meter.dart';
 import '../widgets/segmented_toggle.dart';
 import '../widgets/village.dart';
 import '../widgets/google_button.dart';
@@ -129,6 +133,8 @@ class _AuthScreenState extends State<AuthScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
+                                  _Greeting(registering: _registering),
+                                  const SizedBox(height: 16),
                                   SegmentedToggle(
                                     options: const ['Log in', 'Register'],
                                     selected: _registering ? 1 : 0,
@@ -155,7 +161,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     key: const Key('passwordField'),
                                     label: 'Password',
                                     hint: _registering
-                                        ? 'At least 8 characters'
+                                        ? "A phrase you'll remember"
                                         : 'Your password',
                                     controller: _password,
                                     prefixIcon: Icons.lock_outline_rounded,
@@ -191,6 +197,10 @@ class _AuthScreenState extends State<AuthScreen> {
                                     ),
                                   ),
                                   if (_registering) ...[
+                                    PasswordStrengthMeter(
+                                      password: _password,
+                                      email: _email,
+                                    ),
                                     const SizedBox(height: 14),
                                     AppTextField(
                                       key: const Key('confirmField'),
@@ -262,6 +272,8 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 18),
+                        const _Promises(),
                       ],
                     ),
                   ),
@@ -311,9 +323,131 @@ class _OrDivider extends StatelessWidget {
   }
 }
 
-/// The brand on a watercolour wash, with the proverb Nurtura is built on.
-class _Hero extends StatelessWidget {
+/// "Welcome back" or "Join the village", with a line about the app.
+class _Greeting extends StatelessWidget {
+  const _Greeting({required this.registering});
+
+  final bool registering;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final (title, line) = registering
+        ? (
+            'Join the village',
+            'Simple, evidence-based play ideas from pregnancy to age 3.',
+          )
+        : ('Welcome back', 'Pick up where you left off with your little one.');
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 220),
+      child: Column(
+        key: ValueKey(registering),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            key: const Key('authGreeting'),
+            style: AppText.quicksand(size: 24, color: p.ink),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            line,
+            style: AppText.nunito(
+              size: 14.5,
+              weight: FontWeight.w600,
+              color: p.mutedText,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Three short promises under the form: what a caregiver gets.
+class _Promises extends StatelessWidget {
+  const _Promises();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    const items = [
+      (Icons.wb_sunny_rounded, 'Ideas for today'),
+      (Icons.lightbulb_rounded, 'A reason for each'),
+      (Icons.verified_rounded, 'CDC & WHO guidance'),
+    ];
+    return Row(
+      key: const Key('authPromises'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final (icon, label) in items)
+          Expanded(
+            child: Column(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: p.primarySoft,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, size: 18, color: p.primary),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: AppText.nunito(
+                    size: 12.5,
+                    weight: FontWeight.w700,
+                    color: p.mutedText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// The brand on a watercolour wash: the five developmental areas pop out
+/// around the mark (#140), then the proverb Nurtura is built on. A one-off
+/// entrance, skipped when the phone asks for fewer animations.
+class _Hero extends StatefulWidget {
   const _Hero();
+
+  @override
+  State<_Hero> createState() => _HeroState();
+}
+
+class _HeroState extends State<_Hero> with SingleTickerProviderStateMixin {
+  late final _entrance = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1300),
+  );
+
+  /// Where each area sits, along the top of an ellipse around the mark.
+  static const _angles = [170.0, 130.0, 90.0, 50.0, 10.0];
+
+  /// The mark sits a little below the middle, so the areas arch over it.
+  static const _markOffset = Offset(0, 20);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.of(context).disableAnimations) {
+      _entrance.value = 1;
+    } else if (_entrance.isDismissed) {
+      _entrance.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _entrance.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -323,13 +457,37 @@ class _Hero extends StatelessWidget {
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 36, 24, 64),
+          padding: const EdgeInsets.fromLTRB(24, 6, 24, 54),
           child: Column(
             children: [
-              const VillageMark(size: 92),
-              const SizedBox(height: 14),
-              Text('Nurtura', style: AppText.quicksand(size: 38, color: p.ink)),
-              const SizedBox(height: 4),
+              SizedBox(
+                key: const Key('authVillage'),
+                width: 300,
+                height: 150,
+                child: AnimatedBuilder(
+                  animation: _entrance,
+                  builder: (context, _) => Stack(
+                    alignment: Alignment.center,
+                    clipBehavior: Clip.none,
+                    children: [
+                      for (var i = 0; i < developmentalDomains.length; i++)
+                        _area(context, i),
+                      Transform.translate(
+                        offset: _markOffset,
+                        child: Transform.scale(
+                          scale: Curves.easeOutBack.transform(
+                            const Interval(0, 0.45).transform(_entrance.value),
+                          ),
+                          child: const VillageMark(size: 84),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text('Nurtura', style: AppText.quicksand(size: 34, color: p.ink)),
+              const SizedBox(height: 2),
               Text(
                 'It takes a village to raise a child.',
                 textAlign: TextAlign.center,
@@ -341,6 +499,44 @@ class _Hero extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  /// One area's icon, flying out from behind the mark to its place.
+  Widget _area(BuildContext context, int i) {
+    final p = context.palette;
+    final style = DomainStyle.of(developmentalDomains[i], p);
+    final start = 0.3 + i * 0.1;
+    final t = Curves.easeOutBack.transform(
+      Interval(start, math.min(start + 0.4, 1)).transform(_entrance.value),
+    );
+    final rad = _angles[i] * math.pi / 180;
+    final target = Offset(
+      110 * math.cos(rad),
+      _markOffset.dy - 70 * math.sin(rad),
+    );
+    return Transform.translate(
+      offset: Offset.lerp(_markOffset, target, t)!,
+      child: Transform.scale(
+        scale: t.clamp(0.0, 1.2),
+        child: Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: style.background,
+            shape: BoxShape.circle,
+            border: Border.all(color: p.card, width: 3),
+            boxShadow: [
+              BoxShadow(
+                color: style.color.withValues(alpha: 0.25),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Icon(style.icon, size: 20, color: style.color),
         ),
       ),
     );
