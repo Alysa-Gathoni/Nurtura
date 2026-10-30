@@ -2,7 +2,7 @@
 
 ## `plain_aims_draft.csv`: caregiver wording of each activity's aim (#70)
 
-These are drafts of `plain_aim` for the 54 Published activities. In an explanation, `plain_aim` completes the sentence **"Its aim is to …"**. Nothing has been loaded: every activity's `plain_aim` is blank until the drafts are approved, so explanations show no aim sentence yet.
+These are drafts of `plain_aim` for the 54 Published activities (53 rows since `ACT-0021` was removed in #160). In an explanation, `plain_aim` completes the sentence **"Its aim is to …"**. Nothing has been loaded: every activity's `plain_aim` is blank until the drafts are approved, so explanations show no aim sentence yet.
 
 Each draft:
 - completes "Its aim is to …" in the **second person** ("your baby", "your child", "you");
@@ -25,7 +25,7 @@ Each draft:
 
 Once the sheet is reviewed, the approved rows (with any reviewer edits) will be loaded in a separate change. The model's validator runs again on load: at most 20 words, a lower-case start and no final full stop.
 
-## `plain_aims_batch5_draft.csv`: aims for the 200 new activities (#156)
+## `plain_aims_batch5_draft.csv`: aims for the batch 5 activities (#156)
 
 Drafts of `plain_aim` for `ACT-0055`–`ACT-0254`, in the same format and under the same rules as `plain_aims_draft.csv`: second person, at most 20 words (all are within it), no technical terms, British spelling, and no claim beyond the activity's `developmental_goal`. Pregnancy aims address the parent ("help you…") where the activity is about the parent's own health. Nothing is loaded until the reviewer marks rows `approved`.
 
