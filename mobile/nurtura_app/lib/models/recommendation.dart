@@ -185,12 +185,39 @@ class Recommendation {
   );
 }
 
+/// A gentle suggestion to mention due "Not yet" milestones at the next
+/// clinic visit (#161). Never a diagnosis, and never part of the ranking.
+class Referral {
+  const Referral({required this.message, required this.milestones});
+
+  factory Referral.fromJson(Map<String, dynamic> json) => Referral(
+    message: json['message'] as String,
+    milestones: [
+      for (final m in json['milestones'] as List? ?? const [])
+        (m as Map<String, dynamic>)['description'] as String,
+    ],
+  );
+
+  final String message;
+
+  /// Descriptions of the due milestones marked "Not yet".
+  final List<String> milestones;
+
+  Map<String, dynamic> toJson() => {
+    'message': message,
+    'milestones': [
+      for (final m in milestones) {'description': m},
+    ],
+  };
+}
+
 /// The newest batch of recommendations for a child (possibly empty).
 class RecommendationBatch {
   const RecommendationBatch({
     required this.batch,
     required this.generatedAt,
     required this.items,
+    this.referral,
   });
 
   factory RecommendationBatch.fromJson(Map<String, dynamic> json) {
@@ -199,16 +226,19 @@ class RecommendationBatch {
         Recommendation.fromJson(r as Map<String, dynamic>),
     ]..sort((a, b) => a.position.compareTo(b.position));
     final generated = json['generated_at'] as String?;
+    final referral = json['referral'] as Map<String, dynamic>?;
     return RecommendationBatch(
       batch: json['batch'] as String?,
       generatedAt: generated == null ? null : DateTime.parse(generated),
       items: items,
+      referral: referral == null ? null : Referral.fromJson(referral),
     );
   }
 
   final String? batch;
   final DateTime? generatedAt;
   final List<Recommendation> items;
+  final Referral? referral;
 
   bool get isEmpty => items.isEmpty;
 
@@ -217,11 +247,13 @@ class RecommendationBatch {
     batch: batch,
     generatedAt: generatedAt,
     items: [for (final r in items) r.id == updated.id ? updated : r],
+    referral: referral,
   );
 
   Map<String, dynamic> toJson() => {
     'batch': batch,
     'generated_at': generatedAt?.toIso8601String(),
     'recommendations': [for (final r in items) r.toJson()],
+    'referral': referral?.toJson(),
   };
 }

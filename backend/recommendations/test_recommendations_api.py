@@ -362,8 +362,9 @@ class GenerateTests(RecommendationAPITestCase):
                 self.assertEqual([c["activity_id"] for c in cards], expected)
 
     def test_get_reads_only(self):
+        body = self.get().json()
         self.assertEqual(
-            self.get().json(),
+            {k: v for k, v in body.items() if k != "referral"},
             {"batch": None, "generated_at": None, "recommendations": []},
         )
         self.assertFalse(Recommendation.objects.exists())
@@ -440,6 +441,24 @@ class GenerateTests(RecommendationAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()["recommendations"], [])
         self.assertFalse(Recommendation.objects.exists())
+
+
+class ReferralAPITests(RecommendationAPITestCase):
+    """The clinic-visit referral (#161) rides along with the batch."""
+
+    def test_due_not_yet_gives_referral_on_get_and_post(self):
+        # H03: 2½ months, "holds head up" (due by 2 months) is Not yet.
+        for response in (self.get(), self.post(), self.get()):
+            referral = response.json()["referral"]
+            self.assertIn("next clinic visit", referral["message"])
+            self.assertEqual(
+                [m["expected_age_months"] for m in referral["milestones"]], [2.0]
+            )
+
+    def test_no_due_not_yet_gives_null(self):
+        self.child.milestones.filter(status="not_yet").update(status="achieved")
+        self.assertIsNone(self.get().json()["referral"])
+        self.assertIsNone(self.post().json()["referral"])
 
 
 @unittest.skipUnless(
