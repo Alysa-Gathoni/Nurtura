@@ -24,3 +24,7 @@ Each draft:
 | `reviewer_edit` | **For the reviewer:** your own wording, if you'd rather. It replaces the draft when loaded. |
 
 Once the sheet is reviewed, the approved rows (with any reviewer edits) will be loaded in a separate change. The model's validator runs again on load: at most 20 words, a lower-case start and no final full stop.
+
+## `plain_aims_batch5_draft.csv`: aims for the 200 new activities (#156)
+
+Drafts of `plain_aim` for `ACT-0055`–`ACT-0254`, in the same format and under the same rules as `plain_aims_draft.csv`: second person, at most 20 words (all are within it), no technical terms, British spelling, and no claim beyond the activity's `developmental_goal`. Pregnancy aims address the parent ("help you…") where the activity is about the parent's own health. Nothing is loaded until the reviewer marks rows `approved`.
