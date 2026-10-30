@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -207,11 +208,17 @@ GOOGLE_OAUTH_CLIENT_IDS = [
 ]
 
 
+# Log-in tokens expire this long after they are issued (#162). The same
+# length as a trusted device for two-step log-in.
+TOKEN_LIFETIME = timedelta(days=int(os.getenv("TOKEN_LIFETIME_DAYS", "30")))
+
+
 # Django REST Framework
 REST_FRAMEWORK = {
     # Token auth for the mobile app; session auth for the browsable API.
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
+        # DRF tokens that stop working after TOKEN_LIFETIME (#162).
+        "profiles.authentication.ExpiringTokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
     # Everything requires login unless a view opts out (e.g. registration).
