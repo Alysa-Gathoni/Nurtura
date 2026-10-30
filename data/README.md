@@ -81,8 +81,34 @@ Each rejected row is reported with its file, line number and every problem found
 | `raw/activities_batch2.csv` | 16 (`ACT-0009`–`ACT-0024`) | Mixed sources (CDC, Pathways.org, Montessori, UNICEF, WHO); no `source_url` yet. |
 | `raw/activities_batch3.csv` | 14 (`ACT-0025`–`ACT-0038`) | All CDC, with `source_url` pointing to the CDC *Milestone Moments* booklet. |
 | `raw/activities_batch4.csv` | 16 (`ACT-0039`–`ACT-0054`) | 11 Socio-Emotional, 6 Prenatal, plus Language, Sensory and Cognitive, filling the gaps found by the retrieval preview. Sources and `source_url` values as in the CSV. |
+| `raw/activities_batch5.csv` | 200 (`ACT-0055`–`ACT-0254`) | Brings every age and area to at least 7 activities, including pregnancy Cognitive and Motor (#156). Each follows a specific recommendation on its `source_url`, written in our own words. All `Draft` until reviewed. |
 
 Every activity is loaded as `Draft` and must pass admin review, including checking its source, before it is published.
+
+### Batch 5 sources (#156, 30 Oct 2026)
+
+Each of the 200 activities follows a specific recommendation on one of these pages, all opened and read on 30 Oct 2026. Nothing is copied: the wording, materials and Kenyan notes are ours.
+
+| Source | Pages | Activities |
+|---|---|---|
+| CDC | *Learn the Signs. Act Early.* milestone pages at 2, 4, 6, 9 and 15 months and 1, 18, 2, 30 and 3 years ("Tips and activities") | 100 |
+| Pathways.org | Sensory activities 0–18 months; household-item activities; tummy time guide; comforting a crying baby; activities to encourage walking; toddler coordination skills; animal walks; water play; Cup in the Bath; Monkey See, Monkey Do; Baby See, Baby Do | 51 |
+| UNICEF | WHO/UNICEF *Care for Child Development* counselling cards; UNICEF Parenting: what to eat when pregnant, second and third trimester guides, how music affects your baby's brain | 32 |
+| WHO | *Nurturing Care Practice Guide* (antenatal care); physical activity in pregnancy; daily iron and folic acid in pregnancy; nutrition counselling during pregnancy | 17 |
+
+Pregnancy activities are about the parent's actions that support the baby: nutrition for the baby's brain and spine, a smoke-free home, safe physical activity at a talking pace, rest, support, and talking, singing and touch. They give no medical doses: supplements are taken "as the health worker advises".
+
+| Age | Cognitive | Language | Motor | Sensory | Socio-Emotional | Total |
+|---|---|---|---|---|---|---|
+| Prenatal | 8 | 7 | 8 | 7 | 7 | 37 |
+| 0–3 months | 7 | 7 | 7 | 7 | 8 | 36 |
+| 3–6 months | 7 | 7 | 7 | 7 | 7 | 35 |
+| 6–12 months | 8 | 7 | 7 | 7 | 7 | 36 |
+| 12–18 months | 7 | 8 | 7 | 7 | 7 | 36 |
+| 18–24 months | 7 | 7 | 7 | 7 | 7 | 35 |
+| 24–36 months | 8 | 8 | 8 | 8 | 7 | 39 |
+
+Counts are for all 254 activities (54 Published and 200 Draft).
 
 ## Guideline milestone catalogue
 
