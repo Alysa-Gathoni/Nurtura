@@ -1,6 +1,6 @@
 # Known limitations and outstanding defects
 
-> **Last updated: 2026-10-29.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
+> **Last updated: 2026-10-30.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
 
 ## Outstanding defects
 
@@ -23,7 +23,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 
 ## Content
 
-- **54 Published activities.** Coverage is uneven: Socio-Emotional 17, Language 12, Cognitive 10, Motor 8, Sensory 7, and 8 of them for pregnancy. Some age and area combinations have nothing. For example, there is no Sensory activity for 18–24 months, which made one held-out child (H17) a content-gap case.
+- **54 Published activities, 200 more awaiting review** (#156). The 54 Published ones are uneven: Socio-Emotional 17, Language 12, Cognitive 10, Motor 8, Sensory 7, and 8 of them for pregnancy; some age and area combinations have nothing (no Sensory activity for 18–24 months made one held-out child, H17, a content-gap case). The 200 new activities bring every combination to at least 7, including pregnancy Cognitive and Motor, but they are Draft: none is recommended until an administrator checks it against its source and publishes it. Publishing them changes the evaluation's activity fingerprint, as planned (the 25 Oct unfreeze decision).
 - **Sensory has no guideline milestones.** The CDC and WHO checklists have no Sensory category, so Sensory priority comes only from caregiver concerns and interests.
 - **108 of 133 catalogue milestones are not yet verified** against the source documents (the 6 WHO ones and 19 CDC ones used in the evaluation are).
 - **English only.** A language toggle (NFR-16) is undecided; if it isn't built, English-only is a stated limitation.
