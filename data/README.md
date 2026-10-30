@@ -82,6 +82,7 @@ Each rejected row is reported with its file, line number and every problem found
 | `raw/activities_batch3.csv` | 14 (`ACT-0025`–`ACT-0038`) | All CDC, with `source_url` pointing to the CDC *Milestone Moments* booklet. |
 | `raw/activities_batch4.csv` | 16 (`ACT-0039`–`ACT-0054`) | 11 Socio-Emotional, 6 Prenatal, plus Language, Sensory and Cognitive, filling the gaps found by the retrieval preview. Sources and `source_url` values as in the CSV. |
 | `raw/activities_batch5.csv` | 200 (`ACT-0055`–`ACT-0254`) | Brings every age and area to at least 7 activities, including pregnancy Cognitive and Motor (#156). Each follows a specific recommendation on its `source_url`, written in our own words. All `Draft` until reviewed. |
+| `raw/activities_batch6.csv` | 200 (`ACT-0255`–`ACT-0454`) | A second large batch (#158): 26 for pregnancy and 29 for each age from birth to 36 months. Each follows one specific page on its `source_url`, written in our own words. All `Draft` until reviewed. |
 
 Every activity is loaded as `Draft` and must pass admin review, including checking its source, before it is published.
 
@@ -111,17 +112,31 @@ Each of the 200 activities follows a specific recommendation on one of these pag
 
 Pregnancy activities are about the parent's actions that support the baby: nutrition for the baby's brain and spine, a smoke-free home, safe physical activity at a talking pace, rest, support, and talking, singing and touch. They give no medical doses: supplements are taken "as the health worker advises".
 
+### Batch 6 sources (#158, 30 Oct 2026)
+
+Each of the 200 activities follows a specific recommendation on one of these pages, all opened and read on 30 Oct 2026. Nothing is copied: the wording, materials and Kenyan notes are ours.
+
+| Source | Pages | Activities |
+|---|---|---|
+| Pathways.org | 126 single activity pages under `pathways.org/activities/…`, one per activity, each naming its age band | 126 |
+| CDC | *Steps to a Healthier Me and Baby-to-Be* planner (13); milestone pages at 2 years, 30 months and 3 years (16); *Positive Parenting Tips* for infants, toddlers 1–2 and toddlers 2–3 (9); physical activity in pregnancy (3) | 41 |
+| UNICEF | WHO/UNICEF *Care for Child Development* participant manual (14); 21 learning activities for babies and toddlers (11); what to avoid when pregnant (5); playtime anytime (3) | 33 |
+
+Pathways.org activities sit in the age band the page gives (its 0–2 and 2–4 month bands map to 0–3 months, 4–6 to 3–6, 6–9 and 9–12 to 6–12, 12–15 and 15–18 to 12–18). No Pathways activity was moved to an older band. Pregnancy activities give no medical advice beyond the source: they point the parent to the health worker.
+
+Names were checked against batches 1 to 5, so there are no repeats. CDC pages refuse automated link checks (HTTP 403) but open normally in a browser.
+
 | Age | Cognitive | Language | Motor | Sensory | Socio-Emotional | Total |
 |---|---|---|---|---|---|---|
-| Prenatal | 8 | 7 | 8 | 7 | 7 | 37 |
-| 0–3 months | 7 | 7 | 7 | 7 | 8 | 36 |
-| 3–6 months | 7 | 7 | 7 | 7 | 7 | 35 |
-| 6–12 months | 8 | 7 | 7 | 7 | 7 | 36 |
-| 12–18 months | 7 | 8 | 7 | 7 | 7 | 36 |
-| 18–24 months | 7 | 7 | 7 | 7 | 7 | 35 |
-| 24–36 months | 8 | 8 | 8 | 8 | 7 | 39 |
+| Prenatal | 16 | 11 | 14 | 10 | 12 | 63 |
+| 0–3 months | 13 | 13 | 13 | 13 | 13 | 65 |
+| 3–6 months | 13 | 13 | 13 | 13 | 12 | 64 |
+| 6–12 months | 14 | 13 | 13 | 13 | 12 | 65 |
+| 12–18 months | 13 | 14 | 13 | 13 | 12 | 65 |
+| 18–24 months | 13 | 13 | 13 | 13 | 12 | 64 |
+| 24–36 months | 14 | 14 | 14 | 13 | 13 | 68 |
 
-Counts are for all 254 activities (54 Published and 200 Draft).
+Counts are for all 454 activities: 54 Published and 400 Draft.
 
 ## Guideline milestone catalogue
 
