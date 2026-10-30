@@ -77,13 +77,26 @@ Each rejected row is reported with its file, line number and every problem found
 
 | File | Rows | Notes |
 |---|---|---|
-| `raw/activities_batch1.csv` | 8 (`ACT-0001`–`ACT-0008`) | Initial sample. Descriptions are original wording. The `source` tag names the organisation whose guidance covers the activity type; the specific guidance documents still need to be cited (no `source_url`). |
-| `raw/activities_batch2.csv` | 16 (`ACT-0009`–`ACT-0024`) | Mixed sources (CDC, Pathways.org, Montessori, UNICEF, WHO); no `source_url` yet. |
+| `raw/activities_batch1.csv` | 8 (`ACT-0001`–`ACT-0008`) | Initial sample. Descriptions are original wording. Each has a `source_url` to the specific guidance (#154). |
+| `raw/activities_batch2.csv` | 16 (`ACT-0009`–`ACT-0024`) | Mixed sources (CDC, Pathways.org, UNICEF, WHO), each with a `source_url` (#154). |
 | `raw/activities_batch3.csv` | 14 (`ACT-0025`–`ACT-0038`) | All CDC, with `source_url` pointing to the CDC *Milestone Moments* booklet. |
 | `raw/activities_batch4.csv` | 16 (`ACT-0039`–`ACT-0054`) | 11 Socio-Emotional, 6 Prenatal, plus Language, Sensory and Cognitive, filling the gaps found by the retrieval preview. Sources and `source_url` values as in the CSV. |
 | `raw/activities_batch5.csv` | 200 (`ACT-0055`–`ACT-0254`) | Brings every age and area to at least 7 activities, including pregnancy Cognitive and Motor (#156). Each follows a specific recommendation on its `source_url`, written in our own words. All `Draft` until reviewed. |
 
 Every activity is loaded as `Draft` and must pass admin review, including checking its source, before it is published.
+
+### Source links added (#154, 30 Oct 2026)
+
+`ACT-0001`–`ACT-0024` had a source organisation but no link. Each now links to the page or document its content follows, opened and checked on 30 Oct 2026:
+
+| Link | Organisation | Activities |
+|---|---|---|
+| CDC *Learn the Signs. Act Early.* milestone pages (`cdc.gov/act-early/milestones/<age>.html`, "Tips and activities") | CDC | 0003, 0005, 0008, 0010, 0012, 0016, 0018, 0019, 0021, 0022, 0023, 0024 |
+| WHO/UNICEF *Care for Child Development* counselling cards (`unicef.org/media/91181/file/4-CCD-Counselling-Cards.pdf`) | WHO or UNICEF | 0004, 0007, 0013, 0020 |
+| WHO *Nurturing Care Practice Guide*, antenatal section (`nurturing-care.org/.../PG-handout1.pdf`) | WHO | 0002, 0009 |
+| Pathways.org activity and guidance pages | Pathways.org | 0001, 0006, 0011, 0014, 0015, 0017 |
+
+Where no page from the tagged organisation covered the activity, the `source` was corrected to the organisation whose guidance does: 0002 UNICEF → WHO; 0007 Montessori → WHO; 0008 WHO → CDC; 0012, 0016, 0019, 0022 Montessori → CDC; 0015 CDC → Pathways.org; 0021 and 0024 Pathways.org → CDC. Pathways.org advises supporting a new walker's trunk rather than holding their hands, while CDC suggests letting the baby hold your hands, so 0024 follows CDC. Re-loading these returns them to Draft for re-review.
 
 ### Batch 5 sources (#156, 30 Oct 2026)
 
