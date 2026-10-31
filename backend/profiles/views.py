@@ -14,6 +14,7 @@ from rest_framework.views import APIView
 from activities.choices import Domain
 
 from . import fingerprint, google_sign_in, password_reset, privacy, two_factor
+from .authentication import issue_token
 from .models import LoginChallenge, ReferenceMilestone, User
 from .permissions import HasPrivacyConsent, IsCaregiver
 from .serializers import (
@@ -28,7 +29,7 @@ from .serializers import (
 
 
 def _signed_in(user, device_trusted_until=None):
-    token, _ = Token.objects.get_or_create(user=user)
+    token = issue_token(user)
     return {
         "token": token.key,
         "user": UserSerializer(user).data,

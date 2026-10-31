@@ -139,7 +139,7 @@ Create the first administrator with `python manage.py createsuperuser`; it is gi
 
 ### API
 
-All endpoints are under `/api/` and, apart from registration and the sign-in steps, need an `Authorization: Token <token>` header. Caregivers only ever reach their own children; another caregiver's child is a 404, and administrators get 403.
+All endpoints are under `/api/` and, apart from registration and the sign-in steps, need an `Authorization: Token <token>` header. A token works for 30 days from when it was issued (`TOKEN_LIFETIME_DAYS`, #162); after that the API answers 401 "Your session has expired. Please log in again." and the app returns to the login screen. Logging in again, by any method, issues a new token. Caregivers only ever reach their own children; another caregiver's child is a 404, and administrators get 403.
 
 | Method | Endpoint | Purpose |
 |---|---|---|
