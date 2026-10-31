@@ -78,10 +78,10 @@ Each rejected row is reported with its file, line number and every problem found
 | File | Rows | Notes |
 |---|---|---|
 | `raw/activities_batch1.csv` | 8 (`ACT-0001`–`ACT-0008`) | Initial sample. Descriptions are original wording. Each has a `source_url` to the specific guidance (#154). |
-| `raw/activities_batch2.csv` | 16 (`ACT-0009`–`ACT-0024`) | Mixed sources (CDC, Pathways.org, UNICEF, WHO), each with a `source_url` (#154). |
+| `raw/activities_batch2.csv` | 15 (`ACT-0009`–`ACT-0024`) | Mixed sources (CDC, Pathways.org, UNICEF, WHO), each with a `source_url` (#154). `ACT-0021` was removed (#160). |
 | `raw/activities_batch3.csv` | 14 (`ACT-0025`–`ACT-0038`) | All CDC, with `source_url` pointing to the CDC *Milestone Moments* booklet. |
 | `raw/activities_batch4.csv` | 16 (`ACT-0039`–`ACT-0054`) | 11 Socio-Emotional, 6 Prenatal, plus Language, Sensory and Cognitive, filling the gaps found by the retrieval preview. Sources and `source_url` values as in the CSV. |
-| `raw/activities_batch5.csv` | 200 (`ACT-0055`–`ACT-0254`) | Brings every age and area to at least 7 activities, including pregnancy Cognitive and Motor (#156). Each follows a specific recommendation on its `source_url`, written in our own words. All `Draft` until reviewed. |
+| `raw/activities_batch5.csv` | 196 (`ACT-0055`–`ACT-0254`) | Brings every age and area to at least 7 activities, including pregnancy Cognitive and Motor (#156). Four were removed (#160). Each follows a specific recommendation on its `source_url`, written in our own words. All `Draft` until reviewed. |
 | `raw/activities_batch6.csv` | 200 (`ACT-0255`–`ACT-0454`) | A second large batch (#158): 26 for pregnancy and 29 for each age from birth to 36 months. Each follows one specific page on its `source_url`, written in our own words. All `Draft` until reviewed. |
 
 Every activity is loaded as `Draft` and must pass admin review, including checking its source, before it is published.
@@ -128,15 +128,31 @@ Names were checked against batches 1 to 5, so there are no repeats. CDC pages re
 
 | Age | Cognitive | Language | Motor | Sensory | Socio-Emotional | Total |
 |---|---|---|---|---|---|---|
-| Prenatal | 16 | 11 | 14 | 10 | 12 | 63 |
+| Prenatal | 15 | 11 | 13 | 9 | 12 | 60 |
 | 0–3 months | 13 | 13 | 13 | 13 | 13 | 65 |
 | 3–6 months | 13 | 13 | 13 | 13 | 12 | 64 |
 | 6–12 months | 14 | 13 | 13 | 13 | 12 | 65 |
 | 12–18 months | 13 | 14 | 13 | 13 | 12 | 65 |
-| 18–24 months | 13 | 13 | 13 | 13 | 12 | 64 |
-| 24–36 months | 14 | 14 | 14 | 13 | 13 | 68 |
+| 18–24 months | 13 | 13 | 13 | 12 | 12 | 63 |
+| 24–36 months | 14 | 13 | 14 | 13 | 13 | 67 |
 
-Counts are for all 454 activities: 54 Published and 400 Draft.
+Counts are for all 449 activities in the CSVs, after the removals below (#160).
+
+### Source check and removals (#160, 30 Oct 2026)
+
+Every Draft activity was checked against the text of its `source_url`. Seven did not match their page closely enough:
+
+| Activity | Outcome |
+|---|---|
+| `ACT-0200` Float or Sink? | Kept. The link now goes to the Pathways.org *Float or Sink?* activity (18–24 months), which describes it. |
+| `ACT-0216` Watering-Can Play | Reworked as *Funnel and Cup Water Play*, following the CDC 2-year tip "Let your child play with … plastic containers, spoons, or a funnel in the tub". Source changed from Pathways.org to CDC. |
+| `ACT-0021` Retelling a Simple Story | Removed. No source page covers retelling, and the nearest CDC tip is already `ACT-0232`. |
+| `ACT-0062` Getting a Simple Toy Basket Ready | Removed. The source only says to prepare the home for the baby. |
+| `ACT-0072` Dancing to Family Music | Removed. The WHO fact sheet does not mention dancing. |
+| `ACT-0080` Calm Time in Light and Shade | Removed. The UNICEF page says nothing about sun or shade, and its pillow tip is already `ACT-0074`. |
+| `ACT-0220` Splashing in Puddles | Removed. No source page mentions puddles. |
+
+Removed IDs are not reused. `seed_activities` does not delete rows, so a database seeded earlier keeps them as `Draft`, where they are never recommended. `ACT-0021` was one of the 54 activities in the `sprint5-eval-v1` evaluation, which stays reproducible from that tag. Pregnancy Sensory now has 9 activities; every other age and area has at least 11.
 
 ## Guideline milestone catalogue
 
