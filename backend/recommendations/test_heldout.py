@@ -339,6 +339,55 @@ class ExportHeldOutLabelsTests(HeldOutCommandTestCase):
         self.assertEqual(self.path.read_bytes(), first)
 
 
+class CarryLabelsTests(HeldOutCommandTestCase):
+    """--carry-labels copies labels only where the activity is unchanged (#168)."""
+
+    def test_unchanged_activities_keep_their_labels(self):
+        self.publish()
+        self.export()
+        rows = self.read()
+        for row in rows:
+            row["relevance"] = "2"
+            row["notes"] = "clear fit"
+            row["relevance_rater2"] = "1"
+        self.write(rows)
+        earlier = self.path.with_name("earlier.csv")
+        self.path.rename(earlier)
+
+        changed = DevelopmentalActivity.objects.get(activity_id="ACT-0957")
+        changed.description = "Sing softly and wait for your baby to coo back."
+        changed.save()
+        call_command("embed_activities", stdout=StringIO())
+
+        output = self.export("--carry-labels", str(earlier))
+        new = self.read()
+        self.assertTrue(new)
+        for row in new:
+            labels = (row["relevance"], row["notes"], row["relevance_rater2"])
+            if row["activity_id"] == "ACT-0957":
+                self.assertEqual(labels, ("", "", ""))
+            else:
+                self.assertEqual(labels, ("2", "clear fit", "1"))
+        blank = sum(1 for r in new if not r["relevance"])
+        self.assertGreater(blank, 0)
+        self.assertIn(f"Carried {len(new) - blank} labelled row(s)", output)
+        self.assertIn(f"{blank} row(s) to label", output)
+
+    def test_unlabelled_rows_are_not_carried(self):
+        self.publish()
+        self.export()
+        earlier = self.path.with_name("earlier.csv")
+        self.path.rename(earlier)
+        output = self.export("--carry-labels", str(earlier))
+        self.assertIn("Carried 0 labelled row(s)", output)
+        self.assertTrue(all(not r["relevance"] for r in self.read()))
+
+    def test_missing_earlier_sheet(self):
+        self.publish()
+        with self.assertRaisesMessage(CommandError, "Cannot read"):
+            self.export("--carry-labels", str(self.path.with_name("none.csv")))
+
+
 class EvaluateAlphaGridTests(HeldOutCommandTestCase):
     def evaluate(self):
         out = StringIO()

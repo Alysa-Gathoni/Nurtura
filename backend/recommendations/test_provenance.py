@@ -238,21 +238,24 @@ class SheetRowsHashTests(SimpleTestCase):
 
 
 class GeneratedSidecarTests(SimpleTestCase):
-    """The committed sidecar belongs to the committed sheet."""
+    """Each committed sidecar belongs to its committed sheet: v1 (the
+    sprint5-eval-v1 record) and v2 (#168)."""
 
     def test_committed_sidecar_rows_match_the_committed_sheet(self):
-        sheet = Path(settings.BASE_DIR).parent / "data/evaluation/heldout_labels.csv"
-        sidecar = provenance.sidecar_path(sheet)
-        if not sheet.exists() or not sidecar.exists():
-            self.skipTest("held-out sheet not generated")
-        rows = {}
-        with open(sheet, newline="", encoding="utf-8") as f:
-            for row in csv.DictReader(f):
-                rows.setdefault(row["child_id"], []).append(row["activity_id"])
-        self.assertEqual(
-            provenance.read(sidecar)["sheet_rows_sha256"],
-            provenance.sheet_rows_sha256(rows),
-        )
+        for name in ("heldout_labels.csv", "heldout_labels_v2.csv"):
+            with self.subTest(sheet=name):
+                sheet = Path(settings.BASE_DIR).parent / "data/evaluation" / name
+                sidecar = provenance.sidecar_path(sheet)
+                if not sheet.exists() or not sidecar.exists():
+                    self.skipTest(f"{name} not generated")
+                rows = {}
+                with open(sheet, newline="", encoding="utf-8") as f:
+                    for row in csv.DictReader(f):
+                        rows.setdefault(row["child_id"], []).append(row["activity_id"])
+                self.assertEqual(
+                    provenance.read(sidecar)["sheet_rows_sha256"],
+                    provenance.sheet_rows_sha256(rows),
+                )
 
 
 class CheckProvenanceFlagTests(HeldOutCommandTestCase):

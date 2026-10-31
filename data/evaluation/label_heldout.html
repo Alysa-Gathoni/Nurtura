@@ -8,7 +8,7 @@
   Nurtura held-out labelling page (#46).
 
   Open this file in a browser (Chrome or Edge recommended), choose
-  data/evaluation/heldout_labels.csv, and grade each activity 0, 1 or 2 for
+  data/evaluation/heldout_labels_v2.csv (the current sheet, #168), and grade each activity 0, 1 or 2 for
   the child shown. Works offline; nothing leaves your computer.
 
   - Grades and notes autosave in this browser as you go.
@@ -183,7 +183,7 @@
 <section class="empty" id="welcome">
   <div class="panel">
     <h2>Label the held-out sheet</h2>
-    <p>Click <b>Open CSV</b> and choose <code>data/evaluation/heldout_labels.csv</code>. Then, for each child, grade every activity:</p>
+    <p>Click <b>Open CSV</b> and choose <code>data/evaluation/heldout_labels_v2.csv</code>. Then, for each child, grade every activity:</p>
     <table class="scale">
       <tr><td><b>2</b></td><td>Clearly relevant and age-appropriate</td></tr>
       <tr><td><b>1</b></td><td>Somewhat relevant (right area or age, but not a good match). Right topic, wrong age: 1 at most.</td></tr>
@@ -494,11 +494,11 @@ async function save() {
     }
   }
   const url = URL.createObjectURL(new Blob([text], { type: "text/csv;charset=utf-8" }));
-  const a = Object.assign(document.createElement("a"), { href: url, download: fileName || "heldout_labels.csv" });
+  const a = Object.assign(document.createElement("a"), { href: url, download: fileName || "heldout_labels_v2.csv" });
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
   dirty = false; setStatus();
-  $("status").textContent += " (downloaded: replace data/evaluation/heldout_labels.csv with it)";
+  $("status").textContent += " (downloaded: replace data/evaluation/heldout_labels_v2.csv with it)";
 }
 
 $("openBtn").onclick = openFile;

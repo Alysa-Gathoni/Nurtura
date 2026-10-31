@@ -51,7 +51,7 @@ from recommendations.evaluation import (
 )
 
 DEFAULT_LABELS = (
-    Path(settings.BASE_DIR).parent / "data" / "evaluation" / "heldout_labels.csv"
+    Path(settings.BASE_DIR).parent / "data" / "evaluation" / "heldout_labels_v2.csv"
 )
 EVALUATION_USERNAME = "alpha-grid@nurtura.invalid"
 TOLERANCE = 0.02

@@ -66,9 +66,36 @@ The seven sample children above are the **development set**. They were used to b
 
 | File | What it is |
 |---|---|
-| `heldout_labels.csv` | The held-out labelling sheet, generated once. Fill it in **in place**; the evaluation reads this file. |
-| `heldout_labels.provenance.json` | Written with the sheet: a record of the state the pools were built from. Don't edit it. |
+| `heldout_labels_v2.csv` | **The current sheet** (#168), pooled from the 449 Published activities. Fill it in **in place**; `evaluate_alpha_grid` reads this file by default. |
+| `heldout_labels_v2.provenance.json` | The state the v2 pools were built from. Don't edit it. |
+| `heldout_labels.csv` | The v1 sheet: the labelled record of `sprint5-eval-v1` (54 Published activities). Kept unchanged. |
+| `heldout_labels.provenance.json` | The state the v1 pools were built from. Don't edit it. |
 | `label_heldout.html` | A labelling page that shows one child at a time (see below). |
+
+## Version 2: the 449-activity pool (#168, 31 Oct 2026)
+
+The v1 evaluation (`sprint5-eval-v1`, nDCG@5 0.81 at α = 0.7) was run when 54 activities were Published. With 449 Published, most of each child's top 5 are activities that were never labelled, so v1 no longer describes the system caregivers use. v2 repeats the same protocol on the current state:
+
+- the **same 20 children**, splits, pool depth (top 5 of SBERT-only and of every α from 0.0 to 1.0) and blind, shuffled sheet;
+- labels **carried over** from v1 for 80 rows, where the child, activity, name and description are all unchanged. They were given blind, so carrying them reveals nothing about the new rankings;
+- **177 rows to label**, out of 257.
+
+It was generated with:
+
+```
+cd backend
+python manage.py export_heldout_labels --output ../data/evaluation/heldout_labels_v2.csv --carry-labels ../data/evaluation/heldout_labels.csv
+```
+
+Once every row has a label:
+
+```
+python manage.py evaluate_alpha_grid --markdown
+```
+
+chooses α on the tune children by the same rule fixed in advance and reports the test children once. The results are then written up, and the state is tagged as the new frozen evaluation before the caregiver sessions. Until then the chosen α is marked provisional and no test figures are printed. `sprint5-eval-v1` stays reproducible from its tag with `--labels ../data/evaluation/heldout_labels.csv`.
+
+H17 stays the content-gap child and is reported separately, as in v1, although Sensory 18–24 months now has Published activities.
 
 The sheet was generated with:
 
@@ -118,7 +145,7 @@ Because every ranking that is evaluated contributes its whole top 5, every activ
 The easiest way to label is `label_heldout.html`. It's a single file that runs offline in your browser, and nothing is uploaded.
 
 1. Double-click `data/evaluation/label_heldout.html` to open it in **Chrome or Edge**.
-2. Click **Open CSV** and choose `data/evaluation/heldout_labels.csv`.
+2. Click **Open CSV** and choose `data/evaluation/heldout_labels_v2.csv`.
 3. Each child's profile stays at the top while you grade their activities with the **0 / 1 / 2** buttons. Add optional notes as you go.
 4. Click **Save** (or press Ctrl+S). The first time, the browser asks for permission to edit the file; allow it, and from then on Save writes straight back to the CSV.
 
@@ -131,7 +158,7 @@ The list on the left shows each child's progress.
 
 Good to know:
 - **Autosave.** Grades and notes are kept in the browser as you go. If you close the tab before saving, the page offers to restore them the next time you open the same sheet.
-- **Other browsers** (for example Firefox) can't write to the file, so Save downloads a filled copy. Use it to replace `data/evaluation/heldout_labels.csv`.
+- **Other browsers** (for example Firefox) can't write to the file, so Save downloads a filled copy. Use it to replace `data/evaluation/heldout_labels_v2.csv`.
 - **Second rater.** Choose **Rater → Second rater** to fill `relevance_rater2`. This hides the first rater's grades and notes.
 - **Only the label columns change.** The page only edits `relevance`, `notes` and `relevance_rater2`. The rows keep their order, and every other cell is written back exactly as it was read.
 
@@ -213,7 +240,9 @@ Every row in the sheet is in some ranking's top 5, so this means every row must 
 
 ```
 cd backend
-python manage.py evaluate_alpha_grid [--labels ../data/evaluation/heldout_labels.csv] [--markdown]
+python manage.py evaluate_alpha_grid [--markdown]
 ```
+
+This reads the v2 sheet. To reproduce v1, check out the `sprint5-eval-v1` tag, or pass `--labels ../data/evaluation/heldout_labels.csv` (its provenance check then reports how today's state differs from v1's).
 
 The children are created in a transaction that is rolled back, so they are never saved.
