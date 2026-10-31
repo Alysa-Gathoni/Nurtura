@@ -2,7 +2,7 @@
 
 ## `plain_aims_draft.csv`: caregiver wording of each activity's aim (#70)
 
-These are drafts of `plain_aim` for the 54 Published activities (53 rows since `ACT-0021` was removed in #160). In an explanation, `plain_aim` completes the sentence **"Its aim is to …"**. Nothing has been loaded: every activity's `plain_aim` is blank until the drafts are approved, so explanations show no aim sentence yet.
+These are drafts of `plain_aim` for the 54 Published activities (53 rows since `ACT-0021` was removed in #160). In an explanation, `plain_aim` completes the sentence **"Its aim is to …"**. All 54 were approved, five with reviewer edits (#70), and are loaded.
 
 Each draft:
 - completes "Its aim is to …" in the **second person** ("your baby", "your child", "you");
@@ -27,8 +27,20 @@ Once the sheet is reviewed, the approved rows (with any reviewer edits) will be 
 
 ## `plain_aims_batch5_draft.csv`: aims for the batch 5 activities (#156)
 
-Drafts of `plain_aim` for `ACT-0055`–`ACT-0254`, in the same format and under the same rules as `plain_aims_draft.csv`: second person, at most 20 words (all are within it), no technical terms, British spelling, and no claim beyond the activity's `developmental_goal`. Pregnancy aims address the parent ("help you…") where the activity is about the parent's own health. Nothing is loaded until the reviewer marks rows `approved`.
+Drafts of `plain_aim` for `ACT-0055`–`ACT-0254`, in the same format and under the same rules as `plain_aims_draft.csv`: second person, at most 20 words (all are within it), no technical terms, British spelling, and no claim beyond the activity's `developmental_goal`. Pregnancy aims address the parent ("help you…") where the activity is about the parent's own health. All 196 rows are approved (#166).
 
 ## `plain_aims_batch6_draft.csv`: aims for batch 6 (#158)
 
-Drafts of `plain_aim` for `ACT-0255`–`ACT-0454`, in the same format and under the same rules as `plain_aims_draft.csv`: second person, at most 20 words (all are within it), no technical terms, British spelling, and no claim beyond the activity's `developmental_goal`. Nothing is loaded until the reviewer marks rows `approved`.
+Drafts of `plain_aim` for `ACT-0255`–`ACT-0454`, in the same format and under the same rules as `plain_aims_draft.csv`: second person, at most 20 words (all are within it), no technical terms, British spelling, and no claim beyond the activity's `developmental_goal`. All 200 rows are approved (#166).
+
+## Loading the approved aims
+
+The loader reads one sheet at a time, so load all three (from `backend/`):
+
+```
+venv/Scripts/python.exe manage.py load_plain_aims
+venv/Scripts/python.exe manage.py load_plain_aims --file ../data/review/plain_aims_batch5_draft.csv
+venv/Scripts/python.exe manage.py load_plain_aims --file ../data/review/plain_aims_batch6_draft.csv
+```
+
+It updates `plain_aim` only: content status, the embeddings, the ranking and the evaluation's provenance are untouched. A new batch of ideas then carries the aim sentence in its explanations.
