@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert' show jsonDecode, jsonEncode;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:nurtura_app/models/child_profile.dart';
+import 'package:nurtura_app/models/recommendation.dart';
 import 'package:nurtura_app/screens/recommendations_screen.dart';
 import 'package:nurtura_app/services/api_client.dart';
 import 'package:nurtura_app/services/recommendation_service.dart';
@@ -245,6 +247,83 @@ void main() {
     await pumpScreen(tester, backend);
     await tester.pumpAndSettle();
     expect(find.byKey(const Key('noRecommendations')), findsOneWidget);
+  });
+
+  group('clinic-visit referral (#161)', () {
+    final referral = {
+      'message':
+          'You\'ve marked something as “Not yet” that most children do by '
+          'Amani\'s age.',
+      'source': 'CDC Learn the Signs. Act Early. (2022)',
+      'milestones': [
+        {
+          'description': 'Waves “bye-bye”',
+          'domain': 'Language',
+          'expected_age_months': 12.0,
+          'source': 'CDC',
+        },
+      ],
+    };
+
+    testWidgets('shown above the ideas, with its milestones', (tester) async {
+      final backend = FakeBackend(
+        (r) async => json({
+          ...batch([card('ACT-0004', 'Naming Everyday Objects')]),
+          'referral': referral,
+        }),
+      );
+      await pumpScreen(tester, backend);
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('referralNotice')), findsOneWidget);
+      expect(
+        find.text('Worth mentioning at your next clinic visit'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('most children do by'), findsOneWidget);
+      expect(find.text('•  Waves “bye-bye”'), findsOneWidget);
+      expect(find.text('Naming Everyday Objects'), findsOneWidget);
+    });
+
+    testWidgets('shown even when there are no ideas', (tester) async {
+      final backend = FakeBackend(
+        (r) async => json({...emptyBatch, 'referral': referral}),
+      );
+      await pumpScreen(tester, backend);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('referralNotice')), findsOneWidget);
+      expect(find.byKey(const Key('noRecommendations')), findsOneWidget);
+    });
+
+    testWidgets('absent when the server sends null', (tester) async {
+      final backend = FakeBackend(
+        (r) async => json({
+          ...batch([card('ACT-0004', 'Naming Everyday Objects')]),
+          'referral': null,
+        }),
+      );
+      await pumpScreen(tester, backend);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('referralNotice')), findsNothing);
+    });
+
+    test('kept in the offline copy, and survives an update', () {
+      final parsed = RecommendationBatch.fromJson({
+        ...batch([card('ACT-0004', 'Naming Everyday Objects')]),
+        'referral': referral,
+      });
+      final again = RecommendationBatch.fromJson(
+        jsonDecode(jsonEncode(parsed.toJson())) as Map<String, dynamic>,
+      );
+      expect(again.referral!.milestones, ['Waves “bye-bye”']);
+      expect(again.referral!.message, parsed.referral!.message);
+      expect(
+        parsed.replacing(parsed.items.first).referral!.message,
+        parsed.referral!.message,
+      );
+      // A copy saved before #161 has no referral and still loads.
+      expect(RecommendationBatch.fromJson(batch(const [])).referral, isNull);
+    });
   });
 
   testWidgets('refresh asks for a fresh batch', (tester) async {

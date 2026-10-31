@@ -225,13 +225,24 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
 
   Widget _list() {
     final items = _batch!.items;
+    final referral = _batch!.referral;
     if (items.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(20),
         child: Center(
-          child: MessageBanner.info(
-            'No ideas for ${widget.child.name} yet. Check back soon.',
-            key: const Key('noRecommendations'),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (referral != null) ...[
+                ReferralNotice(referral),
+                const SizedBox(height: 12),
+              ],
+              MessageBanner.info(
+                'No ideas for ${widget.child.name} yet. Check back soon.',
+                key: const Key('noRecommendations'),
+              ),
+            ],
           ),
         ),
       );
@@ -251,6 +262,10 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                   "Saved ideas from ${formatDate(_savedAt!)}. You're offline.",
                   key: const Key('savedRecommendationsNotice'),
                 ),
+                const SizedBox(height: 12),
+              ],
+              if (referral != null) ...[
+                ReferralNotice(referral),
                 const SizedBox(height: 12),
               ],
               Row(
@@ -380,6 +395,62 @@ class RecommendationCard extends StatelessWidget {
             const SizedBox(height: 12),
             ExplanationBox(r.explanation),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+/// The clinic-visit suggestion (#161): calm sage colours, not a warning,
+/// with the milestones it is about.
+class ReferralNotice extends StatelessWidget {
+  const ReferralNotice(this.referral, {super.key});
+
+  final Referral referral;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return Container(
+      key: const Key('referralNotice'),
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: palette.sageSoft,
+        borderRadius: BorderRadius.circular(AppRadii.field),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.favorite_rounded, size: 20, color: palette.sage),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Worth mentioning at your next clinic visit',
+                  style: AppText.nunito(size: 14, weight: FontWeight.w800),
+                ),
+                const SizedBox(height: 4),
+                Text(referral.message, style: AppText.nunito(size: 14)),
+                if (referral.milestones.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  for (final m in referral.milestones)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Text(
+                        '•  $m',
+                        style: AppText.nunito(
+                          size: 14,
+                          weight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                ],
+              ],
+            ),
+          ),
         ],
       ),
     );

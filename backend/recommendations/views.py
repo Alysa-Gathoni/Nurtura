@@ -10,6 +10,7 @@ from feedback.manager import latest as latest_feedback
 from feedback.views import completion_json, feedback_json
 from profiles.models import ChildProfile
 from profiles.permissions import IsCaregiver
+from profiles.rules.referral import referral_for
 
 from . import generation
 from .generation import short_description
@@ -84,13 +85,16 @@ def _card(recommendation):
     }
 
 
-def _payload(recommendations):
+def _payload(child, recommendations):
     prefetch_related_objects(recommendations, "completion", "feedback")
     first = recommendations[0] if recommendations else None
+    referral = referral_for(child)
     return {
         "batch": str(first.batch) if first else None,
         "generated_at": first.date_generated.isoformat() if first else None,
         "recommendations": [_card(r) for r in recommendations],
+        # Worked out on each request and never stored or ranked (#161).
+        "referral": referral.to_dict() if referral else None,
     }
 
 
@@ -100,22 +104,24 @@ class ChildRecommendationsView(APIView):
     GET returns the newest stored batch and never generates. POST ranks the
     child's eligible activities (the ranking evaluated at sprint5-eval-v1)
     and stores the top 5 as a new batch: 201 when a batch is stored, 200 when
-    the newest batch already matches. Only the child's own caregiver may use
-    either; other caregivers' children are 404 and administrators 403.
+    the newest batch already matches. Both include the clinic-visit referral
+    (#161), or null. Only the child's own caregiver may use either; other
+    caregivers' children are 404 and administrators 403.
     """
 
     permission_classes = [IsCaregiver]
 
     def get(self, request, child_id):
         child = get_object_or_404(request.user.children, pk=child_id)
-        return Response(_payload(generation.latest_batch(child)))
+        return Response(_payload(child, generation.latest_batch(child)))
 
     def post(self, request, child_id):
         try:
             result = generation.generate(child_id, request.user)
         except ChildProfile.DoesNotExist:
             raise Http404
+        child = request.user.children.get(pk=child_id)
         return Response(
-            _payload(result.recommendations),
+            _payload(child, result.recommendations),
             status=status.HTTP_201_CREATED if result.created else status.HTTP_200_OK,
         )
