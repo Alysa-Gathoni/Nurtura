@@ -11,6 +11,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 | Item | State | Planned |
 |---|---|---|
 | Explanation reader test (5 non-technical readers) | Materials ready ([explanation_reader_test.md](explanation_reader_test.md)); not run. Until it's scored, explanation wording and the evaluated ranking stay frozen | Before Sprint 9 |
+| Held-out evaluation v2 on the 449-activity pool (#168) | Sheet ready (`data/evaluation/heldout_labels_v2.csv`): 80 of 257 rows carry their v1 labels, 177 to label. The reported nDCG@5 of 0.81 describes the 54-activity v1 state | Before the caregiver sessions |
 | Hand check of retrieval results (#31) | Results generated; the researcher's relevant / not relevant judgements are still to do | Before Sprint 9 |
 | Evaluation with caregivers: relevance, personalisation, explainability, usability (SUS), satisfaction | Materials drafted ([caregiver_evaluation.md](caregiver_evaluation.md)); ethics question and sample size to confirm with the supervisor; participants still to recruit | Sprint 9 |
 | Requirement-by-requirement test map | Tests reference the requirement IDs found in the repository; the full list from Chapter 3 is needed to map all of them | Sprint 9 |
