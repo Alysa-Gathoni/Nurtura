@@ -2,6 +2,7 @@
 
 Usage (from backend/):
     python manage.py evaluate_alpha_grid [--labels PATH] [--markdown]
+                                         [--report-alpha A]
     python manage.py evaluate_alpha_grid --check-provenance
 
 --check-provenance runs only the provenance check (step 0) and exits with an
@@ -21,6 +22,10 @@ error if the sidecar is missing or anything differs (#52).
    or worse on nDCG@5. No significance claims.
 3. The content-gap child, reported separately in the same way.
 4. Agreement between relevance and relevance_rater2, where both are filled.
+
+--report-alpha reports the test and content-gap children at a fixed alpha
+instead of the tune choice (#170). The tune curve and the rule's choice are
+still printed, and the output says which alpha is reported and why.
 
 While any top-5 candidate of any ranking is unlabelled, the chosen alpha is
 marked provisional and the final test (and gap) numbers are not printed.
@@ -81,6 +86,12 @@ class Command(BaseCommand):
             help="Only check the provenance sidecar; fail if anything differs.",
         )
         parser.add_argument(
+            "--report-alpha",
+            type=float,
+            help="Report the test set at this alpha (one of the grid values) "
+            "instead of the one chosen on tune.",
+        )
+        parser.add_argument(
             "--markdown",
             action="store_true",
             help="Output Markdown headings, e.g. for the project report.",
@@ -88,6 +99,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.markdown = options["markdown"]
+        report_alpha = options["report_alpha"]
+        if report_alpha is not None:
+            matching = [a for a in heldout.ALPHAS if abs(a - report_alpha) < 1e-9]
+            if not matching:
+                raise CommandError(
+                    "--report-alpha must be one of "
+                    + ", ".join(f"{a:.1f}" for a in heldout.ALPHAS)
+                )
+            report_alpha = matching[0]
         try:
             labels = load_heldout_labels(options["labels"])
         except LabelError as exc:
@@ -134,14 +154,22 @@ class Command(BaseCommand):
             )
             self._agreement(labels)
             return
+        reported = chosen
+        if report_alpha is not None and report_alpha != chosen:
+            reported = report_alpha
+            self._line("")
+            self._line(
+                f"Reporting alpha {reported:.1f}, fixed in advance, instead of "
+                f"the tune choice ({chosen:.1f}), as asked with --report-alpha."
+            )
         self._compare_section(
-            "Test set", scores, by_split["test"], chosen, with_counts=True
+            "Test set", scores, by_split["test"], reported, with_counts=True
         )
         self._compare_section(
             "Content-gap child (reported separately)",
             scores,
             by_split["gap"],
-            chosen,
+            reported,
             with_counts=False,
         )
         self._agreement(labels)

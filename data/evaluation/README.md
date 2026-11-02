@@ -97,6 +97,8 @@ chooses α on the tune children by the same rule fixed in advance and reports th
 
 H17 stays the content-gap child and is reported separately, as in v1, although Sensory 18–24 months now has Published activities.
 
+**Results** (2 Nov 2026): [docs/eval_v2_results.md](../../docs/eval_v2_results.md), produced with `evaluate_alpha_grid --markdown --report-alpha 0.7`. `--report-alpha` reports the test children at a fixed α while still printing the tune curve and the rule's choice.
+
 The sheet was generated with:
 
 ```
