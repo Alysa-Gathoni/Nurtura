@@ -283,6 +283,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/deployment_requirements.md](docs/deployment_requirements.md) | What hosting needs (Sprint III) |
 | [docs/demo_checklist.md](docs/demo_checklist.md) | Running a live demo on a phone |
 | [docs/sprint5_alpha_results.md](docs/sprint5_alpha_results.md) | The ranking evaluation (held-out children, nDCG, choice of α) |
+| [docs/experiment_embedding_model.md](docs/experiment_embedding_model.md) | Experiment: a search-trained embedding model, with its decision rule |
 | [docs/explanation_reader_test.md](docs/explanation_reader_test.md) | The explanation reader test (Sprint 6) |
 | [docs/DEVELOPMENT_PLAN.md](docs/DEVELOPMENT_PLAN.md) | The sprint plan and GitHub workflow |
 | [data/README.md](data/README.md) | Activity data: schema, sources, cleaning, ethics |
