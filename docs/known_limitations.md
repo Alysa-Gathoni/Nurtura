@@ -1,6 +1,6 @@
 # Known limitations and outstanding defects
 
-> **Last updated: 2026-10-30.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
+> **Last updated: 2026-11-02.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
 
 ## Outstanding defects
 
@@ -11,7 +11,6 @@ None known. Every defect found so far has been fixed and is recorded with its co
 | Item | State | Planned |
 |---|---|---|
 | Explanation reader test (5 non-technical readers) | Materials ready ([explanation_reader_test.md](explanation_reader_test.md)); not run. Until it's scored, explanation wording and the evaluated ranking stay frozen | Before Sprint 9 |
-| Held-out evaluation v2 on the 449-activity pool (#168) | Sheet ready (`data/evaluation/heldout_labels_v2.csv`): 80 of 257 rows carry their v1 labels, 177 to label. The reported nDCG@5 of 0.81 describes the 54-activity v1 state | Before the caregiver sessions |
 | Hand check of retrieval results (#31) | Results generated; the researcher's relevant / not relevant judgements are still to do | Before Sprint 9 |
 | Evaluation with caregivers: relevance, personalisation, explainability, usability (SUS), satisfaction | Materials drafted ([caregiver_evaluation.md](caregiver_evaluation.md)); ethics question and sample size to confirm with the supervisor; participants still to recruit | Sprint 9 |
 | Requirement-by-requirement test map | Tests reference the requirement IDs found in the repository; the full list from Chapter 3 is needed to map all of them | Sprint 9 |
@@ -19,6 +18,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 ## Evaluation limits
 
 - **Small and constructed.** α was chosen on 11 tune children and checked on 8 test children. They are realistic but hypothetical profiles, labelled by one rater who also designed the system, with no agreement measure. The results describe these children only and support no statistical claims ([sprint5_alpha_results.md](sprint5_alpha_results.md)).
+- **v2 kept α = 0.7 against the rule's choice** (#170). On 449 activities the rule fixed before labelling chose α = 1.0, but at α = 1.0 ties are broken by activity ID, which puts the first-written activities first. α = 0.7 was kept and reported (test nDCG@5 0.836 against 0.582); the rule's choice scored 0.876. See [eval_v2_results.md](eval_v2_results.md).
 - **α is a reasonable default, not an optimum.** The test set preferred the α = 0 ablation (nDCG@5 0.873 against 0.814 for α = 0.7), and the tune curve is flat from 0.4 to 1.0.
 - **Only the top 5 were labelled,** so the metrics can't be extended beyond k = 5.
 
