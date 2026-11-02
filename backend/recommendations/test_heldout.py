@@ -389,12 +389,13 @@ class CarryLabelsTests(HeldOutCommandTestCase):
 
 
 class EvaluateAlphaGridTests(HeldOutCommandTestCase):
-    def evaluate(self):
+    def evaluate(self, *args):
         out = StringIO()
         call_command(
             "evaluate_alpha_grid",
             "--labels",
             str(self.path),
+            *args,
             stdout=out,
             stderr=StringIO(),
         )
@@ -437,6 +438,29 @@ class EvaluateAlphaGridTests(HeldOutCommandTestCase):
         self.assertIn("| H17 |", output)
         self.assertIn("1 rows rated by both: exact agreement 100%", output)
         self.assertFalse(User.objects.exists())
+
+    def test_report_alpha_reports_test_at_the_fixed_value(self):
+        self.publish()
+        self.export()
+        rows = self.read()
+        for row in rows:
+            row["relevance"] = "2" if row["activity_id"] == "ACT-0951" else "0"
+        self.write(rows)
+        chosen = self.chosen_line(self.evaluate())
+
+        output = self.evaluate("--report-alpha", "0.3")
+        # The tune choice is still shown, unchanged.
+        self.assertEqual(self.chosen_line(output), chosen)
+        self.assertIn("Test set: alpha 0.3 vs SBERT-only", output)
+        self.assertIn("Content-gap child (reported separately): alpha 0.3", output)
+        if "Chosen alpha (middle of that range): 0.3." not in output:
+            self.assertIn("Reporting alpha 0.3, fixed in advance", output)
+
+    def test_report_alpha_must_be_a_grid_value(self):
+        self.publish()
+        self.export()
+        with self.assertRaisesMessage(CommandError, "--report-alpha must be one of"):
+            self.evaluate("--report-alpha", "0.75")
 
     def test_alpha_is_chosen_on_tune_only(self):
         self.publish()

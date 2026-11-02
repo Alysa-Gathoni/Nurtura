@@ -110,6 +110,17 @@ The balance between the rule engine and the AI search (α) was chosen by experim
 - **7 of the 8 test children got better recommendations** than with AI search alone. One expecting parent got slightly worse.
 - **Most of the gain comes from age weighting**, which favours activities meant for the child's age. Adding it alone raised the tuning score from 0.49 to 0.74. On the test children, the age-weighted search without rule priority (α = 0) scored even higher than the chosen setting (0.87 against 0.81).
 - **Caveats:** this is a small study, with 8 test children and one person grading, so no statistical-significance claims are made. Full details are in `docs/sprint5_alpha_results.md`.
+**Re-run on 449 activities (v2, 2 Nov 2026).** With the full catalogue Published, the same 20 children were labelled again (257 pairs: 80 carried from v1, 177 new).
+
+| | AI search only (baseline) | Nurtura ranking (α = 0.7) |
+|---|---|---|
+| Top-5 activities graded relevant (≥ 1) | 85% | 100% |
+| Top-5 activities graded clearly relevant (2) | 40% | 72.5% |
+| Ranking quality (nDCG@5, 0 to 1) | 0.58 | 0.84 |
+
+- 7 of the 8 test children again got better recommendations.
+- The fixed rule chose α = 1.0 this time, but that comes from how ties are broken at α = 1.0 (by activity ID, which favours the first-written activities), so α = 0.7 was kept. This departs from the rule and is explained in `docs/eval_v2_results.md`.
+
 - **Scope change:** caregiver-preference and contextual weighting, planned in the proposal (Section 3.2.3), were dropped from scope. Only α was tuned.
 
 ---

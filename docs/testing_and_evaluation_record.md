@@ -1,6 +1,6 @@
 # Testing and evaluation record
 
-> **Last updated: 2026-10-19.** The phone run (section 1) is from 2026-10-15; the automated test counts and results are from `main` at commit `cddefe5`, run on 2026-10-16; defects D10–D12 were added on 2026-10-29. Every result below comes from a real run, log or pull request; nothing is estimated.
+> **Last updated: 2026-11-02.** The phone run (section 1) is from 2026-10-15; the automated test counts and results are from `main` at commit `cddefe5`, run on 2026-10-16; defects D10–D12 were added on 2026-10-29. Every result below comes from a real run, log or pull request; nothing is estimated.
 
 This record covers what has been tested so far, the results (expected and actual), the defects found and how they were corrected, and the initial evaluation evidence. What is still to evaluate is listed at the end.
 
@@ -157,6 +157,15 @@ The weight α between the rule engine and SBERT similarity was chosen on 11 *tun
 | **Nurtura ranking, α = 0.7** | **0.925** | **0.675** | **0.814** |
 
 7 of the 8 test children got better recommendations than with similarity alone.
+
+**v2, on 449 activities (2 Nov 2026, tag `sprint9-eval-v2`):** the same children and protocol, 257 pairs graded (80 carried from v1).
+
+| Ranking | Top-5 relevant (≥ 1) | Top-5 clearly relevant (= 2) | nDCG@5 |
+|---|---|---|---|
+| SBERT similarity only (baseline) | 0.850 | 0.400 | 0.582 |
+| **Nurtura ranking, α = 0.7** | **1.000** | **0.725** | **0.836** |
+
+7 of the 8 test children improved. The fixed rule chose α = 1.0, an artefact of the ID tie-break at that setting, so α = 0.7 was kept; see [eval_v2_results.md](eval_v2_results.md).
 
 **Limitations:** small numbers, one rater who also designed the system, and constructed (not real) children. The test set preferred the α = 0 ablation (nDCG@5 0.873), so 0.7 is a reasonable default rather than an optimum. Caregiver feedback in Sprint 9 is the better test.
 
