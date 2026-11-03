@@ -120,6 +120,7 @@ class Recommendation {
     this.source = '',
     this.sourceUrl = '',
     required this.explanation,
+    this.pinned = false,
     this.completion,
     this.feedback,
   });
@@ -140,6 +141,7 @@ class Recommendation {
     source: json['source'] as String? ?? '',
     sourceUrl: json['source_url'] as String? ?? '',
     explanation: json['explanation'] as String? ?? '',
+    pinned: json['pinned'] as bool? ?? false,
     completion: json['completion'] == null
         ? null
         : Completion.fromJson(json['completion'] as Map<String, dynamic>),
@@ -168,6 +170,9 @@ class Recommendation {
   final String source;
   final String sourceUrl;
   final String explanation;
+
+  /// Chosen by the caregiver from the options after feedback (#177).
+  final bool pinned;
   final Completion? completion;
   final ActivityFeedback? feedback;
 
@@ -210,6 +215,7 @@ class Recommendation {
     'source': source,
     'source_url': sourceUrl,
     'explanation': explanation,
+    'pinned': pinned,
     'completion': completion?.toJson(),
     'feedback': feedback?.toJson(),
   };
@@ -234,9 +240,53 @@ class Recommendation {
     source: source,
     sourceUrl: sourceUrl,
     explanation: explanation,
+    pinned: pinned,
     completion: completion == null ? this.completion : completion(),
     feedback: feedback ?? this.feedback,
   );
+}
+
+/// Another activity offered after feedback (#177): what it answers, why,
+/// and the activity itself.
+class FeedbackOption {
+  const FeedbackOption({
+    required this.reason,
+    required this.title,
+    required this.why,
+    required this.tip,
+    required this.activityId,
+    required this.activityName,
+    required this.domain,
+    required this.ageRange,
+    required this.shortDescription,
+  });
+
+  factory FeedbackOption.fromJson(Map<String, dynamic> json) {
+    final a = json['activity'] as Map<String, dynamic>;
+    return FeedbackOption(
+      reason: json['reason'] as String,
+      title: json['title'] as String,
+      why: json['why'] as String? ?? '',
+      tip: json['tip'] as String? ?? '',
+      activityId: a['activity_id'] as String,
+      activityName: a['activity_name'] as String,
+      domain: a['developmental_domain'] as String,
+      ageRange: a['age_range'] as String,
+      shortDescription: a['short_description'] as String? ?? '',
+    );
+  }
+
+  final String reason;
+  final String title;
+  final String why;
+  final String tip;
+  final String activityId;
+  final String activityName;
+  final String domain;
+  final String ageRange;
+  final String shortDescription;
+
+  String get ageLabel => ageRange.replaceAll('-', '–');
 }
 
 /// A gentle suggestion to mention due "Not yet" milestones at the next

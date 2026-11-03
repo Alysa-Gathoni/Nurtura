@@ -19,6 +19,10 @@ are stored as one batch of Recommendation rows.
   the child's interests), the age bracket and the milestone catalogue.
 - The child row is locked for the whole generation, so simultaneous
   requests for the same child can't both store a batch.
+- Pinned activities (#177), chosen by the caregiver from the options after
+  feedback, come first and are carried into later batches until they are
+  completed, at most MAX_PINNED of them. Their explanation starts with why
+  they were chosen. The rest of the batch is the evaluated order.
 """
 
 import hashlib
@@ -39,6 +43,7 @@ from .models import Recommendation
 from .ranking import child_bracket, rank
 
 RECOMMENDATIONS_PER_BATCH = 5
+MAX_PINNED = 2
 SHORT_DESCRIPTION_LENGTH = 160
 
 # ranking_version() at tag sprint5-eval-v1: the rule weights, ranking
@@ -130,10 +135,23 @@ class GenerationResult:
     created: bool
 
 
-def generate(child_id, caregiver):
+def _pins(newest, completed, pin):
+    """[(activity pk, note)] to pin: the new one first, then carried ones."""
+    pins = [
+        (r.activity_id, r.pin_note)
+        for r in newest
+        if r.pinned and r.activity_id not in completed
+    ]
+    if pin is not None:
+        pins = [pin] + [p for p in pins if p[0] != pin[0]]
+    return pins[:MAX_PINNED]
+
+
+def generate(child_id, caregiver, pin=None):
     """Rank, then store a new batch or return the identical newest one.
 
-    Raises ChildProfile.DoesNotExist if the child isn't the caregiver's.
+    pin=(activity pk, note) pins that activity first (#177). Raises
+    ChildProfile.DoesNotExist if the child isn't the caregiver's.
     """
     with transaction.atomic():
         child = ChildProfile.objects.select_for_update().get(
@@ -141,17 +159,37 @@ def generate(child_id, caregiver):
         )
         result = rank(child)
         completed = completed_activity_ids(child)
-        top = [r for r in result.ranked if r.activity.pk not in completed][
-            :RECOMMENDATIONS_PER_BATCH
-        ]
+        newest = latest_batch(child)
+        ranked = {r.activity.pk: r for r in result.ranked}
+        notes = {
+            pk: note
+            for pk, note in _pins(newest, completed, pin)
+            if pk in ranked  # still eligible
+        }
+        top = [ranked[pk] for pk in notes] + [
+            r
+            for r in result.ranked
+            if r.activity.pk not in completed and r.activity.pk not in notes
+        ][: RECOMMENDATIONS_PER_BATCH - len(notes)]
         alpha = result.alpha
         fingerprint = profile_fingerprint(result.evaluation, result.query)
         version = ranking_version()
-        texts = [explain(child, result.evaluation, r).text for r in top]
+        texts = [
+            " ".join(
+                filter(
+                    None,
+                    [
+                        notes.get(r.activity.pk),
+                        explain(child, result.evaluation, r).text,
+                    ],
+                )
+            )
+            for r in top
+        ]
 
-        newest = latest_batch(child)
         if newest and (
             [r.activity_id for r in newest] == [r.activity.pk for r in top]
+            and [r.pinned for r in newest] == [r.activity.pk in notes for r in top]
             and all(
                 r.alpha == alpha
                 and r.profile_fingerprint == fingerprint
@@ -184,6 +222,8 @@ def generate(child_id, caregiver):
                     ranking_version=version,
                     explanation=text,
                     explanation_version=EXPLANATION_VERSION,
+                    pinned=r.activity.pk in notes,
+                    pin_note=notes.get(r.activity.pk, ""),
                     date_generated=now,
                 )
                 for position, (r, text) in enumerate(zip(top, texts), start=1)
