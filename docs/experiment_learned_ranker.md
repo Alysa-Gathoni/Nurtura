@@ -47,4 +47,9 @@ Otherwise α = 0.7 stays, and the result is reported as it is.
 
 ## Results
 
-*Not run yet.*
+**First run (2026-11-04): provisional, no figures read.** The model was trained on 141 labelled pairs of the 11 tune children (grade 0: 21, grade 1: 55, grade 2: 65). Its top 5s include 10 pairs nobody has labelled (5 for tune children in the leave-one-out check, 5 for test children, none for H17). They are in `data/evaluation/learned_ranker_extra.csv`, blind and shuffled, to be graded before any results are printed.
+
+```
+cd backend
+python manage.py evaluate_learned_ranker --extra-labels ../data/evaluation/learned_ranker_extra.csv --markdown
+```

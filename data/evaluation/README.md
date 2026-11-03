@@ -99,6 +99,8 @@ H17 stays the content-gap child and is reported separately, as in v1, although S
 
 **Results** (2 Nov 2026): [docs/eval_v2_results.md](../../docs/eval_v2_results.md), produced with `evaluate_alpha_grid --markdown --report-alpha 0.7`. `--report-alpha` reports the test children at a fixed α while still printing the tune curve and the rule's choice.
 
+**Learned-ranker experiment** (#183): `learned_ranker_extra.csv` holds the 10 pairs the learned ranker put in a top 5 that the v2 sheet doesn't grade. Grade them with `label_heldout.html` (open that file instead), then run `python manage.py evaluate_learned_ranker --extra-labels ../data/evaluation/learned_ranker_extra.csv --markdown`. See [docs/experiment_learned_ranker.md](../../docs/experiment_learned_ranker.md).
+
 The sheet was generated with:
 
 ```

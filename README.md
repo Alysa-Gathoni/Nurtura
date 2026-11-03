@@ -286,6 +286,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/sprint5_alpha_results.md](docs/sprint5_alpha_results.md) | The ranking evaluation v1 on 54 activities (held-out children, nDCG, choice of α) |
 | [docs/eval_v2_results.md](docs/eval_v2_results.md) | The ranking evaluation v2 on 449 activities, and why α stays 0.7 |
 | [docs/experiment_embedding_model.md](docs/experiment_embedding_model.md) | Experiment: a search-trained embedding model, with its decision rule |
+| [docs/experiment_learned_ranker.md](docs/experiment_learned_ranker.md) | Experiment: a ranker learned from the tune children's labels, against the α = 0.7 formula, with its decision rule (#183) |
 | [docs/explanation_reader_test.md](docs/explanation_reader_test.md) | The explanation reader test (Sprint 6) |
 | [docs/DEVELOPMENT_PLAN.md](docs/DEVELOPMENT_PLAN.md) | The sprint plan and GitHub workflow |
 | [data/README.md](data/README.md) | Activity data: schema, sources, cleaning, ethics |
