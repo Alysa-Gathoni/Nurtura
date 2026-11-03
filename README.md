@@ -20,7 +20,7 @@ nurtura/
 │   ├── templates/, static/     admin theme and dashboard
 │   ├── setup_sbert.py          downloads + verifies the SBERT model
 │   └── models/                 cached SBERT model (gitignored, created by setup_sbert.py)
-├── mobile/nurtura_app/     Flutter app (Android, iOS, web)
+├── mobile/nurtura_app/     Flutter app (Android; runs in Chrome for development)
 │   ├── lib/                    caregiver and administrator screens, state, services, theme
 │   ├── test/                   widget and unit tests
 │   └── integration_test/       end-to-end test against the real backend
@@ -180,6 +180,7 @@ The administrator endpoints are under `/api/admin/`; caregivers get 403.
 | GET, POST | `/api/admin/activities/?status=&domain=&search=` | List activities, or add one (always as Draft, with the next `ACT-` ID) |
 | GET, PATCH | `/api/admin/activities/<id>/` | One activity; editing reviewed content returns it to Draft |
 | POST | `/api/admin/activities/<id>/status/` | Move it through review (`status`: `draft`, `under_review` or `published`) |
+| POST | `/api/admin/activities/suggest/` | Suggested area and age band for an activity's `activity_name`, `developmental_goal` and `description`: the activity classifier's three most likely values for each, with probabilities (#181). 503 until `train_activity_classifier` has been run |
 | GET | `/api/admin/choices/` | Areas, ages, difficulty levels, sources, statuses and the allowed status moves |
 | GET | `/api/admin/feedback/?rating=&domain=&activity=&limit=&offset=` | Ratings and comments against each activity, newest first, without family details |
 
@@ -199,7 +200,7 @@ The server address is built into the app with `--dart-define=API_BASE_URL=...`. 
 | Android emulator | `flutter run -d <emulator-id>` |
 | Chrome | `flutter run -d chrome` (any `localhost` port is allowed by CORS in development) |
 
-App identifier: `com.sofia.nurtura_app` (Android), `com.sofia.nurturaApp` (iOS). The app is named **Nurtura** on the home screen.
+App identifier: `com.sofia.nurtura_app`. Nurtura is an Android app; there is no iOS build (#186). It is named **Nurtura** on the home screen.
 
 ### Continue with Google (optional, Android)
 
@@ -287,6 +288,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/sprint5_alpha_results.md](docs/sprint5_alpha_results.md) | The ranking evaluation v1 on 54 activities (held-out children, nDCG, choice of α) |
 | [docs/eval_v2_results.md](docs/eval_v2_results.md) | The ranking evaluation v2 on 449 activities, and why α stays 0.7 |
 | [docs/experiment_embedding_model.md](docs/experiment_embedding_model.md) | Experiment: a search-trained embedding model, with its decision rule |
+| [docs/activity_classifier_results.md](docs/activity_classifier_results.md) | The activity classifier: cross-validated accuracy, precision, recall, F1 and confusion matrices for area and age band (#181) |
 | [docs/explanation_reader_test.md](docs/explanation_reader_test.md) | The explanation reader test (Sprint 6) |
 | [docs/DEVELOPMENT_PLAN.md](docs/DEVELOPMENT_PLAN.md) | The sprint plan and GitHub workflow |
 | [data/README.md](data/README.md) | Activity data: schema, sources, cleaning, ethics |
