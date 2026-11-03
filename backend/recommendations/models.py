@@ -71,6 +71,10 @@ class Recommendation(models.Model):
         "model).",
     )
     explanation = models.TextField(blank=True)
+    # Chosen by the caregiver from the options after feedback (#177): kept
+    # first in later batches until it is done. pin_note says why.
+    pinned = models.BooleanField(default=False)
+    pin_note = models.CharField(max_length=300, blank=True)
     explanation_version = models.CharField(
         max_length=20,
         blank=True,
