@@ -85,7 +85,7 @@ Every area starts at 1. After the rules, the scores are scaled so the most urgen
 
 The explanation is built only from what the caregiver told the app, the milestone guidelines and the activity's own details. It never shows scores or rankings.
 
-**Step 6: Feedback.** After trying the activity, the caregiver can mark it **Done** or **Partly done** and rate it from 1 to 5 stars with an optional comment. A done activity isn't suggested again; the next batch fills its place in the same ranked order.
+**Step 6: Feedback.** After trying the activity, the caregiver can mark it **Done** or **Partly done**, say how it went (went well, partly, didn't work) and what got in the way (too hard, not interested, no materials and so on), rate it from 1 to 5 stars and add a comment (#175). A done activity isn't suggested again. The next batch also learns from the feedback (#179): activities similar to one that went well move up, with a note saying so, ones similar to one that didn't work move down, and an activity that didn't work isn't suggested again.
 
 **Before birth:** an expecting parent can create a profile from the **due date** and choose an area they'd like support with. They then see only pregnancy activities, ranked for that area.
 
