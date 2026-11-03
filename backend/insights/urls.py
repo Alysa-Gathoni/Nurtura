@@ -20,6 +20,11 @@ urlpatterns = [
         name="admin-api-activities",
     ),
     path(
+        "activities/suggest/",
+        activities_api.AdminActivitySuggestView.as_view(),
+        name="admin-api-activity-suggest",
+    ),
+    path(
         "activities/<int:pk>/",
         activities_api.AdminActivityDetailView.as_view(),
         name="admin-api-activity",

@@ -251,6 +251,13 @@ SBERT_MODEL_PATH = Path(
     os.getenv("SBERT_MODEL_PATH", BASE_DIR / "models" / "all-MiniLM-L6-v2")
 )
 
+# The activity classifier (#181), written by train_activity_classifier.
+ACTIVITY_CLASSIFIER_PATH = Path(
+    os.getenv(
+        "ACTIVITY_CLASSIFIER_PATH", BASE_DIR / "models" / "activity_classifier.joblib"
+    )
+)
+
 # Weight of rule priority vs semantic similarity in the ranking (0 = SBERT
 # only, 1 = rule priority only). 0.7 was chosen by the pre-registered rule
 # on the held-out tune set (Sprint 5, #50); see

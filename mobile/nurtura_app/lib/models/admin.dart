@@ -221,6 +221,34 @@ class Choice {
   final String value, label;
 }
 
+/// One suggested value from the activity classifier (#181).
+class Suggestion {
+  const Suggestion(this.value, this.label, this.probability);
+
+  final String value, label;
+  final double probability;
+
+  String get percent => '${(probability * 100).round()}%';
+}
+
+/// The classifier's most likely area and age band for an activity's text.
+class AdminSuggestions {
+  AdminSuggestions.fromJson(Map<String, dynamic> json)
+    : domains = _list(json['developmental_domain']),
+      ageRanges = _list(json['age_range']);
+
+  static List<Suggestion> _list(Object? value) => [
+    for (final s in value as List? ?? const [])
+      Suggestion(
+        s['value'] as String,
+        s['label'] as String,
+        (s['probability'] as num).toDouble(),
+      ),
+  ];
+
+  final List<Suggestion> domains, ageRanges;
+}
+
 /// Allowed values for the activity form and the review workflow.
 class AdminChoices {
   AdminChoices.fromJson(Map<String, dynamic> json)
