@@ -20,7 +20,7 @@ nurtura/
 │   ├── templates/, static/     admin theme and dashboard
 │   ├── setup_sbert.py          downloads + verifies the SBERT model
 │   └── models/                 cached SBERT model (gitignored, created by setup_sbert.py)
-├── mobile/nurtura_app/     Flutter app (Android, iOS, web)
+├── mobile/nurtura_app/     Flutter app (Android; runs in Chrome for development)
 │   ├── lib/                    caregiver and administrator screens, state, services, theme
 │   ├── test/                   widget and unit tests
 │   └── integration_test/       end-to-end test against the real backend
@@ -199,7 +199,7 @@ The server address is built into the app with `--dart-define=API_BASE_URL=...`. 
 | Android emulator | `flutter run -d <emulator-id>` |
 | Chrome | `flutter run -d chrome` (any `localhost` port is allowed by CORS in development) |
 
-App identifier: `com.sofia.nurtura_app` (Android), `com.sofia.nurturaApp` (iOS). The app is named **Nurtura** on the home screen.
+App identifier: `com.sofia.nurtura_app`. Nurtura is an Android app; there is no iOS build (#186). It is named **Nurtura** on the home screen.
 
 ### Continue with Google (optional, Android)
 
