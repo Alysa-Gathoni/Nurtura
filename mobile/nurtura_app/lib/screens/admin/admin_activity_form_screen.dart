@@ -59,6 +59,12 @@ class _AdminActivityFormScreenState extends State<AdminActivityFormScreen> {
   };
 
   AdminChoices? _choices;
+  AdminSuggestions? _suggestions;
+  bool _suggesting = false;
+  String? _suggestError;
+
+  /// Bumped when a suggestion fills a picker, so it rebuilds with the value.
+  int _pickVersion = 0;
   late AdminActivity? _activity = widget.activity;
   Map<String, List<String>> _fieldErrors = {};
   String? _error;
@@ -130,6 +136,85 @@ class _AdminActivityFormScreenState extends State<AdminActivityFormScreen> {
         curve: Curves.easeOut,
       );
     }
+  }
+
+  /// Asks the classifier for the likely area and age band (#181).
+  Future<void> _suggest() async {
+    setState(() {
+      _suggesting = true;
+      _suggestError = null;
+    });
+    try {
+      final suggestions = await _service.suggest(
+        name: _text['activity_name']!.text,
+        goal: _text['developmental_goal']!.text,
+        description: _text['description']!.text,
+      );
+      if (mounted) setState(() => _suggestions = suggestions);
+    } on ApiException catch (e) {
+      if (e.statusCode == 401) {
+        if (mounted) await _failed(e);
+      } else if (mounted) {
+        setState(() => _suggestError = e.message);
+      }
+    }
+    if (mounted) setState(() => _suggesting = false);
+  }
+
+  void _apply(String field, Suggestion s) => setState(() {
+    _picks[field] = s.value;
+    _pickVersion++;
+  });
+
+  Widget _suggestionPanel() {
+    Widget row(String field, String label, List<Suggestion> options) => Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Wrap(
+        spacing: 6,
+        runSpacing: 6,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Text('$label:', style: Theme.of(context).textTheme.bodySmall),
+          for (final s in options)
+            ActionChip(
+              key: Key('suggest_${field}_${s.value}'),
+              label: Text('${s.label} · ${s.percent}'),
+              onPressed: () => _apply(field, s),
+            ),
+        ],
+      ),
+    );
+    final suggestions = _suggestions;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          OutlinedButton.icon(
+            key: const Key('suggestButton'),
+            onPressed: _suggesting ? null : _suggest,
+            icon: const Icon(Icons.auto_awesome_rounded),
+            label: Text(_suggesting ? 'Thinking…' : 'Suggest area and age'),
+          ),
+          Text(
+            'Uses the name, goal and "How to do it". Tap a suggestion to use it.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          if (_suggestError != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: MessageBanner.error(
+                _suggestError!,
+                key: const Key('suggestError'),
+              ),
+            ),
+          if (suggestions != null) ...[
+            row('developmental_domain', 'Area', suggestions.domains),
+            row('age_range', 'Age', suggestions.ageRanges),
+          ],
+        ],
+      ),
+    );
   }
 
   Map<String, String> _values() => {
@@ -309,6 +394,7 @@ class _AdminActivityFormScreenState extends State<AdminActivityFormScreen> {
       ),
     );
     Widget pick(String field, String label, List<Choice> options) => Padding(
+      key: ValueKey('pick_${field}_$_pickVersion'),
       padding: const EdgeInsets.only(bottom: 12),
       child: DropdownButtonFormField<String>(
         key: Key('field_$field'),
@@ -330,6 +416,7 @@ class _AdminActivityFormScreenState extends State<AdminActivityFormScreen> {
       text('activity_name', 'Name', 1),
       pick('developmental_domain', 'Area', choices.domains),
       pick('age_range', 'Age', choices.ageRanges),
+      _suggestionPanel(),
       pick('difficulty_level', 'Difficulty', choices.difficultyLevels),
       for (final (field, label, lines) in _textFields.skip(1))
         if (field != 'source_url') text(field, label, lines),

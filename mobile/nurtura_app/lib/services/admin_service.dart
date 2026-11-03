@@ -59,6 +59,20 @@ class AdminService {
             as Map<String, dynamic>,
       );
 
+  /// The classifier's suggested area and age band (#181). The server loads
+  /// the AI model the first time, so allow as long as the search index.
+  Future<AdminSuggestions> suggest({
+    required String name,
+    required String goal,
+    required String description,
+  }) async => AdminSuggestions.fromJson(
+    await _api.post('/api/admin/activities/suggest/', {
+      'activity_name': name,
+      'developmental_goal': goal,
+      'description': description,
+    }, searchIndexTimeout) as Map<String, dynamic>,
+  );
+
   Future<AdminChoices> choices() async => AdminChoices.fromJson(
     await _api.get('/api/admin/choices/') as Map<String, dynamic>,
   );
