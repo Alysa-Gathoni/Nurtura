@@ -29,6 +29,7 @@ class ActivityDetailScreen extends StatefulWidget {
     required this.recommendation,
     required this.childName,
     this.onChanged,
+    this.onNewBatch,
   });
 
   final Recommendation recommendation;
@@ -37,6 +38,10 @@ class ActivityDetailScreen extends StatefulWidget {
   /// Called with the updated recommendation after a change is saved, so
   /// the list (and its offline copy) can show it.
   final ValueChanged<Recommendation>? onChanged;
+
+  /// Called with the new batch when the caregiver picks one of the options
+  /// offered after feedback (#177); the screen then closes.
+  final ValueChanged<RecommendationBatch>? onNewBatch;
 
   @override
   State<ActivityDetailScreen> createState() => _ActivityDetailScreenState();
@@ -57,15 +62,49 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     ...?widget.recommendation.feedback?.issues,
   };
   late bool _editingFeedback = widget.recommendation.feedback == null;
+  List<FeedbackOption> _options = const [];
+  String? _choosing; // activity_id being added
+  String? _optionsError;
   bool _savingDone = false;
   bool _sendingFeedback = false;
   String? _doneError;
   String? _feedbackError;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.recommendation.feedback?.outcome != null) _loadOptions();
+  }
+
+  @override
   void dispose() {
     _comment.dispose();
     super.dispose();
+  }
+
+  /// The options for the saved feedback (#177). Quietly empty if they
+  /// can't be loaded: they're a suggestion, not something to wait for.
+  Future<void> _loadOptions() async {
+    try {
+      final options = await _service.options(_r.id);
+      if (mounted) setState(() => _options = options);
+    } on ApiException {
+      if (mounted) setState(() => _options = const []);
+    }
+  }
+
+  Future<void> _choose(FeedbackOption option) async {
+    setState(() {
+      _choosing = option.activityId;
+      _optionsError = null;
+    });
+    await _attempt(() async {
+      final batch = await _service.chooseOption(_r.id, option.activityId);
+      if (!mounted) return;
+      widget.onNewBatch?.call(batch);
+      Navigator.of(context).pop();
+    }, (message) => setState(() => _optionsError = message));
+    if (mounted) setState(() => _choosing = null);
   }
 
   void _update(Recommendation updated) {
@@ -163,6 +202,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
       if (!mounted) return;
       _update(_r.withProgress(feedback: feedback));
       setState(() => _editingFeedback = false);
+      await _loadOptions();
     }, (message) => setState(() => _feedbackError = message));
     if (mounted) setState(() => _sendingFeedback = false);
   }
@@ -252,6 +292,10 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                 _doneCard(context),
                 const SizedBox(height: 14),
                 _feedbackCard(context),
+                if (_options.isNotEmpty && !_editingFeedback) ...[
+                  const SizedBox(height: 18),
+                  _optionsSection(context),
+                ],
               ],
             ),
           ),
@@ -505,6 +549,88 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  /// "What next?": the options offered after feedback (#177).
+  Widget _optionsSection(BuildContext context) {
+    final p = context.palette;
+    return Column(
+      key: const Key('feedbackOptions'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text('What next?', style: AppText.quicksand(size: 20)),
+        const SizedBox(height: 4),
+        Text(
+          'Ideas based on how it went.',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        if (_optionsError != null) ...[
+          const SizedBox(height: 8),
+          MessageBanner.error(_optionsError!, key: const Key('optionsError')),
+        ],
+        for (final o in _options) ...[
+          const SizedBox(height: 10),
+          AppCard(
+            key: Key('option_${o.activityId}'),
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  o.title,
+                  style: AppText.nunito(
+                    size: 13,
+                    weight: FontWeight.w800,
+                    color: p.primary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(o.activityName, style: AppText.quicksand(size: 18)),
+                const SizedBox(height: 6),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    DomainChip(o.domain),
+                    PillChip(
+                      label: o.ageLabel,
+                      color: p.mutedText,
+                      background: p.cardAlt,
+                      icon: Icons.child_care_rounded,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(o.why, style: AppText.nunito(size: 14)),
+                if (o.shortDescription.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    o.shortDescription,
+                    style: AppText.nunito(size: 14, color: p.mutedText),
+                  ),
+                ],
+                if (o.tip.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  MessageBanner.info(
+                    o.tip,
+                    key: Key('optionTip_${o.activityId}'),
+                  ),
+                ],
+                const SizedBox(height: 10),
+                SecondaryButton(
+                  key: Key('chooseOption_${o.activityId}'),
+                  label: _choosing == o.activityId
+                      ? 'Adding…'
+                      : 'Try this instead',
+                  icon: Icons.add_rounded,
+                  onPressed: _choosing != null ? null : () => _choose(o),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

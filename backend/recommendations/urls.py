@@ -13,4 +13,9 @@ urlpatterns = [
         views.ChildRecommendationsView.as_view(),
         name="child-recommendations",
     ),
+    path(
+        "recommendations/<int:recommendation_id>/options/",
+        views.RecommendationOptionsView.as_view(),
+        name="recommendation-options",
+    ),
 ]

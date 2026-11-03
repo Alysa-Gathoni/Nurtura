@@ -7,13 +7,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from feedback.manager import latest as latest_feedback
-from feedback.views import completion_json, feedback_json
+from feedback.views import completion_json, feedback_json, own_recommendation
 from profiles.models import ChildProfile
 from profiles.permissions import IsCaregiver
 from profiles.rules.referral import referral_for
 
 from . import generation
 from .generation import short_description
+from .options import options_for
 from .retrieval import DEFAULT_LIMIT, MAX_LIMIT, retrieve
 
 
@@ -78,6 +79,8 @@ def _card(recommendation):
         "source": activity.source,
         "source_url": activity.source_url,
         "explanation": recommendation.explanation,
+        # Chosen by the caregiver after feedback, and kept until done (#177).
+        "pinned": recommendation.pinned,
         # Read-only state recorded by the caregiver (FR-14).
         "completion": completion_json(getattr(recommendation, "completion", None)),
         # Read-only, from FeedbackManager (FR-15).
@@ -124,4 +127,78 @@ class ChildRecommendationsView(APIView):
         return Response(
             _payload(child, result.recommendations),
             status=status.HTTP_201_CREATED if result.created else status.HTTP_200_OK,
+        )
+
+
+def _activity_json(activity):
+    return {
+        "activity_id": activity.activity_id,
+        "activity_name": activity.activity_name,
+        "developmental_domain": activity.developmental_domain,
+        "age_range": activity.age_range,
+        "short_description": short_description(activity.description),
+        "description": activity.description,
+        "materials": activity.materials,
+        "cultural_relevance": activity.cultural_relevance,
+        "source": activity.source,
+        "source_url": activity.source_url,
+    }
+
+
+def _options(recommendation):
+    """The options for the caregiver's latest feedback on recommendation."""
+    child = recommendation.child
+    exclude = generation.completed_activity_ids(child) | {
+        r.activity_id for r in generation.latest_batch(child)
+    }
+    feedback = latest_feedback(recommendation.feedback.all())
+    return options_for(recommendation, feedback, exclude)
+
+
+class RecommendationOptionsView(APIView):
+    """Options offered after feedback (#177).
+
+    GET lists up to three activities answering what went wrong, each with
+    why it is offered (an empty list until there is feedback with an
+    outcome). POST {"activity_id"} pins one of them: a new batch is stored
+    with it first, and it stays in later batches until it is done. The
+    response is the new batch, as from the recommendations endpoint.
+    """
+
+    permission_classes = [IsCaregiver]
+
+    def get(self, request, recommendation_id):
+        recommendation = own_recommendation(request.user, recommendation_id)
+        return Response(
+            {
+                "options": [
+                    {
+                        "reason": o.reason,
+                        "title": o.title,
+                        "why": o.why,
+                        "tip": o.tip,
+                        "activity": _activity_json(o.activity),
+                    }
+                    for o in _options(recommendation)
+                ]
+            }
+        )
+
+    def post(self, request, recommendation_id):
+        recommendation = own_recommendation(request.user, recommendation_id)
+        chosen = str(request.data.get("activity_id", "")).strip()
+        option = next(
+            (o for o in _options(recommendation) if o.activity.activity_id == chosen),
+            None,
+        )
+        if option is None:
+            raise ValidationError(
+                {"activity_id": ["Choose one of the options offered."]}
+            )
+        child = recommendation.child
+        result = generation.generate(
+            child.pk, request.user, pin=(option.activity.pk, option.why)
+        )
+        return Response(
+            _payload(child, result.recommendations), status=status.HTTP_201_CREATED
         )

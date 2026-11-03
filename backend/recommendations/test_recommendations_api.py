@@ -93,6 +93,7 @@ CARD_FIELDS = {
     "source",
     "source_url",
     "explanation",
+    "pinned",
     "completion",
     "feedback",
 }

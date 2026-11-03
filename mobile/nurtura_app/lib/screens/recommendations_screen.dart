@@ -127,6 +127,19 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
     await _cache.write(widget.child.id, next);
   }
 
+  /// A caregiver picked an option after feedback (#177): show the new
+  /// batch, with it first, and keep the offline copy in step.
+  Future<void> _newBatch(RecommendationBatch batch) async {
+    setState(() {
+      _batch = batch;
+      _savedAt = null;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Added to ${widget.child.name}'s ideas.")),
+    );
+    await _cache.write(widget.child.id, batch);
+  }
+
   Future<void> _sessionEnded() async {
     final auth = context.read<AuthState>();
     Navigator.of(context).popUntil((route) => route.isFirst);
@@ -300,6 +313,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                 recommendation: item,
                 childName: widget.child.name,
                 onChanged: _changed,
+                onNewBatch: _newBatch,
               ),
             ),
           ),
@@ -361,6 +375,14 @@ class RecommendationCard extends StatelessWidget {
             runSpacing: 6,
             children: [
               DomainChip(r.domain),
+              if (r.pinned)
+                PillChip(
+                  key: Key('pinnedChip_${r.activityId}'),
+                  label: 'Your choice',
+                  color: context.palette.primary,
+                  background: context.palette.cardAlt,
+                  icon: Icons.push_pin_rounded,
+                ),
               PillChip(
                 label: r.ageLabel,
                 color: context.palette.mutedText,

@@ -175,3 +175,14 @@ class GenerationTests(PersonalisationTestCase):
             )
         )
         self.assertLessEqual(ids.index("ACT-0912"), ids.index("ACT-0914"))
+
+    def test_a_pin_marked_as_not_working_is_dropped(self):
+        pinned = generation.generate(
+            self.child.pk, self.caregiver, pin=(self.a["ACT-0915"].pk, "Chosen.")
+        ).recommendations[0]
+        self.assertTrue(pinned.pinned)
+        Feedback.objects.create(recommendation=pinned, rating=1, outcome="didnt_work")
+        later = generation.generate(self.child.pk, self.caregiver)
+        self.assertNotIn(
+            "ACT-0915", [r.activity.activity_id for r in later.recommendations]
+        )

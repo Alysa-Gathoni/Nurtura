@@ -57,6 +57,28 @@ class RecommendationService {
     }) as Map<String, dynamic>,
   );
 
+  /// Options offered after feedback (#177); empty until there is any.
+  Future<List<FeedbackOption>> options(int recommendationId) async {
+    final body = await _api.get(
+      '/api/recommendations/$recommendationId/options/',
+    ) as Map<String, dynamic>;
+    return [
+      for (final o in body['options'] as List? ?? const [])
+        FeedbackOption.fromJson(o as Map<String, dynamic>),
+    ];
+  }
+
+  /// Adds an option to the child's ideas; returns the new batch, with it
+  /// pinned first (#177).
+  Future<RecommendationBatch> chooseOption(
+    int recommendationId,
+    String activityId,
+  ) async => RecommendationBatch.fromJson(
+    await _api.post('/api/recommendations/$recommendationId/options/', {
+      'activity_id': activityId,
+    }, generateTimeout) as Map<String, dynamic>,
+  );
+
   /// The newest batch, generating one first if there isn't any yet.
   Future<RecommendationBatch> load(
     int childId, {
