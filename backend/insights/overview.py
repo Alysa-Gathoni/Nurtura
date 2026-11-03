@@ -268,7 +268,12 @@ def recent_events(limit=EVENTS_N):
             (
                 f.date_submitted,
                 "feedback",
-                f"Rated {f.rating}★",
+                (
+                    f"Rated {f.rating}★"
+                    if f.rating
+                    else "Feedback: "
+                    + (f.get_interest_display() or f.get_outcome_display() or "given")
+                ),
                 f.recommendation.activity.activity_name,
             )
         )

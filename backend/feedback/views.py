@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from profiles.permissions import IsCaregiver
 from recommendations.models import Recommendation
 
+from . import observations
 from .manager import FeedbackManager
 from .models import CompletedActivity
 
@@ -39,6 +40,7 @@ def feedback_json(feedback):
         "comment": feedback.comment,
         "outcome": feedback.outcome,
         "issues": list(feedback.issues),
+        "interest": feedback.interest,
         "date_submitted": feedback.date_submitted.isoformat(),
     }
 
@@ -84,10 +86,14 @@ class RecommendationCompletionView(APIView):
 
 class FeedbackSerializer(serializers.Serializer):
     # Only the shape is checked here; FeedbackManager owns the rules.
-    rating = serializers.IntegerField()
+    rating = serializers.IntegerField(required=False, allow_null=True, default=None)
     comment = serializers.CharField(required=False, allow_blank=True, default="")
     outcome = serializers.CharField(required=False, allow_blank=True, default="")
     issues = serializers.ListField(
+        child=serializers.CharField(), required=False, default=list
+    )
+    interest = serializers.CharField(required=False, allow_blank=True, default="")
+    observed = serializers.ListField(
         child=serializers.CharField(), required=False, default=list
     )
 
@@ -123,6 +129,33 @@ class RecommendationFeedbackView(APIView):
         except DjangoValidationError as e:
             raise serializers.ValidationError(e.message_dict)
         return Response(
-            feedback_json(feedback),
+            # The skills just recorded as milestones, for the confirmation.
+            {**feedback_json(feedback), "recorded": feedback.recorded},
             status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+        )
+
+
+class ObservableSkillsView(APIView):
+    """Skills to ask about in the "Well done!" sheet (#185).
+
+    GET lists catalogue milestones of the activity's area that are due or
+    coming up for the child and not yet Achieved, with their current status.
+    """
+
+    permission_classes = [IsCaregiver]
+
+    def get(self, request, recommendation_id):
+        recommendation = own_recommendation(request.user, recommendation_id)
+        return Response(
+            {
+                "skills": [
+                    {
+                        "key": ref.milestone_key,
+                        "description": ref.description,
+                        "expected_age_months": float(ref.expected_age_months),
+                        "status": current or "",
+                    }
+                    for ref, current in observations.observable(recommendation)
+                ]
+            }
         )

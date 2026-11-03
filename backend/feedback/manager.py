@@ -12,6 +12,7 @@ from django.utils import timezone
 
 from recommendations.models import Recommendation
 
+from . import observations
 from .models import Feedback
 
 MAX_COMMENT_LENGTH = 1000
@@ -28,29 +29,50 @@ def latest(feedback_rows):
 class FeedbackManager:
     @staticmethod
     def submit(
-        caregiver, recommendation_id, rating, comment="", outcome="", issues=None
+        caregiver,
+        recommendation_id,
+        rating=None,
+        comment="",
+        outcome="",
+        issues=None,
+        interest="",
+        observed=None,
     ):
         """Record or replace the caregiver's feedback on a recommendation.
 
-        Returns (feedback, created). Raises Recommendation.DoesNotExist when
-        the recommendation isn't the caregiver's, and ValidationError for a
-        rating outside 1-5, a comment over MAX_COMMENT_LENGTH characters, or
-        an unknown outcome or issue (#175). Issues are stored once each, in
-        the order of Feedback.Issue.
+        Returns (feedback, created); feedback.recorded lists the observed
+        skills recorded as milestones (#185). Raises
+        Recommendation.DoesNotExist when the recommendation isn't the
+        caregiver's, and ValidationError for a rating outside 1-5 (it is
+        optional), a comment over MAX_COMMENT_LENGTH characters, an unknown
+        outcome, issue (#175) or interest, or an observed skill that wasn't
+        offered. Recording skills needs the privacy notice agreed, like any
+        milestone. Issues are stored once each, in the order of
+        Feedback.Issue.
         """
+        from profiles import privacy
+
         comment = (comment or "").strip()
         outcome = (outcome or "").strip()
+        interest = (interest or "").strip()
         issues = list(issues or [])
+        observed = list(observed or [])
         errors = {}
+        if interest and interest not in Feedback.Interest.values:
+            errors["interest"] = ["Choose how interested your child was."]
+        if observed and privacy.consent_required(caregiver):
+            errors["observed"] = ["Please read and agree to the privacy notice first."]
         if outcome and outcome not in Feedback.Outcome.values:
             errors["outcome"] = ["Choose how it went."]
         unknown = [i for i in issues if i not in Feedback.Issue.values]
         if unknown:
             errors["issues"] = [f"Unknown option: {', '.join(map(str, unknown))}."]
         issues = [i for i in Feedback.Issue.values if i in issues]
-        if isinstance(rating, bool) or not isinstance(rating, int):
-            errors["rating"] = ["Choose a rating from 1 to 5."]
-        elif not 1 <= rating <= 5:
+        if rating is not None and (
+            isinstance(rating, bool)
+            or not isinstance(rating, int)
+            or not 1 <= rating <= 5
+        ):
             errors["rating"] = ["Choose a rating from 1 to 5."]
         if len(comment) > MAX_COMMENT_LENGTH:
             errors["comment"] = [
@@ -73,9 +95,16 @@ class FeedbackManager:
             feedback.comment = comment
             feedback.outcome = outcome
             feedback.issues = issues
+            feedback.interest = interest
             feedback.date_submitted = timezone.now()
             feedback.full_clean()
             feedback.save()
+            try:
+                feedback.recorded = observations.record(recommendation, observed)
+            except ValueError as exc:
+                raise ValidationError(
+                    {"observed": [f"Not offered for this activity: {exc}."]}
+                ) from exc
         return feedback, created
 
     @staticmethod

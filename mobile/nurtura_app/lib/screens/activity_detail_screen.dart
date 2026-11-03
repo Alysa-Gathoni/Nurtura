@@ -15,6 +15,7 @@ import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
 import '../widgets/nurtura_app_bar.dart';
 import '../widgets/pill_chip.dart';
+import '../widgets/well_done_sheet.dart';
 import 'recommendations_screen.dart';
 
 /// Longest comment the server accepts (FeedbackManager).
@@ -30,6 +31,7 @@ class ActivityDetailScreen extends StatefulWidget {
     required this.childName,
     this.onChanged,
     this.onNewBatch,
+    this.onProfileChanged,
   });
 
   final Recommendation recommendation;
@@ -42,6 +44,10 @@ class ActivityDetailScreen extends StatefulWidget {
   /// Called with the new batch when the caregiver picks one of the options
   /// offered after feedback (#177); the screen then closes.
   final ValueChanged<RecommendationBatch>? onNewBatch;
+
+  /// Called when skills ticked in the "Well done!" sheet were recorded as
+  /// milestones (#185), so the child's ideas are out of date.
+  final VoidCallback? onProfileChanged;
 
   @override
   State<ActivityDetailScreen> createState() => _ActivityDetailScreenState();
@@ -57,6 +63,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
   );
 
   late int _rating = widget.recommendation.feedback?.rating ?? 0;
+  late FeedbackInterest? _interest = widget.recommendation.feedback?.interest;
   late FeedbackOutcome? _outcome = widget.recommendation.feedback?.outcome;
   late final Set<FeedbackIssue> _issues = {
     ...?widget.recommendation.feedback?.issues,
@@ -150,17 +157,40 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
       // Doing an activity counts toward the day streak too.
       await context.read<EngagementState>().checkIn();
       if (!mounted) return;
+      setState(() => _savingDone = false);
+      // "Well done!": how it went, interest and skills seen (#185).
+      final saved = await WellDoneSheet.show(
+        context,
+        recommendation: _r,
+        childName: widget.childName,
+        service: _service,
+      );
+      if (!mounted || saved == null) return;
+      await _feedbackSaved(saved);
+    }, (message) => setState(() => _doneError = message));
+    if (mounted) setState(() => _savingDone = false);
+  }
+
+  /// Shows newly saved feedback, its options, and any milestones recorded.
+  Future<void> _feedbackSaved(ActivityFeedback saved) async {
+    _update(_r.withProgress(feedback: saved));
+    setState(() {
+      _editingFeedback = false;
+      _interest = saved.interest;
+    });
+    if (saved.recorded.isNotEmpty) {
+      widget.onProfileChanged?.call();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          key: const Key('milestonesRecordedSnack'),
           content: Text(
-            partial
-                ? 'Nice start! Saved as partly done.'
-                : 'Well done! Marked as done.',
+            "Added to ${widget.childName}'s milestones: "
+            '${saved.recorded.join('; ')}.',
           ),
         ),
       );
-    }, (message) => setState(() => _doneError = message));
-    if (mounted) setState(() => _savingDone = false);
+    }
+    await _loadOptions();
   }
 
   Future<void> _undoDone() async {
@@ -180,10 +210,6 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
       setState(() => _feedbackError = 'Choose how it went.');
       return;
     }
-    if (_rating == 0) {
-      setState(() => _feedbackError = 'Tap a star to rate the activity.');
-      return;
-    }
     setState(() {
       _sendingFeedback = true;
       _feedbackError = null;
@@ -191,9 +217,10 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     await _attempt(() async {
       final feedback = await _service.sendFeedback(
         _r.id,
-        rating: _rating,
+        rating: _rating == 0 ? null : _rating,
         comment: _comment.text,
         outcome: _outcome,
+        interest: _interest,
         // Nothing "got in the way" of an activity that went well.
         issues: _outcome == FeedbackOutcome.wentWell
             ? const []
@@ -431,7 +458,16 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
               ),
               const SizedBox(height: 4),
             ],
-            _Stars(rating: saved.rating, color: p.mustard),
+            if (saved.interest != null) ...[
+              Text(
+                'Interest: ${saved.interest!.label}',
+                key: const Key('savedInterest'),
+                style: AppText.nunito(size: 14, color: p.mutedText),
+              ),
+              const SizedBox(height: 4),
+            ],
+            if (saved.rating != null)
+              _Stars(rating: saved.rating!, color: p.mustard),
             if (saved.comment.isNotEmpty) ...[
               const SizedBox(height: 6),
               Text(
@@ -505,7 +541,29 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
           ],
           const SizedBox(height: 14),
           Text(
-            'How helpful was this idea?',
+            'How interested was ${widget.childName}?',
+            style: AppText.nunito(size: 16, weight: FontWeight.w700),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final i in FeedbackInterest.values)
+                ChoiceChip(
+                  key: Key('cardInterest_${i.value}'),
+                  avatar: Icon(i.icon, size: 18),
+                  label: Text(i.label),
+                  selected: _interest == i,
+                  onSelected: _sendingFeedback
+                      ? null
+                      : (_) => setState(() => _interest = i),
+                ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Text(
+            'How helpful was this idea? (optional)',
             style: AppText.nunito(size: 16, weight: FontWeight.w700),
           ),
           const SizedBox(height: 8),

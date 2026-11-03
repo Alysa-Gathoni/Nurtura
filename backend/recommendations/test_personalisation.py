@@ -96,6 +96,31 @@ class SignalsTests(PersonalisationTestCase):
         self.assertEqual(found[self.a["ACT-0913"].pk][0], DISLIKED)
         self.assertNotIn(self.a["ACT-0915"].pk, found)
 
+    def test_interest_decides_when_there_is_no_outcome(self):
+        for aid, interest, kind in (
+            ("ACT-0911", "loved_it", LIKED),
+            ("ACT-0912", "happy", LIKED),
+            ("ACT-0913", "bored", DISLIKED),
+            ("ACT-0914", "okay", None),
+        ):
+            f = self.give(aid, rating=None)
+            f.interest = interest
+            f.save()
+        found = signals(self.child)
+        for aid, kind in (
+            ("ACT-0911", LIKED),
+            ("ACT-0912", LIKED),
+            ("ACT-0913", DISLIKED),
+        ):
+            self.assertEqual(found[self.a[aid].pk][0], kind)
+        self.assertNotIn(self.a["ACT-0914"].pk, found)
+
+    def test_an_outcome_outranks_interest(self):
+        f = self.give("ACT-0911", "didnt_work", rating=None)
+        f.interest = "loved_it"
+        f.save()
+        self.assertEqual(signals(self.child)[self.a["ACT-0911"].pk][0], DISLIKED)
+
     def test_older_feedback_falls_back_to_the_rating(self):
         self.give("ACT-0911", rating=5)
         self.give("ACT-0913", rating=1)

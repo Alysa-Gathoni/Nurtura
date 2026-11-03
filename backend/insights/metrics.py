@@ -101,8 +101,10 @@ def dashboard(now=None):
     )
     tried = completions["done"] + completions["partly"]
 
-    ratings = Feedback.objects.aggregate(count=Count("id"), average=Avg("rating"))
-    by_rating = dict(Feedback.objects.values_list("rating").annotate(n=Count("id")))
+    # The rating is optional since #185; only feedback with one counts here.
+    rated = Feedback.objects.filter(rating__isnull=False)
+    ratings = rated.aggregate(count=Count("id"), average=Avg("rating"))
+    by_rating = dict(rated.values_list("rating").annotate(n=Count("id")))
 
     published = dict(
         DevelopmentalActivity.objects.filter(content_status=ContentStatus.PUBLISHED)

@@ -37,7 +37,7 @@ class CompletedActivity(models.Model):
 
 class Feedback(models.Model):
     """A caregiver's view of a recommendation: how it went, what got in the
-    way, a 1-5 rating and a comment."""
+    way, the child's interest, an optional 1-5 rating and a comment."""
 
     class Outcome(models.TextChoices):
         WENT_WELL = "went_well", "Went well"
@@ -52,12 +52,20 @@ class Feedback(models.Model):
         NO_TIME = "no_time", "Not enough time"
         CHILD_UPSET = "child_upset", "My child got upset"
 
+    class Interest(models.TextChoices):
+        BORED = "bored", "Bored"
+        OKAY = "okay", "Okay"
+        HAPPY = "happy", "Happy"
+        LOVED_IT = "loved_it", "Loved it"
+
     recommendation = models.ForeignKey(
         Recommendation, on_delete=models.CASCADE, related_name="feedback"
     )
     rating = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
-        help_text="1 (not helpful) to 5 (very helpful).",
+        help_text="1 (not helpful) to 5 (very helpful); optional since #185.",
     )
     comment = models.TextField(blank=True)
     # How it went and what got in the way (#175). Blank on feedback given
@@ -66,6 +74,8 @@ class Feedback(models.Model):
     issues = models.JSONField(
         default=list, blank=True, help_text='Issue values, e.g. ["too_hard"].'
     )
+    # The child's interest, from the "Well done!" sheet (#185).
+    interest = models.CharField(max_length=20, choices=Interest.choices, blank=True)
     date_submitted = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -73,11 +83,13 @@ class Feedback(models.Model):
         verbose_name_plural = "feedback"
         constraints = [
             models.CheckConstraint(
-                condition=models.Q(rating__gte=1) & models.Q(rating__lte=5),
+                condition=models.Q(rating__isnull=True)
+                | (models.Q(rating__gte=1) & models.Q(rating__lte=5)),
                 name="rating_between_1_and_5",
             ),
         ]
 
     def __str__(self):
         # The activity, not the child (see CompletedActivity.__str__).
-        return f"{self.rating}/5 on {self.recommendation.activity.activity_name}"
+        rating = f"{self.rating}/5" if self.rating else "Feedback"
+        return f"{rating} on {self.recommendation.activity.activity_name}"

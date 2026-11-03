@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// The caregiver marked the activity as done, fully or partly (FR-14).
 class Completion {
   const Completion({required this.partial, required this.date});
@@ -60,8 +62,44 @@ enum FeedbackIssue {
   }
 }
 
+/// How interested the child was (#185), from the "Well done!" sheet.
+enum FeedbackInterest {
+  bored('bored', 'Bored', Icons.sentiment_dissatisfied_rounded),
+  okay('okay', 'Okay', Icons.sentiment_neutral_rounded),
+  happy('happy', 'Happy', Icons.sentiment_satisfied_rounded),
+  lovedIt('loved_it', 'Loved it', Icons.sentiment_very_satisfied_rounded);
+
+  const FeedbackInterest(this.value, this.label, this.icon);
+  final String value;
+  final String label;
+  final IconData icon;
+
+  static FeedbackInterest? fromValue(String? value) {
+    for (final i in values) {
+      if (i.value == value) return i;
+    }
+    return null;
+  }
+}
+
+/// A guideline milestone the caregiver may have seen during an activity
+/// (#185); ticking it records it as Emerging.
+class ObservableSkill {
+  const ObservableSkill({required this.key, required this.description});
+
+  factory ObservableSkill.fromJson(Map<String, dynamic> json) =>
+      ObservableSkill(
+        key: json['key'] as String,
+        description: json['description'] as String,
+      );
+
+  final String key;
+  final String description;
+}
+
 /// The caregiver's feedback on a recommendation (FR-15): how it went and
-/// what got in the way (#175), a rating and a comment.
+/// what got in the way (#175), the child's interest (#185), an optional
+/// rating and a comment.
 class ActivityFeedback {
   const ActivityFeedback({
     required this.rating,
@@ -69,11 +107,13 @@ class ActivityFeedback {
     required this.submittedAt,
     this.outcome,
     this.issues = const [],
+    this.interest,
+    this.recorded = const [],
   });
 
   factory ActivityFeedback.fromJson(Map<String, dynamic> json) =>
       ActivityFeedback(
-        rating: json['rating'] as int,
+        rating: json['rating'] as int?,
         comment: json['comment'] as String? ?? '',
         submittedAt: DateTime.parse(json['date_submitted'] as String),
         outcome: FeedbackOutcome.fromValue(json['outcome'] as String?),
@@ -82,11 +122,20 @@ class ActivityFeedback {
           for (final v in json['issues'] as List? ?? const [])
             ?FeedbackIssue.fromValue(v as String),
         ],
+        interest: FeedbackInterest.fromValue(json['interest'] as String?),
+        recorded: [
+          for (final r in json['recorded'] as List? ?? const []) r as String,
+        ],
       );
 
-  final int rating;
+  /// Optional since #185.
+  final int? rating;
   final String comment;
   final DateTime submittedAt;
+  final FeedbackInterest? interest;
+
+  /// Skills recorded as milestones by this submission; not stored.
+  final List<String> recorded;
 
   /// Null on feedback given before the question was asked.
   final FeedbackOutcome? outcome;
@@ -97,6 +146,7 @@ class ActivityFeedback {
     'comment': comment,
     'outcome': outcome?.value ?? '',
     'issues': [for (final i in issues) i.value],
+    'interest': interest?.value ?? '',
     'date_submitted': submittedAt.toIso8601String(),
   };
 }

@@ -191,9 +191,14 @@ class _FeedbackCard extends StatelessWidget {
         children: [
           Row(
             children: [
+              // The rating is optional since #185 (0 = none given).
               Text(
-                '★' * f.rating + '☆' * (5 - f.rating),
-                semanticsLabel: '${f.rating} out of 5',
+                f.rating == 0
+                    ? 'No rating'
+                    : '★' * f.rating + '☆' * (5 - f.rating),
+                semanticsLabel: f.rating == 0
+                    ? 'No rating'
+                    : '${f.rating} out of 5',
                 style: AppText.nunito(size: 16, color: p.mustard),
               ),
               const Spacer(),
