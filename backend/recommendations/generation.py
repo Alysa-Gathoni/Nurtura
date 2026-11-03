@@ -19,6 +19,10 @@ are stored as one batch of Recommendation rows.
   the child's interests), the age bracket and the milestone catalogue.
 - The child row is locked for the whole generation, so simultaneous
   requests for the same child can't both store a batch.
+- The child's feedback adjusts the order after ranking (personalisation.py,
+  #179): activities similar to ones that went well move up, ones similar to
+  ones that didn't work move down, and an activity that didn't work isn't
+  suggested again. A child with no feedback gets the evaluated order.
 """
 
 import hashlib
@@ -36,6 +40,7 @@ from profiles.models import ChildProfile
 from . import embeddings, provenance
 from .explanations import EXPLANATION_VERSION, explain
 from .models import Recommendation
+from .personalisation import personalise
 from .ranking import child_bracket, rank
 
 RECOMMENDATIONS_PER_BATCH = 5
@@ -140,14 +145,27 @@ def generate(child_id, caregiver):
             pk=child_id, caregiver=caregiver
         )
         result = rank(child)
-        completed = completed_activity_ids(child)
-        top = [r for r in result.ranked if r.activity.pk not in completed][
+        personal = personalise(child, result.ranked)
+        skip = completed_activity_ids(child) | personal.excluded
+        top = [r for r in personal.ranked if r.activity.pk not in skip][
             :RECOMMENDATIONS_PER_BATCH
         ]
         alpha = result.alpha
         fingerprint = profile_fingerprint(result.evaluation, result.query)
         version = ranking_version()
-        texts = [explain(child, result.evaluation, r).text for r in top]
+        notes = personal.notes_for([r.activity.pk for r in top])
+        texts = [
+            " ".join(
+                filter(
+                    None,
+                    [
+                        explain(child, result.evaluation, r).text,
+                        notes.get(r.activity.pk),
+                    ],
+                )
+            )
+            for r in top
+        ]
 
         newest = latest_batch(child)
         if newest and (
