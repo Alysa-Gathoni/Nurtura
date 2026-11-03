@@ -52,6 +52,10 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
   );
 
   late int _rating = widget.recommendation.feedback?.rating ?? 0;
+  late FeedbackOutcome? _outcome = widget.recommendation.feedback?.outcome;
+  late final Set<FeedbackIssue> _issues = {
+    ...?widget.recommendation.feedback?.issues,
+  };
   late bool _editingFeedback = widget.recommendation.feedback == null;
   bool _savingDone = false;
   bool _sendingFeedback = false;
@@ -133,6 +137,10 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
   }
 
   Future<void> _sendFeedback() async {
+    if (_outcome == null) {
+      setState(() => _feedbackError = 'Choose how it went.');
+      return;
+    }
     if (_rating == 0) {
       setState(() => _feedbackError = 'Tap a star to rate the activity.');
       return;
@@ -146,6 +154,11 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
         _r.id,
         rating: _rating,
         comment: _comment.text,
+        outcome: _outcome,
+        // Nothing "got in the way" of an activity that went well.
+        issues: _outcome == FeedbackOutcome.wentWell
+            ? const []
+            : FeedbackIssue.values.where(_issues.contains).toList(),
       );
       if (!mounted) return;
       _update(_r.withProgress(feedback: feedback));
@@ -358,6 +371,22 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                 ),
               ],
             ),
+            if (saved.outcome != null) ...[
+              Text(
+                saved.outcome!.label,
+                key: const Key('savedOutcome'),
+                style: AppText.nunito(size: 15, weight: FontWeight.w700),
+              ),
+              const SizedBox(height: 4),
+            ],
+            if (saved.issues.isNotEmpty) ...[
+              Text(
+                saved.issues.map((i) => i.label).join(' · '),
+                key: const Key('savedIssues'),
+                style: AppText.nunito(size: 14, color: p.mutedText),
+              ),
+              const SizedBox(height: 4),
+            ],
             _Stars(rating: saved.rating, color: p.mustard),
             if (saved.comment.isNotEmpty) ...[
               const SizedBox(height: 6),
@@ -378,7 +407,61 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'How helpful was this?',
+            'How did it go?',
+            style: AppText.nunito(size: 16, weight: FontWeight.w700),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final o in FeedbackOutcome.values)
+                ChoiceChip(
+                  key: Key('outcome_${o.value}'),
+                  label: Text(o.label),
+                  selected: _outcome == o,
+                  onSelected: _sendingFeedback
+                      ? null
+                      : (_) => setState(() {
+                          _outcome = o;
+                          _feedbackError = null;
+                        }),
+                ),
+            ],
+          ),
+          if (_outcome != null && _outcome != FeedbackOutcome.wentWell) ...[
+            const SizedBox(height: 14),
+            Text(
+              'What got in the way?',
+              style: AppText.nunito(size: 16, weight: FontWeight.w700),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              'Choose any that apply.',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final i in FeedbackIssue.values)
+                  FilterChip(
+                    key: Key('issue_${i.value}'),
+                    label: Text(i.label),
+                    selected: _issues.contains(i),
+                    onSelected: _sendingFeedback
+                        ? null
+                        : (on) => setState(
+                            () => on ? _issues.add(i) : _issues.remove(i),
+                          ),
+                  ),
+              ],
+            ),
+          ],
+          const SizedBox(height: 14),
+          Text(
+            'How helpful was this idea?',
             style: AppText.nunito(size: 16, weight: FontWeight.w700),
           ),
           const SizedBox(height: 8),

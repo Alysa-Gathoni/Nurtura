@@ -41,15 +41,19 @@ class RecommendationService {
   Future<void> undoDone(int recommendationId) =>
       _api.delete('/api/recommendations/$recommendationId/completion/');
 
-  /// Records or replaces the caregiver's feedback (FR-15).
+  /// Records or replaces the caregiver's feedback (FR-15, #175).
   Future<ActivityFeedback> sendFeedback(
     int recommendationId, {
     required int rating,
     String comment = '',
+    FeedbackOutcome? outcome,
+    List<FeedbackIssue> issues = const [],
   }) async => ActivityFeedback.fromJson(
     await _api.put('/api/recommendations/$recommendationId/feedback/', {
       'rating': rating,
       'comment': comment.trim(),
+      'outcome': outcome?.value ?? '',
+      'issues': [for (final i in issues) i.value],
     }) as Map<String, dynamic>,
   );
 

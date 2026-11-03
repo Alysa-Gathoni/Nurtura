@@ -66,10 +66,16 @@ class FeedbackAdmin(ReviewOnlyAdmin):
         "activity",
         "area",
         "stars",
+        "outcome",
+        "issue_labels",
         "comment_excerpt",
         "completion",
     ]
-    list_filter = ["rating", "recommendation__activity__developmental_domain"]
+    list_filter = [
+        "outcome",
+        "rating",
+        "recommendation__activity__developmental_domain",
+    ]
     search_fields = [
         "recommendation__activity__activity_id",
         "recommendation__activity__activity_name",
@@ -81,6 +87,8 @@ class FeedbackAdmin(ReviewOnlyAdmin):
         "activity_id",
         "activity",
         "area",
+        "outcome",
+        "issue_labels",
         "rating",
         "comment",
         "completion",
@@ -91,6 +99,11 @@ class FeedbackAdmin(ReviewOnlyAdmin):
     @admin.display(description="Rating", ordering="rating")
     def stars(self, obj):
         return f"{'★' * obj.rating}{'☆' * (5 - obj.rating)} ({obj.rating}/5)"
+
+    @admin.display(description="What got in the way")
+    def issue_labels(self, obj):
+        labels = dict(Feedback.Issue.choices)
+        return ", ".join(labels.get(i, i) for i in obj.issues) or "-"
 
     @admin.display(description="Comment")
     def comment_excerpt(self, obj):

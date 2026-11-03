@@ -167,7 +167,7 @@ All endpoints are under `/api/` and, apart from registration and the sign-in ste
 | GET, POST | `/api/children/<id>/recommendations/` | GET the newest stored batch; POST ranks, explains and stores a new batch (or returns the identical newest one). Each recommendation carries the activity in full (`description`, `materials`, `cultural_relevance`, `source`, `source_url`) as well as a `short_description` for lists, the explanation, and any completion and feedback; no scores. Both also return `referral`: `null`, or a gentle clinic-visit message with the due milestones marked "Not yet" (#161), worked out on each request and never ranked |
 | GET | `/api/children/<id>/candidates/?limit=10` | SBERT retrieval candidates before ranking (for inspection) |
 | PUT, DELETE | `/api/recommendations/<id>/completion/` | Mark a recommended activity done (`status`: `completed` or `partially_completed`), or undo it |
-| GET, PUT | `/api/recommendations/<id>/feedback/` | Read or submit the caregiver's rating (1–5) and comment |
+| GET, PUT | `/api/recommendations/<id>/feedback/` | Read or submit the caregiver's feedback: `rating` (1–5) and `comment`, plus `outcome` (`went_well`, `partly`, `didnt_work`) and `issues`, a list of what got in the way (`too_hard`, `too_easy`, `not_interested`, `no_materials`, `no_time`, `child_upset`) (#175). Submitting again replaces it |
 
 The administrator endpoints are under `/api/admin/`; caregivers get 403.
 

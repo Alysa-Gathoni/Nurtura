@@ -149,6 +149,63 @@ class FeedbackManagerTests(OwnRecommendationTestCase):
         self.assertTrue(created)
 
 
+class FeedbackOutcomeTests(OwnRecommendationTestCase):
+    """How it went and what got in the way (#175)."""
+
+    def submit(self, outcome="", issues=None):
+        return FeedbackManager.submit(
+            self.caregiver, self.recommendation.pk, 3, "", outcome, issues
+        )
+
+    def test_records_outcome_and_issues_in_a_fixed_order(self):
+        feedback, _ = self.submit(
+            "didnt_work", ["not_interested", "too_hard", "too_hard"]
+        )
+        feedback.refresh_from_db()
+        self.assertEqual(feedback.outcome, "didnt_work")
+        self.assertEqual(feedback.issues, ["too_hard", "not_interested"])
+
+    def test_resubmitting_replaces_them(self):
+        self.submit("didnt_work", ["too_hard"])
+        feedback, created = self.submit("went_well", [])
+        self.assertFalse(created)
+        feedback.refresh_from_db()
+        self.assertEqual((feedback.outcome, feedback.issues), ("went_well", []))
+
+    def test_unknown_values_are_refused(self):
+        with self.assertRaises(ValidationError) as caught:
+            self.submit("brilliant", ["too_loud"])
+        self.assertIn("outcome", caught.exception.message_dict)
+        self.assertIn("issues", caught.exception.message_dict)
+        self.assertFalse(Feedback.objects.exists())
+
+    def test_both_are_optional(self):
+        feedback, _ = self.submit()
+        self.assertEqual((feedback.outcome, feedback.issues), ("", []))
+
+    def test_api_round_trip(self):
+        url = reverse("recommendation-feedback", args=[self.recommendation.pk])
+        response = self.client.put(
+            url,
+            {
+                "rating": 2,
+                "outcome": "partly",
+                "issues": ["no_materials", "no_time"],
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()["outcome"], "partly")
+        self.assertEqual(response.json()["issues"], ["no_materials", "no_time"])
+        self.assertEqual(self.card()["feedback"]["issues"], ["no_materials", "no_time"])
+
+        bad = self.client.put(
+            url, {"rating": 2, "outcome": "partly", "issues": ["nope"]}, format="json"
+        )
+        self.assertEqual(bad.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("issues", bad.json())
+
+
 class FeedbackAPITests(OwnRecommendationTestCase):
     def url(self, pk=None):
         return reverse("recommendation-feedback", args=[pk or self.recommendation.pk])
@@ -165,7 +222,10 @@ class FeedbackAPITests(OwnRecommendationTestCase):
         response = self.put()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         body = response.json()
-        self.assertEqual(set(body), {"rating", "comment", "date_submitted"})
+        self.assertEqual(
+            set(body), {"rating", "comment", "outcome", "issues", "date_submitted"}
+        )
+        self.assertEqual((body["outcome"], body["issues"]), ("", []))
         self.assertEqual((body["rating"], body["comment"]), (5, "Great"))
         self.assertEqual(self.client.get(self.url()).json(), body)
         self.assertEqual(self.card()["feedback"], body)

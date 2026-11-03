@@ -21,12 +21,54 @@ class Completion {
   };
 }
 
-/// The caregiver's rating and comment on a recommendation (FR-15).
+/// How an activity went (#175). The API values are the enum's [value]s.
+enum FeedbackOutcome {
+  wentWell('went_well', 'Went well'),
+  partly('partly', 'Partly'),
+  didntWork('didnt_work', "Didn't work");
+
+  const FeedbackOutcome(this.value, this.label);
+  final String value;
+  final String label;
+
+  static FeedbackOutcome? fromValue(String? value) {
+    for (final o in values) {
+      if (o.value == value) return o;
+    }
+    return null;
+  }
+}
+
+/// What got in the way of an activity (#175), in the order shown.
+enum FeedbackIssue {
+  tooHard('too_hard', 'Too hard'),
+  tooEasy('too_easy', 'Too easy'),
+  notInterested('not_interested', "My child wasn't interested"),
+  noMaterials('no_materials', "I didn't have the materials"),
+  noTime('no_time', 'Not enough time'),
+  childUpset('child_upset', 'My child got upset');
+
+  const FeedbackIssue(this.value, this.label);
+  final String value;
+  final String label;
+
+  static FeedbackIssue? fromValue(String value) {
+    for (final i in values) {
+      if (i.value == value) return i;
+    }
+    return null;
+  }
+}
+
+/// The caregiver's feedback on a recommendation (FR-15): how it went and
+/// what got in the way (#175), a rating and a comment.
 class ActivityFeedback {
   const ActivityFeedback({
     required this.rating,
     required this.comment,
     required this.submittedAt,
+    this.outcome,
+    this.issues = const [],
   });
 
   factory ActivityFeedback.fromJson(Map<String, dynamic> json) =>
@@ -34,15 +76,27 @@ class ActivityFeedback {
         rating: json['rating'] as int,
         comment: json['comment'] as String? ?? '',
         submittedAt: DateTime.parse(json['date_submitted'] as String),
+        outcome: FeedbackOutcome.fromValue(json['outcome'] as String?),
+        // Values this app version doesn't know are skipped.
+        issues: [
+          for (final v in json['issues'] as List? ?? const [])
+            ?FeedbackIssue.fromValue(v as String),
+        ],
       );
 
   final int rating;
   final String comment;
   final DateTime submittedAt;
 
+  /// Null on feedback given before the question was asked.
+  final FeedbackOutcome? outcome;
+  final List<FeedbackIssue> issues;
+
   Map<String, dynamic> toJson() => {
     'rating': rating,
     'comment': comment,
+    'outcome': outcome?.value ?? '',
+    'issues': [for (final i in issues) i.value],
     'date_submitted': submittedAt.toIso8601String(),
   };
 }

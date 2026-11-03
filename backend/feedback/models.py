@@ -36,7 +36,21 @@ class CompletedActivity(models.Model):
 
 
 class Feedback(models.Model):
-    """A caregiver's rating and comment on a specific recommendation."""
+    """A caregiver's view of a recommendation: how it went, what got in the
+    way, a 1-5 rating and a comment."""
+
+    class Outcome(models.TextChoices):
+        WENT_WELL = "went_well", "Went well"
+        PARTLY = "partly", "Partly"
+        DIDNT_WORK = "didnt_work", "Didn't work"
+
+    class Issue(models.TextChoices):
+        TOO_HARD = "too_hard", "Too hard"
+        TOO_EASY = "too_easy", "Too easy"
+        NOT_INTERESTED = "not_interested", "My child wasn't interested"
+        NO_MATERIALS = "no_materials", "I didn't have the materials"
+        NO_TIME = "no_time", "Not enough time"
+        CHILD_UPSET = "child_upset", "My child got upset"
 
     recommendation = models.ForeignKey(
         Recommendation, on_delete=models.CASCADE, related_name="feedback"
@@ -46,6 +60,12 @@ class Feedback(models.Model):
         help_text="1 (not helpful) to 5 (very helpful).",
     )
     comment = models.TextField(blank=True)
+    # How it went and what got in the way (#175). Blank on feedback given
+    # before these were asked.
+    outcome = models.CharField(max_length=20, choices=Outcome.choices, blank=True)
+    issues = models.JSONField(
+        default=list, blank=True, help_text='Issue values, e.g. ["too_hard"].'
+    )
     date_submitted = models.DateTimeField(default=timezone.now)
 
     class Meta:

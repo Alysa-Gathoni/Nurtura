@@ -61,6 +61,8 @@ def _row(feedback):
         "id": feedback.pk,
         "rating": feedback.rating,
         "comment": feedback.comment,
+        "outcome": feedback.outcome,
+        "issues": list(feedback.issues),
         "date_submitted": feedback.date_submitted.isoformat(),
         "completion": completion.status if completion else None,
         "activity": {
