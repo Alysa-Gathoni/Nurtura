@@ -37,6 +37,8 @@ def feedback_json(feedback):
     return {
         "rating": feedback.rating,
         "comment": feedback.comment,
+        "outcome": feedback.outcome,
+        "issues": list(feedback.issues),
         "date_submitted": feedback.date_submitted.isoformat(),
     }
 
@@ -84,10 +86,15 @@ class FeedbackSerializer(serializers.Serializer):
     # Only the shape is checked here; FeedbackManager owns the rules.
     rating = serializers.IntegerField()
     comment = serializers.CharField(required=False, allow_blank=True, default="")
+    outcome = serializers.CharField(required=False, allow_blank=True, default="")
+    issues = serializers.ListField(
+        child=serializers.CharField(), required=False, default=list
+    )
 
 
 class RecommendationFeedbackView(APIView):
-    """A caregiver's rating and comment on a recommendation (FR-15).
+    """A caregiver's feedback on a recommendation (FR-15): how it went and
+    what got in the way (#175), a rating and a comment.
 
     PUT records it through FeedbackManager (201 the first time, 200 when it
     replaces the earlier entry); GET returns it, or 404 if there is none.

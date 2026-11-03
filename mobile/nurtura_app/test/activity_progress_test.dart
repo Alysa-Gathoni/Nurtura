@@ -114,12 +114,17 @@ void main() {
     expect(find.byKey(const Key('doneChip_ACT-0004')), findsNothing);
   });
 
-  testWidgets('feedback needs a star, then sends rating and comment', (
+  testWidgets('feedback needs how it went and a star, then sends them', (
     tester,
   ) async {
     final backend = progressBackend();
     await openDetail(tester, backend);
 
+    await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
+    expect(find.text('Choose how it went.'), findsOneWidget);
+    await tapOnDetail(tester, find.byKey(const Key('outcome_went_well')));
+    // Nothing "got in the way" of an activity that went well.
+    expect(find.text('What got in the way?'), findsNothing);
     await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
     expect(find.text('Tap a star to rate the activity.'), findsOneWidget);
     expect(backend.to(feedbackPath), isEmpty);
@@ -134,8 +139,12 @@ void main() {
     expect(jsonDecode(backend.to(feedbackPath).single.body), {
       'rating': 4,
       'comment': 'She giggled the whole time',
+      'outcome': 'went_well',
+      'issues': <String>[],
     });
     expect(find.text('Thanks for your feedback!'), findsOneWidget);
+    expect(find.byKey(const Key('savedOutcome')), findsOneWidget);
+    expect(find.text('Went well'), findsOneWidget);
     expect(find.text('“She giggled the whole time”'), findsOneWidget);
 
     await back(tester);
@@ -163,10 +172,15 @@ void main() {
     await tapOnDetail(tester, find.byKey(const Key('editFeedbackButton')));
     expect(find.text('Update feedback'), findsOneWidget);
     await tapOnDetail(tester, find.byKey(const Key('star_5')));
+    // Feedback from before the question was asked has no outcome yet.
+    await tapOnDetail(tester, find.byKey(const Key('outcome_partly')));
+    await tapOnDetail(tester, find.byKey(const Key('issue_too_hard')));
     await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
     expect(jsonDecode(backend.to(feedbackPath).single.body), {
       'rating': 5,
       'comment': 'Too hard',
+      'outcome': 'partly',
+      'issues': ['too_hard'],
     });
     expect(find.text('Thanks for your feedback!'), findsOneWidget);
   });
@@ -178,10 +192,36 @@ void main() {
       }, 400),
     );
     await openDetail(tester, backend);
+    await tapOnDetail(tester, find.byKey(const Key('outcome_went_well')));
     await tapOnDetail(tester, find.byKey(const Key('star_3')));
     await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
     expect(find.byKey(const Key('feedbackError')), findsOneWidget);
     expect(find.text('Thanks for your feedback!'), findsNothing);
+  });
+
+  testWidgets("didn't work asks what got in the way and sends it in order", (
+    tester,
+  ) async {
+    final backend = progressBackend();
+    await openDetail(tester, backend);
+
+    await tapOnDetail(tester, find.byKey(const Key('outcome_didnt_work')));
+    expect(find.text('What got in the way?'), findsOneWidget);
+    await tapOnDetail(tester, find.byKey(const Key('issue_not_interested')));
+    await tapOnDetail(tester, find.byKey(const Key('issue_too_hard')));
+    await tapOnDetail(tester, find.byKey(const Key('issue_no_time')));
+    await tapOnDetail(
+      tester,
+      find.byKey(const Key('issue_no_time')),
+    ); // off again
+    await tapOnDetail(tester, find.byKey(const Key('star_2')));
+    await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
+
+    final sent = jsonDecode(backend.to(feedbackPath).single.body);
+    expect(sent['outcome'], 'didnt_work');
+    expect(sent['issues'], ['too_hard', 'not_interested']);
+    expect(find.text("Didn't work"), findsOneWidget);
+    expect(find.text("Too hard · My child wasn't interested"), findsOneWidget);
   });
 
   testWidgets('offline, nothing is pretended to be saved', (tester) async {

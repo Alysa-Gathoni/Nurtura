@@ -1,7 +1,7 @@
 """The single way caregiver feedback enters the system (FR-15).
 
 Feedback is about one recommendation, and a caregiver keeps one entry per
-recommendation: submitting again replaces the rating and comment, so a
+recommendation: submitting again replaces the whole entry, so a
 change of mind doesn't count twice in the evaluation. Feedback doesn't need
 the activity to be completed ("not suitable for us" is useful feedback).
 """
@@ -27,15 +27,27 @@ def latest(feedback_rows):
 
 class FeedbackManager:
     @staticmethod
-    def submit(caregiver, recommendation_id, rating, comment=""):
+    def submit(
+        caregiver, recommendation_id, rating, comment="", outcome="", issues=None
+    ):
         """Record or replace the caregiver's feedback on a recommendation.
 
         Returns (feedback, created). Raises Recommendation.DoesNotExist when
         the recommendation isn't the caregiver's, and ValidationError for a
-        rating outside 1-5 or a comment over MAX_COMMENT_LENGTH characters.
+        rating outside 1-5, a comment over MAX_COMMENT_LENGTH characters, or
+        an unknown outcome or issue (#175). Issues are stored once each, in
+        the order of Feedback.Issue.
         """
         comment = (comment or "").strip()
+        outcome = (outcome or "").strip()
+        issues = list(issues or [])
         errors = {}
+        if outcome and outcome not in Feedback.Outcome.values:
+            errors["outcome"] = ["Choose how it went."]
+        unknown = [i for i in issues if i not in Feedback.Issue.values]
+        if unknown:
+            errors["issues"] = [f"Unknown option: {', '.join(map(str, unknown))}."]
+        issues = [i for i in Feedback.Issue.values if i in issues]
         if isinstance(rating, bool) or not isinstance(rating, int):
             errors["rating"] = ["Choose a rating from 1 to 5."]
         elif not 1 <= rating <= 5:
@@ -59,6 +71,8 @@ class FeedbackManager:
                 feedback = Feedback(recommendation=recommendation)
             feedback.rating = rating
             feedback.comment = comment
+            feedback.outcome = outcome
+            feedback.issues = issues
             feedback.date_submitted = timezone.now()
             feedback.full_clean()
             feedback.save()
