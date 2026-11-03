@@ -23,6 +23,10 @@ are stored as one batch of Recommendation rows.
   feedback, come first and are carried into later batches until they are
   completed, at most MAX_PINNED of them. Their explanation starts with why
   they were chosen. The rest of the batch is the evaluated order.
+- The child's feedback adjusts the order after ranking (personalisation.py,
+  #179): activities similar to ones that went well move up, ones similar to
+  ones that didn't work move down, and an activity that didn't work isn't
+  suggested again. A child with no feedback gets the evaluated order.
 """
 
 import hashlib
@@ -40,6 +44,7 @@ from profiles.models import ChildProfile
 from . import embeddings, provenance
 from .explanations import EXPLANATION_VERSION, explain
 from .models import Recommendation
+from .personalisation import personalise
 from .ranking import child_bracket, rank
 
 RECOMMENDATIONS_PER_BATCH = 5
@@ -158,22 +163,26 @@ def generate(child_id, caregiver, pin=None):
             pk=child_id, caregiver=caregiver
         )
         result = rank(child)
+        personal = personalise(child, result.ranked)
         completed = completed_activity_ids(child)
         newest = latest_batch(child)
-        ranked = {r.activity.pk: r for r in result.ranked}
+        ranked = {r.activity.pk: r for r in personal.ranked}
         notes = {
             pk: note
             for pk, note in _pins(newest, completed, pin)
-            if pk in ranked  # still eligible
+            # still eligible, and not since marked as not working
+            if pk in ranked and pk not in personal.excluded
         }
+        skip = completed | personal.excluded | set(notes)
         top = [ranked[pk] for pk in notes] + [
-            r
-            for r in result.ranked
-            if r.activity.pk not in completed and r.activity.pk not in notes
+            r for r in personal.ranked if r.activity.pk not in skip
         ][: RECOMMENDATIONS_PER_BATCH - len(notes)]
         alpha = result.alpha
         fingerprint = profile_fingerprint(result.evaluation, result.query)
         version = ranking_version()
+        liked_notes = personal.notes_for(
+            [r.activity.pk for r in top if r.activity.pk not in notes]
+        )
         texts = [
             " ".join(
                 filter(
@@ -181,6 +190,7 @@ def generate(child_id, caregiver, pin=None):
                     [
                         notes.get(r.activity.pk),
                         explain(child, result.evaluation, r).text,
+                        liked_notes.get(r.activity.pk),
                     ],
                 )
             )
