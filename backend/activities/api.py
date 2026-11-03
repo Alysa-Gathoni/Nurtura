@@ -256,3 +256,51 @@ class AdminChoicesView(APIView):
                 },
             }
         )
+
+
+class SuggestSerializer(serializers.Serializer):
+    activity_name = serializers.CharField(allow_blank=True, default="")
+    developmental_goal = serializers.CharField(allow_blank=True, default="")
+    description = serializers.CharField(allow_blank=True, default="")
+
+    def validate(self, data):
+        if not any(v.strip() for v in data.values()):
+            raise serializers.ValidationError(
+                "Write a name, goal or description first."
+            )
+        return data
+
+
+class AdminActivitySuggestView(APIView):
+    """Suggested area and age band for an activity's text (#181).
+
+    POST {activity_name, developmental_goal, description} returns, for
+    developmental_domain and age_range, the classifier's three most likely
+    values with their probabilities. 503 until the classifier is trained.
+    """
+
+    permission_classes = [IsAdministrator]
+
+    def post(self, request):
+        from .classifier import ClassifierUnavailable, suggest
+
+        serializer = SuggestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        try:
+            result = suggest(
+                data["activity_name"], data["developmental_goal"], data["description"]
+            )
+        except ClassifierUnavailable as exc:
+            return Response(
+                {"detail": str(exc)}, status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        return Response(
+            {
+                field: [
+                    {"value": v, "label": label, "probability": round(p, 3)}
+                    for v, label, p in ranked
+                ]
+                for field, ranked in result.items()
+            }
+        )

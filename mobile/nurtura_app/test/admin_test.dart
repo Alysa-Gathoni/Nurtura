@@ -530,6 +530,111 @@ void main() {
       expect(find.text('Added as ACT-0055, in Draft.'), findsOneWidget);
     });
 
+    testWidgets('suggested area and age fill the pickers (#181)', (
+      tester,
+    ) async {
+      final backend = await openActivities(
+        tester,
+        handler: (r) async {
+          if (r.url.path == '/api/admin/activities/suggest/') {
+            return json({
+              'developmental_domain': [
+                {'value': 'Language', 'label': 'Language', 'probability': 0.91},
+                {'value': 'Sensory', 'label': 'Sensory', 'probability': 0.05},
+                {'value': 'Motor', 'label': 'Motor', 'probability': 0.02},
+              ],
+              'age_range': [
+                {
+                  'value': '6-12 months',
+                  'label': '6-12 months',
+                  'probability': 0.74,
+                },
+                {
+                  'value': '3-6 months',
+                  'label': '3-6 months',
+                  'probability': 0.15,
+                },
+                {
+                  'value': '12-18 months',
+                  'label': '12-18 months',
+                  'probability': 0.06,
+                },
+              ],
+            });
+          }
+          if (r.method == 'POST' && r.url.path == '/api/admin/activities/') {
+            return json(
+              activityJson(id: 9, code: 'ACT-0055', status: 'draft'),
+              201,
+            );
+          }
+          return null;
+        },
+      );
+      await tapVisible(tester, find.byKey(const Key('addActivityButton')));
+      await typeInForm(tester, 'field_activity_name', 'Clapping Songs');
+      await typeInForm(tester, 'field_description', 'Clap and sing together.');
+      await tapInForm(tester, find.byKey(const Key('suggestButton')));
+
+      final sent = jsonDecode(
+        backend.requests
+            .lastWhere((r) => r.url.path == '/api/admin/activities/suggest/')
+            .body,
+      ) as Map;
+      expect(sent['activity_name'], 'Clapping Songs');
+      expect(sent['description'], 'Clap and sing together.');
+      expect(find.text('Language · 91%'), findsOneWidget);
+
+      await tapInForm(
+        tester,
+        find.byKey(const Key('suggest_developmental_domain_Language')),
+      );
+      await tapInForm(
+        tester,
+        find.byKey(const Key('suggest_age_range_6-12 months')),
+      );
+      await tapInForm(tester, find.byKey(Key('field_difficulty_level')));
+      await tester.tap(find.text('Beginner').last);
+      await tester.pumpAndSettle();
+      await tapInForm(tester, find.byKey(Key('field_source')));
+      await tester.tap(find.text('UNICEF').last);
+      await tester.pumpAndSettle();
+      await typeInForm(tester, 'field_developmental_goal', 'Rhythm');
+      await typeInForm(tester, 'field_materials', 'None');
+      await typeInForm(tester, 'field_cultural_relevance', 'Local songs.');
+      await tapInForm(tester, find.byKey(const Key('saveActivityButton')));
+
+      final saved = jsonDecode(
+        backend.requests
+            .lastWhere(
+              (r) =>
+                  r.method == 'POST' && r.url.path == '/api/admin/activities/',
+            )
+            .body,
+      ) as Map;
+      expect(saved['developmental_domain'], 'Language');
+      expect(saved['age_range'], '6-12 months');
+    });
+
+    testWidgets('an untrained classifier explains itself', (tester) async {
+      await openActivities(
+        tester,
+        handler: (r) async => r.url.path == '/api/admin/activities/suggest/'
+            ? json({
+                'detail': "The activity classifier hasn't been trained.",
+              }, 503)
+            : null,
+      );
+      await tapVisible(tester, find.byKey(const Key('addActivityButton')));
+      await typeInForm(tester, 'field_activity_name', 'Clapping Songs');
+      await tapInForm(tester, find.byKey(const Key('suggestButton')));
+      expect(find.byKey(const Key('suggestError')), findsOneWidget);
+      expect(
+        find.textContaining("classifier hasn't been trained"),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('server field errors appear under the field', (tester) async {
       await openActivities(
         tester,
