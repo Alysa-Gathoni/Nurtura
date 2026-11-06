@@ -65,6 +65,14 @@ Future<void> tapOnDetail(WidgetTester tester, Finder finder) async {
   await tester.pumpAndSettle();
 }
 
+/// Closes the "Well done!" sheet (#185) with "Skip for now".
+Future<void> skipWellDone(WidgetTester tester) async {
+  await tester.ensureVisible(find.byKey(const Key('skipWellDone')));
+  await tester.pumpAndSettle();
+  await tester.tap(find.byKey(const Key('skipWellDone')));
+  await tester.pumpAndSettle();
+}
+
 Future<void> back(WidgetTester tester) async {
   await tester.pageBack();
   await tester.pumpAndSettle();
@@ -84,8 +92,12 @@ void main() {
     expect(jsonDecode(backend.to(completionPath).single.body), {
       'status': 'completed',
     });
+    // The "Well done!" sheet opens (#185); skipping closes it.
+    expect(find.byKey(const Key('wellDoneSheet')), findsOneWidget);
+    expect(find.text('Well done!'), findsOneWidget);
+    await skipWellDone(tester);
+    expect(find.byKey(const Key('wellDoneSheet')), findsNothing);
     expect(find.text('Done on 14 Oct 2026'), findsOneWidget);
-    expect(find.textContaining('Well done!'), findsOneWidget);
     expect(find.textContaining("It won't come up again"), findsOneWidget);
     expect(engagement.checkedInToday, isTrue);
 
@@ -104,6 +116,7 @@ void main() {
     expect(jsonDecode(backend.to(completionPath).single.body), {
       'status': 'partially_completed',
     });
+    await skipWellDone(tester);
     expect(find.text('Partly done on 14 Oct 2026'), findsOneWidget);
 
     await tapOnDetail(tester, find.byKey(const Key('undoDoneButton')));
@@ -114,7 +127,7 @@ void main() {
     expect(find.byKey(const Key('doneChip_ACT-0004')), findsNothing);
   });
 
-  testWidgets('feedback needs how it went and a star, then sends them', (
+  testWidgets('feedback needs how it went; the star is optional', (
     tester,
   ) async {
     final backend = progressBackend();
@@ -125,8 +138,6 @@ void main() {
     await tapOnDetail(tester, find.byKey(const Key('outcome_went_well')));
     // Nothing "got in the way" of an activity that went well.
     expect(find.text('What got in the way?'), findsNothing);
-    await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
-    expect(find.text('Tap a star to rate the activity.'), findsOneWidget);
     expect(backend.to(feedbackPath), isEmpty);
 
     await tapOnDetail(tester, find.byKey(const Key('star_4')));
@@ -141,6 +152,8 @@ void main() {
       'comment': 'She giggled the whole time',
       'outcome': 'went_well',
       'issues': <String>[],
+      'interest': '',
+      'observed': <String>[],
     });
     expect(find.text('Thanks for your feedback!'), findsOneWidget);
     expect(find.byKey(const Key('savedOutcome')), findsOneWidget);
@@ -181,6 +194,8 @@ void main() {
       'comment': 'Too hard',
       'outcome': 'partly',
       'issues': ['too_hard'],
+      'interest': '',
+      'observed': <String>[],
     });
     expect(find.text('Thanks for your feedback!'), findsOneWidget);
   });

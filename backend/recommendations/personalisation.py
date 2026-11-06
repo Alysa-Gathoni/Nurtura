@@ -60,8 +60,8 @@ def signals(child):
     latest feedback on each activity.
 
     An outcome decides (went well / didn't work; "partly" is neither).
-    Feedback from before outcomes were asked falls back to the rating:
-    4-5 liked, 1-2 disliked.
+    Without one, the child's interest decides (#185: happy or loved it is
+    liked, bored is disliked), then the rating (4-5 liked, 1-2 disliked).
     """
     latest = {}
     rows = (
@@ -73,16 +73,31 @@ def signals(child):
         latest[f.recommendation.activity_id] = f
     found = {}
     for pk, f in latest.items():
-        if f.outcome == Feedback.Outcome.WENT_WELL or (not f.outcome and f.rating >= 4):
-            kind = LIKED
-        elif f.outcome == Feedback.Outcome.DIDNT_WORK or (
-            not f.outcome and f.rating <= 2
-        ):
-            kind = DISLIKED
-        else:
+        kind = _kind(f)
+        if kind is None:
             continue
         found[pk] = (kind, f.recommendation.activity.activity_name)
     return found
+
+
+def _kind(f):
+    if f.outcome == Feedback.Outcome.WENT_WELL:
+        return LIKED
+    if f.outcome == Feedback.Outcome.DIDNT_WORK:
+        return DISLIKED
+    if f.outcome:  # partly
+        return None
+    if f.interest in (Feedback.Interest.HAPPY, Feedback.Interest.LOVED_IT):
+        return LIKED
+    if f.interest == Feedback.Interest.BORED:
+        return DISLIKED
+    if f.interest or f.rating is None:  # okay, or nothing to go on
+        return None
+    if f.rating >= 4:
+        return LIKED
+    if f.rating <= 2:
+        return DISLIKED
+    return None
 
 
 def _vectors(pks):

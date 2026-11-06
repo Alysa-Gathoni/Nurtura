@@ -41,21 +41,37 @@ class RecommendationService {
   Future<void> undoDone(int recommendationId) =>
       _api.delete('/api/recommendations/$recommendationId/completion/');
 
-  /// Records or replaces the caregiver's feedback (FR-15, #175).
+  /// Records or replaces the caregiver's feedback (FR-15, #175, #185).
+  /// [observed] skills are recorded as milestones.
   Future<ActivityFeedback> sendFeedback(
     int recommendationId, {
-    required int rating,
+    int? rating,
     String comment = '',
     FeedbackOutcome? outcome,
     List<FeedbackIssue> issues = const [],
+    FeedbackInterest? interest,
+    List<String> observed = const [],
   }) async => ActivityFeedback.fromJson(
     await _api.put('/api/recommendations/$recommendationId/feedback/', {
       'rating': rating,
       'comment': comment.trim(),
       'outcome': outcome?.value ?? '',
       'issues': [for (final i in issues) i.value],
+      'interest': interest?.value ?? '',
+      'observed': observed,
     }) as Map<String, dynamic>,
   );
+
+  /// Skills to ask about in the "Well done!" sheet (#185).
+  Future<List<ObservableSkill>> observableSkills(int recommendationId) async {
+    final body = await _api.get(
+      '/api/recommendations/$recommendationId/observable/',
+    ) as Map<String, dynamic>;
+    return [
+      for (final s in body['skills'] as List? ?? const [])
+        ObservableSkill.fromJson(s as Map<String, dynamic>),
+    ];
+  }
 
   /// Options offered after feedback (#177); empty until there is any.
   Future<List<FeedbackOption>> options(int recommendationId) async {

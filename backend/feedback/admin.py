@@ -67,12 +67,14 @@ class FeedbackAdmin(ReviewOnlyAdmin):
         "area",
         "stars",
         "outcome",
+        "interest",
         "issue_labels",
         "comment_excerpt",
         "completion",
     ]
     list_filter = [
         "outcome",
+        "interest",
         "rating",
         "recommendation__activity__developmental_domain",
     ]
@@ -88,6 +90,7 @@ class FeedbackAdmin(ReviewOnlyAdmin):
         "activity",
         "area",
         "outcome",
+        "interest",
         "issue_labels",
         "rating",
         "comment",
@@ -98,6 +101,8 @@ class FeedbackAdmin(ReviewOnlyAdmin):
 
     @admin.display(description="Rating", ordering="rating")
     def stars(self, obj):
+        if obj.rating is None:
+            return "-"
         return f"{'★' * obj.rating}{'☆' * (5 - obj.rating)} ({obj.rating}/5)"
 
     @admin.display(description="What got in the way")

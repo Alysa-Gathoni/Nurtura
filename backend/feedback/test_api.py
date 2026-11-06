@@ -122,7 +122,8 @@ class FeedbackManagerTests(OwnRecommendationTestCase):
         self.assertEqual(Feedback.objects.get().rating, 2)
 
     def test_rating_must_be_a_whole_number_from_1_to_5(self):
-        for rating in (0, 6, -1, 3.5, True, "4", None):
+        # None is allowed: the rating is optional since #185.
+        for rating in (0, 6, -1, 3.5, True, "4"):
             with self.subTest(rating=rating):
                 with self.assertRaises(ValidationError) as caught:
                     self.submit(rating)
@@ -222,10 +223,14 @@ class FeedbackAPITests(OwnRecommendationTestCase):
         response = self.put()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         body = response.json()
+        # The response also lists any skills just recorded (#185).
+        self.assertEqual(body.pop("recorded"), [])
         self.assertEqual(
-            set(body), {"rating", "comment", "outcome", "issues", "date_submitted"}
+            set(body),
+            {"rating", "comment", "outcome", "issues", "interest", "date_submitted"},
         )
         self.assertEqual((body["outcome"], body["issues"]), ("", []))
+        self.assertEqual(body["interest"], "")
         self.assertEqual((body["rating"], body["comment"]), (5, "Great"))
         self.assertEqual(self.client.get(self.url()).json(), body)
         self.assertEqual(self.card()["feedback"], body)
@@ -239,7 +244,7 @@ class FeedbackAPITests(OwnRecommendationTestCase):
         for data, field in (
             ({"rating": 9}, "rating"),
             ({"rating": "great"}, "rating"),
-            ({"comment": "no rating"}, "rating"),
+            ({"rating": 0}, "rating"),
             ({"rating": 3, "comment": "x" * (MAX_COMMENT_LENGTH + 1)}, "comment"),
         ):
             with self.subTest(data=data):

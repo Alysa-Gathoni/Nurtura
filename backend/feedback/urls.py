@@ -13,4 +13,9 @@ urlpatterns = [
         views.RecommendationFeedbackView.as_view(),
         name="recommendation-feedback",
     ),
+    path(
+        "recommendations/<int:recommendation_id>/observable/",
+        views.ObservableSkillsView.as_view(),
+        name="recommendation-observable",
+    ),
 ]

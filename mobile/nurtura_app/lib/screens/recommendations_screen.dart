@@ -140,6 +140,24 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
     await _cache.write(widget.child.id, batch);
   }
 
+  /// Opens an idea. If skills ticked there were recorded as milestones
+  /// (#185), the profile changed, so a fresh batch is asked for on return.
+  Future<void> _open(Recommendation item) async {
+    var profileChanged = false;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ActivityDetailScreen(
+          recommendation: item,
+          childName: widget.child.name,
+          onChanged: _changed,
+          onNewBatch: _newBatch,
+          onProfileChanged: () => profileChanged = true,
+        ),
+      ),
+    );
+    if (profileChanged && mounted) await _load(regenerate: true);
+  }
+
   Future<void> _sessionEnded() async {
     final auth = context.read<AuthState>();
     Navigator.of(context).popUntil((route) => route.isFirst);
@@ -307,16 +325,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
         final item = items[i - 1];
         return RecommendationCard(
           recommendation: item,
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => ActivityDetailScreen(
-                recommendation: item,
-                childName: widget.child.name,
-                onChanged: _changed,
-                onNewBatch: _newBatch,
-              ),
-            ),
-          ),
+          onTap: () => _open(item),
         );
       },
     );
@@ -399,10 +408,10 @@ class RecommendationCard extends StatelessWidget {
                       ? Icons.timelapse_rounded
                       : Icons.check_circle_rounded,
                 ),
-              if (r.feedback != null)
+              if (r.feedback?.rating != null)
                 PillChip(
                   key: Key('ratingChip_${r.activityId}'),
-                  label: '${r.feedback!.rating}/5',
+                  label: '${r.feedback!.rating!}/5',
                   color: context.palette.ink,
                   background: context.palette.mustardSoft,
                   icon: Icons.star_rounded,
