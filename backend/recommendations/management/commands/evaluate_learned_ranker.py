@@ -2,7 +2,7 @@
 
 Usage (from backend/):
     python manage.py evaluate_learned_ranker [--labels PATH]
-        [--extra-labels PATH] [--export-unlabelled PATH [--force]] [--markdown]
+        [--extra-labels PATH ...] [--export-unlabelled PATH [--force]] [--markdown]
 
 Follows docs/experiment_learned_ranker.md, fixed before the first run:
 
@@ -52,7 +52,8 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--labels", type=Path, default=DEFAULT_LABELS)
-        parser.add_argument("--extra-labels", type=Path)
+        # Repeatable: each round of grading adds a sheet.
+        parser.add_argument("--extra-labels", type=Path, action="append", default=[])
         parser.add_argument("--export-unlabelled", type=Path)
         parser.add_argument("--force", action="store_true")
         parser.add_argument("--markdown", action="store_true")
@@ -123,9 +124,7 @@ class Command(BaseCommand):
 
     def _labels(self, options):
         relevance, sheet_rows = {}, {}
-        paths = [options["labels"]]
-        if options["extra_labels"]:
-            paths.append(options["extra_labels"])
+        paths = [options["labels"], *options["extra_labels"]]
         for path in paths:
             try:
                 labels = load_heldout_labels(path)
