@@ -3,7 +3,7 @@
 Usage (from backend/):
     python manage.py load_plain_aims [--file PATH] [--dry-run] [--all-drafts]
 
-Reads data/review/plain_aims_draft.csv (#70). By default only rows marked
+Reads data/review/plain_aims.csv: one sheet for every activity (#70, #190). By default only rows marked
 approved ("yes") are loaded; a reviewer_edit, when filled, replaces the
 draft. --all-drafts loads every draft regardless of approval and is meant
 for rehearsals in a rolled-back transaction or a scratch database.
@@ -26,9 +26,7 @@ from django.db import transaction
 
 from activities.models import DevelopmentalActivity, validate_plain_aim
 
-DEFAULT_FILE = (
-    Path(settings.BASE_DIR).parent / "data" / "review" / "plain_aims_draft.csv"
-)
+DEFAULT_FILE = Path(settings.BASE_DIR).parent / "data" / "review" / "plain_aims.csv"
 COLUMNS = ("activity_id", "plain_aim_draft", "approved", "reviewer_edit")
 
 

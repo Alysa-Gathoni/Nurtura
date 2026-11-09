@@ -77,7 +77,7 @@ A fresh database has no activities or milestones. Run these once, in order, with
 
 1. **Load the activity library and milestone catalogue:** `make seed-data` from the repo root, or:
    ```bash
-   cd ../data/scripts && python clean_activities.py "../raw/activities_batch*.csv" ../processed/activities_clean.csv && cd ../../backend
+   cd ../data/scripts && python clean_activities.py ../raw/activities.csv ../processed/activities_clean.csv && cd ../../backend
    python manage.py seed_activities      # activities arrive as Draft
    python manage.py seed_milestones      # CDC/WHO milestone catalogue
    ```
@@ -253,7 +253,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | One-time setup | `make setup` | see Backend and Mobile setup above, plus `pre-commit install` |
 | Run backend | `make run-backend` | `cd backend && python manage.py runserver` |
 | Run app | `make run-app DEVICE=chrome` | `cd mobile/nurtura_app && flutter run -d chrome` |
-| Clean activity data | (first half of `make seed-data`) | `cd data/scripts && python clean_activities.py "../raw/activities_batch*.csv" ../processed/activities_clean.csv` |
+| Clean activity data | (first half of `make seed-data`) | `cd data/scripts && python clean_activities.py ../raw/activities.csv ../processed/activities_clean.csv` |
 | Load activities into the database | `make seed-data` (cleans, then loads) | `cd backend && python manage.py seed_activities` (add `--dry-run` to preview) |
 | Load the guideline milestone catalogue | (part of `make seed-data`) | `cd backend && python manage.py seed_milestones` (add `--dry-run` to preview) |
 | Load approved plain-language aims | | `cd backend && python manage.py load_plain_aims` (`--dry-run` to preview) |

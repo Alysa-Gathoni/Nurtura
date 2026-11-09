@@ -3,8 +3,13 @@
 Usage:
     python clean_activities.py <input_csv> [<input_csv> ...] <output_csv>
 
-Input paths may contain wildcards (e.g. ../raw/activities_batch*.csv); they are
-expanded here so the same command works in PowerShell. Rows from every input
+The catalogue is one file, ../raw/activities.csv, with a batch column saying
+which batch each activity came from (#190):
+
+    python clean_activities.py ../raw/activities.csv ../processed/activities_clean.csv
+
+Input paths may contain wildcards; they are expanded here so the same command
+works in PowerShell. Rows from every input
 are validated together (duplicates are detected across batches) and the valid
 rows are written to <output_csv>. Each row is checked independently; invalid
 rows are reported and skipped.
@@ -37,6 +42,8 @@ OPTIONAL_COLUMNS = {
     "source_url": "",
 }
 OUTPUT_COLUMNS = REQUIRED_COLUMNS + list(OPTIONAL_COLUMNS)
+# Known but not part of the cleaned output: the batch an activity came from.
+IGNORED_COLUMNS = {"batch"}
 
 ACTIVITY_ID_PATTERN = re.compile(r"^ACT-\d{4}$")
 
@@ -158,7 +165,11 @@ def clean(input_paths, output_path):
                     f"[ERROR] {input_path} is missing column(s): {', '.join(missing_cols)}"
                 )
                 return 2
-            unknown_cols = [c for c in header if c not in OUTPUT_COLUMNS]
+            unknown_cols = [
+                c
+                for c in header
+                if c not in OUTPUT_COLUMNS and c not in IGNORED_COLUMNS
+            ]
             if unknown_cols:
                 print(
                     f"[WARN] {input_path}: ignoring unknown column(s): {', '.join(unknown_cols)}"

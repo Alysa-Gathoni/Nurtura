@@ -242,7 +242,7 @@ class GeneratedSidecarTests(SimpleTestCase):
     sprint5-eval-v1 record) and v2 (#168)."""
 
     def test_committed_sidecar_rows_match_the_committed_sheet(self):
-        for name in ("heldout_labels.csv", "heldout_labels_v2.csv"):
+        for name in ("archive/heldout_labels.csv", "heldout_labels_v2.csv"):
             with self.subTest(sheet=name):
                 sheet = Path(settings.BASE_DIR).parent / "data/evaluation" / name
                 sidecar = provenance.sidecar_path(sheet)

@@ -34,7 +34,7 @@ from activities.models import DevelopmentalActivity
 from recommendations import heldout, provenance
 
 DEFAULT_OUTPUT = (
-    Path(settings.BASE_DIR).parent / "data" / "evaluation" / "heldout_labels.csv"
+    Path(settings.BASE_DIR).parent / "data" / "evaluation" / "heldout_labels_v2.csv"
 )
 COLUMNS = [
     "child_id",
