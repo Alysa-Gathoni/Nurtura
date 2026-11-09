@@ -2,23 +2,33 @@
 
 Developmental activities that the Nurtura recommender draws from.
 
+## Which file to open
+
+| You want | Open |
+|---|---|
+| **Every activity, as written** (edit here) | `raw/activities.csv`: one file, 449 activities, with a `batch` column |
+| The cleaned activities the app loads | `processed/activities_clean.csv` (generated; never edit by hand) |
+| The CDC/WHO milestones the rule engine uses | `reference/developmental_milestones.csv` |
+| Plain aims and classifier flags to review | `review/` (see [review/README.md](review/README.md)) |
+| Evaluation labels | `evaluation/` (see [evaluation/README.md](evaluation/README.md)) |
+
 > **Do NOT fabricate developmental activities or claim unverified sources. All entries must be traceable to WHO, CDC, UNICEF, Montessori, or Pathways.org guidance.**
 
 ## Workflow
 
 ```
-data/raw/*.csv  ──►  scripts/clean_activities.py  ──►  data/processed/*.csv
+data/raw/activities.csv  ──►  scripts/clean_activities.py  ──►  data/processed/activities_clean.csv
  (hand-curated)      (validate + standardise)          (used by the backend)
 ```
 
-1. Add a new batch as its own CSV under `raw/` (e.g. `activities_batch4.csv`), continuing the `activity_id` numbering from the previous batch.
-2. Run the cleaning script over **all** batches together, so duplicates are caught across batches:
+1. Add new activities as rows at the end of `raw/activities.csv`, continuing the `activity_id` numbering, with the next `batch` number.
+2. Run the cleaning script, which also catches duplicates:
    ```
    cd data/scripts
-   python clean_activities.py "../raw/activities_batch*.csv" ../processed/activities_clean.csv
+   python clean_activities.py ../raw/activities.csv ../processed/activities_clean.csv
    ```
-   (or `make seed-data` from the repo root). The script expands the wildcard itself, so the same command works in PowerShell.
-3. Fix every `[REJECTED]` row in the **raw** file it came from and re-run until the summary shows all rows valid. Never edit files in `processed/` by hand.
+   (or `make seed-data` from the repo root).
+3. Fix every `[REJECTED]` row in `raw/activities.csv` and re-run until the summary shows all rows valid. Never edit files in `processed/` by hand.
 4. Load the processed file into the database:
    ```
    cd backend
@@ -75,14 +85,16 @@ Each rejected row is reported with its file, line number and every problem found
 
 ## Batch status
 
-| File | Rows | Notes |
+Until #190 each batch was its own file (`raw/activities_batch1.csv` to `raw/activities_batch6.csv`). They are now combined in `raw/activities.csv`; the `batch` column keeps which batch each activity came from, and the cleaned output is byte-for-byte the same.
+
+| `batch` | Rows | Notes |
 |---|---|---|
-| `raw/activities_batch1.csv` | 8 (`ACT-0001`–`ACT-0008`) | Initial sample. Descriptions are original wording. Each has a `source_url` to the specific guidance (#154). |
-| `raw/activities_batch2.csv` | 15 (`ACT-0009`–`ACT-0024`) | Mixed sources (CDC, Pathways.org, UNICEF, WHO), each with a `source_url` (#154). `ACT-0021` was removed (#160). |
-| `raw/activities_batch3.csv` | 14 (`ACT-0025`–`ACT-0038`) | All CDC, with `source_url` pointing to the CDC *Milestone Moments* booklet. |
-| `raw/activities_batch4.csv` | 16 (`ACT-0039`–`ACT-0054`) | 11 Socio-Emotional, 6 Prenatal, plus Language, Sensory and Cognitive, filling the gaps found by the retrieval preview. Sources and `source_url` values as in the CSV. |
-| `raw/activities_batch5.csv` | 196 (`ACT-0055`–`ACT-0254`) | Brings every age and area to at least 7 activities, including pregnancy Cognitive and Motor (#156). Four were removed (#160). Each follows a specific recommendation on its `source_url`, written in our own words. All `Draft` until reviewed. |
-| `raw/activities_batch6.csv` | 200 (`ACT-0255`–`ACT-0454`) | A second large batch (#158): 26 for pregnancy and 29 for each age from birth to 36 months. Each follows one specific page on its `source_url`, written in our own words. All `Draft` until reviewed. |
+| 1 | 8 (`ACT-0001`–`ACT-0008`) | Initial sample. Descriptions are original wording. Each has a `source_url` to the specific guidance (#154). |
+| 2 | 15 (`ACT-0009`–`ACT-0024`) | Mixed sources (CDC, Pathways.org, UNICEF, WHO), each with a `source_url` (#154). `ACT-0021` was removed (#160). |
+| 3 | 14 (`ACT-0025`–`ACT-0038`) | All CDC, with `source_url` pointing to the CDC *Milestone Moments* booklet. |
+| 4 | 16 (`ACT-0039`–`ACT-0054`) | 11 Socio-Emotional, 6 Prenatal, plus Language, Sensory and Cognitive, filling the gaps found by the retrieval preview. Sources and `source_url` values as in the CSV. |
+| 5 | 196 (`ACT-0055`–`ACT-0254`) | Brings every age and area to at least 7 activities, including pregnancy Cognitive and Motor (#156). Four were removed (#160). Each follows a specific recommendation on its `source_url`, written in our own words. All `Draft` until reviewed. |
+| 6 | 200 (`ACT-0255`–`ACT-0454`) | A second large batch (#158): 26 for pregnancy and 29 for each age from birth to 36 months. Each follows one specific page on its `source_url`, written in our own words. All `Draft` until reviewed. |
 
 Every activity is loaded as `Draft` and must pass admin review, including checking its source, before it is published.
 
@@ -183,6 +195,6 @@ The entries were written from these publications and **must each be checked agai
 - **Caregivers agree to a privacy notice first** (#136). [docs/privacy_notice.md](../docs/privacy_notice.md) says what is stored, why, who sees it and that it's kept until the caregiver deletes it. The version agreed to and the time are stored on the account.
 - **Signing in with Google keeps only the email.** Continue with Google (#130) uses the Google account's verified email to find or create the account; the name and photo Google also sends are not stored.
 - **Caregivers can erase their data** (#134). Deleting an account in the app removes the account and everything linked to it (children, milestones, developmental profiles, recommendations, completions, ratings, sign-in codes and trusted phones) at once. A single child's profile can also be deleted, with its records.
-- **Evaluation data uses constructed children.** The held-out children in `evaluation/heldout_labels.csv` and the sample children are realistic but hypothetical profiles built from real catalogue milestones. No real child's data was used, and the relevance labels are the researcher's own judgements.
+- **Evaluation data uses constructed children.** The held-out children in `evaluation/heldout_labels_v2.csv` and the sample children are realistic but hypothetical profiles built from real catalogue milestones. No real child's data was used, and the relevance labels are the researcher's own judgements.
 - **Studies with people are anonymous.** The explanation reader test and the planned caregiver evaluation record no names: readers are R1–R5, forms are anonymous, verbal or written consent is asked first, people can stop at any time, and responses are kept out of the repository (see `docs/explanation_reader_test.md`).
 - **To confirm with the client:** how responsibility for protecting caregivers' data is divided between Nurtura and Webmasters Kenya once SOFIA hosts it (IR-10).

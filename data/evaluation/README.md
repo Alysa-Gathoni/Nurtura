@@ -1,19 +1,30 @@
 # Relevance labels for ranking evaluation
 
+## Which file to open
+
+| You want | Open |
+|---|---|
+| **The current evaluation labels** (v2, frozen at `sprint9-eval-v2`) | `heldout_labels_v2.csv` |
+| The extra labels for the learned-ranker experiment | `learned_ranker_extra.csv` |
+| To grade a sheet | `label_heldout.html` (open it in Chrome or Edge, then choose the CSV) |
+| The v1 record (`sprint5-eval-v1`, 54 activities) and the old development-set template | `archive/` |
+
+Each `.provenance.json` sits next to its sheet and records the state the sheet was built from; never edit one. The v1 sheet and its record moved to `archive/` in #190 without any change, so the v1 evaluation still reproduces (`--labels ../data/evaluation/archive/heldout_labels.csv`).
+
 Sprint 5 tunes the ranking weight **α** against **hand-labelled relevance judgments**, never against the similarity or ranking score itself (α = 0 would then trivially win).
 
 ## Files
 
 | File | What it is |
 |---|---|
-| `relevance_labels_template.csv` | Generated, unfilled template: one row per (sample child, eligible activity). |
+| `archive/relevance_labels_template.csv` | Generated, unfilled template: one row per (sample child, eligible activity). Archived in #190: the development set was used to build and spot-check retrieval, not to evaluate it. |
 | `relevance_labels.csv` | **Your filled-in labels** (create it by copying the template). The evaluation reads this file. |
 
 Regenerate the template (for example after adding activities) with:
 
 ```
 cd backend
-python manage.py export_relevance_template --output ../data/evaluation/relevance_labels_template_new.csv
+python manage.py export_relevance_template --output ../data/evaluation/archive/relevance_labels_template_new.csv
 ```
 
 It refuses to overwrite an existing file unless you pass `--force`, so filled-in labels can't be lost by accident. Labels are matched on `sample_key` and `activity_id`, so existing labels stay valid when activities are added. Copy only the new rows across.
@@ -68,8 +79,8 @@ The seven sample children above are the **development set**. They were used to b
 |---|---|
 | `heldout_labels_v2.csv` | **The current sheet** (#168), pooled from the 449 Published activities. Fill it in **in place**; `evaluate_alpha_grid` reads this file by default. |
 | `heldout_labels_v2.provenance.json` | The state the v2 pools were built from. Don't edit it. |
-| `heldout_labels.csv` | The v1 sheet: the labelled record of `sprint5-eval-v1` (54 Published activities). Kept unchanged. |
-| `heldout_labels.provenance.json` | The state the v1 pools were built from. Don't edit it. |
+| `archive/heldout_labels.csv` | The v1 sheet: the labelled record of `sprint5-eval-v1` (54 Published activities). Unchanged; moved to `archive/` in #190. |
+| `archive/heldout_labels.provenance.json` | The state the v1 pools were built from. Don't edit it. |
 | `label_heldout.html` | A labelling page that shows one child at a time (see below). |
 
 ## Version 2: the 449-activity pool (#168, 31 Oct 2026)
@@ -84,7 +95,7 @@ It was generated with:
 
 ```
 cd backend
-python manage.py export_heldout_labels --output ../data/evaluation/heldout_labels_v2.csv --carry-labels ../data/evaluation/heldout_labels.csv
+python manage.py export_heldout_labels --output ../data/evaluation/heldout_labels_v2.csv --carry-labels ../data/evaluation/archive/heldout_labels.csv
 ```
 
 Once every row has a label:
@@ -93,7 +104,7 @@ Once every row has a label:
 python manage.py evaluate_alpha_grid --markdown
 ```
 
-chooses α on the tune children by the same rule fixed in advance and reports the test children once. The results are then written up, and the state is tagged as the new frozen evaluation before the caregiver sessions. Until then the chosen α is marked provisional and no test figures are printed. `sprint5-eval-v1` stays reproducible from its tag with `--labels ../data/evaluation/heldout_labels.csv`.
+chooses α on the tune children by the same rule fixed in advance and reports the test children once. The results are then written up, and the state is tagged as the new frozen evaluation before the caregiver sessions. Until then the chosen α is marked provisional and no test figures are printed. `sprint5-eval-v1` stays reproducible from its tag, or with `--labels ../data/evaluation/archive/heldout_labels.csv`.
 
 H17 stays the content-gap child and is reported separately, as in v1, although Sensory 18–24 months now has Published activities.
 
@@ -247,6 +258,6 @@ cd backend
 python manage.py evaluate_alpha_grid [--markdown]
 ```
 
-This reads the v2 sheet. To reproduce v1, check out the `sprint5-eval-v1` tag, or pass `--labels ../data/evaluation/heldout_labels.csv` (its provenance check then reports how today's state differs from v1's).
+This reads the v2 sheet. To reproduce v1, check out the `sprint5-eval-v1` tag, or pass `--labels ../data/evaluation/archive/heldout_labels.csv` (its provenance check then reports how today's state differs from v1's).
 
 The children are created in a transaction that is rolled back, so they are never saved.

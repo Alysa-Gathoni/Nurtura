@@ -23,6 +23,7 @@ DEFAULT_OUTPUT = (
     Path(settings.BASE_DIR).parent
     / "data"
     / "evaluation"
+    / "archive"
     / "relevance_labels_template.csv"
 )
 COLUMNS = [
