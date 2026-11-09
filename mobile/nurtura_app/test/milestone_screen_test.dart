@@ -136,6 +136,9 @@ Future<FakeBackend> openMilestoneScreen(
   await pumpApp(tester, backend, savedToken: 'tok');
   await tester.tap(find.byKey(const Key('tab_milestones')));
   await tester.pumpAndSettle();
+  // The tab opens on the tracker (#192); these tests use the picker.
+  await tester.tap(find.byKey(const Key('milestonesRecordSegment')));
+  await tester.pumpAndSettle();
   return backend;
 }
 

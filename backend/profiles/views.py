@@ -13,7 +13,15 @@ from rest_framework.views import APIView
 
 from activities.choices import Domain
 
-from . import fingerprint, google_sign_in, password_reset, privacy, two_factor
+from . import (
+    fingerprint,
+    google_sign_in,
+    observation,
+    password_reset,
+    privacy,
+    tracker,
+    two_factor,
+)
 from .authentication import issue_token
 from .models import LoginChallenge, ReferenceMilestone, User
 from .permissions import HasPrivacyConsent, IsCaregiver
@@ -564,6 +572,16 @@ class ChildProfileViewSet(viewsets.ModelViewSet):
         """The child's DevelopmentalProfile, regenerated for today's age."""
         profile = self.get_object().refresh_developmental_profile()
         return Response(DevelopmentalProfileSerializer(profile).data)
+
+    @action(detail=True, methods=["get"])
+    def tracker(self, request, pk=None):
+        """The child's milestones by area, with their status (#192)."""
+        return Response(tracker.tracker(self.get_object()))
+
+    @action(detail=True, methods=["get"])
+    def observation(self, request, pk=None):
+        """The weekly Nurtura observation, from the child's own records (#192)."""
+        return Response(observation.observation(self.get_object()))
 
 
 class ReferenceMilestoneViewSet(viewsets.ReadOnlyModelViewSet):
