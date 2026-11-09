@@ -1,3 +1,4 @@
+import '../models/milestone_tracker.dart';
 import '../models/reference_milestone.dart';
 import 'api_client.dart';
 
@@ -31,6 +32,20 @@ class MilestoneService {
         .map((e) => MilestoneObservation.fromJson(e as Map<String, dynamic>))
         .toList();
   }
+
+  /// The child's milestones by area (#192).
+  Future<MilestoneTracker> tracker(int childId) async =>
+      MilestoneTracker.fromJson(
+        await _api.get('/api/children/$childId/tracker/')
+            as Map<String, dynamic>,
+      );
+
+  /// The weekly Nurtura observation (#192).
+  Future<NurturaObservation> observation(int childId) async =>
+      NurturaObservation.fromJson(
+        await _api.get('/api/children/$childId/observation/')
+            as Map<String, dynamic>,
+      );
 
   /// Records an observation; the backend regenerates the child's profile.
   Future<RecordedMilestone> record({

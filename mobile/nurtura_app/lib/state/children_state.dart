@@ -130,6 +130,13 @@ class ChildrenState extends ChangeNotifier {
 
   final _ideasOutOfDate = <int>{};
 
+  /// Marks the child's ideas as picked for an old profile, e.g. after a
+  /// milestone was updated in the tracker (#192).
+  void markIdeasOutOfDate(int childId) {
+    _ideasOutOfDate.add(childId);
+    notifyListeners();
+  }
+
   /// True, once, if the child's profile was edited since their ideas were
   /// last fetched.
   bool takeIdeasOutOfDate(int childId) => _ideasOutOfDate.remove(childId);

@@ -6,7 +6,7 @@ import '../state/children_state.dart';
 import '../widgets/shell_header.dart';
 import 'child_form_screen.dart';
 import 'children_screen.dart';
-import 'milestone_screen.dart';
+import 'milestones_tab.dart';
 import 'progress_screen.dart';
 import 'recommendations_screen.dart';
 
@@ -123,9 +123,8 @@ class _HomeShellState extends State<HomeShell> {
                     child: child,
                     onRecord: () => _go(milestones),
                   ),
-                  milestones => MilestoneScreen(
+                  milestones => MilestonesTab(
                     child: child,
-                    embedded: true,
                     justCreated: _justCreated,
                     onSeeIdeas: _seeIdeas,
                   ),
