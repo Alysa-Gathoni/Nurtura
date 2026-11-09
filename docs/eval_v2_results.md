@@ -87,7 +87,7 @@ All metrics, means over the 8 test children:
 | SBERT-only | 0.833 | 0.850 | 0.458 | 0.400 | 0.608 | 0.582 |
 | α = 1.0 (rule's choice, for the record) | 1.000 | 1.000 | 0.792 | 0.775 | 0.858 | 0.876 |
 
-With this few children, no significance claims are made.
+Confidence intervals and a signed-rank test were added later, in [eval_v2_statistics.md](eval_v2_statistics.md): against SBERT-only the difference is +0.254, 95% CI [+0.136, +0.379], Wilcoxon p = 0.016. Read them with the small sample in mind.
 
 ## Content-gap child (H17)
 
