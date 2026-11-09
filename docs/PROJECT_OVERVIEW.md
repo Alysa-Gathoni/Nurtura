@@ -120,6 +120,7 @@ The balance between the rule engine and the AI search (α) was chosen by experim
 
 - 7 of the 8 test children again got better recommendations.
 - The fixed rule chose α = 1.0 this time, but that comes from how ties are broken at α = 1.0 (by activity ID, which favours the first-written activities), so α = 0.7 was kept. This departs from the rule and is explained in `docs/eval_v2_results.md`.
+- Added on 9 Nov 2026 (`docs/eval_v2_statistics.md`): the gain over AI search alone has a 95% confidence interval of +0.14 to +0.38 (Wilcoxon p = 0.016, 8 children). Most of it comes from the age weight, and the exact age-weight values don't change any test child's top 5.
 
 - **Scope change:** caregiver-preference and contextual weighting, planned in the proposal (Section 3.2.3), were dropped from scope. Only α was tuned.
 
