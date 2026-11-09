@@ -6,6 +6,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from activities.models import DevelopmentalActivity
 from feedback.manager import latest as latest_feedback
 from feedback.views import completion_json, feedback_json, own_recommendation
 from profiles.models import ChildProfile
@@ -14,6 +15,8 @@ from profiles.rules.referral import referral_for
 
 from . import generation
 from .generation import short_description
+from . import browse
+from .models import SavedActivity
 from .options import options_for
 from .retrieval import DEFAULT_LIMIT, MAX_LIMIT, retrieve
 
@@ -199,6 +202,110 @@ class RecommendationOptionsView(APIView):
         result = generation.generate(
             child.pk, request.user, pin=(option.activity.pk, option.why)
         )
+        return Response(
+            _payload(child, result.recommendations), status=status.HTTP_201_CREATED
+        )
+
+
+def _flag(params, name):
+    return str(params.get(name, "")).lower() in ("1", "true", "yes")
+
+
+class ChildActivitiesView(APIView):
+    """Explore: activities for a child, to browse or search (#194).
+
+    GET lists Published activities suited to the child's age and not yet
+    done, best first. ?q= searches by meaning with SBERT; ?for=interests
+    searches with the child's interests. Filters: ?area=, ?no_materials=1,
+    ?quick=1, ?saved=1; ?limit= (default 30, at most 100).
+    """
+
+    permission_classes = [IsCaregiver]
+
+    def get(self, request, child_id):
+        child = get_object_or_404(request.user.children, pk=child_id)
+        params = request.query_params
+        query = params.get("q", "")
+        if params.get("for") == "interests":
+            query = browse.interests_query(child)
+            if not query:
+                return Response({"query": "", "results": []})
+        try:
+            limit = int(params.get("limit", browse.DEFAULT_LIMIT))
+        except ValueError:
+            raise ValidationError({"limit": "Must be a whole number."})
+        if not 1 <= limit <= browse.MAX_LIMIT:
+            raise ValidationError(
+                {"limit": f"Must be between 1 and {browse.MAX_LIMIT}."}
+            )
+        found = browse.browse(
+            child,
+            query=query,
+            area=params.get("area") or None,
+            no_materials=_flag(params, "no_materials"),
+            quick=_flag(params, "quick"),
+            saved_only=_flag(params, "saved"),
+            limit=limit,
+        )
+        return Response(
+            {
+                "query": query,
+                "results": [
+                    {**_activity_json(f.activity), "saved": f.saved} for f in found
+                ],
+            }
+        )
+
+
+class SavedActivityView(APIView):
+    """Save an activity for later (PUT, 201 or 200) or unsave it (DELETE)."""
+
+    permission_classes = [IsCaregiver]
+
+    def _get(self, request, child_id, activity_id):
+        child = get_object_or_404(request.user.children, pk=child_id)
+        activity = get_object_or_404(
+            DevelopmentalActivity.objects.published(), activity_id=activity_id
+        )
+        return child, activity
+
+    def put(self, request, child_id, activity_id):
+        child, activity = self._get(request, child_id, activity_id)
+        _, created = SavedActivity.objects.get_or_create(child=child, activity=activity)
+        return Response(
+            {"activity_id": activity.activity_id, "saved": True},
+            status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+        )
+
+    def delete(self, request, child_id, activity_id):
+        child, activity = self._get(request, child_id, activity_id)
+        SavedActivity.objects.filter(child=child, activity=activity).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TryActivityView(APIView):
+    """Add an activity found in Explore to the child's ideas (#194).
+
+    It is pinned first in a new batch, as for an option after feedback
+    (#177), and stays until done. The response is the new batch.
+    """
+
+    permission_classes = [IsCaregiver]
+
+    def post(self, request, child_id, activity_id):
+        child = get_object_or_404(request.user.children, pk=child_id)
+        activity = get_object_or_404(
+            DevelopmentalActivity.objects.published(), activity_id=activity_id
+        )
+        result = generation.generate(
+            child.pk,
+            request.user,
+            pin=(activity.pk, f"You chose this for {child.name} in Explore."),
+        )
+        if activity.pk not in {r.activity_id for r in result.recommendations}:
+            raise ValidationError(
+                {"activity_id": [f"This activity can't be added for {child.name} now."]}
+            )
         return Response(
             _payload(child, result.recommendations), status=status.HTTP_201_CREATED
         )

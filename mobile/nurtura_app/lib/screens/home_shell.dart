@@ -6,6 +6,7 @@ import '../state/children_state.dart';
 import '../widgets/shell_header.dart';
 import 'child_form_screen.dart';
 import 'children_screen.dart';
+import 'explore_screen.dart';
 import 'milestones_tab.dart';
 import 'progress_screen.dart';
 import 'recommendations_screen.dart';
@@ -20,7 +21,8 @@ class HomeShell extends StatefulWidget {
 }
 
 class _HomeShellState extends State<HomeShell> {
-  static const today = 0, progress = 1, milestones = 2, family = 3;
+  static const today = 0, explore = 1, progress = 2, milestones = 3;
+  static const family = 4;
 
   int _tab = today;
 
@@ -90,6 +92,7 @@ class _HomeShellState extends State<HomeShell> {
             ? 'Gentle ideas for your pregnancy'
             : 'Picked for ${child.name}',
       ),
+      explore => ('Explore', 'Ideas to browse for ${child.name}'),
       progress => ('Progress', 'Every step counts'),
       milestones => ('Milestones', 'What can ${child.name} do?'),
       _ => ('Family', null),
@@ -118,6 +121,11 @@ class _HomeShellState extends State<HomeShell> {
                     // read when this screen is created.
                     refresh:
                         _refreshIdeas || state.takeIdeasOutOfDate(child.id),
+                  ),
+                  explore => ExploreScreen(
+                    child: child,
+                    // The new batch is stored; Today shows it on opening.
+                    onTried: (_) => _go(today),
                   ),
                   progress => ProgressScreen(
                     child: child,
@@ -148,6 +156,12 @@ class _HomeShellState extends State<HomeShell> {
             icon: Icon(Icons.wb_sunny_outlined),
             selectedIcon: Icon(Icons.wb_sunny_rounded),
             label: 'Today',
+          ),
+          NavigationDestination(
+            key: Key('tab_explore'),
+            icon: Icon(Icons.explore_outlined),
+            selectedIcon: Icon(Icons.explore_rounded),
+            label: 'Explore',
           ),
           NavigationDestination(
             key: Key('tab_progress'),

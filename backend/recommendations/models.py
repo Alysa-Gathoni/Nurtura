@@ -143,3 +143,27 @@ class ActivityEmbedding(models.Model):
 
     def __str__(self):
         return f"{self.model_name} embedding of {self.activity.activity_id}"
+
+
+class SavedActivity(models.Model):
+    """An activity a caregiver saved for later from Explore (#194)."""
+
+    child = models.ForeignKey(
+        ChildProfile, on_delete=models.CASCADE, related_name="saved_activities"
+    )
+    activity = models.ForeignKey(
+        DevelopmentalActivity, on_delete=models.CASCADE, related_name="saved_by"
+    )
+    saved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-saved_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["child", "activity"], name="unique_saved_activity"
+            )
+        ]
+
+    def __str__(self):
+        # The activity, not the child (as for feedback).
+        return f"Saved: {self.activity.activity_name}"
