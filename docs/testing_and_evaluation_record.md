@@ -169,6 +169,8 @@ The weight α between the rule engine and SBERT similarity was chosen on 11 *tun
 
 **v2 statistics (2026-11-09, #196):** against SBERT-only, test nDCG@5 +0.254, bootstrap 95% CI [+0.136, +0.379], Wilcoxon signed-rank p = 0.016. Against α = 0, +0.029, CI [−0.007, +0.095], not significant. Four alternative sets of age weights give the same test top 5; removing age weighting lowers test nDCG@5 to 0.520. See [eval_v2_statistics.md](eval_v2_statistics.md).
 
+**Accessibility (2026-11-10, #206):** `accessibility_test.dart` runs Flutter's Android tap-target, labelled tap-target and text-contrast guidelines on sign-in and all five caregiver tabs in light and dark themes, and renders every tab at twice the text size. The first run found the child switcher and the Log in/Register toggle under 48 px, muted text, terracotta and rose text below 4.5:1 contrast in the light theme, and two rows overflowing at large text. All were fixed; all checks now pass.
+
 **Diversity, novelty, coverage and personalisation (2026-11-10, #199):** over all 20 children's top 5 at α = 0.7, personalisation 0.996 (0.962 within an age band), 96 distinct activities in 100 slots (coverage 0.214, ceiling 0.223), novelty 4.24 of 4.32 bits, intra-list diversity 0.442 against 0.398 for SBERT alone. Area diversity is low (0.28, about 1.4 areas per top 5) because the priority area comes first. See [eval_v2_beyond_accuracy.md](eval_v2_beyond_accuracy.md).
 
 **Limitations:** small numbers, one rater who also designed the system, and constructed (not real) children. The test set preferred the α = 0 ablation (nDCG@5 0.873), so 0.7 is a reasonable default rather than an optimum. Caregiver feedback in Sprint 9 is the better test.

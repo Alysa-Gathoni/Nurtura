@@ -55,12 +55,17 @@ class PillChip extends StatelessWidget {
                   Icon(icon, size: 15, color: selected ? textColor : color),
                   const SizedBox(width: 5),
                 ],
-                Text(
-                  label,
-                  style: AppText.nunito(
-                    size: 12.5,
-                    weight: FontWeight.w800,
-                    color: textColor,
+                // Shortens instead of overflowing at large text sizes (#206).
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppText.nunito(
+                      size: 12.5,
+                      weight: FontWeight.w800,
+                      color: textColor,
+                    ),
                   ),
                 ),
                 if (trailingIcon != null) ...[

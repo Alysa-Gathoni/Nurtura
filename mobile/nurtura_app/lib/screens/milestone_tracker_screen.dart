@@ -339,12 +339,15 @@ class _ObservationCard extends StatelessWidget {
             children: [
               Icon(Icons.auto_awesome_rounded, color: p.onPrimary, size: 20),
               const SizedBox(width: 8),
-              Text(
-                'Nurtura observation',
-                style: AppText.nunito(
-                  size: 15,
-                  weight: FontWeight.w800,
-                  color: p.onPrimary,
+              // Wraps at large text sizes instead of overflowing (#206).
+              Expanded(
+                child: Text(
+                  'Nurtura observation',
+                  style: AppText.nunito(
+                    size: 15,
+                    weight: FontWeight.w800,
+                    color: p.onPrimary,
+                  ),
                 ),
               ),
             ],

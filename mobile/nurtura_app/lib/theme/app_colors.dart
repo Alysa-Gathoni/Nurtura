@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 /// and dark mode; these constants are the light palette's source.
 abstract final class AppColors {
   /// Terracotta: actions, selected states, headings that need weight.
-  static const terracotta = Color(0xFFB4583A);
+  // Deepened from B4583A so text in it reaches WCAG AA (4.5:1) on every
+  // light background (#206).
+  static const terracotta = Color(0xFF994A31);
 
   /// Sage: things done, growing or going well.
   static const sage = Color(0xFF6A8763);
@@ -15,7 +17,8 @@ abstract final class AppColors {
 
   /// Warm brown text on linen.
   static const ink = Color(0xFF3B2F28);
-  static const mutedText = Color(0xFF85766A);
+  // Deepened from 85766A for WCAG AA contrast (#206).
+  static const mutedText = Color(0xFF6A5E54);
 
   /// Linen cream background and the paper-white of cards.
   static const linen = Color(0xFFF7F0E3);
@@ -98,7 +101,8 @@ class NurturaPalette extends ThemeExtension<NurturaPalette> {
     mustardSoft: Color(0xFFF6EACB),
     dusk: Color(0xFF5B7E92),
     duskSoft: Color(0xFFDDE7EB),
-    rose: Color(0xFFBC5F55),
+    // Deepened from BC5F55 for WCAG AA contrast (#206).
+    rose: Color(0xFF964C44),
     roseSoft: Color(0xFFF5DDD8),
     plum: Color(0xFF876C8F),
     plumSoft: Color(0xFFEBE1EC),

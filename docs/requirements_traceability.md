@@ -15,7 +15,7 @@ Status key:
 | Group | Met | Met, with a deviation | Partly met | Evidence pending | Not met |
 |---|---|---|---|---|---|
 | Functional (FR-01 to FR-18) | 13 | 3 | 2 | 0 | 0 |
-| Non-functional (NFR-01 to NFR-13) | 7 | 1 | 2 | 3 | 0 |
+| Non-functional (NFR-01 to NFR-13) | 8 | 1 | 1 | 3 | 0 |
 | Data (DR-01 to DR-11) | 8 | 0 | 3 | 0 | 0 |
 | Interface (IR-01 to IR-09) | 8 | 0 | 1 | 0 | 0 |
 
@@ -72,7 +72,7 @@ All other IDs in the repo (FR-01, FR-02, FR-05, FR-11, FR-14 to FR-16, NFR-02, N
 | NFR-04 | Data integrity | Database constraints (score ranges, unique positions), atomic batch writes | `recommendations/tests.py`, `test_recommendations_api.py` (out-of-range values rejected by the database) | **Met** |
 | NFR-05 | Reliability | Row lock so two simultaneous requests store one batch; invalid input refused without partial writes | `test_recommendations_api.py` (`test_simultaneous_posts_store_one_batch`) | **Met** |
 | NFR-06 | Usability (SUS) | SUS in the caregiver sessions ([caregiver_evaluation.md](caregiver_evaluation.md)) | **Evidence pending:** sessions not yet run. |
-| NFR-07 | Accessibility | Readable text, labels and tooltips, light and dark themes | app `redesign_test.dart` (dark mode), `verify_code_screen_test.dart` | **Partly met:** no formal accessibility check (screen reader, text scaling). |
+| NFR-07 | Accessibility | Flutter's Android tap-target (48 × 48), labelled tap-target and WCAG AA text-contrast (4.5:1) guidelines on sign-in and every caregiver tab, in light and dark themes; every tab at twice the text size without overflow (#206) | app `accessibility_test.dart` | **Met.** Not yet tried with TalkBack on a phone; the automated checks cover labels, sizes and contrast. |
 | NFR-08 | Compatibility | Flutter app on Android; REST API | app tests; end-to-end run on a phone ([evidence/e2e_2026-10-15](evidence/e2e_2026-10-15)) | **Met, with a deviation:** Android only. iOS was removed (#186). |
 | NFR-09 | Maintainability | Separate Django apps: `profiles`, `activities`, `recommendations`, `feedback`, `insights` | Code inspection | **Met** |
 | NFR-10 | Explainability | Explanations traced to the profile (FR-11); the explanation reader test checks caregivers understand them ([explanation_reader_test.md](explanation_reader_test.md)) | **Evidence pending:** the automated trace is done; the reader test hasn't run. |

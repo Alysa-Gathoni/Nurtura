@@ -47,32 +47,38 @@ class SegmentedToggle extends StatelessWidget {
                   child: InkWell(
                     customBorder: const StadiumBorder(),
                     onTap: () => onChanged(i),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (icons != null) ...[
-                            Icon(
-                              icons![i],
-                              size: 16,
-                              color: i == selected ? p.onPrimary : p.primary,
-                            ),
-                            const SizedBox(width: 6),
-                          ],
-                          Flexible(
-                            child: Text(
-                              options[i],
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppText.nunito(
-                                size: 15,
-                                weight: FontWeight.w800,
+                    // At least 48 high: Android's minimum tap target (#206).
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(minHeight: 48),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (icons != null) ...[
+                              Icon(
+                                icons![i],
+                                size: 16,
                                 color: i == selected ? p.onPrimary : p.primary,
                               ),
+                              const SizedBox(width: 6),
+                            ],
+                            Flexible(
+                              child: Text(
+                                options[i],
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppText.nunito(
+                                  size: 15,
+                                  weight: FontWeight.w800,
+                                  color: i == selected
+                                      ? p.onPrimary
+                                      : p.primary,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
