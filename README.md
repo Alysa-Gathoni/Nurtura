@@ -60,7 +60,7 @@ Activate the virtual environment:
 Then:
 
 ```bash
-pip install -r requirements.txt       # includes PyTorch; large download
+pip install -r requirements-dev.txt   # the server's packages (with PyTorch; large) plus black and pre-commit
 cp .env.example .env                  # Windows PowerShell: copy .env.example .env
 python setup_sbert.py                 # downloads all-MiniLM-L6-v2 to backend/models/ (~90 MB)
 python manage.py migrate
@@ -69,7 +69,9 @@ python manage.py runserver            # http://127.0.0.1:8000
 ```
 
 > **Slow or unreliable connection?** If pip reports `No matching distribution found ... (from versions: none)` for a package that clearly exists, it is usually a network timeout, not a missing package. Retry with:
-> `pip install --timeout 600 --retries 20 --resume-retries 50 -r requirements.txt`
+> `pip install --timeout 600 --retries 20 --resume-retries 50 -r requirements-dev.txt`
+>
+> A server needs only `requirements.txt`; `requirements-dev.txt` adds the formatting tools.
 
 ### From an empty database to working recommendations
 
@@ -281,6 +283,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 
 - **Backend:** installs `backend/requirements.txt` (with CPU-only PyTorch), then runs `manage.py check`, `makemigrations --check --dry-run` and `manage.py test`, plus the PostgreSQL-only concurrency test. Tests that need the SBERT model are skipped there, since the model isn't downloaded in CI.
 - **Mobile:** `flutter pub get`, `flutter analyze`, `flutter test`.
+- **Deployment check (non-blocking):** `manage.py check --deploy` with production-style settings. It reports the HTTPS settings still to set before deployment (HSTS, SSL redirect, secure cookies) but never fails the run.
 
 ## Documentation
 

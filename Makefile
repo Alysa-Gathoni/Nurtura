@@ -21,7 +21,7 @@ PY := $(abspath $(VENV_BIN))/python
 setup:
 	test -d $(VENV) || $(SYS_PYTHON) -m venv $(VENV)
 	$(PY) -m pip install --upgrade pip
-	$(PY) -m pip install -r $(BACKEND)/requirements.txt
+	$(PY) -m pip install -r $(BACKEND)/requirements-dev.txt
 	test -f $(BACKEND)/.env || cp $(BACKEND)/.env.example $(BACKEND)/.env
 	cd $(BACKEND) && $(PY) setup_sbert.py
 	cd $(APP) && flutter pub get
