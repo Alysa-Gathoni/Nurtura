@@ -16,7 +16,7 @@ import '../../widgets/message_banner.dart';
 import '../../widgets/pill_chip.dart';
 import 'admin_activity_form_screen.dart';
 
-/// The activity library for administrators (#123, FR-13): search, filter by
+/// The activity library for administrators (#123, FR-06): search, filter by
 /// status and area, add, and open one to edit or move through review.
 class AdminActivitiesScreen extends StatefulWidget {
   const AdminActivitiesScreen({super.key, this.initialStatus});

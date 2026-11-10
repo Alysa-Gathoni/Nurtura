@@ -27,7 +27,7 @@ import 'activity_detail_screen.dart';
 ///
 /// Each batch it receives is saved on the device. If the server can't be
 /// reached, the saved batch is shown with a "Saved recommendations"
-/// notice (NFR-14).
+/// notice (offline use, a SOFIA addition).
 class RecommendationsScreen extends StatefulWidget {
   const RecommendationsScreen({
     super.key,

@@ -7,7 +7,7 @@ Rows are matched on activity_id, so re-running updates activities instead of
 duplicating them. Every row is validated before anything is written; if any
 row is invalid, nothing is saved.
 
-Content status (FR-13, DR-12): new activities are always created as Draft so
+Content status (FR-06; a SOFIA addition): new activities are always created as Draft so
 they go through admin review before they can be recommended. Re-seeding keeps
 the status set in the admin, except that an Under Review or Published activity
 whose content changes is returned to Draft for re-review.

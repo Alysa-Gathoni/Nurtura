@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/recommendation.dart';
 
 /// The last recommendation batch per child, kept on the device so it can
-/// be shown offline (NFR-14). Cleared whenever the user signs out or the
+/// be shown offline (offline use, a SOFIA addition). Cleared whenever the user signs out or the
 /// session ends, so another account on the same phone never sees it.
 abstract class RecommendationCache {
   Future<CachedBatch?> read(int childId);

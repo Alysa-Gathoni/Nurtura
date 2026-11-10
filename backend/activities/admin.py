@@ -84,7 +84,7 @@ class DevelopmentalActivityAdmin(admin.ModelAdmin):
             '<a href="{}" target="_blank" rel="noopener">open</a>', obj.source_url
         )
 
-    # Administrators manage the activity repository (FR-13) by role, without
+    # Administrators manage the activity repository (FR-06) by role, without
     # needing individual Django model permissions.
     def _is_administrator(self, request):
         user = request.user

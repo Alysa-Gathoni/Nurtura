@@ -63,4 +63,4 @@ Behind a proxy or load balancer, the admin's login form also needs `CSRF_TRUSTED
 | A platform service (Render, Railway and similar) on a paid tier with enough memory | Deploys from GitHub; HTTPS included | Free tiers are too small for the model; check the memory limit |
 | **Cloudflare** | Cloudflare **Tunnel** can put a server (even this laptop) behind a public HTTPS address, with no open ports | Cloudflare **Workers** can't run Django or PyTorch, so the API itself must run on a server |
 
-Whichever is chosen, the data-protection split with Webmasters Kenya (IR-10) should be agreed first. Real caregivers' data would then be on that host ([data/README.md](../data/README.md), "Access, privacy and ethics").
+Whichever is chosen, the data-protection split with Webmasters Kenya (a SOFIA addition, see [requirements_traceability.md](requirements_traceability.md)) should be agreed first. Real caregivers' data would then be on that host ([data/README.md](../data/README.md), "Access, privacy and ethics").

@@ -292,6 +292,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/deployment_requirements.md](docs/deployment_requirements.md) | What hosting needs (Sprint III) |
 | [docs/demo_checklist.md](docs/demo_checklist.md) | Running a live demo on a phone |
 | [docs/sprint5_alpha_results.md](docs/sprint5_alpha_results.md) | The ranking evaluation v1 on 54 activities (held-out children, nDCG, choice of α) |
+| [docs/requirements_traceability.md](docs/requirements_traceability.md) | Every Chapter 4 requirement: where it is built, its tests and its status, with the old-ID crosswalk |
 | [docs/eval_v2_results.md](docs/eval_v2_results.md) | The ranking evaluation v2 on 449 activities, and why α stays 0.7 |
 | [docs/eval_v2_statistics.md](docs/eval_v2_statistics.md) | Confidence intervals, Wilcoxon tests and age-weight sensitivity for v2 |
 | [docs/experiment_embedding_model.md](docs/experiment_embedding_model.md) | Experiment: a search-trained embedding model, with its decision rule |

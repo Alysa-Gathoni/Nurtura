@@ -14,7 +14,7 @@ import '../../widgets/nurtura_app_bar.dart';
 import 'admin_activities_screen.dart';
 
 /// Add an activity, or view and edit one and move it through review
-/// (#123, FR-13, DR-12). Pops `true` when something was saved.
+/// (#123, FR-06; content status). Pops `true` when something was saved.
 class AdminActivityFormScreen extends StatefulWidget {
   const AdminActivityFormScreen({super.key, this.activity});
 

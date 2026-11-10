@@ -1,4 +1,4 @@
-"""Semantic retrieval: match a child's developmental profile to activities (FR-06).
+"""Semantic retrieval: match a child's developmental profile to activities (FR-09).
 
 At request time the child's profile (from the rule engine) is turned into a
 plain-language query, encoded with SBERT, and compared by cosine similarity

@@ -51,9 +51,9 @@ All of these run on every change (GitHub Actions) and **all passed** on `main` a
 
 | Area | Tests | What they check |
 |---|---|---|
-| Activities | 36 | The activity model; the Draft → Under Review → Published workflow; only Published activities can be recommended (FR-13, DR-12); seeding and approved plain-language aims |
+| Activities | 36 | The activity model; the Draft → Under Review → Published workflow; only Published activities can be recommended (FR-06; content status, a SOFIA addition); seeding and approved plain-language aims |
 | Profiles | 117 | Caregiver/administrator roles (FR-01, FR-02); registration, login and two-step codes (expiry, 5 tries, resend limits, trusted phones, hashing); child profiles, including pregnancy; milestone recording; the rule engine's priority scores (FR-05) |
-| Recommendations | 193 | Embeddings and similarity retrieval (FR-06); the weighted ranking and its tie-breaks (FR-07); explanations (FR-11); stored batches and when a new one is made; completed activities left out; evaluation harness and provenance checks; access (another caregiver's child → 404, administrators → 403) |
+| Recommendations | 193 | Embeddings and similarity retrieval (FR-09); the weighted ranking and its tie-breaks (FR-10); explanations (FR-11); stored batches and when a new one is made; completed activities left out; evaluation harness and provenance checks; access (another caregiver's child → 404, administrators → 403) |
 | Feedback | 32 | Mark done / partly done / undo (FR-14); `FeedbackManager` rating and comment rules (FR-15); administrator review, read-only, without the child or the caregiver shown (FR-16) |
 | Insights | 7 | The admin dashboard's figures (people, activity, ratings, library, milestones), what counts as active, the page itself, empty states, and that no child or caregiver is shown |
 | Admin theme | 3 | The admin's login and pages carry the Nurtura theme and branding |
@@ -65,8 +65,8 @@ All of these run on every change (GitHub Actions) and **all passed** on `main` a
 | Sign-in | 20 | Login and registration, error messages, saved sessions; the code screen (auto-submit, wrong code, resend countdown, "trust this phone", dark mode) |
 | Children and milestones | 16 | Child profiles (including pregnancy), the milestone search and recording, "See ideas" |
 | Recommendations and activity | 20 | Showing ranked ideas with explanations, generating, errors and retry; activity details; done, partly done, undo and feedback |
-| Offline (NFR-14) | 11 | Saved recommendations shown offline with a notice; opening the app offline stays signed in; logout and a 401 clear what's saved |
-| Home, progress and theme | 10 | Tabs and child switcher; progress and badges from the child's own records, with banned comparison words checked (NFR-15); day streak; theme remembered |
+| Offline (SOFIA addition) | 11 | Saved recommendations shown offline with a notice; opening the app offline stays signed in; logout and a 401 clear what's saved |
+| Home, progress and theme | 10 | Tabs and child switcher; progress and badges from the child's own records, with banned comparison words checked (non-comparative, a SOFIA addition); day streak; theme remembered |
 
 The app's test runner reports 78; one test is generated for two status codes.
 

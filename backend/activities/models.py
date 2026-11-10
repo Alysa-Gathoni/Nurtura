@@ -29,7 +29,7 @@ class DevelopmentalActivityQuerySet(models.QuerySet):
 class DevelopmentalActivity(models.Model):
     """An evidence-based activity in the activity repository."""
 
-    # Content-validation workflow (FR-13, DR-12): content must be reviewed
+    # Content-validation workflow (FR-06; a SOFIA addition): content must be reviewed
     # before it is published; any state can go back to draft for edits.
     ALLOWED_TRANSITIONS = {
         ContentStatus.DRAFT: {ContentStatus.UNDER_REVIEW},

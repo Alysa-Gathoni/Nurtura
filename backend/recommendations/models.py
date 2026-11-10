@@ -126,7 +126,7 @@ class Recommendation(models.Model):
 
 
 class ActivityEmbedding(models.Model):
-    """Precomputed SBERT embedding of a Published activity (DR-09, DR-10).
+    """Precomputed SBERT embedding of a Published activity (DR-09).
 
     Stored as float32 bytes. text_hash records the model and text that were
     embedded, so embed_activities only re-encodes activities that changed.
