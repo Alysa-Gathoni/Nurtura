@@ -1,7 +1,7 @@
 import '../models/reference_milestone.dart';
 import '../theme/domain_style.dart';
 
-/// A child's own milestone record, per area. Non-comparative (NFR-15): it
+/// A child's own milestone record, per area. Non-comparative (a SOFIA addition): it
 /// counts what the caregiver has recorded and never measures the child
 /// against norms or other children.
 class AreaProgress {

@@ -35,7 +35,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 - **The clinic-visit suggestion is simple** (#161). It appears when at least one CDC or WHO milestone the child is past the expected age for is marked "Not yet", following CDC's "one or more milestones" advice. It can't notice lost skills (CDC's other sign), "Emerging" answers and free-text milestones don't count, and the wording has not been reviewed by a health worker. It never changes the ranking.
 - **Sensory has no guideline milestones.** The CDC and WHO checklists have no Sensory category, so Sensory priority comes only from caregiver concerns and interests.
 - **108 of 133 catalogue milestones are not yet verified** against the source documents (the 6 WHO ones and 19 CDC ones used in the evaluation are).
-- **English only.** A language toggle (NFR-16) is undecided; if it isn't built, English-only is a stated limitation.
+- **English only.** A language toggle (a SOFIA suggestion, not in Chapter 4) is undecided; if it isn't built, English-only is a stated limitation.
 
 ## App and backend
 

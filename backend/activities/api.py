@@ -1,4 +1,4 @@
-"""Activity management for administrators in the app (#122, FR-13, DR-12).
+"""Activity management for administrators in the app (#122, FR-06; content status, a SOFIA addition).
 
 Administrators list, add and edit activities and move them through the
 review workflow. New activities start as Draft. Editing an activity that is

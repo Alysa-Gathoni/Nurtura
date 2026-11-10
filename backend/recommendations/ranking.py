@@ -1,4 +1,4 @@
-"""Weighted ranking: combine rule priority and semantic similarity (FR-07).
+"""Weighted ranking: combine rule priority and semantic similarity (FR-10).
 
 For each eligible activity a, for child c:
 

@@ -24,7 +24,7 @@ from .retrieval import DEFAULT_LIMIT, MAX_LIMIT, retrieve
 class ChildCandidatesView(APIView):
     """Activities semantically closest to a child's developmental profile.
 
-    These are retrieval candidates (FR-06), not final recommendations: the
+    These are retrieval candidates (FR-09), not final recommendations: the
     weighted ranking and explanations come in Sprints 5-6.
     """
 

@@ -10,7 +10,7 @@ caregiver's own records:
   highest-priority area that has one (Not yet before Emerging, never one
   already mentioned).
 
-Like the Progress tab (NFR-15) it never compares the child with other
+Like the Progress tab (non-comparative, a SOFIA addition) it never compares the child with other
 children, and like the referral (#161) it never diagnoses. It is generated
 from templates, so every sentence can be traced to a record.
 """

@@ -17,7 +17,7 @@ import '../widgets/message_banner.dart';
 
 /// The child's own milestone record and the caregiver's badges and streak.
 ///
-/// Non-comparative (NFR-15): it shows what has been recorded and celebrated,
+/// Non-comparative (a SOFIA addition): it shows what has been recorded and celebrated,
 /// never how the child compares with norms or other children.
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key, required this.child, this.onRecord});

@@ -177,12 +177,12 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 - **Sign in:** register or log in, with the emailed code on a new phone.
 - **Four tabs:**
   - **Today:** the selected child's recommendations, with explanations;
-  - **Progress:** milestones celebrated, a ring for each area and badges, all from the child's own records and never compared with other children (NFR-15);
+  - **Progress:** milestones celebrated, a ring for each area and badges, all from the child's own records and never compared with other children (a SOFIA addition);
   - **Milestones:** record from the searchable checklist;
   - **Family:** children, theme and logout.
 - **Administrator screens:** an administrator account opens Dashboard, Activities, Feedback and Account tabs instead. Together they cover the system's use and health, adding, editing and publishing activities, and reviewing ratings without family details.
 - **Activity screen:** the full activity, then "How did it go?": Done or Partly done (with undo), and 1–5 stars with a comment.
-- **Offline (NFR-14):** the last recommendations and the child list are kept on the phone. Opening the app offline keeps the caregiver signed in and shows them, marked as saved.
+- **Offline (a SOFIA addition):** the last recommendations and the child list are kept on the phone. Opening the app offline keeps the caregiver signed in and shows them, marked as saved.
 - **Look and feel:** a playful design with light and dark mode, a day streak and badges, inspired by Kinedu. It keeps the agreed teal, coral and gold colours, rounded cards, and the Nunito and Quicksand fonts.
 - Runs on a real Android phone against the backend.
 
@@ -195,5 +195,5 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 - **End-to-end test on a phone:** register, profiles, a milestone, recommendations, done and feedback, Progress and dark mode, with screenshots.
 - **Real email for sign-in codes:** SMTP details go in `backend/.env`. Until then, codes appear in the backend console.
 - **Sprint 9 evaluation:** recruit caregivers now (the longest lead time), then run relevance, personalisation, explainability, SUS and satisfaction. Map each requirement to its tests and fill the gaps.
-- **Language toggle (NFR-16):** build it, or record English-only as a limitation.
+- **Language toggle (a SOFIA suggestion):** build it, or record English-only as a limitation.
 - **Verify the remaining 108 CDC milestones** against the official checklists.
