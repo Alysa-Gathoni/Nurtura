@@ -269,6 +269,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | Apply migrations | | `cd backend && python manage.py migrate` |
 | Verify SBERT model | | `cd backend && python setup_sbert.py` |
 | Re-run the ranking evaluation | | `cd backend && python manage.py evaluate_alpha_grid` (see [docs/eval_v2_results.md](docs/eval_v2_results.md)) |
+| Diversity, novelty, coverage and personalisation | | `cd backend && python manage.py evaluate_beyond_accuracy` (see [docs/eval_v2_beyond_accuracy.md](docs/eval_v2_beyond_accuracy.md)) |
 | Confidence intervals and age-weight sensitivity | | `cd backend && python manage.py evaluate_statistics` (see [docs/eval_v2_statistics.md](docs/eval_v2_statistics.md)) |
 | Check nothing evaluated has changed | | `cd backend && python manage.py evaluate_alpha_grid --check-provenance` (run before any change to `backend/` during the explanation reader test) |
 | Spot-check retrieval relevance (Sprint 4) | | `cd backend && python manage.py spot_check_retrieval` (`--markdown` for the report; nothing is saved) |
@@ -294,6 +295,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/sprint5_alpha_results.md](docs/sprint5_alpha_results.md) | The ranking evaluation v1 on 54 activities (held-out children, nDCG, choice of α) |
 | [docs/requirements_traceability.md](docs/requirements_traceability.md) | Every Chapter 4 requirement: where it is built, its tests and its status, with the old-ID crosswalk |
 | [docs/eval_v2_results.md](docs/eval_v2_results.md) | The ranking evaluation v2 on 449 activities, and why α stays 0.7 |
+| [docs/eval_v2_beyond_accuracy.md](docs/eval_v2_beyond_accuracy.md) | Diversity, novelty, coverage and personalisation of the rankings (proposal 3.2.4) |
 | [docs/eval_v2_statistics.md](docs/eval_v2_statistics.md) | Confidence intervals, Wilcoxon tests and age-weight sensitivity for v2 |
 | [docs/experiment_embedding_model.md](docs/experiment_embedding_model.md) | Experiment: a search-trained embedding model, with its decision rule |
 | [docs/activity_classifier_results.md](docs/activity_classifier_results.md) | The activity classifier: cross-validated accuracy, precision, recall, F1 and confusion matrices for area and age band (#181) |
