@@ -73,6 +73,39 @@ jobs:
           python manage.py test recommendations.test_recommendations_api.ConcurrentPostTests -v 2 2>&1 | tee concurrency.log
           grep -E "test_simultaneous_posts_store_one_batch .*\.\.\. ok$" concurrency.log
 
+  deploy-check:
+    name: Deployment check (non-blocking)
+    runs-on: ubuntu-latest
+    # Reports what still needs setting before deployment (HTTPS, secure
+    # cookies) without failing the run; deployment is on hold.
+    continue-on-error: true
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DEBUG: "False"
+      # Throwaway values: only the settings checks run, nothing is served.
+      SECRET_KEY: ci-deploy-check-not-a-real-secret-0123456789abcdefghijklmnopqrstuvwxyz
+      ALLOWED_HOSTS: nurtura.example.org
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          TORCH_VERSION=$(grep -E '^torch==' requirements.txt | cut -d= -f3)
+          pip install "torch==${TORCH_VERSION}" --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+
+      - name: Django deployment check
+        run: python manage.py check --deploy --fail-level WARNING
+
   mobile:
     name: Mobile (Flutter)
     runs-on: ubuntu-latest
