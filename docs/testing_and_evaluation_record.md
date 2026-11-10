@@ -1,6 +1,6 @@
 # Testing and evaluation record
 
-> **Last updated: 2026-11-09** (v2 statistics added). The phone run (section 1) is from 2026-10-15; the automated test counts and results are from `main` at commit `cddefe5`, run on 2026-10-16; defects D10–D12 were added on 2026-10-29. Every result below comes from a real run, log or pull request; nothing is estimated.
+> **Last updated: 2026-11-10** (v2 statistics and beyond-accuracy measures added). The phone run (section 1) is from 2026-10-15; the automated test counts and results are from `main` at commit `cddefe5`, run on 2026-10-16; defects D10–D12 were added on 2026-10-29. Every result below comes from a real run, log or pull request; nothing is estimated.
 
 This record covers what has been tested so far, the results (expected and actual), the defects found and how they were corrected, and the initial evaluation evidence. What is still to evaluate is listed at the end.
 
@@ -168,6 +168,8 @@ The weight α between the rule engine and SBERT similarity was chosen on 11 *tun
 7 of the 8 test children improved. The fixed rule chose α = 1.0, an artefact of the ID tie-break at that setting, so α = 0.7 was kept; see [eval_v2_results.md](eval_v2_results.md).
 
 **v2 statistics (2026-11-09, #196):** against SBERT-only, test nDCG@5 +0.254, bootstrap 95% CI [+0.136, +0.379], Wilcoxon signed-rank p = 0.016. Against α = 0, +0.029, CI [−0.007, +0.095], not significant. Four alternative sets of age weights give the same test top 5; removing age weighting lowers test nDCG@5 to 0.520. See [eval_v2_statistics.md](eval_v2_statistics.md).
+
+**Diversity, novelty, coverage and personalisation (2026-11-10, #199):** over all 20 children's top 5 at α = 0.7, personalisation 0.996 (0.962 within an age band), 96 distinct activities in 100 slots (coverage 0.214, ceiling 0.223), novelty 4.24 of 4.32 bits, intra-list diversity 0.442 against 0.398 for SBERT alone. Area diversity is low (0.28, about 1.4 areas per top 5) because the priority area comes first. See [eval_v2_beyond_accuracy.md](eval_v2_beyond_accuracy.md).
 
 **Limitations:** small numbers, one rater who also designed the system, and constructed (not real) children. The test set preferred the α = 0 ablation (nDCG@5 0.873), so 0.7 is a reasonable default rather than an optimum. Caregiver feedback in Sprint 9 is the better test.
 
