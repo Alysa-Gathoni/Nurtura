@@ -77,7 +77,7 @@ jobs:
     name: Deployment check (non-blocking)
     runs-on: ubuntu-latest
     # Reports what still needs setting before deployment (HTTPS, secure
-    # cookies) without failing the run; deployment is on hold.
+    # cookies, an email server) without failing; deployment is on hold.
     continue-on-error: true
     defaults:
       run:
@@ -104,7 +104,24 @@ jobs:
           pip install -r requirements.txt
 
       - name: Django deployment check
-        run: python manage.py check --deploy --fail-level WARNING
+        # Reports what deployment still needs without failing: the findings
+        # go to the job log and the run summary (#208).
+        run: |
+          set +e
+          python manage.py check --deploy --fail-level WARNING > deploy-check.txt 2>&1
+          status=$?
+          cat deploy-check.txt
+          {
+            echo "## Deployment check"
+            if [ "$status" -eq 0 ]; then
+              echo "No issues: ready for deployment settings."
+            else
+              echo "Still to set before deployment (not a failure of this run):"
+              echo
+              grep -E '^\?: \(' deploy-check.txt | sed 's/^?: /- /'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 0
 
   mobile:
     name: Mobile (Flutter)
