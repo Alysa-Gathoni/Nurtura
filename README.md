@@ -283,7 +283,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 
 - **Backend:** installs `backend/requirements.txt` (with CPU-only PyTorch), then runs `manage.py check`, `makemigrations --check --dry-run` and `manage.py test`, plus the PostgreSQL-only concurrency test. Tests that need the SBERT model are skipped there, since the model isn't downloaded in CI.
 - **Mobile:** `flutter pub get`, `flutter analyze`, `flutter test`.
-- **Deployment check (non-blocking):** `manage.py check --deploy` with production-style settings. It reports the HTTPS settings still to set before deployment (HSTS, SSL redirect, secure cookies) but never fails the run.
+- **Deployment check (non-blocking):** `manage.py check --deploy` with production-style settings. It lists what is still to set before deployment (HSTS, SSL redirect, secure cookies and an email server) in the run's summary, and always passes.
 
 ## Documentation
 
