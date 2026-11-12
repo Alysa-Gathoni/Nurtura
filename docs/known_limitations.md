@@ -38,6 +38,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 
 ## App and backend
 
+- **Portrait only** (#214). The app is locked to portrait on Android. The screens weren't designed for landscape, and Milestones overflowed when the phone was turned.
 - **Not hosted yet.** The backend runs on a laptop. The phone reaches it over USB (`adb reverse`), because campus Wi-Fi blocks devices from reaching each other. Hosting is Sprint III ([deployment_requirements.md](deployment_requirements.md)).
 - **The server address is built into the app** at build time (`--dart-define=API_BASE_URL`). A new address means rebuilding the app.
 - **Android debug builds only.** No signed release build yet (the app has been tested on an Android phone and in Chrome). Nurtura is an Android app by design; the iOS project was removed (#186).

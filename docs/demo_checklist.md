@@ -67,6 +67,6 @@ A prepared demo account on a trusted phone (see "The day before") needs no code 
 |---|---|
 | "Can't reach the Nurtura server" | Check the backend window is running; run `adb reverse tcp:8000 tcp:8000` again |
 | No code email | Check Spam; or use the no-internet steps above |
-| The first ideas take a while | The AI model is loading; the app allows for it. Start the backend with `NURTURA_MODEL_WARMUP=1` to avoid it |
+| The first ideas take a while, or "The server took too long" | The AI model is loading with the first request, which can take longer than the app's 45-second wait. The ideas are still saved: tap **Try again**. Start the backend with `NURTURA_MODEL_WARMUP=1` (or `make run-backend`) to avoid it |
 | The phone isn't listed by `adb devices` | Unlock it, re-plug the cable, and accept the "Allow USB debugging" prompt |
 | Anything else | Show the screenshots in `docs/evidence/e2e_2026-10-15/` and the testing record |

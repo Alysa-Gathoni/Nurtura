@@ -245,7 +245,13 @@ class _WellDoneSheetState extends State<WellDoneSheet> {
                   for (final s in _skills)
                     FilterChip(
                       key: Key('skill_${s.key}'),
-                      label: Text(s.description),
+                      // Long names wrap instead of being clipped (#214).
+                      label: Text(
+                        s.description,
+                        softWrap: true,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       selected: _observed.contains(s.key),
                       onSelected: _saving
                           ? null

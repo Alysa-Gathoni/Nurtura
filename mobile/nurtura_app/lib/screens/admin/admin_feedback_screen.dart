@@ -142,7 +142,7 @@ class _AdminFeedbackScreenState extends State<AdminFeedbackScreen> {
             )
           else ...[
             Text(
-              '$_count rating${_count == 1 ? '' : 's'}',
+              '$_count response${_count == 1 ? '' : 's'}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 8),

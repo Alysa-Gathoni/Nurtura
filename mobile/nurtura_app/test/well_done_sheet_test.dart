@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,7 +11,9 @@ import 'recommendations_screen_test.dart' as recs;
 const observablePath = '/api/recommendations/1/observable/';
 
 /// One card; marking done, feedback, and two skills to observe.
-FakeBackend wellDoneBackend() => FakeBackend((r) async {
+FakeBackend wellDoneBackend({
+  String firstSkill = 'Makes a lot of different sounds',
+}) => FakeBackend((r) async {
   if (r.url.path == recs.path) {
     return json(recs.batch([recs.card('ACT-0004', 'Peekaboo')]));
   }
@@ -23,7 +25,7 @@ FakeBackend wellDoneBackend() => FakeBackend((r) async {
       'skills': [
         {
           'key': 'CDC-09M-LA-01',
-          'description': 'Makes a lot of different sounds',
+          'description': firstSkill,
           'expected_age_months': 9.0,
           'status': '',
         },
@@ -58,6 +60,19 @@ Future<void> tapInSheet(WidgetTester tester, String key) async {
 }
 
 void main() {
+  testWidgets('long milestone names wrap instead of being clipped (#214)', (
+    tester,
+  ) async {
+    const long =
+        'Makes a lot of different sounds like "mamamama" and "bababababa"';
+    await progress.openDetail(tester, wellDoneBackend(firstSkill: long));
+    await progress.tapOnDetail(tester, find.byKey(const Key('markDoneButton')));
+    final label = tester.renderObject<RenderParagraph>(find.text(long));
+    expect(label.didExceedMaxLines, isFalse);
+    // More than one line: a single line was clipped at the chip's edge.
+    expect(label.size.height, greaterThan(30));
+  });
+
   testWidgets('the sheet saves interest, outcome and skills seen (#185)', (
     tester,
   ) async {
