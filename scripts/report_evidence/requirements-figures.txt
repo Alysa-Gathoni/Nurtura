@@ -1,0 +1,2 @@
+# Only for the figures script (make_figures.py); not an app dependency.
+matplotlib==3.10.7

@@ -1,0 +1,148 @@
+{
+  "child_profile": {
+    "id": 1167,
+    "name": "Fictional Child",
+    "date_of_birth": "2025-10-12",
+    "gender": "unspecified",
+    "interests": [
+      "water"
+    ],
+    "preferences": {},
+    "concerns": [
+      "Language"
+    ]
+  },
+  "developmental_milestones": [
+    {
+      "id": 1220,
+      "child": 1167,
+      "reference": 184,
+      "domain": "Language",
+      "description": "Waves \"bye-bye\"",
+      "status": "not_yet",
+      "observation_date": "2026-11-12"
+    }
+  ],
+  "recommendations": [
+    {
+      "id": 1342,
+      "child": 1167,
+      "activity": 1232,
+      "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+      "position": 1,
+      "similarity_score": 0.5690974593162537,
+      "ranking_score": 0.9543408355729415,
+      "rule_priority": 1.0,
+      "age_weight": 1.0,
+      "alpha": 0.7,
+      "profile_fingerprint": "a7b0de375ad1c0bd72722fb2256c6561fb6a6f1d8becbf316ebf092b1721eee1",
+      "ranking_version": "da4d8bcfc4b96aa8275ddf6d450433ff66df8c6786952221e19cad800840de31",
+      "pinned": false,
+      "pin_note": "",
+      "explanation_version": "2",
+      "date_generated": "2026-11-12 19:04:04.205437+00:00",
+      "activity_id": "ACT-0176",
+      "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn new words by building on the ones they say."
+    },
+    {
+      "id": 1343,
+      "child": 1167,
+      "activity": 1235,
+      "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+      "position": 2,
+      "similarity_score": 0.5627865791320801,
+      "ranking_score": 0.9499950780725773,
+      "rule_priority": 1.0,
+      "age_weight": 1.0,
+      "alpha": 0.7,
+      "profile_fingerprint": "a7b0de375ad1c0bd72722fb2256c6561fb6a6f1d8becbf316ebf092b1721eee1",
+      "ranking_version": "da4d8bcfc4b96aa8275ddf6d450433ff66df8c6786952221e19cad800840de31",
+      "pinned": false,
+      "pin_note": "",
+      "explanation_version": "2",
+      "date_generated": "2026-11-12 19:04:04.205437+00:00",
+      "activity_id": "ACT-0179",
+      "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn words for the things you do every day."
+    },
+    {
+      "id": 1344,
+      "child": 1167,
+      "activity": 1236,
+      "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+      "position": 3,
+      "similarity_score": 0.5324022769927979,
+      "ranking_score": 0.9290720364267778,
+      "rule_priority": 1.0,
+      "age_weight": 1.0,
+      "alpha": 0.7,
+      "profile_fingerprint": "a7b0de375ad1c0bd72722fb2256c6561fb6a6f1d8becbf316ebf092b1721eee1",
+      "ranking_version": "da4d8bcfc4b96aa8275ddf6d450433ff66df8c6786952221e19cad800840de31",
+      "pinned": false,
+      "pin_note": "",
+      "explanation_version": "2",
+      "date_generated": "2026-11-12 19:04:04.205437+00:00",
+      "activity_id": "ACT-0180",
+      "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to invite your child to talk and pretend with a soft toy."
+    },
+    {
+      "id": 1345,
+      "child": 1167,
+      "activity": 1431,
+      "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+      "position": 4,
+      "similarity_score": 0.5302702188491821,
+      "ranking_score": 0.9276038723358058,
+      "rule_priority": 1.0,
+      "age_weight": 1.0,
+      "alpha": 0.7,
+      "profile_fingerprint": "a7b0de375ad1c0bd72722fb2256c6561fb6a6f1d8becbf316ebf092b1721eee1",
+      "ranking_version": "da4d8bcfc4b96aa8275ddf6d450433ff66df8c6786952221e19cad800840de31",
+      "pinned": false,
+      "pin_note": "",
+      "explanation_version": "2",
+      "date_generated": "2026-11-12 19:04:04.205437+00:00",
+      "activity_id": "ACT-0375",
+      "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child understand short, simple instructions."
+    },
+    {
+      "id": 1346,
+      "child": 1167,
+      "activity": 1233,
+      "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+      "position": 5,
+      "similarity_score": 0.4869686961174011,
+      "ranking_score": 0.8977858577804454,
+      "rule_priority": 1.0,
+      "age_weight": 1.0,
+      "alpha": 0.7,
+      "profile_fingerprint": "a7b0de375ad1c0bd72722fb2256c6561fb6a6f1d8becbf316ebf092b1721eee1",
+      "ranking_version": "da4d8bcfc4b96aa8275ddf6d450433ff66df8c6786952221e19cad800840de31",
+      "pinned": false,
+      "pin_note": "",
+      "explanation_version": "2",
+      "date_generated": "2026-11-12 19:04:04.205437+00:00",
+      "activity_id": "ACT-0177",
+      "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child try to say the names of things they point to."
+    }
+  ],
+  "completed_activities": [
+    {
+      "id": 10,
+      "recommendation": 1342,
+      "completion_date": "2026-11-12",
+      "status": "completed"
+    }
+  ],
+  "feedback": [
+    {
+      "id": 14,
+      "recommendation": 1342,
+      "rating": 5,
+      "comment": "Fictional note",
+      "outcome": "went_well",
+      "issues": [],
+      "interest": "loved_it",
+      "date_submitted": "2026-11-12 19:04:04.271938+00:00"
+    }
+  ]
+}

@@ -1,0 +1,450 @@
+activity_id,name,domain,age_range,status,source,has_source_url,difficulty,batch
+ACT-0001,Tummy Time,Motor,0-3 months,published,Pathways.org,True,Beginner,1
+ACT-0002,Talking and Singing to the Baby During Pregnancy,Language,Prenatal,published,WHO,True,Beginner,1
+ACT-0003,Peekaboo,Socio-Emotional,6-12 months,published,CDC,True,Beginner,1
+ACT-0004,Naming Everyday Objects,Language,12-18 months,published,WHO,True,Beginner,1
+ACT-0005,Stacking Blocks,Cognitive,18-24 months,published,CDC,True,Intermediate,1
+ACT-0006,Texture Exploration,Sensory,6-12 months,published,Pathways.org,True,Beginner,1
+ACT-0007,Sorting by Colour and Size,Cognitive,24-36 months,published,WHO,True,Advanced,1
+ACT-0008,Follow the Leader,Motor,24-36 months,published,CDC,True,Intermediate,1
+ACT-0009,Belly Massage and Gentle Touch,Sensory,Prenatal,published,WHO,True,Beginner,2
+ACT-0010,Face-to-Face Cooing Exchange,Socio-Emotional,0-3 months,published,CDC,True,Beginner,2
+ACT-0011,Gentle Rocking to Soothe,Sensory,0-3 months,published,Pathways.org,True,Beginner,2
+ACT-0012,Mirror Play,Cognitive,3-6 months,published,CDC,True,Beginner,2
+ACT-0013,Sound-Making Exploration,Sensory,3-6 months,published,UNICEF,True,Beginner,2
+ACT-0014,Imitating Facial Expressions,Socio-Emotional,6-12 months,published,Pathways.org,True,Beginner,2
+ACT-0015,Crawling Obstacle Path,Motor,6-12 months,published,Pathways.org,True,Intermediate,2
+ACT-0016,Naming Feelings During Daily Routines,Socio-Emotional,12-18 months,published,CDC,True,Beginner,2
+ACT-0017,Water Play with Containers,Sensory,12-18 months,published,Pathways.org,True,Intermediate,2
+ACT-0018,Simple Turn-Taking Games,Socio-Emotional,18-24 months,published,CDC,True,Intermediate,2
+ACT-0019,Matching Shapes to Openings,Cognitive,18-24 months,published,CDC,True,Intermediate,2
+ACT-0020,Outdoor Nature Walk and Observation,Sensory,24-36 months,published,UNICEF,True,Beginner,2
+ACT-0022,Helping with Simple Chores,Socio-Emotional,24-36 months,published,CDC,True,Intermediate,2
+ACT-0023,Animal Sound Imitation Game,Language,3-6 months,published,CDC,True,Beginner,2
+ACT-0024,Balancing While Holding Hands,Motor,12-18 months,published,CDC,True,Intermediate,2
+ACT-0025,Reaching and Kicking at Toys,Motor,3-6 months,published,CDC,True,Beginner,3
+ACT-0026,Tracking a Moving Toy,Cognitive,3-6 months,published,CDC,True,Beginner,3
+ACT-0027,Reach-and-Roll Toy Retrieval,Motor,6-12 months,published,CDC,True,Intermediate,3
+ACT-0028,Object Permanence Hide and Seek,Cognitive,6-12 months,published,CDC,True,Beginner,3
+ACT-0029,Container Fill and Dump Play,Cognitive,12-18 months,published,CDC,True,Intermediate,3
+ACT-0030,Turn-Taking Sound Games,Language,6-12 months,published,CDC,True,Beginner,3
+ACT-0031,Naming Pictures in a Book,Language,12-18 months,published,CDC,True,Beginner,3
+ACT-0032,Supervised Climbing Practice,Motor,12-18 months,published,CDC,True,Intermediate,3
+ACT-0033,Simple One-Step Instruction Games,Language,18-24 months,published,CDC,True,Beginner,3
+ACT-0034,Ball Kicking and Throwing Play,Motor,18-24 months,published,CDC,True,Intermediate,3
+ACT-0035,Buttons and Knobs Exploration Toy,Cognitive,18-24 months,published,CDC,True,Intermediate,3
+ACT-0036,Two-Step Instruction Practice,Language,24-36 months,published,CDC,True,Intermediate,3
+ACT-0037,Family Rhyme and Song Time,Language,24-36 months,published,CDC,True,Beginner,3
+ACT-0038,Simple Puzzle and Sorting Play,Cognitive,24-36 months,published,CDC,True,Intermediate,3
+ACT-0039,Responding Joyfully to Baby's Movements,Socio-Emotional,Prenatal,published,WHO,True,Beginner,4
+ACT-0040,Soft Songs and Humming Time,Sensory,Prenatal,published,UNICEF,True,Beginner,4
+ACT-0041,Family Voices for the Baby,Language,Prenatal,published,WHO,True,Beginner,4
+ACT-0042,Sharing Hopes and Worries About the Baby,Socio-Emotional,Prenatal,published,WHO,True,Beginner,4
+ACT-0043,Daily Rest and Relaxing Routine,Socio-Emotional,Prenatal,published,WHO,True,Beginner,4
+ACT-0044,End-of-Day Talk as a Couple or Family,Socio-Emotional,Prenatal,published,UNICEF,True,Beginner,4
+ACT-0045,Skin-to-Skin Holding and Comforting,Socio-Emotional,0-3 months,published,UNICEF,True,Beginner,4
+ACT-0046,Gentle Tickle and Touch Play,Socio-Emotional,3-6 months,published,UNICEF,True,Beginner,4
+ACT-0047,"Calm Voice, Name and Smile",Socio-Emotional,6-12 months,published,UNICEF,True,Beginner,4
+ACT-0048,Cheering On Baby's Efforts,Socio-Emotional,6-12 months,published,UNICEF,True,Beginner,4
+ACT-0049,Daily Happy Time Together,Socio-Emotional,12-18 months,published,UNICEF,True,Beginner,4
+ACT-0050,"Family Songs, Riddles and Stories",Socio-Emotional,24-36 months,published,UNICEF,True,Beginner,4
+ACT-0051,Showing the Behaviour You Want,Socio-Emotional,24-36 months,published,UNICEF,True,Intermediate,4
+ACT-0052,Waiting for Baby's Response,Language,6-12 months,published,UNICEF,True,Beginner,4
+ACT-0053,Eye Contact and Mother-Tongue Talk,Language,0-3 months,published,UNICEF,True,Beginner,4
+ACT-0054,Counting Everyday Objects Together,Cognitive,24-36 months,published,UNICEF,True,Beginner,4
+ACT-0055,Folate-Rich Foods Every Day,Cognitive,Prenatal,published,UNICEF,True,Beginner,5
+ACT-0056,Iron and Folic Acid Tablets with a Daily Routine,Cognitive,Prenatal,published,WHO,True,Beginner,5
+ACT-0057,"Eggs, Milk and Fish for Baby's Brain",Cognitive,Prenatal,published,UNICEF,True,Beginner,5
+ACT-0058,Healthy Snacks for the Growing Baby,Cognitive,Prenatal,published,UNICEF,True,Beginner,5
+ACT-0059,"A Smoke-Free, Alcohol-Free Home",Cognitive,Prenatal,published,WHO,True,Beginner,5
+ACT-0060,Clean-Air Cooking Corner,Cognitive,Prenatal,published,WHO,True,Beginner,5
+ACT-0061,Calm Music Time in the Third Trimester,Cognitive,Prenatal,published,UNICEF,True,Beginner,5
+ACT-0063,Reading a Story to the Bump,Language,Prenatal,published,WHO,True,Beginner,5
+ACT-0064,Morning and Evening Greetings for the Baby,Language,Prenatal,published,WHO,True,Beginner,5
+ACT-0065,Telling the Baby About Your Day,Language,Prenatal,published,WHO,True,Beginner,5
+ACT-0066,Choosing Family Songs Before Birth,Language,Prenatal,published,UNICEF,True,Beginner,5
+ACT-0067,Talking to the Baby During the Ultrasound,Language,Prenatal,published,WHO,True,Beginner,5
+ACT-0068,A Daily Brisk Walk,Motor,Prenatal,published,WHO,True,Beginner,5
+ACT-0069,Exercising at a Talking Pace,Motor,Prenatal,published,UNICEF,True,Beginner,5
+ACT-0070,Gentle Stretching Routine,Motor,Prenatal,published,WHO,True,Beginner,5
+ACT-0071,Everyday Muscle Strengthening,Motor,Prenatal,published,WHO,True,Beginner,5
+ACT-0073,Getting to Know Baby's Daily Movements,Motor,Prenatal,published,UNICEF,True,Beginner,5
+ACT-0074,Resting with Pillow Support,Motor,Prenatal,published,UNICEF,True,Beginner,5
+ACT-0075,Walking Together with Friends,Motor,Prenatal,published,WHO,True,Beginner,5
+ACT-0076,Noticing Baby's Response to Sounds,Sensory,Prenatal,published,UNICEF,True,Beginner,5
+ACT-0077,Calm Music Rest Breaks,Sensory,Prenatal,published,UNICEF,True,Beginner,5
+ACT-0078,Gentle Touch Response Game,Sensory,Prenatal,published,WHO,True,Beginner,5
+ACT-0079,Rhythm Pats on the Bump,Sensory,Prenatal,published,UNICEF,True,Beginner,5
+ACT-0081,Asking for Help with Household Work,Socio-Emotional,Prenatal,published,WHO,True,Beginner,5
+ACT-0082,Choosing a Support Person,Socio-Emotional,Prenatal,published,WHO,True,Beginner,5
+ACT-0083,Planning Family Help for After Birth,Socio-Emotional,Prenatal,published,WHO,True,Beginner,5
+ACT-0084,Following a Rattle to One Side,Cognitive,0-3 months,published,CDC,True,Beginner,5
+ACT-0085,Slow-Moving Colourful Objects,Cognitive,0-3 months,published,UNICEF,True,Beginner,5
+ACT-0086,Looking at Bright Pictures Together,Cognitive,0-3 months,published,CDC,True,Beginner,5
+ACT-0087,Homemade Hanger Mobile,Cognitive,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0088,Family Photo Faces,Cognitive,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0089,Tapping the Mirror and Saying Baby's Name,Cognitive,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0090,"New Positions, New Views",Cognitive,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0091,Talking to Baby During Feeds,Language,0-3 months,published,UNICEF,True,Beginner,5
+ACT-0092,Talking Through Nappy Changes and Baths,Language,0-3 months,published,CDC,True,Beginner,5
+ACT-0093,Reading Aloud to a Newborn,Language,0-3 months,published,CDC,True,Beginner,5
+ACT-0094,Bedtime Song Routine,Language,0-3 months,published,UNICEF,True,Beginner,5
+ACT-0095,Conversations with Faces and Gestures,Language,0-3 months,published,UNICEF,True,Beginner,5
+ACT-0096,Answering Hunger Signals,Language,0-3 months,published,CDC,True,Beginner,5
+ACT-0097,A Tummy Minute After Every Nappy Change,Motor,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0098,Chest-to-Chest Tummy Time,Motor,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0099,The Football Carry,Motor,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0100,Free Kicking Time on a Mat,Motor,0-3 months,published,UNICEF,True,Beginner,5
+ACT-0101,Gentle Arm and Leg Movements,Motor,0-3 months,published,UNICEF,True,Beginner,5
+ACT-0102,Holding and Shaking a Rattle,Motor,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0103,Beep Body-Part Game,Sensory,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0104,Homemade Bean Shaker,Sensory,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0105,"Touching Hands, Feet and Forehead",Sensory,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0106,Soft Steady Sounds to Calm,Sensory,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0107,Swaddle and Settle,Sensory,0-3 months,published,Pathways.org,True,Beginner,5
+ACT-0108,Gentle Stroking Massage,Sensory,0-3 months,published,UNICEF,True,Beginner,5
+ACT-0109,Holding and Cuddling Without Worry,Socio-Emotional,0-3 months,published,CDC,True,Beginner,5
+ACT-0110,Learning Baby's Signals,Socio-Emotional,0-3 months,published,CDC,True,Beginner,5
+ACT-0111,Stopping When Baby Is Full,Socio-Emotional,0-3 months,published,CDC,True,Beginner,5
+ACT-0112,Staying Calm When Crying Is Hard,Socio-Emotional,0-3 months,published,CDC,True,Beginner,5
+ACT-0113,Phone-Free Cuddle Time,Socio-Emotional,0-3 months,published,CDC,True,Beginner,5
+ACT-0114,Helping Baby Learn to Self-Soothe,Socio-Emotional,0-3 months,published,CDC,True,Beginner,5
+ACT-0115,Fabric Pull-Out Surprise,Cognitive,3-6 months,published,Pathways.org,True,Beginner,5
+ACT-0116,"Dropped Toy, Returned Toy",Cognitive,3-6 months,published,CDC,True,Beginner,5
+ACT-0117,Reaching for a Ring on a String,Cognitive,3-6 months,published,UNICEF,True,Beginner,5
+ACT-0118,"Rolling, Dropping and Bouncing Balls",Cognitive,3-6 months,published,Pathways.org,True,Beginner,5
+ACT-0119,Exploring a Soft Picture Book,Cognitive,3-6 months,published,CDC,True,Beginner,5
+ACT-0120,Naming Things on Outings,Language,3-6 months,published,CDC,True,Beginner,5
+ACT-0121,Pictures and Babbling Every Day,Language,3-6 months,published,CDC,True,Beginner,5
+ACT-0122,Talking About What Baby Is Looking At,Language,3-6 months,published,CDC,True,Beginner,5
+ACT-0123,A Quiet Time for Books and Songs,Language,3-6 months,published,CDC,True,Beginner,5
+ACT-0124,"Smiling, Laughing and Talking Together",Language,3-6 months,published,UNICEF,True,Beginner,5
+ACT-0125,Songs Every Day,Language,3-6 months,published,CDC,True,Beginner,5
+ACT-0126,Bouncing on Your Lap,Motor,3-6 months,published,CDC,True,Beginner,5
+ACT-0127,Rolling Over to Reach a Toy,Motor,3-6 months,published,CDC,True,Beginner,5
+ACT-0128,Supported Sitting with Toys,Motor,3-6 months,published,CDC,True,Beginner,5
+ACT-0129,Supported Standing and Looking Around,Motor,3-6 months,published,CDC,True,Beginner,5
+ACT-0130,Swiping at a Scarf,Motor,3-6 months,published,Pathways.org,True,Beginner,5
+ACT-0131,Floor Time Instead of Seats,Motor,3-6 months,published,CDC,True,Beginner,5
+ACT-0132,Feeling Different Fabrics,Sensory,3-6 months,published,Pathways.org,True,Beginner,5
+ACT-0133,Safe Mouthing Exploration,Sensory,3-6 months,published,CDC,True,Beginner,5
+ACT-0134,"Whispers, Claps and Funny Noises",Sensory,3-6 months,published,CDC,True,Beginner,5
+ACT-0135,"Up, Down and All Around",Sensory,3-6 months,published,Pathways.org,True,Beginner,5
+ACT-0136,Splashing at Bath Time,Sensory,3-6 months,published,Pathways.org,True,Beginner,5
+ACT-0137,Swaying to Music Together,Sensory,3-6 months,published,UNICEF,True,Beginner,5
+ACT-0138,Noticing What Baby Likes,Socio-Emotional,3-6 months,published,CDC,True,Beginner,5
+ACT-0139,Comforting When Baby Is Upset,Socio-Emotional,3-6 months,published,CDC,True,Beginner,5
+ACT-0140,Calming Down Together,Socio-Emotional,3-6 months,published,CDC,True,Beginner,5
+ACT-0141,Smile-Copy Game,Socio-Emotional,3-6 months,published,CDC,True,Beginner,5
+ACT-0142,Smiles and Talk During Daily Care,Socio-Emotional,3-6 months,published,CDC,True,Beginner,5
+ACT-0143,Family Music Circle,Socio-Emotional,3-6 months,published,UNICEF,True,Beginner,5
+ACT-0144,Banging a Pot and Spoon,Cognitive,6-12 months,published,UNICEF,True,Beginner,5
+ACT-0145,Containers with Lids,Cognitive,6-12 months,published,UNICEF,True,Beginner,5
+ACT-0146,Which Cup Is It Under?,Cognitive,6-12 months,published,CDC,True,Intermediate,5
+ACT-0147,The Dropped-Object Game,Cognitive,6-12 months,published,CDC,True,Beginner,5
+ACT-0148,Dump and Restack,Cognitive,6-12 months,published,CDC,True,Beginner,5
+ACT-0149,Looking Near and Far,Cognitive,6-12 months,published,Pathways.org,True,Beginner,5
+ACT-0150,Turning the Pages of a Board Book,Cognitive,6-12 months,published,Pathways.org,True,Beginner,5
+ACT-0151,Repeating Sounds and Adding Words,Language,6-12 months,published,CDC,True,Beginner,5
+ACT-0152,Waving Bye-Bye and Other Gestures,Language,6-12 months,published,CDC,True,Beginner,5
+ACT-0153,Who's That? Naming Family Members,Language,6-12 months,published,UNICEF,True,Beginner,5
+ACT-0154,Simple Signs for Wants,Language,6-12 months,published,CDC,True,Intermediate,5
+ACT-0155,Responding to Their Name,Language,6-12 months,published,UNICEF,True,Beginner,5
+ACT-0156,Passing a Spoon from Hand to Hand,Motor,6-12 months,published,Pathways.org,True,Beginner,5
+ACT-0157,Pulling Up on Safe Furniture,Motor,6-12 months,published,CDC,True,Intermediate,5
+ACT-0158,Feeding Themselves Finger Foods,Motor,6-12 months,published,CDC,True,Beginner,5
+ACT-0159,Exploring Toys with Both Hands,Motor,6-12 months,published,Pathways.org,True,Beginner,5
+ACT-0160,Light and Heavy Objects,Motor,6-12 months,published,Pathways.org,True,Beginner,5
+ACT-0161,New Tastes and Textures at Mealtimes,Sensory,6-12 months,published,CDC,True,Beginner,5
+ACT-0162,Mirror and Body Parts,Sensory,6-12 months,published,Pathways.org,True,Beginner,5
+ACT-0163,"Sponges, Cloths and Soft Things",Sensory,6-12 months,published,Pathways.org,True,Beginner,5
+ACT-0164,Noisy and Quiet Objects,Sensory,6-12 months,published,Pathways.org,True,Beginner,5
+ACT-0165,"Clap, Stomp and Pat Music",Sensory,6-12 months,published,UNICEF,True,Beginner,5
+ACT-0166,Treasure Basket of Shapes and Textures,Sensory,6-12 months,published,Pathways.org,True,Beginner,5
+ACT-0167,"Brief, Cheerful Goodbyes",Socio-Emotional,6-12 months,published,CDC,True,Beginner,5
+ACT-0168,Passing a Toy Back and Forth,Socio-Emotional,6-12 months,published,CDC,True,Beginner,5
+ACT-0169,Saying What You Want Them to Do,Socio-Emotional,6-12 months,published,CDC,True,Beginner,5
+ACT-0170,Copy How We Use Things,Cognitive,12-18 months,published,CDC,True,Beginner,5
+ACT-0171,Nesting Cups,Cognitive,12-18 months,published,UNICEF,True,Beginner,5
+ACT-0172,Clothes Pegs in a Tin,Cognitive,12-18 months,published,UNICEF,True,Beginner,5
+ACT-0173,Lift-the-Flap and Touch Books,Cognitive,12-18 months,published,CDC,True,Beginner,5
+ACT-0174,Simple Hide and Seek,Cognitive,12-18 months,published,CDC,True,Beginner,5
+ACT-0175,Following Your Pointing Finger,Cognitive,12-18 months,published,CDC,True,Beginner,5
+ACT-0176,Building on Baby's Words,Language,12-18 months,published,CDC,True,Beginner,5
+ACT-0177,"Pointing, Naming and Waiting",Language,12-18 months,published,CDC,True,Beginner,5
+ACT-0178,Family Picture Book,Language,12-18 months,published,CDC,True,Beginner,5
+ACT-0179,Songs About Daily Routines,Language,12-18 months,published,CDC,True,Beginner,5
+ACT-0180,Talking Through a Soft Toy,Language,12-18 months,published,CDC,True,Beginner,5
+ACT-0181,A New Book After a Favourite,Language,12-18 months,published,CDC,True,Beginner,5
+ACT-0182,Push Toys and Empty Boxes,Motor,12-18 months,published,CDC,True,Beginner,5
+ACT-0183,Drinking from an Open Cup,Motor,12-18 months,published,CDC,True,Beginner,5
+ACT-0184,Practising with a Spoon,Motor,12-18 months,published,CDC,True,Beginner,5
+ACT-0185,Cruising Along Furniture,Motor,12-18 months,published,Pathways.org,True,Beginner,5
+ACT-0186,Squatting to Pick Up Toys,Motor,12-18 months,published,Pathways.org,True,Beginner,5
+ACT-0187,Bubbles to Watch and Touch,Sensory,12-18 months,published,Pathways.org,True,Beginner,5
+ACT-0188,Squishy Table Play,Sensory,12-18 months,published,Pathways.org,True,Beginner,5
+ACT-0189,Bucket of Different Blocks,Sensory,12-18 months,published,Pathways.org,True,Beginner,5
+ACT-0190,Cup in the Bath,Sensory,12-18 months,published,Pathways.org,True,Beginner,5
+ACT-0191,Homemade Instruments,Sensory,12-18 months,published,CDC,True,Beginner,5
+ACT-0192,Dancing to Family Songs,Sensory,12-18 months,published,CDC,True,Beginner,5
+ACT-0193,Little Helper Tasks,Socio-Emotional,12-18 months,published,CDC,True,Beginner,5
+ACT-0194,Praising Gentle Touch,Socio-Emotional,12-18 months,published,CDC,True,Beginner,5
+ACT-0195,Redirecting Instead of Saying No,Socio-Emotional,12-18 months,published,CDC,True,Beginner,5
+ACT-0196,A Comfort Item for a New Carer,Socio-Emotional,12-18 months,published,CDC,True,Beginner,5
+ACT-0197,Clean-Up Song,Socio-Emotional,12-18 months,published,CDC,True,Beginner,5
+ACT-0198,Feeding Teddy: First Pretend Play,Cognitive,18-24 months,published,CDC,True,Beginner,5
+ACT-0199,Choosing Between Two,Cognitive,18-24 months,published,CDC,True,Beginner,5
+ACT-0200,Float or Sink?,Cognitive,18-24 months,published,Pathways.org,True,Beginner,5
+ACT-0201,"Roll It, Push It, Put It In",Cognitive,18-24 months,published,CDC,True,Beginner,5
+ACT-0202,Simple Questions About What They See,Language,18-24 months,published,CDC,True,Beginner,5
+ACT-0203,Talking at Eye Level,Language,18-24 months,published,CDC,True,Beginner,5
+ACT-0204,Naming Body Parts,Language,18-24 months,published,CDC,True,Beginner,5
+ACT-0205,Building Short Sentences,Language,18-24 months,published,CDC,True,Beginner,5
+ACT-0206,Describing Pictures in Simple Words,Language,18-24 months,published,CDC,True,Beginner,5
+ACT-0207,Animal Walks and Animal Sounds,Language,18-24 months,published,Pathways.org,True,Beginner,5
+ACT-0208,Push and Pull Toys,Motor,18-24 months,published,CDC,True,Beginner,5
+ACT-0209,Bear Walks and Duck Walks,Motor,18-24 months,published,Pathways.org,True,Beginner,5
+ACT-0210,Tossing a Ball into a Bucket,Motor,18-24 months,published,Pathways.org,True,Beginner,5
+ACT-0211,Mini Obstacle Course,Motor,18-24 months,published,Pathways.org,True,Intermediate,5
+ACT-0212,Walking Along a Line,Motor,18-24 months,published,Pathways.org,True,Intermediate,5
+ACT-0213,Going for a Walk Together,Motor,18-24 months,published,Pathways.org,True,Beginner,5
+ACT-0214,Dropping Stones into Water,Sensory,18-24 months,published,Pathways.org,True,Beginner,5
+ACT-0215,Mixing Sand and Water,Sensory,18-24 months,published,Pathways.org,True,Beginner,5
+ACT-0216,Funnel and Cup Water Play,Sensory,18-24 months,published,CDC,True,Beginner,5
+ACT-0217,Watching Living Things Near Water,Sensory,18-24 months,published,Pathways.org,True,Beginner,5
+ACT-0218,Nature Show and Tell,Sensory,18-24 months,published,UNICEF,True,Beginner,5
+ACT-0219,Dance Party,Sensory,18-24 months,published,Pathways.org,True,Beginner,5
+ACT-0221,Praising What You Want to See,Socio-Emotional,18-24 months,published,CDC,True,Beginner,5
+ACT-0222,Noticing How Others Feel,Socio-Emotional,18-24 months,published,CDC,True,Beginner,5
+ACT-0223,Bubble Turn-Taking,Socio-Emotional,18-24 months,published,CDC,True,Beginner,5
+ACT-0224,A Safe Calm-Down Spot,Socio-Emotional,18-24 months,published,CDC,True,Beginner,5
+ACT-0225,Caring for a Doll,Socio-Emotional,18-24 months,published,CDC,True,Beginner,5
+ACT-0226,Eating Together as a Family,Socio-Emotional,18-24 months,published,CDC,True,Beginner,5
+ACT-0227,Opposites Game,Cognitive,24-36 months,published,CDC,True,Intermediate,5
+ACT-0228,Matching Pairs,Cognitive,24-36 months,published,CDC,True,Intermediate,5
+ACT-0229,Working Out Small Problems,Cognitive,24-36 months,published,CDC,True,Intermediate,5
+ACT-0230,Counting Steps and Fingers,Cognitive,24-36 months,published,CDC,True,Beginner,5
+ACT-0231,Big Box Pretend House,Cognitive,24-36 months,published,CDC,True,Beginner,5
+ACT-0232,"Who, What and Where Story Questions",Language,24-36 months,published,CDC,True,Intermediate,5
+ACT-0233,Saying Words the Right Way,Language,24-36 months,published,CDC,True,Beginner,5
+ACT-0234,Answering with Longer Sentences,Language,24-36 months,published,CDC,True,Beginner,5
+ACT-0235,Saying My Name and Age,Language,24-36 months,published,CDC,True,Beginner,5
+ACT-0236,Regular Library and Book Time,Language,24-36 months,published,CDC,True,Beginner,5
+ACT-0237,Running Up to Kick a Ball,Motor,24-36 months,published,CDC,True,Intermediate,5
+ACT-0238,"Ready, Set, Go!",Motor,24-36 months,published,CDC,True,Beginner,5
+ACT-0239,Playdough for Strong Fingers,Motor,24-36 months,published,CDC,True,Beginner,5
+ACT-0240,Drawing Lines and Circles,Motor,24-36 months,published,CDC,True,Beginner,5
+ACT-0241,Flamingo Hops and Crab Walks,Motor,24-36 months,published,Pathways.org,True,Intermediate,5
+ACT-0242,Hopscotch,Motor,24-36 months,published,Pathways.org,True,Intermediate,5
+ACT-0243,Running and Climbing Outdoors,Motor,24-36 months,published,CDC,True,Beginner,5
+ACT-0244,Finger Painting,Sensory,24-36 months,published,CDC,True,Beginner,5
+ACT-0245,Sand Scooping and Pouring,Sensory,24-36 months,published,CDC,True,Beginner,5
+ACT-0246,Drawing in Shaving Cream,Sensory,24-36 months,published,CDC,True,Beginner,5
+ACT-0247,Loud and Quiet Music,Sensory,24-36 months,published,UNICEF,True,Beginner,5
+ACT-0248,Pouring and Measuring Water,Sensory,24-36 months,published,Pathways.org,True,Beginner,5
+ACT-0249,"Barefoot on Grass, Sand and Soil",Sensory,24-36 months,published,Pathways.org,True,Beginner,5
+ACT-0250,Sights and Sounds on Outings,Sensory,24-36 months,published,CDC,True,Beginner,5
+ACT-0251,Sharing and Taking Turns with Friends,Socio-Emotional,24-36 months,published,CDC,True,Intermediate,5
+ACT-0252,Naming Feelings and Calming Steps,Socio-Emotional,24-36 months,published,CDC,True,Intermediate,5
+ACT-0253,A Few Simple Rules,Socio-Emotional,24-36 months,published,CDC,True,Intermediate,5
+ACT-0254,Getting Ready for New Places,Socio-Emotional,24-36 months,published,CDC,True,Beginner,5
+ACT-0255,Washing Hands and Fresh Produce Before Meals,Cognitive,Prenatal,published,UNICEF,True,Beginner,6
+ACT-0256,Cooking Meat and Eggs All the Way Through,Cognitive,Prenatal,published,UNICEF,True,Beginner,6
+ACT-0257,Cutting Down on Tea and Coffee,Cognitive,Prenatal,published,UNICEF,True,Beginner,6
+ACT-0258,An Eat-Your-Colours Shopping List,Cognitive,Prenatal,published,CDC,True,Beginner,6
+ACT-0259,Keeping Away from Household Chemical Fumes,Cognitive,Prenatal,published,CDC,True,Beginner,6
+ACT-0260,Checking Your Vaccinations at the Clinic,Cognitive,Prenatal,published,CDC,True,Beginner,6
+ACT-0261,Simple Habits Against Infections,Cognitive,Prenatal,published,CDC,True,Beginner,6
+ACT-0262,Only Medicines Prescribed for You,Cognitive,Prenatal,published,CDC,True,Beginner,6
+ACT-0263,Older Children Say Hello to the Bump,Language,Prenatal,published,UNICEF,True,Beginner,6
+ACT-0264,Father's Daily Words to the Baby,Language,Prenatal,published,UNICEF,True,Beginner,6
+ACT-0265,Talking About Your Chores to the Baby,Language,Prenatal,published,UNICEF,True,Beginner,6
+ACT-0266,Grandparents' Stories for the Baby,Language,Prenatal,published,UNICEF,True,Beginner,6
+ACT-0267,Ten-Minute Activity Breaks,Motor,Prenatal,published,CDC,True,Beginner,6
+ACT-0268,Gentle Pregnancy Yoga,Motor,Prenatal,published,CDC,True,Intermediate,6
+ACT-0269,Water Exercise or Swimming,Motor,Prenatal,published,CDC,True,Intermediate,6
+ACT-0270,Exercising Without Lying Flat on Your Back,Motor,Prenatal,published,CDC,True,Beginner,6
+ACT-0271,Asking Others to Carry Heavy Loads,Motor,Prenatal,published,UNICEF,True,Beginner,6
+ACT-0272,A Walk During Your Lunch Break,Motor,Prenatal,published,CDC,True,Beginner,6
+ACT-0273,Slow Calming Breaths,Sensory,Prenatal,published,UNICEF,True,Beginner,6
+ACT-0274,An Early Night for Enough Rest,Sensory,Prenatal,published,CDC,True,Beginner,6
+ACT-0275,Stepping Away from Cigarette Smoke,Sensory,Prenatal,published,CDC,True,Beginner,6
+ACT-0276,A Simple Plan for Stress,Socio-Emotional,Prenatal,published,CDC,True,Beginner,6
+ACT-0277,An Exercise Friend,Socio-Emotional,Prenatal,published,CDC,True,Beginner,6
+ACT-0278,Learning Your Family's Health History,Socio-Emotional,Prenatal,published,CDC,True,Beginner,6
+ACT-0279,Writing Questions for Your Clinic Visit,Socio-Emotional,Prenatal,published,CDC,True,Beginner,6
+ACT-0280,Planning How the Father Will Be Involved,Socio-Emotional,Prenatal,published,UNICEF,True,Beginner,6
+ACT-0281,Puppet Follow,Cognitive,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0282,Soft Toy with a Face,Cognitive,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0283,A Silly Show for Baby,Cognitive,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0284,Face Tracking from the Cot,Cognitive,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0285,"Black, Red and White Toys",Cognitive,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0286,Uncovered Face and Free Arms,Cognitive,0-3 months,published,UNICEF,True,Beginner,6
+ACT-0287,Sing-Song Voice Talk,Language,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0288,Songs with Hand Movements,Language,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0289,Blowing Raspberries,Language,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0290,Tongue-Out Copy Game,Language,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0291,Father's Eye Contact and Talk,Language,0-3 months,published,UNICEF,True,Beginner,6
+ACT-0292,Tummy-Down Carry and Chat,Language,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0293,Lean Back on Your Chest,Motor,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0294,Supported Pull to Sit,Motor,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0295,Side Roll with a Blanket,Motor,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0296,Swatting at Hanging Spoons,Motor,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0297,"Reach, Reach, Reach",Motor,0-3 months,published,UNICEF,True,Beginner,6
+ACT-0298,Bicycle Legs,Motor,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0299,Tap Along to a Song,Sensory,0-3 months,published,UNICEF,True,Beginner,6
+ACT-0300,Clapping Baby's Hands to Music,Sensory,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0301,Stroking Their Own Cheeks,Sensory,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0302,Singing Along with Music,Sensory,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0303,Textured Teething Rings,Sensory,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0304,Gentle Chest Pressure to Calm,Sensory,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0305,Many Faces for Baby,Socio-Emotional,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0306,Getting Baby Ready to Play,Socio-Emotional,0-3 months,published,Pathways.org,True,Beginner,6
+ACT-0307,Father's Cuddle and Stroke,Socio-Emotional,0-3 months,published,UNICEF,True,Beginner,6
+ACT-0308,Answering Cries to Build Trust,Socio-Emotional,0-3 months,published,UNICEF,True,Beginner,6
+ACT-0309,Looking After Yourself Too,Socio-Emotional,0-3 months,published,CDC,True,Beginner,6
+ACT-0310,On and Off with Lights and Taps,Cognitive,3-6 months,published,UNICEF,True,Beginner,6
+ACT-0311,Toys That Move by Themselves,Cognitive,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0312,Fun Faces to Explore,Cognitive,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0313,Ten Toe Surprise,Cognitive,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0314,What Could It Be? Soft Toy Game,Cognitive,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0315,Everyday Sounds at Different Volumes,Cognitive,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0316,Reading in New Places,Language,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0317,Finger and Toe Rhymes,Language,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0318,Toys That Act Out Stories,Language,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0319,Open and Close Song,Language,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0320,Calling for Your Attention,Language,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0321,Story Time with Pointing,Language,3-6 months,published,UNICEF,True,Beginner,6
+ACT-0322,Front Reach on the Tummy,Motor,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0323,Lean and Reach While Sitting,Motor,3-6 months,published,Pathways.org,True,Intermediate,6
+ACT-0324,Guided Rolling,Motor,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0325,Reaching for Their Toes,Motor,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0326,Ring Around the Foot,Motor,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0327,Blanket Ride on the Tummy,Motor,3-6 months,published,UNICEF,True,Intermediate,6
+ACT-0328,Listening Walk,Sensory,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0329,Kitchen Smells,Sensory,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0330,Gentle Knee Rides,Sensory,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0331,Chores in the Baby Carrier,Sensory,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0332,Textured Ball Play,Sensory,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0333,A Chewing Toy for Sore Gums,Sensory,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0334,Tummy-Time Peekaboo,Socio-Emotional,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0335,Lap Chat Face to Face,Socio-Emotional,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0336,Praise and Loving Attention,Socio-Emotional,3-6 months,published,CDC,True,Beginner,6
+ACT-0337,Noticing When Baby Needs a Break,Socio-Emotional,3-6 months,published,CDC,True,Beginner,6
+ACT-0338,A Change of Scene to Calm,Socio-Emotional,3-6 months,published,Pathways.org,True,Beginner,6
+ACT-0339,Unwrapping a Surprise,Cognitive,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0340,Squeaky Toy Under a Blanket,Cognitive,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0341,Shadow Puppets,Cognitive,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0342,Many Ways to Use a Toy,Cognitive,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0343,Sealed Bottle of Beads,Cognitive,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0344,Pointing During Chores,Cognitive,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0345,Baby's First Interview,Language,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0346,Naming Face Parts,Language,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0347,Pretend Phone Calls,Language,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0348,Big Red Ball Words,Language,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0349,"Hello, Feet!",Language,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0350,Simple Requests with Cheers,Language,6-12 months,published,UNICEF,True,Beginner,6
+ACT-0351,Crawling Over a Grown-Up,Motor,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0352,Baby in the Middle,Motor,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0353,Reaching Across the Body,Motor,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0354,Squat and Stand Again,Motor,6-12 months,published,Pathways.org,True,Intermediate,6
+ACT-0355,Climbing into a Small Chair,Motor,6-12 months,published,Pathways.org,True,Intermediate,6
+ACT-0356,"Ready, Set, Crawl!",Motor,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0357,Backyard Touch and Talk,Sensory,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0358,Rain Shaker for Bath Time,Sensory,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0359,Cool Washcloth for Gums,Sensory,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0360,Horsey Knee Ride,Sensory,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0361,Rolling on a Big Ball,Sensory,6-12 months,published,Pathways.org,True,Intermediate,6
+ACT-0362,Gentle Swing in the Park,Sensory,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0363,Copy-Cat Play,Socio-Emotional,6-12 months,published,UNICEF,True,Beginner,6
+ACT-0364,A Round of Applause,Socio-Emotional,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0365,Exploring While You Stay Near,Socio-Emotional,6-12 months,published,UNICEF,True,Beginner,6
+ACT-0366,Taking Turns at the Bucket,Socio-Emotional,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0367,Bring It to Me Tidy-Up,Socio-Emotional,6-12 months,published,Pathways.org,True,Beginner,6
+ACT-0368,Sort and Separate,Cognitive,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0369,Grown-Up Bag Pretend Play,Cognitive,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0370,The Curiosity Cupboard,Cognitive,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0371,First Matching Games,Cognitive,12-18 months,published,CDC,True,Beginner,6
+ACT-0372,Blanket Peekaboo Reveal,Cognitive,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0373,Make-Believe with Everyday Things,Cognitive,12-18 months,published,UNICEF,True,Beginner,6
+ACT-0374,Rhyming Songs on the Move,Language,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0375,"Real Words, Simple Directions",Language,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0376,Floating Flowers Colour Talk,Language,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0377,In and Out Words,Language,12-18 months,published,UNICEF,True,Beginner,6
+ACT-0378,Would You Like That? Questions,Language,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0379,Action Song Instructions,Language,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0380,Walk and Carry,Motor,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0381,Holding a Toy While Standing,Motor,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0382,First Kicks,Motor,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0383,Stepping into Trousers,Motor,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0384,Balloon Chase,Motor,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0385,Sock Push-Through,Motor,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0386,Sandpit Play,Sensory,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0387,Handprint Pictures,Sensory,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0388,Yoghurt Finger Painting,Sensory,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0389,Bath-Time Sponges,Sensory,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0390,Shin Rides,Sensory,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0391,Bumpy Board Books,Sensory,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0392,Copy My Rhythm,Socio-Emotional,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0393,Clown Time,Socio-Emotional,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0394,Funny Hats in the Mirror,Socio-Emotional,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0395,Feeding Soft Toys,Socio-Emotional,12-18 months,published,Pathways.org,True,Beginner,6
+ACT-0396,Helping Dress and Feed Themselves,Socio-Emotional,12-18 months,published,CDC,True,Beginner,6
+ACT-0397,Homemade Picture Puzzle,Cognitive,18-24 months,published,Pathways.org,True,Intermediate,6
+ACT-0398,Odd One Out,Cognitive,18-24 months,published,Pathways.org,True,Intermediate,6
+ACT-0399,"Warmer, Colder",Cognitive,18-24 months,published,Pathways.org,True,Intermediate,6
+ACT-0400,Toy Hunt with Clues,Cognitive,18-24 months,published,Pathways.org,True,Intermediate,6
+ACT-0401,Rolling Down a Ramp,Cognitive,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0402,Chalk Colour Squares,Cognitive,18-24 months,published,Pathways.org,True,Intermediate,6
+ACT-0403,Copy My Words Game,Language,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0404,Stories with Sound Effects,Language,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0405,Please Bring Me a Sock,Language,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0406,Shadow Stories,Language,18-24 months,published,Pathways.org,True,Intermediate,6
+ACT-0407,Look Under the Table,Language,18-24 months,published,Pathways.org,True,Intermediate,6
+ACT-0408,Box Car Pretend Drive,Language,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0409,Freeze Dance,Motor,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0410,Pillow Path,Motor,18-24 months,published,Pathways.org,True,Intermediate,6
+ACT-0411,Egg and Spoon Walk,Motor,18-24 months,published,Pathways.org,True,Intermediate,6
+ACT-0412,Bottle Bowling,Motor,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0413,Peeling Tape,Motor,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0414,Pasta Necklace,Motor,18-24 months,published,Pathways.org,True,Intermediate,6
+ACT-0415,Melting Coloured Ice,Sensory,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0416,Sand Search,Sensory,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0417,Foot Painting,Sensory,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0418,Squish Bag Painting,Sensory,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0419,Popping Bubble Wrap,Sensory,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0420,Rubber-Band Guitar,Sensory,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0421,Teddy Tea Party,Socio-Emotional,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0422,Kitchen Stirring Helper,Socio-Emotional,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0423,Playground Time,Socio-Emotional,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0424,I'm Going to Get You!,Socio-Emotional,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0425,Dress-Up Box,Socio-Emotional,18-24 months,published,Pathways.org,True,Beginner,6
+ACT-0426,What Might Happen Next?,Cognitive,24-36 months,published,CDC,True,Intermediate,6
+ACT-0427,Press It and See,Cognitive,24-36 months,published,CDC,True,Beginner,6
+ACT-0428,Bigger or Smaller?,Cognitive,24-36 months,published,UNICEF,True,Beginner,6
+ACT-0429,Free Play with Everyday Objects,Cognitive,24-36 months,published,CDC,True,Beginner,6
+ACT-0430,Pebble and Shell Pictures,Cognitive,24-36 months,published,UNICEF,True,Beginner,6
+ACT-0431,Grown-Up Clothes Dress-Up,Cognitive,24-36 months,published,CDC,True,Beginner,6
+ACT-0432,Body-Part Songs with a Pause,Language,24-36 months,published,CDC,True,Beginner,6
+ACT-0433,Naming Clothes and Colours While Dressing,Language,24-36 months,published,UNICEF,True,Beginner,6
+ACT-0434,Answering Your Child's Questions,Language,24-36 months,published,UNICEF,True,Beginner,6
+ACT-0435,Teaching a Simple Story,Language,24-36 months,published,UNICEF,True,Beginner,6
+ACT-0436,Talking About What You See on the Bus,Language,24-36 months,published,CDC,True,Beginner,6
+ACT-0437,Would You Like the Red Cup?,Language,24-36 months,published,UNICEF,True,Beginner,6
+ACT-0438,Helping Set the Table,Motor,24-36 months,published,CDC,True,Beginner,6
+ACT-0439,Washing Vegetables and Stirring,Motor,24-36 months,published,CDC,True,Beginner,6
+ACT-0440,Opening Drawers and Doors,Motor,24-36 months,published,CDC,True,Beginner,6
+ACT-0441,Turning Pages One at a Time,Motor,24-36 months,published,CDC,True,Beginner,6
+ACT-0442,Pavement Chalk Drawing,Motor,24-36 months,published,CDC,True,Beginner,6
+ACT-0443,Drawing with a Stick in the Sand,Motor,24-36 months,published,UNICEF,True,Beginner,6
+ACT-0444,Small Tastes of New Foods,Sensory,24-36 months,published,CDC,True,Beginner,6
+ACT-0445,Toddler-Led Bath Play,Sensory,24-36 months,published,UNICEF,True,Beginner,6
+ACT-0446,Exploring Kitchen Items,Sensory,24-36 months,published,UNICEF,True,Beginner,6
+ACT-0447,Child-Led Outdoor Play,Sensory,24-36 months,published,CDC,True,Beginner,6
+ACT-0448,A Calm Bedtime Routine,Sensory,24-36 months,published,CDC,True,Beginner,6
+ACT-0449,Displaying Your Child's Art,Socio-Emotional,24-36 months,published,CDC,True,Beginner,6
+ACT-0450,Staying Calm During Tantrums,Socio-Emotional,24-36 months,published,CDC,True,Beginner,6
+ACT-0451,Words for Being Upset,Socio-Emotional,24-36 months,published,CDC,True,Beginner,6
+ACT-0452,Praise for Following Instructions,Socio-Emotional,24-36 months,published,CDC,True,Beginner,6
+ACT-0453,Picking from Two Options,Socio-Emotional,24-36 months,published,CDC,True,Beginner,6
+ACT-0454,Taking Turns Building a Tower,Socio-Emotional,24-36 months,published,CDC,True,Beginner,6

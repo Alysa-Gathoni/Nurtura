@@ -1,0 +1,23 @@
+file,widgets,added
+mobile/nurtura_app/lib/screens/activity_detail_screen.dart,ActivityDetailScreen _Stars _DetailCard,2026-10-10 feat: activity detail screen from a recommendation card (#84)
+mobile/nurtura_app/lib/screens/admin/admin_account_screen.dart,AdminAccountScreen,2026-10-21 feat: administrator screens in the Flutter app (#123)
+mobile/nurtura_app/lib/screens/admin/admin_activities_screen.dart,AdminActivitiesScreen StatusPill _ActivityCard,2026-10-21 feat: administrator screens in the Flutter app (#123)
+mobile/nurtura_app/lib/screens/admin/admin_activity_form_screen.dart,AdminActivityFormScreen _StatusPanel,2026-10-21 feat: administrator screens in the Flutter app (#123)
+mobile/nurtura_app/lib/screens/admin/admin_dashboard_screen.dart,AdminDashboardScreen _Section _OverviewCard,2026-10-21 feat: administrator screens in the Flutter app (#123)
+mobile/nurtura_app/lib/screens/admin/admin_feedback_screen.dart,AdminFeedbackScreen _FeedbackCard,2026-10-21 feat: administrator screens in the Flutter app (#123)
+mobile/nurtura_app/lib/screens/admin/admin_shell.dart,AdminShell AdminHeader,2026-10-21 feat: administrator screens in the Flutter app (#123)
+mobile/nurtura_app/lib/screens/auth_screen.dart,AuthScreen _FingerprintLogIn _OrDivider,2026-10-01 feat: add Flutter registration/login screen wired to auth API (#23)
+mobile/nurtura_app/lib/screens/change_password_screen.dart,ChangePasswordScreen,"2026-10-29 feat: change password while signed in, for caregivers and admins (#142)"
+mobile/nurtura_app/lib/screens/child_form_screen.dart,ChildFormScreen _DateField,2026-10-01 feat: add child profile creation screen wired to backend (#24)
+mobile/nurtura_app/lib/screens/children_screen.dart,ChildrenScreen _ChildCard _DeleteAccountDialog,2026-10-01 feat: add child profile creation screen wired to backend (#24)
+mobile/nurtura_app/lib/screens/explore_screen.dart,ExploreScreen _Heading _ActivityCard,"2026-11-09 feat: Explore tab to browse, search, save and try activities (#194)"
+mobile/nurtura_app/lib/screens/forgot_password_screen.dart,ForgotPasswordScreen _StepDots,2026-10-21 feat: reset a forgotten password with an emailed code (#126)
+mobile/nurtura_app/lib/screens/home_shell.dart,HomeShell,"2026-10-11 feat: modern, playful redesign with light and dark mode and a tabbed home (#90)"
+mobile/nurtura_app/lib/screens/lock_screen.dart,LockScreen,2026-10-29 feat: unlock the app with a fingerprint (#150)
+mobile/nurtura_app/lib/screens/milestone_screen.dart,MilestoneScreen _MilestoneTile _StatusChip,2026-10-01 feat: add milestone recording screen wired to rule engine (#25)
+mobile/nurtura_app/lib/screens/milestone_tracker_screen.dart,MilestoneTrackerScreen _MilestoneCard _ObservationCard,"2026-11-09 feat: milestone tracker by area, with a weekly Nurtura observation (#192)"
+mobile/nurtura_app/lib/screens/milestones_tab.dart,MilestonesTab,"2026-11-09 feat: milestone tracker by area, with a weekly Nurtura observation (#192)"
+mobile/nurtura_app/lib/screens/privacy_notice_screen.dart,PrivacyNoticeScreen,2026-10-26 feat: privacy notice and consent before adding a child's data (#136)
+mobile/nurtura_app/lib/screens/progress_screen.dart,ProgressScreen _SectionTitle _Hero,"2026-10-11 feat: modern, playful redesign with light and dark mode and a tabbed home (#90)"
+mobile/nurtura_app/lib/screens/recommendations_screen.dart,RecommendationsScreen RecommendationCard ReferralNotice,2026-10-10 feat: recommendations screen for the selected child (#82)
+mobile/nurtura_app/lib/screens/verify_code_screen.dart,VerifyCodeScreen CodeBoxes,2026-10-11 feat: two-step verification code screen in the app (#91)

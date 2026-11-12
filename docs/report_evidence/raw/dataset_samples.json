@@ -1,0 +1,61 @@
+{
+  "activity": {
+    "id": 41,
+    "activity_id": "ACT-0001",
+    "activity_name": "Tummy Time",
+    "developmental_domain": "Motor",
+    "age_range": "0-3 months",
+    "developmental_goal": "Build neck, shoulder and upper-body strength needed for rolling, sitting and crawling",
+    "materials": "Clean blanket or mat on a firm floor",
+    "difficulty_level": "Beginner",
+    "description": "While the baby is awake and an adult is watching, lay them on their stomach on a flat, firm surface. Start with one to two minutes a few times a day and lengthen sessions as the baby grows stronger. Get down at eye level, talk, or place a toy just in front of them to encourage lifting the head. Always place the baby on their back to sleep.",
+    "cultural_relevance": "Can be done on a kanga or leso spread on the floor at home, so no special equipment is needed.",
+    "plain_aim": "help your baby build the neck, shoulder and upper-body strength needed for rolling, sitting and crawling",
+    "source": "Pathways.org",
+    "source_url": "https://pathways.org/topics-of-development/tummy-time",
+    "content_status": "published"
+  },
+  "milestone": {
+    "id": 140,
+    "milestone_key": "CDC-02M-CO-01",
+    "source": "CDC",
+    "expected_age_months": "2.0",
+    "domain": "Cognitive",
+    "description": "Watches you as you move",
+    "source_reference": "CDC Learn the Signs. Act Early. milestone checklist, 2022 revision (Zubler et al., Pediatrics 2022;149(3):e2021052138)",
+    "notes": "CDC checklist age 2 months: most children (75% or more) reach this by this age.",
+    "verified": false
+  },
+  "fictional_child": {
+    "child_id": "H01",
+    "fictional": true,
+    "age_months": -2,
+    "not_yet": [],
+    "achieved": [],
+    "concerns": [
+      "Language"
+    ],
+    "interests": [],
+    "defined_in": "backend/recommendations/heldout.py:59"
+  },
+  "recommendation_row (rolled back)": {
+    "id": 1137,
+    "child": 1083,
+    "activity": 42,
+    "batch": "c265ef0b-97d1-4362-9039-d3a04cacecd4",
+    "position": 1,
+    "similarity_score": 0.7798755168914795,
+    "ranking_score": 1.0,
+    "rule_priority": 1.0,
+    "age_weight": 1.0,
+    "alpha": 0.7,
+    "profile_fingerprint": "d32e8ffbab25b3ce9b2c8394d4e106c3fabfe8cef6108ea17738c16629feaaac",
+    "ranking_version": "da4d8bcfc4b96aa8275ddf6d450433ff66df8c6786952221e19cad800840de31",
+    "explanation": "You said you'd like support with language and communication. It's an activity for parents during pregnancy. Its aim is to help your baby start getting to know your voice and the rhythm of your home language.",
+    "pinned": false,
+    "pin_note": "",
+    "explanation_version": "2",
+    "date_generated": "2026-11-12 18:55:30.454548+00:00",
+    "activity_id": "ACT-0002"
+  }
+}
