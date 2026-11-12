@@ -66,8 +66,13 @@ def active_caregivers(since):
 
 
 def _rated_activities():
+    # The rating is optional since #185: count only feedback with one, so an
+    # activity whose feedback has no stars isn't listed with no average (#212).
     return DevelopmentalActivity.objects.annotate(
-        ratings=Count("recommendations__feedback"),
+        ratings=Count(
+            "recommendations__feedback",
+            filter=Q(recommendations__feedback__rating__isnull=False),
+        ),
         average=Avg("recommendations__feedback__rating"),
     ).filter(ratings__gt=0)
 

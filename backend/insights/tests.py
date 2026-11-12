@@ -126,6 +126,31 @@ class DashboardFiguresTests(DashboardTestCase):
         )
         self.assertEqual(d["recent_feedback"][-1]["comment"], "She loved it")
 
+    def test_feedback_without_a_rating_is_left_out_of_the_rated_lists(self):
+        # The rating is optional (#185); this used to crash the dashboard (#212).
+        quiet = DevelopmentalActivity.objects.create(
+            **activity_fields(
+                activity_id="ACT-9005",
+                activity_name="Quiet Book",
+                developmental_domain=Domain.SENSORY,
+                content_status=ContentStatus.PUBLISHED,
+            )
+        )
+        rec = Recommendation.objects.create(
+            child=self.child,
+            activity=quiet,
+            batch=uuid.uuid4(),
+            position=1,
+            similarity_score=0.8,
+            ranking_score=0.7,
+        )
+        Feedback.objects.create(recommendation=rec, rating=None, comment="Fun")
+        d = dashboard()
+        self.assertEqual(d["ratings_count"], 3)
+        listed = [a["activity_id"] for a in d["top_rated"] + d["needs_attention"]]
+        self.assertNotIn("ACT-9005", listed)
+        self.assertIn("Fun", [f["comment"] for f in d["recent_feedback"]])
+
     def test_library_pipeline_and_milestones(self):
         d = dashboard()
         self.assertEqual(d["library_total"], 3)  # the draft isn't published
