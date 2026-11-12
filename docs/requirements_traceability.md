@@ -1,6 +1,6 @@
 # Requirements traceability
 
-> **Last updated: 2026-11-09.** Traces every requirement in Chapter 4 (Section 4.2) of the June 2026 proposal to where it is built, how it is tested and its status. Figures come from real runs. The proposal text hasn't been updated yet; where the built system differs from the wording, the row says so and [Wording to update in Chapter 4](#wording-to-update-in-chapter-4) lists the change.
+> **Last updated: 2026-11-10.** Traces every requirement in Chapter 4 (Section 4.2) of the June 2026 proposal to where it is built, how it is tested and its status. Figures come from real runs. The proposal text hasn't been updated yet; where the built system differs from the wording, the row says so and [Wording to update in Chapter 4](#wording-to-update-in-chapter-4) lists the change.
 
 Status key:
 
@@ -15,7 +15,7 @@ Status key:
 | Group | Met | Met, with a deviation | Partly met | Evidence pending | Not met |
 |---|---|---|---|---|---|
 | Functional (FR-01 to FR-18) | 13 | 3 | 2 | 0 | 0 |
-| Non-functional (NFR-01 to NFR-13) | 8 | 1 | 1 | 3 | 0 |
+| Non-functional (NFR-01 to NFR-13) | 8 | 2 | 0 | 3 | 0 |
 | Data (DR-01 to DR-11) | 8 | 0 | 3 | 0 | 0 |
 | Interface (IR-01 to IR-09) | 8 | 0 | 1 | 0 | 0 |
 
@@ -77,7 +77,7 @@ All other IDs in the repo (FR-01, FR-02, FR-05, FR-11, FR-14 to FR-16, NFR-02, N
 | NFR-09 | Maintainability | Separate Django apps: `profiles`, `activities`, `recommendations`, `feedback`, `insights` | Code inspection | **Met** |
 | NFR-10 | Explainability | Explanations traced to the profile (FR-11); the explanation reader test checks caregivers understand them ([explanation_reader_test.md](explanation_reader_test.md)) | **Evidence pending:** the automated trace is done; the reader test hasn't run. |
 | NFR-11 | Human oversight | Wording is guidance, never diagnosis; the clinic-visit referral is gentle and outside the ranking (#161) | `test_explanations.py` (no diagnostic words), `test_referral.py`, `test_tracker.py` | **Met** |
-| NFR-12 | Recommendation quality | Relevance: graded human labels on 20 held-out children, nDCG@5 0.836 against 0.582 for SBERT alone (95% CI of the difference +0.136 to +0.379). Explainability: as NFR-10. Diversity, novelty and coverage: not yet computed. | **Partly met:** relevance is judged by human labels, not similarity scores (a stated deviation); the diversity, novelty and coverage metrics are still to do. |
+| NFR-12 | Recommendation quality | Relevance: graded human labels on 20 held-out children, nDCG@5 0.836 against 0.582 for SBERT alone (95% CI of the difference +0.136 to +0.379). Personalisation: at α = 0.7, personalisation 0.996, 96 distinct activities in 100 top-5 slots, novelty 4.24 of 4.32 bits, intra-list diversity 0.442 ([eval_v2_beyond_accuracy.md](eval_v2_beyond_accuracy.md)). Explainability: every explanation traced to the stored profile (FR-11). | **Met, with a deviation:** relevance is judged by graded human labels, not similarity scores. Area diversity is low (about 1.4 areas per top 5) because the priority area comes first. |
 | NFR-13 | Caregiver satisfaction | Post-use questionnaire in the caregiver sessions | **Evidence pending:** sessions not yet run. |
 
 ## Data requirements
