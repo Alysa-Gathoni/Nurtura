@@ -97,8 +97,9 @@ class _ChildSwitcherButton extends StatelessWidget {
           key: const Key('childSwitcher'),
           customBorder: const StadiumBorder(),
           onTap: () => showChildSwitcher(context, onAddChild: onAddChild),
+          // At least 48 high: Android's minimum tap target (#206).
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(4, 4, 12, 4),
+            padding: const EdgeInsets.fromLTRB(4, 6, 12, 6),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
