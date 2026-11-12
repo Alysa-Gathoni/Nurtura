@@ -5,6 +5,7 @@ import datetime
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
+from django.test import SimpleTestCase
 from rest_framework.test import APITestCase
 
 from activities.choices import ContentStatus, Domain
@@ -169,3 +170,19 @@ class EndpointTests(TrackerTestCase):
         for name in ("child-tracker", "child-observation"):
             response = self.client.get(reverse(name, args=[self.child.pk]))
             self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class WholeMonthsTests(SimpleTestCase):
+    """The tracker's "noted at" age counts calendar months, like the app (#214)."""
+
+    def test_counts_completed_calendar_months(self):
+        born = datetime.date(2025, 9, 12)
+        # The phone test: on the 14-month birthday the app says 14 months.
+        self.assertEqual(tracker.whole_months(born, datetime.date(2026, 11, 12)), 14)
+        self.assertEqual(tracker.whole_months(born, datetime.date(2026, 11, 11)), 13)
+        self.assertEqual(tracker.whole_months(born, born), 0)
+
+    def test_month_end_birthdays(self):
+        born = datetime.date(2026, 1, 31)
+        self.assertEqual(tracker.whole_months(born, datetime.date(2026, 2, 28)), 0)
+        self.assertEqual(tracker.whole_months(born, datetime.date(2026, 3, 31)), 2)

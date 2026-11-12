@@ -27,9 +27,9 @@ setup:
 	cd $(APP) && flutter pub get
 	$(PY) -m pre_commit install
 
-## run-backend: start the Django dev server on http://127.0.0.1:8000
+## run-backend: start the Django dev server on http://127.0.0.1:8000, with the AI model loaded at start-up
 run-backend:
-	cd $(BACKEND) && $(PY) manage.py runserver
+	cd $(BACKEND) && NURTURA_MODEL_WARMUP=1 $(PY) manage.py runserver
 
 ## run-app: run the Flutter app (pass DEVICE=chrome or an emulator id)
 run-app:

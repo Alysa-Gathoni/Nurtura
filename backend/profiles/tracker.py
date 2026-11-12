@@ -20,6 +20,21 @@ from .models import ReferenceMilestone
 from .rules.facts import age_in_months
 from .rules.guidelines import UPCOMING_WINDOW_MONTHS
 
+
+def whole_months(date_of_birth, on_date):
+    """Completed calendar months, as the app counts them (#214).
+
+    For display only: the rule engine keeps age_in_months (days divided by
+    the average month), so the ranking is unchanged.
+    """
+    months = (on_date.year - date_of_birth.year) * 12 + (
+        on_date.month - date_of_birth.month
+    )
+    if on_date.day < date_of_birth.day:
+        months -= 1
+    return months
+
+
 RECENT_MONTHS = 6
 UPCOMING_MONTHS = UPCOMING_WINDOW_MONTHS
 AREAS = (Domain.MOTOR, Domain.SOCIO_EMOTIONAL, Domain.LANGUAGE, Domain.COGNITIVE)
@@ -67,11 +82,7 @@ def tracker(child, on_date=None):
                         else None
                     ),
                     "observed_at_months": (
-                        int(
-                            age_in_months(
-                                child.date_of_birth, observation.observation_date
-                            )
-                        )
+                        whole_months(child.date_of_birth, observation.observation_date)
                         if observation
                         else None
                     ),

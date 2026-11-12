@@ -710,7 +710,7 @@ void main() {
       final backend = adminBackend(feedbackTotal: 35);
       await pumpAdmin(tester, backend);
       await tapVisible(tester, find.byKey(const Key('admin_tab_feedback')));
-      expect(find.text('35 ratings'), findsOneWidget);
+      expect(find.text('35 responses'), findsOneWidget);
       expect(find.text('“Comment 1”'), findsOneWidget);
       expect(find.textContaining('Peekaboo'), findsWidgets);
       await scrollTo(tester, find.byKey(const Key('moreFeedback')));
