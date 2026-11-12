@@ -1,6 +1,6 @@
 # Known limitations and outstanding defects
 
-> **Last updated: 2026-11-10.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
+> **Last updated: 2026-11-12.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
 
 ## Outstanding defects
 
@@ -11,9 +11,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 | Item | State | Planned |
 |---|---|---|
 | Explanation reader test (5 non-technical readers) | Materials ready ([explanation_reader_test.md](explanation_reader_test.md)); not run. Until it's scored, explanation wording and the evaluated ranking stay frozen | Before Sprint 9 |
-| Hand check of retrieval results (#31) | Results generated; the researcher's relevant / not relevant judgements are still to do | Before Sprint 9 |
 | Evaluation with caregivers: relevance, personalisation, explainability, usability (SUS), satisfaction | Materials drafted ([caregiver_evaluation.md](caregiver_evaluation.md)); ethics question and sample size to confirm with the supervisor; participants still to recruit | Sprint 9 |
-| Requirement-by-requirement test map | Tests reference the requirement IDs found in the repository; the full list from Chapter 3 is needed to map all of them | Sprint 9 |
 
 ## Evaluation limits
 

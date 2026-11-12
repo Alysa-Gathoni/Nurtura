@@ -136,7 +136,7 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 | 2. Core data layer | Data models, login with roles, content review workflow, activity data | ✅ Complete |
 | 3. Rule engine | Developmental profiling from CDC/WHO/ASQ guidelines | ✅ Complete |
 | 3.5 Mobile shell | First app screens connected to the real backend, run on an Android phone | ✅ Complete |
-| 4. Semantic search | SBERT embeddings and similarity search | ✅ Built; hand check of results pending (#31) |
+| 4. Semantic search | SBERT embeddings and similarity search | ✅ Built; relevance graded by hand in the held-out evaluation (the #31 spot-check was superseded) |
 | 5. Weighted ranking | Combine the signals, choose α on a held-out set | ✅ Complete (tag `sprint5-eval-v1`) |
 | 6. Explainability | Plain-language reasons for each recommendation | ✅ Built (tag `sprint6-explanations-v1`); reader test with 5 readers still to run |
 | 7. Feedback & history | Mark activities done, rate them, administrator review | ✅ Complete |
@@ -191,7 +191,6 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 ## 6. What's next and open items
 
 - **Explanation reader test (Sprint 6 definition of done):** 5 non-technical readers, materials ready in `docs/explanation_reader_test*.md`. Until it's scored, explanation wording and the evaluated ranking stay frozen.
-- **Sprint 4 hand check (#31):** the researcher marks the saved search results relevant or not.
 - **End-to-end test on a phone:** register, profiles, a milestone, recommendations, done and feedback, Progress and dark mode, with screenshots.
 - **Real email for sign-in codes:** SMTP details go in `backend/.env`. Until then, codes appear in the backend console.
 - **Sprint 9 evaluation:** recruit caregivers now (the longest lead time), then run relevance, personalisation, explainability, SUS and satisfaction. Map each requirement to its tests and fill the gaps.
