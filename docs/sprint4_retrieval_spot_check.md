@@ -6,7 +6,7 @@
 - **Method:** retrieval only, i.e. **SBERT cosine similarity with no rule-priority or age weighting**. This is the **SBERT-only baseline** that the Sprint 5 hybrid ranking will be compared against.
 - **Generated with:** `python manage.py spot_check_retrieval --markdown` (sample children are created in a rolled-back transaction and never saved).
 
-> **Hand check not yet done.** The *Relevant? (Y/N)* and *Notes* columns are intentionally blank, to be filled in by the researcher. Issue #31 (Sprint 4 Definition of done) stays open until then.
+> **Hand check superseded.** The *Relevant? (Y/N)* and *Notes* columns were left blank. Relevance was instead graded by hand in the held-out evaluations, at a larger scale and on the current catalogue: v2 grades 257 pairs over 20 children, with SBERT-only as its own baseline (nDCG@5 0.582 against 0.836 for the hybrid; [eval_v2_results.md](eval_v2_results.md)). Issue #31 was closed on that basis on 2026-11-12. This page stays as the record of the 54-activity spot-check.
 
 ## Domain match: SBERT-only baseline
 
