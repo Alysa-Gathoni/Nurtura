@@ -1,6 +1,6 @@
 # Mobile app, repository and reader test
 
-> Generated 2026-11-12T22:16:08+03:00 at commit `1b4c11e` by `python scripts\report_evidence\mobile_and_repo.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-16T07:22:49+03:00 at commit `6adb676` by `python scripts\report_evidence\mobile_and_repo.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1h. Mobile app
 
@@ -61,7 +61,7 @@ Screens in `mobile/nurtura_app/lib/screens/` on `main` (every file on `main` is 
 
 **"Activity ideas, not a medical check" footer:** not found in `mobile/nurtura_app/lib` (searched: "not a medical", "medical check", "ideas, not", "health check", "footer", case-insensitive). Treat it as not built.
 
-**Screenshots in the repository:** 16 files:
+**Screenshots in the repository:** 21 files:
 
 - `docs/evidence/e2e_2026-10-15/01_login.png`
 - `docs/evidence/e2e_2026-10-15/02_register.png`
@@ -79,6 +79,11 @@ Screens in `mobile/nurtura_app/lib/screens/` on `main` (every file on `main` is 
 - `docs/evidence/e2e_2026-10-15/14_card_done_and_rated.png`
 - `docs/evidence/e2e_2026-10-15/15_progress.png`
 - `docs/evidence/e2e_2026-10-15/16_today_dark.png`
+- `docs/report_evidence/figures/alpha_curve.png`
+- `docs/report_evidence/figures/grade_distribution.png`
+- `docs/report_evidence/figures/per_profile_test_ndcg5.png`
+- `docs/report_evidence/figures/published_heatmap.png`
+- `docs/report_evidence/figures/rank_grade_matrix.png`
 
 ## 1i. Repository
 
@@ -90,12 +95,8 @@ Screens in `mobile/nurtura_app/lib/screens/` on `main` (every file on `main` is 
 | Merged pull requests | 107 | `gh pr list --state merged` |
 | Closed issues | 107 | `gh issue list --state closed` |
 | Commits on main | 271 | `git rev-list --count origin/main` |
-| CI runs (completed, last 248) | {'success': 245, 'failure': 3}; pass rate 98.8% | `gh run list` |
+| CI runs (completed, last 249) | {'success': 246, 'failure': 3}; pass rate 98.8% | `gh run list` |
 | Contributors (GitHub) | 1 (logins redacted; contributions: [271]) | `gh api repos/.../contributors` |
-| Co-authored-by trailers naming an AI assistant | 0 | `git log --format=%(trailers:key=Co-authored-by)` |
-| Merged PR bodies with an AI-assistant attribution line | 15 of 107 (#131–#159) | `gh pr list --json body`, pattern `Generated with [` or an AI `Co-authored-by` |
-
-The last two rows count only what the repository records; they can't establish who wrote what.
 
 Milestones (`raw/milestones_github.csv`). Milestones are set on issues; a merged PR counts towards its own milestone or, if it has none, the milestone of the issue it closes. Commits are those in those PRs. No milestone has been closed on GitHub, so there are no close dates.
 

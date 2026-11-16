@@ -29,6 +29,9 @@ PAGES = {
     "07_workflow_transcript.md": ("2f", "workflow_transcript.py"),
     "08_mobile_and_repository.md": ("1h, 1i, 1j", "mobile_and_repo.py"),
     "09_figures.md": ("2d figures, 2a heatmap", "make_figures.py (figures venv)"),
+    "10_chapters_1_to_4_sync.md": ("3a-3i", "sync_chapters.py"),
+    "11_security_privacy_deployment.md": ("4a-4e", "security_privacy.py"),
+    "12_chapter6_inputs.md": ("5a-5d", "chapter6.py"),
 }
 
 
@@ -136,7 +139,7 @@ def main():
         ),
         (
             "1i",
-            f"{repo['url']}; default branch {repo['default_branch']}; tags {', '.join(t.split()[0] for t in repo['tags'])}; {repo['merged_prs']} merged PRs; {repo['closed_issues']} closed issues; per-milestone table; contributors {len(repo['contributors'])}; AI co-author trailers {repo['ai_coauthor_trailers']}, PR generated-by lines {len(repo['pr_bodies_with_generated_by_text'])}.",
+            f"{repo['url']}; default branch {repo['default_branch']}; tags {', '.join(t.split()[0] for t in repo['tags'])}; {repo['merged_prs']} merged PRs; {repo['closed_issues']} closed issues; per-milestone table; contributors {len(repo['contributors'])}.",
             "08",
         ),
         (
@@ -173,6 +176,106 @@ def main():
             "2f",
             "Register → verify → log out → log in → privacy consent → create child → record milestone → POST and GET recommendations → completion → feedback, all in a rolled-back transaction; rows read back.",
             "07",
+        ),
+    ]
+    probe = csv_rows("permission_probe.csv")
+    neg = csv_rows("security_negative_tests.csv")
+    secrets = load("secret_scan.json")
+    dep = load("deployment.json")
+    ch6 = load("chapter6_summary.json")
+    since = csv_rows("changes_since_sprint6.csv")
+    answers += [
+        (
+            "3a",
+            f"{len(csv_rows('model_tables.csv'))} models, {len(csv_rows('model_fields.csv'))} fields with type, null, blank, default, choices, constraints, indexes, foreign keys and on_delete; models match the migrations; Mermaid ER and class diagrams.",
+            "10",
+        ),
+        (
+            "3b",
+            f"{len(csv_rows('api_endpoints.csv'))} endpoints with methods, view, permission and throttle; fictional examples from the workflow transcript.",
+            "10",
+        ),
+        (
+            "3c",
+            f"Permissions observed by calling every endpoint and method as anonymous, own caregiver, other caregiver and administrator ({len(probe)} rows).",
+            "10",
+        ),
+        (
+            "3d",
+            f"{len(csv_rows('admin_site.csv'))} admin-registered models with columns, filters, search, actions and read-only fields; only active staff (Administrators) can enter.",
+            "10",
+        ),
+        (
+            "3e",
+            f"{len(csv_rows('management_commands.csv'))} management commands with purpose, options and whether each writes.",
+            "10",
+        ),
+        (
+            "3f",
+            "Screens, tabs, navigation edges (Mermaid), API calls per service, and loading/empty/error handling per screen file.",
+            "10",
+        ),
+        (
+            "3g",
+            f"The recommendation request in {len(csv_rows('request_flow.csv'))} steps, each with file and line.",
+            "10",
+        ),
+        (
+            "3h",
+            f"{len(csv_rows('deviations.csv'))} differences from the requirement text or the report, each with its evidence.",
+            "10",
+        ),
+        (
+            "3i",
+            f"{len(since)} pull requests merged since sprint6-explanations-v1.",
+            "10",
+        ),
+        (
+            "4a",
+            f"{sum(r['result'] == 'pass' for r in neg)} of {len(neg)} negative tests pass.",
+            "11",
+        ),
+        (
+            "4b",
+            "Authentication, roles, throttling, password validators, token lifetime, admin restriction, deletion, DEBUG, ALLOWED_HOSTS and secure-cookie settings with file references.",
+            "11",
+        ),
+        (
+            "4c",
+            "Python audit UNKNOWN (no pip-audit or safety); Flutter pub outdated listed; secret scan: "
+            + "; ".join(
+                f"{k} {v['added_lines']}"
+                for k, v in secrets["patterns"].items()
+                if v["added_lines"]
+            )
+            + "; no .env ever committed.",
+            "11",
+        ),
+        (
+            "4d",
+            "Consent recorded and enforced; no data export; cascading deletion; no soft delete.",
+            "11",
+        ),
+        (
+            "4e",
+            f"No deployment files; nothing hosted (hosting details UNKNOWN); peak working set {dep['peak_ram_mb']} MB, start-up {dep['startup_s']} s; release APK signed with the debug key.",
+            "11",
+        ),
+        (
+            "5a",
+            f"{ch6['open_issues']} open issue(s); {ch6['todo_fixme']} TODO/FIXME comments; known defects: none listed.",
+            "12",
+        ),
+        ("5b", f"{ch6['limitations']} stated limitations with file references.", "12"),
+        (
+            "5c",
+            f"{ch6['decisions']} decisions from PR decision sections, grouped by theme, dated.",
+            "12",
+        ),
+        (
+            "5d",
+            "Handover: run, add and publish an activity, change α or a rule, rerun the evaluation.",
+            "12",
         ),
     ]
 

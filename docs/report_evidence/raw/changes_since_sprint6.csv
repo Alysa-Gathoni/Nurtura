@@ -1,0 +1,66 @@
+pr,merged,title,summary
+88,2026-10-14,feat: activity detail screen from a recommendation card (#84),Closes #84
+89,2026-10-14,feat: show the last recommendations offline (#85),Closes #85
+92,2026-10-14,"feat: modern, playful redesign with light and dark mode and a tabbed home (#90)",Closes #90
+87,2026-10-14,feat: two-step verification by emailed code for app login (#86),Closes #86
+93,2026-10-14,feat: two-step verification code screen in the app (#91),Closes #91
+97,2026-10-14,feat: mark a recommendation as completed (#94),Closes #94
+98,2026-10-14,feat: submit feedback on a recommendation via FeedbackManager (#95),Closes #95
+99,2026-10-14,feat: administrator feedback review (#96),Closes #96
+101,2026-10-14,feat: mark done and leave feedback from the activity screen (#100),Closes #100
+103,2026-10-14,fix: stay signed in when the app is opened offline (#102),Closes #102
+105,2026-10-14,test: end-to-end round trip on the real backend for the tabbed app (#104),Closes #104
+107,2026-10-15,docs: bring PROJECT_OVERVIEW.md up to date after Sprints 6-8 (#106),Closes #106
+109,2026-10-15,test: make the end-to-end test pass on a real Android phone (#108),Closes #108
+111,2026-10-15,"docs: testing and evaluation record, phone-run screenshots and demo checklist (#110)",Closes #110
+113,2026-10-15,"feat: 'Village in Your Pocket' restyle, app icon and splash (#112)",Closes #112
+115,2026-10-15,feat: style the Django admin to match the app's village theme (#114),Closes #114
+117,2026-10-16,feat: analytics dashboard on the admin home page (#116),Closes #116
+119,2026-10-21,docs: align the repository with the Sprint I and Sprint II review requirements (#118),Closes #118
+124,2026-10-21,"feat: administrator API for the app (overview, activities, feedback) (#122)",Closes #122
+125,2026-10-21,feat: administrator screens in the Flutter app (#123),Closes #123
+127,2026-10-21,feat: reset a forgotten password with an emailed code (#126),Closes #126
+129,2026-10-22,"feat: work with Google's ""Suggest strong password"" and password saving (#128)",Closes #128
+131,2026-10-25,"feat: Continue with Google, as a choice next to email (#130)","Adds ""Continue with Google"" as an alternative to email sign-in. Closes #130."
+133,2026-10-25,docs: caregiver evaluation materials (#132),"Drafts the materials for the caregiver evaluation in Section 3.2.4 of the proposal, so recruiting can start. Closes #132."
+135,2026-10-29,"feat: delete my account, and edit or delete a child in the app (#134)","Lets caregivers correct and erase their data before real caregivers use the app. This closes a ""do now"" gap from the Webmasters review (right to erasure under Kenya's Data Protection Act 2019) and FR-03 (update and manag"
+137,2026-10-29,feat: privacy notice and consent before adding a child's data (#136),"Adds a privacy notice that caregivers agree to before adding a child's data. This closes a ""do now"" gap from the Webmasters review: informed consent for children's data under Kenya's Data Protection Act 2019. Closes #136"
+139,2026-10-29,"feat: full activity details, and polish from the phone walkthrough (#138)",Fixes the four problems found when testing the app end to end on a phone on 29 Oct 2026.
+141,2026-10-29,"feat: a livelier sign-in screen, and a password strength meter (#140)",Sign-in screen
+143,2026-10-29,"feat: change password while signed in, for caregivers and admins (#142)",Backend
+145,2026-10-29,"fix: say when a code email can't be sent, instead of a 500 (#144)",On 29 Oct the Gmail app password had been revoked (Google does that when the account's password changes). Asking for a reset code then failed with **500**: `smtplib.SMTPServerDisconnected` escaped from `two_factor._send`
+148,2026-10-29,feat: strength meter on the Change password screen (#147),"The Change password screen (#142) shows the strength meter (#140) under the new password, as on Register and the reset screen."
+149,2026-10-29,"feat: reset a password in three steps: email, code, new password (#146)","Backend** (`profiles/password_reset.py`, `views.py`, `urls.py`)"
+151,2026-10-29,feat: fingerprint log-in and lock (#150),Asked for by the supervisor.
+153,2026-10-29,fix: log out straight to the login screen (#152),"The bug:** logging out showed ""Your session has ended. Please log in again."" for about 2 seconds before the login screen."
+155,2026-10-30,data: source links for the 24 activities that had none (#154),`ACT-0001`–`ACT-0024` (batches 1 and 2) named a source organisation but had no `source_url`. Each now links to the page or document its content follows. **Every link was opened and checked against the activity on 30 Oct 
+157,2026-10-30,data: 200 more activities from verified sources (#156),"`data/raw/activities_batch5.csv`: 200 new activities (`ACT-0055`–`ACT-0254`).** Every age and area combination now has 7–8 activities, up from 0–4. That includes the four empty ones: pregnancy Cognitive and Motor, Cognit"
+159,2026-10-30,"data: 200 more activities from verified sources, batch 6 (#158)",`data/raw/activities_batch6.csv`: 200 new activities (`ACT-0255` to `ACT-0454`). 26 are for pregnancy and 29 for each age band from 0–3 up to 24–36 months.
+163,2026-10-31,data: fix or remove the 7 activities their source did not support (#160),A check of every Draft activity against its source page found 7 whose page does not support the specific idea. Two are fixed and five are removed.
+164,2026-10-31,"feat: suggest a clinic visit when a due milestone is ""Not yet"" (#161)","Adds the referral path from the proposal: a gentle, non-diagnostic suggestion to mention a milestone at the next clinic visit."
+165,2026-10-31,feat: log-in tokens expire after 30 days (#162),Log-in tokens lasted until the user logged out. Now a token stops working 30 days after it was issued.
+167,2026-10-31,data: approve the plain aims for batches 5 and 6 (#166),"Marks all 396 drafted plain aims for batches 5 and 6 as approved, so explanations for those activities get their ""Its aim is to…"" sentence."
+169,2026-10-31,test: held-out evaluation v2 sheet on the 449-activity pool (#168),"The frozen evaluation (`sprint5-eval-v1`, nDCG@5 0.81) was run on 54 Published activities. There are now 449, so most of each held-out child's top 5 had never been labelled. This prepares v2 using the same protocol."
+171,2026-11-02,docs: held-out evaluation v2 results on 449 activities (#170),"The v2 sheet is fully labelled. This adds the results, keeps α = 0.7, and records why."
+173,2026-11-02,test: tool and plan to compare a search-trained embedding model (#172),"Sets up a controlled comparison of `multi-qa-MiniLM-L6-cos-v1` (trained for query-to-passage search) with the current `all-MiniLM-L6-v2`. The app is not changed. Results come in a follow-up, once #171's labels are on `ma"
+176,2026-11-03,feat: ask how an activity went and what got in the way (#175),First layer of the caregiver feedback loop. Feedback was a 1–5 rating and a comment that nothing acted on. It now also records how the activity went and what got in the way. Layers 2 (options offered after feedback) and 
+178,2026-11-03,"feat: offer options after feedback, and pin the one chosen (#177)","Second layer of the caregiver feedback loop. After a caregiver says how an activity went (#175), the app offers up to three other activities. Each one answers something that went wrong and says why it's offered."
+180,2026-11-03,feat: learn from each child's feedback when generating ideas (#179),"Third layer of the caregiver feedback loop. Until now, feedback (#175) didn't change the ranking. Now, after the evaluated ranking, `generate()` adjusts each score using that child's feedback (`recommendations/personalis"
+182,2026-11-03,"feat: activity classifier for area and age band, with admin suggestions (#181)","Supervised learning on top of the pre-trained SBERT model (transfer learning). SBERT is unchanged; a logistic regression is trained on the activity embeddings it already produces, using the labels the activities already "
+187,2026-11-03,chore: remove the iOS project; Nurtura is an Android app (#186),"Nurtura targets Android only, so the iOS parts go."
+184,2026-11-06,test: learned ranker trained on the tune children (#183),"An experiment: can a model learned from the held-out labels rank better than the fixed formula `age_weight × ((1−α)·similarity + α·priority)` at α = 0.7? The plan and decision rule were committed first (cfa745d), before "
+188,2026-11-06,"feat: ""Well done!"" sheet with interest level and skills seen (#185)","Built from the proposal's ""Well Done!"" wireframe."
+189,2026-11-09,docs: learned ranker results; alpha = 0.7 stays (#183),"The results of the learned-ranker experiment. #184 was merged just before this commit reached it, so it follows here."
+191,2026-11-09,chore: one data file per section (#190),"Several data sections were split across many files. Each section now has one file to open, and the data itself is unchanged."
+193,2026-11-09,"feat: milestone tracker by area, with a weekly Nurtura observation (#192)",Built from the proposal's Milestones wireframe.
+195,2026-11-09,"feat: Explore tab to browse, search, save and try activities (#194)",Built from the proposal's Activities wireframe.
+197,2026-11-09,"test: confidence intervals, Wilcoxon tests and age-weight sensitivity for v2 (#196)","`recommendations/statistics.py`:** paired comparison helpers. Percentile bootstrap 95% interval (10,000 resamples of children, seed 2026) and a two-sided Wilcoxon signed-rank test (ties dropped)."
+201,2026-11-10,docs: requirements traceability against proposal Chapter 4 (#198),"`docs/requirements_traceability.md`:** every Chapter 4 requirement with where it is built, its tests or evidence and its status."
+202,2026-11-10,"test: diversity, novelty, coverage and personalisation of the rankings (#199)","`recommendations/beyond_accuracy.py`:** intra-list diversity, area diversity, catalogue coverage, novelty and personalisation."
+203,2026-11-10,"chore: app README, dev requirements and a non-blocking deploy check (#200)","Mobile README and pubspec description:** the Flutter boilerplate is replaced with what the app does, the code layout, and how to run and test it."
+209,2026-11-12,fix: deployment check always passes and summarises its findings (#208),"CI deployment check:** `continue-on-error` still showed the job as failed (a red cross) on every PR, including #205 and #207. The step now:"
+205,2026-11-12,"docs: NFR-12 met, with the beyond-accuracy measures (#204)","`docs/requirements_traceability.md`: NFR-12 moves from **Partly met** to **Met, with a deviation**. It now cites the beyond-accuracy figures from #199 (personalisation 0.996, 96 distinct activities in 100 slots, novelty "
+207,2026-11-12,test: accessibility checks and fixes for large text and contrast (#206),`test/accessibility_test.dart`:
+211,2026-11-12,docs: #31 hand check superseded; requirement map done (#210),"`sprint4_retrieval_spot_check.md`:** the ""hand check not yet done"" note now says it was superseded. Relevance was graded by hand in the held-out evaluations instead: v2 has 257 pairs over 20 children, and SBERT-only scor"
+213,2026-11-12,fix: admin dashboard no longer fails on feedback without a rating (#212),"Bug, found on the phone:** after the demo caregiver sent feedback without stars, the admin dashboard showed ""The server had a problem (500)"". The server raised `TypeError: type NoneType doesn't define __round__ method` i"
+215,2026-11-12,fix: phone test findings (#214),Five problems found while testing on a phone (Samsung A14) with the demo accounts. The dashboard crash is in #213.

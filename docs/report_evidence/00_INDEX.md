@@ -1,6 +1,6 @@
 # Report evidence pack: index
 
-> Built 2026-11-12T22:16:39+03:00 at commit `1b4c11e`. Regenerate everything with `powershell -File scripts\report_evidence\run_all.ps1` from the repository root. Each page states the command, date and commit behind it.
+> Built 2026-11-16T07:33:27+03:00 at commit `6adb676`. Regenerate everything with `powershell -File scripts\report_evidence\run_all.ps1` from the repository root. Each page states the command, date and commit behind it.
 
 Rules followed: facts come from a command, file and line, or query named on the page; anything that couldn't be verified says UNKNOWN. The database was only read: every row the scripts needed (fictional children, recommendations, the request transcript) was created inside a transaction that was rolled back. No secrets, real emails or names: they are `<redacted>`. Data is fictional.
 
@@ -16,7 +16,7 @@ Rules followed: facts come from a command, file and line, or query named on the 
 | 1f | Full tune curve and per-profile test table; test nDCG@5 α = 0.7 0.836 vs SBERT-only 0.582; labels by one rater (the researcher), from repo docs; v1 document differs by design (54 activities). | 04 |
 | 1g | Mean areas per top 5 at α = 0.7: 1.40; 96 distinct activities in the 20 top-5s (catalogue is 449, not 54); latency p50 63.1 ms, p95 82.5 ms, peak working set 580 MB, start-up 21.2 s. | 04, 05 |
 | 1h | 22 screen files listed; offline cache = last batch per child in shared preferences; offline launch covered by widget tests; the "not a medical check" footer is not found; 16 phone screenshots in docs/evidence/e2e_2026-10-15. | 08 |
-| 1i | https://github.com/Alysa-Gathoni/Nurtura; default branch main; tags sprint5-eval-v1, sprint6-explanations-v1, sprint9-eval-v2; 107 merged PRs; 107 closed issues; per-milestone table; contributors 1; AI co-author trailers 0, PR generated-by lines 15. | 08 |
+| 1i | https://github.com/Alysa-Gathoni/Nurtura; default branch main; tags sprint5-eval-v1, sprint6-explanations-v1, sprint9-eval-v2; 107 merged PRs; 107 closed issues; per-milestone table; contributors 1. | 08 |
 | 1j | UNKNOWN: no reader-test responses or scorer output in the repository. | 08 |
 | 2a | Activity and milestone inventories (CSV), heatmap, samples (activity, milestone, fictional child, recommendation row), preparation steps. | 03, 09 |
 | 2b | Configuration table generated from the module constants and settings, each with file:line. | 03 |
@@ -24,6 +24,24 @@ Rules followed: facts come from a command, file and line, or query named on the 
 | 2d | Five 300-dpi figures with their CSVs and computed one-line insights; grade-0 sources by area and age band. | 04, 09 |
 | 2e | Test inventory (838 tests) and requirement coverage: {'Done (with a stated deviation)': 5, 'Done': 37, 'Partial': 6, 'Done (built); evidence pending': 3}. | 01 |
 | 2f | Register → verify → log out → log in → privacy consent → create child → record milestone → POST and GET recommendations → completion → feedback, all in a rolled-back transaction; rows read back. | 07 |
+| 3a | 14 models, 129 fields with type, null, blank, default, choices, constraints, indexes, foreign keys and on_delete; models match the migrations; Mermaid ER and class diagrams. | 10 |
+| 3b | 42 endpoints with methods, view, permission and throttle; fictional examples from the workflow transcript. | 10 |
+| 3c | Permissions observed by calling every endpoint and method as anonymous, own caregiver, other caregiver and administrator (57 rows). | 10 |
+| 3d | 13 admin-registered models with columns, filters, search, actions and read-only fields; only active staff (Administrators) can enter. | 10 |
+| 3e | 14 management commands with purpose, options and whether each writes. | 10 |
+| 3f | Screens, tabs, navigation edges (Mermaid), API calls per service, and loading/empty/error handling per screen file. | 10 |
+| 3g | The recommendation request in 15 steps, each with file and line. | 10 |
+| 3h | 22 differences from the requirement text or the report, each with its evidence. | 10 |
+| 3i | 65 pull requests merged since sprint6-explanations-v1. | 10 |
+| 4a | 20 of 20 negative tests pass. | 11 |
+| 4b | Authentication, roles, throttling, password validators, token lifetime, admin restriction, deletion, DEBUG, ALLOWED_HOSTS and secure-cookie settings with file references. | 11 |
+| 4c | Python audit UNKNOWN (no pip-audit or safety); Flutter pub outdated listed; secret scan: password/secret assignment with a literal 24; Django SECRET_KEY literal 1; no .env ever committed. | 11 |
+| 4d | Consent recorded and enforced; no data export; cascading deletion; no soft delete. | 11 |
+| 4e | No deployment files; nothing hosted (hosting details UNKNOWN); peak working set 580.0 MB, start-up 21.2 s; release APK signed with the debug key. | 11 |
+| 5a | 1 open issue(s); 0 TODO/FIXME comments; known defects: none listed. | 12 |
+| 5b | 49 stated limitations with file references. | 12 |
+| 5c | 32 decisions from PR decision sections, grouped by theme, dated. | 12 |
+| 5d | Handover: run, add and publish an activity, change α or a rule, rerun the evaluation. | 12 |
 
 ## Pages
 
@@ -36,8 +54,11 @@ Rules followed: facts come from a command, file and line, or query named on the 
 | `05_latency.md` | 1g (latency, memory, start-up) | `scripts/report_evidence/latency.py` | 2026-11-12T21:58:59+03:00 | 1b4c11e |
 | `06_explanation_examples.md` | 2c | `scripts/report_evidence/explanation_examples.py` | 2026-11-12T22:02:27+03:00 | 1b4c11e |
 | `07_workflow_transcript.md` | 2f | `scripts/report_evidence/workflow_transcript.py` | 2026-11-12T22:04:04+03:00 | 1b4c11e |
-| `08_mobile_and_repository.md` | 1h, 1i, 1j | `scripts/report_evidence/mobile_and_repo.py` | 2026-11-12T22:16:08+03:00 | 1b4c11e |
+| `08_mobile_and_repository.md` | 1h, 1i, 1j | `scripts/report_evidence/mobile_and_repo.py` | 2026-11-16T07:22:49+03:00 | 6adb676 |
 | `09_figures.md` | 2d figures, 2a heatmap | `scripts/report_evidence/make_figures.py` | 2026-11-12T22:11:08+03:00 | 1b4c11e |
+| `10_chapters_1_to_4_sync.md` | 3a-3i | `scripts/report_evidence/sync_chapters.py` | 2026-11-16T07:27:09+03:00 | 6adb676 |
+| `11_security_privacy_deployment.md` | 4a-4e | `scripts/report_evidence/security_privacy.py` | 2026-11-16T07:31:04+03:00 | 6adb676 |
+| `12_chapter6_inputs.md` | 5a-5d | `scripts/report_evidence/chapter6.py` | 2026-11-16T07:32:55+03:00 | 6adb676 |
 
 The commit is the one checked out when the page was generated; the scripts themselves are added by this pull request.
 
@@ -45,34 +66,58 @@ The commit is the one checked out when the page was generated; the scripts thems
 
 - `raw/activities_inventory.csv`
 - `raw/activity_frequency_alpha_0.7.csv`
+- `raw/admin_site.csv`
 - `raw/alpha_curve.csv`
 - `raw/alpha_grid_markdown.txt`
+- `raw/api_endpoints.csv`
+- `raw/changes_since_sprint6.csv`
+- `raw/chapter6_summary.json`
 - `raw/ci_runs.json`
 - `raw/ci_skips.json`
+- `raw/class_diagram.mmd`
 - `raw/configuration.csv`
 - `raw/dataset_samples.json`
+- `raw/decision_log.csv`
+- `raw/deployment.json`
+- `raw/deviations.csv`
 - `raw/engine_mentions.json`
 - `raw/environment.json`
+- `raw/er_diagram.mmd`
 - `raw/explanation_profiles.json`
 - `raw/explanation_rules_fired.csv`
 - `raw/explanation_top5.csv`
 - `raw/exploratory_top5.csv`
+- `raw/flutter_pub_outdated.json`
 - `raw/grade0_sources.csv`
 - `raw/grade_distribution.csv`
 - `raw/latency_runs.csv`
 - `raw/latency_summary.json`
+- `raw/limitations.csv`
+- `raw/management_commands.csv`
 - `raw/milestones_github.csv`
 - `raw/milestones_inventory.csv`
+- `raw/mobile_navigation.mmd`
 - `raw/mobile_screens.csv`
+- `raw/mobile_screens_map.csv`
+- `raw/mobile_services.json`
+- `raw/model_fields.csv`
+- `raw/model_tables.csv`
+- `raw/open_issues.csv`
 - `raw/per_profile_test.csv`
+- `raw/permission_probe.csv`
 - `raw/published_by_domain_age.csv`
 - `raw/rank_grade_matrix.csv`
 - `raw/repository.json`
+- `raw/request_flow.csv`
 - `raw/requirement_coverage.csv`
+- `raw/secret_scan.json`
+- `raw/security_implementation.csv`
+- `raw/security_negative_tests.csv`
 - `raw/test_inventory.csv`
 - `raw/tests_backend_log.txt`
 - `raw/tests_flutter_log.jsonl`
 - `raw/tests_summary.json`
+- `raw/todo_fixme.csv`
 - `raw/workflow_rows.json`
 - `raw/workflow_transcript.json`
 
@@ -87,4 +132,6 @@ The commit is the one checked out when the page was generated; the scripts thems
 ## UNKNOWN items
 
 - `02_environment.md:18`: | Phone | UNKNOWN, Android UNKNOWN (SDK UNKNOWN) | `adb shell getprop` |
-- `08_mobile_and_repository.md:120`: Exported responses or scorer output (CSV, JSON, XLSX or TXT among them): none. **UNKNOWN**: no reader-test responses or scorer output are in the repository (the test and the caregiver sessions have no
+- `08_mobile_and_repository.md:121`: Exported responses or scorer output (CSV, JSON, XLSX or TXT among them): none. **UNKNOWN**: no reader-test responses or scorer output are in the repository (the test and the caregiver sessions have no
+- `11_security_privacy_deployment.md:54`: - **Python dependency audit:** UNKNOWN: neither pip-audit nor safety is installed in the backend venv.
+- `11_security_privacy_deployment.md:83`: - **Hosting:** No deployment files in the repository; docs/known_limitations.md:42 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).

@@ -10,7 +10,7 @@
   "closed_issues": 107,
   "commits_on_main": "271",
   "ci_conclusions": {
-    "success": 245,
+    "success": 246,
     "failure": 3
   },
   "contributors": [
@@ -18,23 +18,5 @@
       "login": "<redacted>",
       "contributions": 271
     }
-  ],
-  "ai_coauthor_trailers": 0,
-  "pr_bodies_with_generated_by_text": [
-    131,
-    133,
-    135,
-    137,
-    139,
-    141,
-    143,
-    145,
-    148,
-    149,
-    151,
-    153,
-    155,
-    157,
-    159
   ]
 }

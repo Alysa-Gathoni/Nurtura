@@ -17,7 +17,7 @@ if (-not (Test-Path $fig)) {
 $testsArgs = @()
 if ($Reuse) { $testsArgs = @("--reuse") }
 & $py scripts\report_evidence\tests_and_ci.py @testsArgs
-foreach ($s in "environment", "catalogue_and_config", "evaluation", "latency", "explanation_examples", "workflow_transcript", "mobile_and_repo") {
+foreach ($s in "environment", "catalogue_and_config", "evaluation", "latency", "explanation_examples", "workflow_transcript", "mobile_and_repo", "sync_chapters", "security_privacy", "chapter6") {
     & $py "scripts\report_evidence\$s.py"
     if ($LASTEXITCODE) { throw "$s.py failed" }
 }

@@ -1,0 +1,21 @@
+test,request,expected,actual,result
+Weak password,"POST /api/auth/register/ {""password"": ""password""}",400,400,pass
+Duplicate email,"POST /api/auth/register/ {""email"": <existing>}",400,400,pass
+Six wrong logins in a minute,"POST /api/auth/login/ x6 {""password"": <wrong>}","400 x5, then 429",400 400 400 400 400 429,pass
+No token,GET /api/children/ (no Authorization),401,401,pass
+Bad token,GET /api/children/ (Authorization: Token <invalid>),401,401,pass
+Another caregiver's child (GET),GET /api/children/<other's id>/,404,404,pass
+Another caregiver's child (PATCH),PATCH /api/children/<other's id>/,404,404,pass
+Another caregiver's child (DELETE),DELETE /api/children/<other's id>/,404,404,pass
+Child unchanged after those attempts,SELECT the child,"still there, name unchanged",unchanged,pass
+Administrator on the child API,GET /api/children/ as administrator,403,403,pass
+Caregiver on the admin site,GET /admin/ logged in as a caregiver,302 to the admin login (not 200),302 -> /admin/login/?next=/admin/,pass
+Role in the registration body,"POST /api/auth/register/ {""role"": ""administrator""}","201, role stays caregiver","201, role caregiver",pass
+Invalid JSON,POST /api/children/ body `{not json`,400,400,pass
+Oversized JSON,POST /api/children/ with a 2561 KB body (limit 2560 KB),"400 or 413, nothing saved",400,pass
+SQL-like text in a field,"POST /api/children/ {""name"": ""Robert'); DROP TABLE profiles_childprofile;--""}","201, stored as plain text, table intact","201, stored literally: True",pass
+Unpublished activity,POST /api/children/<id>/activities/<Draft id>/try/,404,404,pass
+Save an unpublished activity,PUT /api/children/<id>/saved/<Draft id>/,404,404,pass
+Unauthorised publish (caregiver),"POST /api/admin/activities/<id>/status/ {""status"": ""published""}",403,403,pass
+Publish skipping review (administrator),Draft -> Published directly,400,400,pass
+Draft still Draft,SELECT content_status,draft,draft,pass

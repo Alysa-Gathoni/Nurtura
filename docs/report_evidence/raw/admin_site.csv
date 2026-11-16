@@ -1,0 +1,14 @@
+model,admin_class,list_display,list_filter,search_fields,actions,readonly_fields
+activities.DevelopmentalActivity,DevelopmentalActivityAdmin,"activity_id, activity_name, developmental_domain, age_range, difficulty_level, source, source_link, content_status, feedback_count, average_rating","content_status, source, HasSourceUrlFilter, developmental_domain, age_range, difficulty_level","activity_id, activity_name, description","submit_for_review, publish, return_to_draft",content_status
+auth.Group,GroupAdmin,__str__,,name,,
+authtoken.TokenProxy,TokenAdmin,"key, user, created",created,user__username,,
+feedback.CompletedActivity,CompletedActivityAdmin,"completion_date, activity_id, activity, area, status","status, recommendation__activity__developmental_domain","recommendation__activity__activity_id, recommendation__activity__activity_name",,"activity_id, activity, area, status, completion_date"
+feedback.Feedback,FeedbackAdmin,"date_submitted, activity_id, activity, area, stars, outcome, interest, issue_labels, comment_excerpt, completion","outcome, interest, rating, recommendation__activity__developmental_domain","recommendation__activity__activity_id, recommendation__activity__activity_name, comment",,"activity_id, activity, area, outcome, interest, issue_labels, rating, comment, completion, date_submitted"
+profiles.ChildProfile,ChildProfileAdmin,"name, caregiver, date_of_birth, gender",,"name, caregiver__username",,
+profiles.DevelopmentalMilestone,DevelopmentalMilestoneAdmin,"child, domain, status, observation_date, reference","domain, status",,,
+profiles.DevelopmentalProfile,DevelopmentalProfileAdmin,"child, top_domain, age_months, generated_at",,,,"child, age_months, scores, ranked_domains, reasons, generated_at"
+profiles.LoginChallenge,LoginChallengeAdmin,"user, purpose, created_at, expires_at, sends, attempts, used_at",purpose,"user__username, user__email",,
+profiles.ReferenceMilestone,ReferenceMilestoneAdmin,"milestone_key, expected_age_months, domain, description, source, verified","verified, source, domain, expected_age_months","milestone_key, description","mark_verified, mark_unverified",
+profiles.TrustedDevice,TrustedDeviceAdmin,"user, trusted_until, last_used_at, created_at",,"user__username, user__email",,"user, device_hash, trusted_until, created_at, last_used_at"
+profiles.User,NurturaUserAdmin,"username, email, role, is_active, is_superuser","role, is_active, is_superuser","username, first_name, last_name, email",,
+recommendations.Recommendation,RecommendationAdmin,"child, activity, similarity_score, ranking_score, date_generated",activity__developmental_domain,"child__name, activity__activity_name",,

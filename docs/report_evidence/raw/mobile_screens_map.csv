@@ -1,0 +1,24 @@
+file,screens,purpose,services_named,loading,empty_state,error_state
+mobile/nurtura_app/lib/screens/activity_detail_screen.dart,ActivityDetailScreen _Stars _DetailCard,Longest comment the server accepts (FeedbackManager).,ApiClient ApiException RecommendationService,no,yes,yes
+mobile/nurtura_app/lib/screens/admin/admin_account_screen.dart,AdminAccountScreen,"The administrator's account: who is signed in, theme and log out.",,no,no,no
+mobile/nurtura_app/lib/screens/admin/admin_activities_screen.dart,AdminActivitiesScreen StatusPill _ActivityCard,"The activity library for administrators (#123, FR-06): search, filter by",AdminService ApiClient ApiException,yes,yes,yes
+mobile/nurtura_app/lib/screens/admin/admin_activity_form_screen.dart,AdminActivityFormScreen _StatusPanel,"Add an activity, or view and edit one and move it through review",AdminService ApiClient ApiException,yes,yes,yes
+mobile/nurtura_app/lib/screens/admin/admin_dashboard_screen.dart,AdminDashboardScreen _Section _OverviewCard,"The administrator's operations overview (#123): use over time, outcomes,",AdminService ApiClient ApiException,yes,yes,yes
+mobile/nurtura_app/lib/screens/admin/admin_feedback_screen.dart,AdminFeedbackScreen _FeedbackCard,"Caregivers' ratings and comments against each activity (#123, FR-16).",AdminService ApiClient ApiException,yes,yes,yes
+mobile/nurtura_app/lib/screens/admin/admin_shell.dart,AdminShell AdminHeader,"The administrator's home (#123): Dashboard, Activities, Feedback and",,no,no,no
+mobile/nurtura_app/lib/screens/auth_screen.dart,AuthScreen _FingerprintLogIn _OrDivider,Register or log in as a caregiver.,ApiException,no,no,yes
+mobile/nurtura_app/lib/screens/change_password_screen.dart,ChangePasswordScreen,"Opens the right screen for the signed-in account (#142): Change password,",ApiException,no,no,yes
+mobile/nurtura_app/lib/screens/child_form_screen.dart,ChildFormScreen _DateField,"Creates a child profile, or edits [child]'s (#134); pops with the saved",ApiException,yes,no,yes
+mobile/nurtura_app/lib/screens/children_screen.dart,ChildrenScreen _ChildCard _DeleteAccountDialog,The caregiver's children and app settings.,ApiException,yes,no,yes
+mobile/nurtura_app/lib/screens/explore_screen.dart,ExploreScreen _Heading _ActivityCard,"Explore (#194): browse and search activities for the child, save them",ApiClient ApiException ExploreService,yes,no,yes
+mobile/nurtura_app/lib/screens/forgot_password_screen.dart,ForgotPasswordScreen _StepDots,"Choosing a new password with an emailed code (#126), in three steps",ApiException CodeChallenge,no,no,yes
+mobile/nurtura_app/lib/screens/home_shell.dart,HomeShell,"The signed-in home: Today (ideas), Progress, Milestones and Family tabs",,no,no,no
+mobile/nurtura_app/lib/screens/lock_screen.dart,LockScreen,"Shown instead of the app while ""Unlock with fingerprint"" is on and the",,no,no,yes
+mobile/nurtura_app/lib/screens/milestone_screen.dart,MilestoneScreen _MilestoneTile _StatusChip,Records a milestone for a child by picking it from the guideline,ApiClient ApiException MilestoneService,yes,yes,yes
+mobile/nurtura_app/lib/screens/milestone_tracker_screen.dart,MilestoneTrackerScreen _MilestoneCard _ObservationCard,"The child's milestones by area, with the weekly Nurtura observation",ApiClient ApiException MilestoneService,yes,no,yes
+mobile/nurtura_app/lib/screens/milestones_tab.dart,MilestonesTab,The Milestones tab: the tracker (#192) or the catalogue picker.,,no,no,no
+mobile/nurtura_app/lib/screens/privacy_notice_screen.dart,PrivacyNoticeScreen,The privacy notice (#136).,ApiException,yes,no,yes
+mobile/nurtura_app/lib/screens/progress_screen.dart,ProgressScreen _SectionTitle _Hero,The child's own milestone record and the caregiver's badges and streak.,ApiClient ApiException MilestoneService,yes,no,yes
+mobile/nurtura_app/lib/screens/recommendations_screen.dart,RecommendationsScreen RecommendationCard ReferralNotice,The selected child's recommended activities.,ApiClient ApiException RecommendationService,yes,yes,yes
+mobile/nurtura_app/lib/screens/verify_code_screen.dart,VerifyCodeScreen CodeBoxes,The second sign-in step: the six-digit code emailed to the caregiver,ApiException,no,no,yes
+mobile/nurtura_app/lib/widgets/well_done_sheet.dart,WellDoneSheet _InterestButton,"The ""Well done!"" sheet shown after an activity is marked done (#185).",ApiException RecommendationService,no,yes,yes

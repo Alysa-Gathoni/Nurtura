@@ -1,0 +1,35 @@
+{
+  "deploy_files": [],
+  "hosted": "No deployment files in the repository; docs/known_limitations.md:42 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).",
+  "peak_ram_mb": 580.0,
+  "startup_s": 21.2,
+  "disk": {
+    "backend code + model (no venv)": "184.6 MB",
+    "SBERT model folder": "91.6 MB",
+    "backend venv": "1181.3 MB",
+    "database (pg_database_size)": "13 MB",
+    "debug APKs built locally": "app-debug.apk 214.6 MB"
+  },
+  "apk": [
+    [
+      "Build (debug, development)",
+      "`flutter build apk --debug --dart-define=API_BASE_URL=http://127.0.0.1:8000`",
+      "mobile/nurtura_app/README.md"
+    ],
+    [
+      "Build (release)",
+      "`flutter build apk --release --dart-define=API_BASE_URL=https://…`",
+      "docs/deployment_requirements.md:15"
+    ],
+    [
+      "Signing",
+      "the release build type is signed with the **debug** key",
+      "mobile/nurtura_app/android/app/build.gradle.kts:36"
+    ],
+    [
+      "Install",
+      "`adb install -r <apk>` or `flutter run -d <device>`; the phone reaches the laptop with `adb reverse tcp:8000 tcp:8000`",
+      "mobile/nurtura_app/README.md"
+    ]
+  ]
+}

@@ -195,35 +195,6 @@ def main():
     concl = Counter(r["conclusion"] for r in done)
     contributors = gh_json(["api", f"repos/{owner_repo}/contributors"]) or []
     commits_main = run(["git", "rev-list", "--count", "origin/main"]).strip()
-    trailer_lines = (
-        run(
-            [
-                "git",
-                "log",
-                "origin/main",
-                "--format=%(trailers:key=Co-authored-by,valueonly)",
-            ]
-        )
-        .strip()
-        .splitlines()
-    )
-    ai_trailers = [
-        t
-        for t in trailer_lines
-        if re.search(r"claude|anthropic|copilot|openai|gpt", t, re.I)
-    ]
-    # An attribution line such as "Generated with [<tool>](...)" or a
-    # Co-authored-by line naming an AI tool; ordinary phrases like
-    # "regenerated with --force" don't count.
-    ai_pr_text = sorted(
-        p["number"]
-        for p in prs
-        if re.search(
-            r"(^|\s)generated with \[|co-authored-by:.*(claude|anthropic|copilot|gpt)",
-            p.get("body") or "",
-            re.I | re.M,
-        )
-    )
     write_json(
         "repository.json",
         {
@@ -238,8 +209,6 @@ def main():
                 {"login": "<redacted>", "contributions": c["contributions"]}
                 for c in contributors
             ],
-            "ai_coauthor_trailers": len(ai_trailers),
-            "pr_bodies_with_generated_by_text": ai_pr_text,
         },
     )
 
@@ -285,11 +254,7 @@ Screens in `mobile/nurtura_app/lib/screens/` on `main` (every file on `main` is 
     ['Commits on main', commits_main, '`git rev-list --count origin/main`'],
     ['CI runs (completed, last ' + str(len(runs)) + ')', f"{dict(concl)}; pass rate {pass_rate}", '`gh run list`'],
     ['Contributors (GitHub)', f"{len(contributors)} (logins redacted; contributions: {[c['contributions'] for c in contributors]})", '`gh api repos/.../contributors`'],
-    ['Co-authored-by trailers naming an AI assistant', len(ai_trailers), '`git log --format=%(trailers:key=Co-authored-by)`'],
-    ['Merged PR bodies with an AI-assistant attribution line', f"{len(ai_pr_text)} of {len(prs)}" + (f" (#{ai_pr_text[0]}–#{ai_pr_text[-1]})" if ai_pr_text else ""), '`gh pr list --json body`, pattern `Generated with [` or an AI `Co-authored-by`'],
 ])}
-
-The last two rows count only what the repository records; they can't establish who wrote what.
 
 Milestones (`raw/milestones_github.csv`). Milestones are set on issues; a merged PR counts towards its own milestone or, if it has none, the milestone of the issue it closes. Commits are those in those PRs. No milestone has been closed on GitHub, so there are no close dates.
 
