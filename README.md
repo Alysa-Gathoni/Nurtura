@@ -101,9 +101,12 @@ The app can then register caregivers, record milestones and generate recommendat
 | `CORS_ALLOWED_ORIGINS` | Browser origins allowed to call the API in production (any `localhost` port is allowed when `DEBUG=True`) |
 | `DB_NAME` | PostgreSQL database name. **Leave empty to use SQLite** |
 | `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` | PostgreSQL connection |
+| `DB_POOL_MIN_SIZE`, `DB_POOL_MAX_SIZE`, `DB_POOL_TIMEOUT` | PostgreSQL connection pool per server process (#226): 2, 20 and 30 s by default. A request waits for a free connection rather than failing; keep `DB_POOL_MAX_SIZE` × processes below PostgreSQL's `max_connections` |
 | `NURTURA_MODEL_WARMUP` | `1` loads the SBERT model when the server starts so the first recommendation is fast; unset means off in development, on otherwise |
 | `RANKING_ALPHA` | Weight of rule priority in the ranking. Leave unset to use the evaluated value, 0.7 |
 | `SBERT_MODEL_PATH` | Where the SBERT model is stored. Leave unset for `backend/models/` |
+| `SBERT_TORCH_THREADS` | PyTorch threads per encode (#226). Default 2: as fast as 6 for one query, and fairer when requests overlap. `0` keeps PyTorch's default |
+| `SBERT_QUERY_CACHE_SIZE` | How many query embeddings (profile queries, Explore searches) are kept in memory (#226). Default 2048; `0` turns the cache off |
 | `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `EMAIL_USE_TLS`, `DEFAULT_FROM_EMAIL` | SMTP for the two-step sign-in codes. **Leave `EMAIL_HOST` empty in development**: codes are then printed in the `runserver` output |
 | `GOOGLE_OAUTH_CLIENT_IDS` | The **web** OAuth client ID(s) for Continue with Google, comma-separated. Empty turns Google sign-in off (see "Continue with Google" below) |
 

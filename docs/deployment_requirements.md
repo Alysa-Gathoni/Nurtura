@@ -17,6 +17,7 @@
 ## Measured resource use
 
 - **Memory:** with the SBERT model loaded, the development server process had committed about **1.2 GB** (Windows, 2026-10-16). That rules out the 512 MB free tiers most hosts offer. Plan for **at least 2 GB of RAM**.
+- **Database connections** (#226): each server process keeps a pool of up to `DB_POOL_MAX_SIZE` (20) PostgreSQL connections. Keep processes × `DB_POOL_MAX_SIZE` below PostgreSQL's `max_connections` (100 by default). With the pool, 200 concurrent caregivers ran on the laptop with no errors ([performance_under_load.md](performance_under_load.md)).
 - **Start-up:** loading PyTorch and the model takes about 14–15 s. With `NURTURA_MODEL_WARMUP` on (the default when `DEBUG` is off), this happens at start-up instead of on the first request ([performance_recommendations.md](performance_recommendations.md)).
 - **Disk:** the model (88 MB), plus PyTorch and the other Python packages (a few GB in a virtual environment).
 

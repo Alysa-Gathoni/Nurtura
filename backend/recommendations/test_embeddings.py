@@ -153,6 +153,80 @@ class EmbeddingHelperTests(SimpleTestCase):
         self.assertNotEqual(base, embeddings.text_hash("model-a", "other"))
 
 
+class CountingModel:
+    """Stands in for a SentenceTransformer and counts what it encodes."""
+
+    def __init__(self):
+        self.calls = []
+
+    def get_embedding_dimension(self):
+        return 3
+
+    def encode(self, texts, **kwargs):
+        self.calls.append(list(texts))
+        return np.array([[len(t), t.count("a"), 1.0] for t in texts], dtype=np.float32)
+
+
+class QueryCacheTests(SimpleTestCase):
+    """Single-text encodes are cached; batches never are (#226)."""
+
+    def encoder(self, size=2):
+        self.model = CountingModel()
+        return embeddings.SentenceTransformerEncoder(self.model, cache_size=size)
+
+    def test_a_repeated_query_is_encoded_once(self):
+        encoder = self.encoder()
+        first = encoder.encode(["a baby who loves music"])
+        second = encoder.encode(["a baby who loves music"])
+        self.assertEqual(len(self.model.calls), 1)
+        self.assertTrue(np.array_equal(first, second))
+        self.assertEqual(second.shape, (1, 3))
+
+    def test_cached_vectors_are_copies(self):
+        encoder = self.encoder()
+        encoder.encode(["text"])[0, 0] = 99
+        self.assertEqual(encoder.encode(["text"])[0, 0], 4)
+
+    def test_least_recently_used_is_dropped(self):
+        encoder = self.encoder(size=2)
+        for text in ("one", "two", "one", "three", "one", "two"):
+            encoder.encode([text])
+        # "two" was dropped when "three" came in; "one" was kept.
+        self.assertEqual(
+            [c[0] for c in self.model.calls], ["one", "two", "three", "two"]
+        )
+
+    def test_batches_are_not_cached(self):
+        encoder = self.encoder()
+        encoder.encode(["one", "two"])
+        encoder.encode(["one", "two"])
+        encoder.encode(["one"])
+        self.assertEqual(len(self.model.calls), 3)
+
+    def test_size_zero_turns_the_cache_off(self):
+        encoder = self.encoder(size=0)
+        encoder.encode(["one"])
+        encoder.encode(["one"])
+        self.assertEqual(len(self.model.calls), 2)
+
+
+class LoadSettingsTests(SimpleTestCase):
+    """The settings the load test asked for (#226)."""
+
+    def test_postgres_uses_a_bounded_pool(self):
+        db = settings.DATABASES["default"]
+        if db["ENGINE"] != "django.db.backends.postgresql":
+            self.skipTest("SQLite run")
+        pool = db["OPTIONS"]["pool"]
+        self.assertLessEqual(pool["min_size"], pool["max_size"])
+        self.assertLess(pool["max_size"], 100)  # PostgreSQL's default limit
+
+    def test_server_errors_are_logged(self):
+        logger = settings.LOGGING["loggers"]["django.request"]
+        self.assertEqual(logger["level"], "ERROR")
+        self.assertIn("console", logger["handlers"])
+
+
 @unittest.skipUnless(
     settings.SBERT_MODEL_PATH.exists(),
     "SBERT model not downloaded (run setup_sbert.py); skipped in CI",
