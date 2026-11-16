@@ -1,0 +1,33 @@
+Count,Message,Traceback,Nodes
+
+1,"HTTPConnectionPool(host='127.0.0.1', port=8001): Max retries exceeded with url: /api/children/1633/recommendations/ (Caused by NewConnectionError(""HTTPConnection(host='127.0.0.1', port=8001): Failed to establish a new connection: [Errno 10061] [WinError 10061] No connection could be made because the target machine actively refused it.""))","  File ""<home>\src\nurtura\scripts\load_test\.venv\Lib\site-packages\locust\user\task.py"", line 363, in run
+    self.execute_next_task()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File ""<home>\src\nurtura\scripts\load_test\.venv\Lib\site-packages\locust\user\task.py"", line 396, in execute_next_task
+    self.execute_task(self._task_queue.popleft())
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File ""<home>\src\nurtura\scripts\load_test\.venv\Lib\site-packages\locust\user\task.py"", line 513, in execute_task
+    task(self.user)
+    ~~~~^^^^^^^^^^^
+  File ""<home>\src\nurtura\scripts\load_test\locustfile.py"", line 78, in today
+    self._today()
+    ~~~~~~~~~~~^^
+  File ""<home>\src\nurtura\scripts\load_test\locustfile.py"", line 63, in _today
+    r.success() if r.ok else r.failure(r.status_code)
+                   ^^^^
+  File ""<home>\src\nurtura\scripts\load_test\.venv\Lib\site-packages\requests\models.py"", line 869, in ok
+    self.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File ""<home>\src\nurtura\scripts\load_test\.venv\Lib\site-packages\locust\clients.py"", line 350, in raise_for_status
+    raise self.error
+  File ""<home>\src\nurtura\scripts\load_test\.venv\Lib\site-packages\locust\clients.py"", line 238, in _send_request_safe_mode
+    return super().request(method, url, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File ""<home>\src\nurtura\scripts\load_test\.venv\Lib\site-packages\requests\sessions.py"", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+  File ""<home>\src\nurtura\scripts\load_test\.venv\Lib\site-packages\requests\sessions.py"", line 784, in send
+    r = adapter.send(request, **kwargs)
+  File ""<home>\src\nurtura\scripts\load_test\.venv\Lib\site-packages\requests\adapters.py"", line 729, in send
+    raise ConnectionError(e, request=request)
+",local
+
