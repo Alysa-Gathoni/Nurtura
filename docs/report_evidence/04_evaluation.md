@@ -1,6 +1,6 @@
 # Held-out evaluation (v2)
 
-> Generated 2026-11-12T21:57:21+03:00 at commit `1b4c11e` by `backend\venv\Scripts\python.exe scripts\report_evidence\evaluation.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-16T11:41:56+03:00 at commit `87b0f45` by `backend\venv\Scripts\python.exe scripts\report_evidence\evaluation.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 Labels: `data/evaluation/heldout_labels_v2.csv`. Raw command output: `raw/alpha_grid_markdown.txt` (`manage.py evaluate_alpha_grid --markdown --report-alpha 0.7`). The tables below are recomputed from the same rankings and labels.
 
@@ -56,7 +56,39 @@ Labels: `data/evaluation/heldout_labels_v2.csv`. Raw command output: `raw/alpha_
 | test | 8 | 101 | 6 | 34 | 61 | 0 |
 | gap | 1 | 15 | 1 | 4 | 10 | 0 |
 
-**Who produced the labels (repository evidence):** `docs/eval_v2_results.md:29`: "graded 0/1/2 by the researcher, blind (no scores, ranks or areas shown)"; `:33`: one rater. `relevance_rater2` is empty in the sheet.
+**Who produced the labels (repository evidence):** `docs/eval_v2_results.md:29`: "graded 0/1/2 by the researcher, blind (no scores, ranks or areas shown)"; first rater.
+
+### Second rater
+
+Since #218, a second rater (a registered nurse, independent of the project) has graded 257 rows blind in `relevance_rater2` (`docs/eval_v2_statistics.md:96`). Raw: `raw/rater_agreement.json`, `raw/rater_confusion.csv`, `raw/per_profile_test_by_rater.csv`. Bootstrap intervals resample children (10,000, seed 2026).
+
+| Measure | Value | 95% CI |
+|---|---|---|
+| Cohen's kappa, unweighted | 0.416 | [0.297, 0.523] |
+| Cohen's kappa, linear | 0.533 | [0.443, 0.612] |
+| Cohen's kappa, quadratic | 0.661 | [0.589, 0.718] |
+| Exact agreement | 0.623 | - |
+
+Rows: first rater (researcher); columns: second rater (nurse).
+
+|  | Second 0 | Second 1 | Second 2 |
+|---|---|---|---|
+| First 0 | 27 | 1 | 0 |
+| First 1 | 39 | 48 | 6 |
+| First 2 | 2 | 49 | 85 |
+
+Test set on the second rater's labels: α = 0.7 0.737 against SBERT-only 0.398, difference +0.339 [+0.156, +0.532], 7/0/1 better/tied/worse, Wilcoxon p = 0.016. Quadratic-weighted κ (main figure): 0.661.
+
+| Child | Researcher α = 0.7 | Researcher SBERT-only | Nurse α = 0.7 | Nurse SBERT-only |
+|---|---|---|---|---|
+| H02 | 0.887 | 0.903 | 0.903 | 1.000 |
+| H03 | 0.548 | 0.217 | 0.296 | 0.060 |
+| H04 | 0.760 | 0.673 | 0.595 | 0.321 |
+| H07 | 1.000 | 0.799 | 1.000 | 0.756 |
+| H10 | 1.000 | 0.815 | 1.000 | 0.476 |
+| H14 | 0.815 | 0.244 | 0.893 | 0.048 |
+| H15 | 0.774 | 0.559 | 0.661 | 0.113 |
+| H18 | 0.903 | 0.446 | 0.548 | 0.409 |
 
 ## Difference from the sprint5-eval-v1 results document
 

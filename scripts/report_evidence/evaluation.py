@@ -230,6 +230,91 @@ def main():
         if re.match(r"^\| (SBERT-only|\*\*α = 0\.7)", l)
     ]
 
+    # ---- second rater (#218) ----
+    from recommendations.evaluation import ndcg_at_k
+    from recommendations.statistics import (
+        GRADES,
+        KAPPA_WEIGHTS,
+        cohen_kappa,
+        confusion,
+        kappa_bootstrap_ci,
+        paired,
+    )
+
+    by_child = {
+        c: [
+            (g, labels.rater2[c][a])
+            for a, g in grades.items()
+            if a in labels.rater2.get(c, {})
+        ]
+        for c, grades in labels.relevance.items()
+    }
+    pairs = [p for ps in by_child.values() for p in ps]
+    rater_text = "`relevance_rater2` is empty in the sheet: one rater only."
+    if pairs:
+        kappas = {}
+        for w in KAPPA_WEIGHTS:
+            value = cohen_kappa(pairs, w)
+            low, high = (
+                kappa_bootstrap_ci(by_child, w) if value is not None else (None, None)
+            )
+            kappas[w] = {"kappa": value, "ci_low": low, "ci_high": high}
+        matrix = confusion(pairs)
+        write_csv(
+            "rater_confusion.csv",
+            [
+                {"first_rater": g, **{f"second_{h}": n for h, n in zip(GRADES, row)}}
+                for g, row in zip(GRADES, matrix)
+            ],
+        )
+        test_ids = [c.child_id for c in heldout.HELDOUT_CHILDREN if c.split == "test"]
+        per_rater = []
+        for c in test_ids:
+            row = {"child": c}
+            for who, grades in (("first", labels.relevance), ("second", labels.rater2)):
+                for m, name in (
+                    (REPORTED_ALPHA, "alpha_0.7"),
+                    (heldout.BASELINE, "sbert_only"),
+                ):
+                    row[f"{who}_{name}"] = ndcg_at_k(
+                        rankings[c][m], grades.get(c, {}), 5
+                    )
+            per_rater.append(row)
+        write_csv("per_profile_test_by_rater.csv", per_rater)
+        second = paired(
+            [r["second_alpha_0.7"] for r in per_rater],
+            [r["second_sbert_only"] for r in per_rater],
+        )
+        agreement = {
+            "rows_both": len(pairs),
+            "children": sum(1 for ps in by_child.values() if ps),
+            "second_rater": "a registered nurse, independent of the project (role only, with their agreement)",
+            "exact": mean(a == b for a, b in pairs),
+            "kappa": kappas,
+            "confusion_rows_first_cols_second": matrix,
+            "test_second_rater": {
+                "alpha_0.7": second.mean_a,
+                "sbert_only": second.mean_b,
+                "difference": second.mean_diff,
+                "ci": [second.ci_low, second.ci_high],
+                "better_tied_worse": [second.improved, second.tied, second.worse],
+                "wilcoxon_p": second.p_value,
+            },
+        }
+        write_json("rater_agreement.json", agreement)
+        q = kappas["quadratic"]
+        rater_text = f"""Since #218, a second rater (a registered nurse, independent of the project) has graded {len(pairs)} rows blind in `relevance_rater2` (`docs/eval_v2_statistics.md:{line_of('docs/eval_v2_statistics.md', '^## Agreement between raters')}`). Raw: `raw/rater_agreement.json`, `raw/rater_confusion.csv`, `raw/per_profile_test_by_rater.csv`. Bootstrap intervals resample children (10,000, seed 2026).
+
+{table(['Measure', 'Value', '95% CI'], [[f"Cohen's kappa, {w}", fmt(k['kappa']), '-' if k['ci_low'] is None else f"[{k['ci_low']:.3f}, {k['ci_high']:.3f}]"] for w, k in kappas.items()] + [['Exact agreement', fmt(agreement['exact']), '-']])}
+
+Rows: first rater (researcher); columns: second rater (nurse).
+
+{table(['', *(f'Second {g}' for g in GRADES)], [[f'First {g}', *row] for g, row in zip(GRADES, matrix)])}
+
+Test set on the second rater's labels: α = 0.7 {fmt(second.mean_a)} against SBERT-only {fmt(second.mean_b)}, difference {second.mean_diff:+.3f} [{second.ci_low:+.3f}, {second.ci_high:+.3f}], {second.improved}/{second.tied}/{second.worse} better/tied/worse, Wilcoxon p = {fmt(second.p_value)}. Quadratic-weighted κ (main figure): {fmt(q['kappa'])}.
+
+{table(['Child', 'Researcher α = 0.7', 'Researcher SBERT-only', 'Nurse α = 0.7', 'Nurse SBERT-only'], [[r['child'], fmt(r['first_alpha_0.7']), fmt(r['first_sbert_only']), fmt(r['second_alpha_0.7']), fmt(r['second_sbert_only'])] for r in per_rater])}"""
+
     tune = [r for r in curve if r["split"] == "tune"]
     body = f"""Labels: `{DEFAULT_LABELS.relative_to(ROOT).as_posix()}`. Raw command output: `raw/alpha_grid_markdown.txt` (`manage.py evaluate_alpha_grid --markdown --report-alpha 0.7`). The tables below are recomputed from the same rankings and labels.
 
@@ -249,7 +334,11 @@ def main():
 
 {table(['Split', 'Children', 'Rows', 'Grade 0', 'Grade 1', 'Grade 2', 'Blank'], [[d['split'], d['children'], d['rows'], d['grade_0'], d['grade_1'], d['grade_2'], d['blank']] for d in dist])}
 
-**Who produced the labels (repository evidence):** `docs/eval_v2_results.md:{line_of('docs/eval_v2_results.md', 'graded 0/1/2 by the researcher')}`: "graded 0/1/2 by the researcher, blind (no scores, ranks or areas shown)"; `:{line_of('docs/eval_v2_results.md', 'One rater')}`: one rater. `relevance_rater2` is {'empty' if not labels.rater2 else 'partly filled'} in the sheet.
+**Who produced the labels (repository evidence):** `docs/eval_v2_results.md:{line_of('docs/eval_v2_results.md', 'graded 0/1/2 by the researcher')}`: "graded 0/1/2 by the researcher, blind (no scores, ranks or areas shown)"; first rater.
+
+### Second rater
+
+{rater_text}
 
 ## Difference from the sprint5-eval-v1 results document
 

@@ -623,16 +623,24 @@ backend,SpotCheckCommandTests.test_markdown_output,backend/recommendations/test_
 backend,SpotCheckCommandTests.test_warns_when_published_activities_are_not_embedded,backend/recommendations/test_spot_check.py:153,"assertIn(""have no embedding"", output)",integration,logic
 backend,SpotCheckCommandTests.test_preview_leaves_content_unchanged,backend/recommendations/test_spot_check.py:158,"assertIn(""PREVIEW"", output)",integration,logic
 backend,RealModelSpotCheckTests.test_each_sample_retrieves_its_domain_first,backend/recommendations/test_spot_check.py:183,"assertIn(top.developmental_domain, sample.expected_domains)",integration,logic
-backend,PairedStatisticsTests.test_bootstrap_interval_contains_the_mean_and_is_reproducible,backend/recommendations/test_statistics.py:19,"assertLess(low, mean)",unit,logic
-backend,PairedStatisticsTests.test_constant_differences_give_a_point_interval,backend/recommendations/test_statistics.py:27,"assertEqual(statistics.bootstrap_ci([0.2] * 5), (0.2, 0.2))",unit,logic
-backend,PairedStatisticsTests.test_wilcoxon_drops_ties,backend/recommendations/test_statistics.py:30,"assertEqual(n, 6)",unit,logic
-backend,PairedStatisticsTests.test_wilcoxon_with_no_differences_is_not_applicable,backend/recommendations/test_statistics.py:36,"assertEqual(statistics.wilcoxon([0.0, 0.0]), (0, None, None))",unit,logic
-backend,PairedStatisticsTests.test_paired_counts_and_skips_missing_scores,backend/recommendations/test_statistics.py:39,"assertEqual(result.n, 3)",unit,logic
-backend,PairedStatisticsTests.test_no_pairs_is_an_error,backend/recommendations/test_statistics.py:46,assertRaises(ValueError):,unit,logic
-backend,AgeScenarioTests.test_the_first_scenario_is_the_current_weights,backend/recommendations/test_statistics.py:52,assertEqual(,unit,logic
-backend,AgeScenarioTests.test_weights_are_replaced_and_restored,backend/recommendations/test_statistics.py:65,"assertEqual(ranking.age_weight(9, older), 0.5)",unit,logic
-backend,EvaluateStatisticsTests.test_refuses_unlabelled_rankings,backend/recommendations/test_statistics.py:95,"assertRaisesMessage(CommandError, ""no label""):",integration,logic
-backend,EvaluateStatisticsTests.test_reports_paired_statistics_and_sensitivity,backend/recommendations/test_statistics.py:101,"assertIn(text, output)",integration,logic
+backend,PairedStatisticsTests.test_bootstrap_interval_contains_the_mean_and_is_reproducible,backend/recommendations/test_statistics.py:20,"assertLess(low, mean)",unit,logic
+backend,PairedStatisticsTests.test_constant_differences_give_a_point_interval,backend/recommendations/test_statistics.py:28,"assertEqual(statistics.bootstrap_ci([0.2] * 5), (0.2, 0.2))",unit,logic
+backend,PairedStatisticsTests.test_wilcoxon_drops_ties,backend/recommendations/test_statistics.py:31,"assertEqual(n, 6)",unit,logic
+backend,PairedStatisticsTests.test_wilcoxon_with_no_differences_is_not_applicable,backend/recommendations/test_statistics.py:37,"assertEqual(statistics.wilcoxon([0.0, 0.0]), (0, None, None))",unit,logic
+backend,PairedStatisticsTests.test_paired_counts_and_skips_missing_scores,backend/recommendations/test_statistics.py:40,"assertEqual(result.n, 3)",unit,logic
+backend,PairedStatisticsTests.test_no_pairs_is_an_error,backend/recommendations/test_statistics.py:47,assertRaises(ValueError):,unit,logic
+backend,KappaTests.test_matches_scikit_learn,backend/recommendations/test_statistics.py:68,assertAlmostEqual(,unit,logic
+backend,KappaTests.test_perfect_agreement_is_one,backend/recommendations/test_statistics.py:82,"assertEqual(statistics.cohen_kappa([(0, 0), (1, 1), (2, 2)]), 1.0)",unit,logic
+backend,KappaTests.test_quadratic_counts_a_two_grade_disagreement_more,backend/recommendations/test_statistics.py:85,"assertGreater(statistics.cohen_kappa(near), statistics.cohen_kappa(far))",unit,logic
+backend,KappaTests.test_undefined_cases_are_none,backend/recommendations/test_statistics.py:90,assertIsNone(statistics.cohen_kappa([])),unit,logic
+backend,KappaTests.test_unknown_weights_are_an_error,backend/recommendations/test_statistics.py:94,assertRaises(ValueError):,unit,logic
+backend,KappaTests.test_bootstrap_resamples_children_and_is_reproducible,backend/recommendations/test_statistics.py:98,"assertLessEqual(low, value)",unit,logic
+backend,KappaTests.test_confusion_matrix,backend/recommendations/test_statistics.py:108,assertEqual(,unit,logic
+backend,AgeScenarioTests.test_the_first_scenario_is_the_current_weights,backend/recommendations/test_statistics.py:115,assertEqual(,unit,logic
+backend,AgeScenarioTests.test_weights_are_replaced_and_restored,backend/recommendations/test_statistics.py:128,"assertEqual(ranking.age_weight(9, older), 0.5)",unit,logic
+backend,EvaluateStatisticsTests.test_refuses_unlabelled_rankings,backend/recommendations/test_statistics.py:160,"assertRaisesMessage(CommandError, ""no label""):",integration,logic
+backend,EvaluateStatisticsTests.test_reports_paired_statistics_and_sensitivity,backend/recommendations/test_statistics.py:166,"assertIn(text, output)",integration,logic
+backend,EvaluateStatisticsTests.test_reports_agreement_and_results_on_the_second_raters_labels,backend/recommendations/test_statistics.py:182,"assertIn(text, output)",integration,logic
 backend,WarmUpTests.test_loads_the_encoder_once_and_encodes,backend/recommendations/test_warmup.py:39,assertIsNotNone(warmup.warm_up()),unit,logic
 backend,WarmUpTests.test_env_flag_disables_it,backend/recommendations/test_warmup.py:48,assertIsNone(warmup.warm_up()),unit,logic
 backend,WarmUpTests.test_default_is_off_in_development_and_on_otherwise,backend/recommendations/test_warmup.py:56,assertFalse(warmup.enabled()),unit,logic

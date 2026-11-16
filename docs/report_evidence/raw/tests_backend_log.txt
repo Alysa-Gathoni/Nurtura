@@ -1,6 +1,6 @@
 Creating test database for alias 'default' ('test_nurtura_db')...
 
-Found 649 test(s).
+Found 657 test(s).
 Operations to perform:
   Synchronize unmigrated apps: corsheaders, insights, messages, rest_framework, staticfiles
   Apply all migrations: activities, admin, auth, authtoken, contenttypes, feedback, profiles, recommendations, sessions
@@ -571,8 +571,7 @@ test_real_model_matches_profiles_to_their_domain (recommendations.test_retrieval
 System check identified no issues (0 silenced).
 
 Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]
-Loading weights:  32%|###2      | 33/103 [00:00<00:00, 329.82it/s]
-Loading weights: 100%|##########| 103/103 [00:00<00:00, 895.42it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1607.15it/s]
 ok
 test_embeddings_from_another_model_are_ignored (recommendations.test_retrieval.RetrieveTests.test_embeddings_from_another_model_are_ignored) ... ok
 test_language_delay_retrieves_language_activity_first (recommendations.test_retrieval.RetrieveTests.test_language_delay_retrieves_language_activity_first) ... ok
@@ -583,8 +582,7 @@ test_pregnancy_activities_only_for_expecting_parents (recommendations.test_retri
 test_unpublished_activities_are_never_candidates (recommendations.test_retrieval.RetrieveTests.test_unpublished_activities_are_never_candidates) ... ok
 test_each_sample_retrieves_its_domain_first (recommendations.test_spot_check.RealModelSpotCheckTests.test_each_sample_retrieves_its_domain_first) ... 
 Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]
-Loading weights:  33%|###3      | 34/103 [00:00<00:00, 336.08it/s]
-Loading weights: 100%|##########| 103/103 [00:00<00:00, 837.54it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1823.09it/s]
 ok
 test_each_sample_profile_puts_an_expected_domain_on_top (recommendations.test_spot_check.SampleProfileTests.test_each_sample_profile_puts_an_expected_domain_on_top) ... ok
 test_samples_use_real_catalogue_milestones (recommendations.test_spot_check.SampleProfileTests.test_samples_use_real_catalogue_milestones) ... ok
@@ -594,6 +592,7 @@ test_preview_leaves_content_unchanged (recommendations.test_spot_check.SpotCheck
 test_reports_every_sample_and_saves_nothing (recommendations.test_spot_check.SpotCheckCommandTests.test_reports_every_sample_and_saves_nothing) ... ok
 test_warns_when_published_activities_are_not_embedded (recommendations.test_spot_check.SpotCheckCommandTests.test_warns_when_published_activities_are_not_embedded) ... ok
 test_refuses_unlabelled_rankings (recommendations.test_statistics.EvaluateStatisticsTests.test_refuses_unlabelled_rankings) ... ok
+test_reports_agreement_and_results_on_the_second_raters_labels (recommendations.test_statistics.EvaluateStatisticsTests.test_reports_agreement_and_results_on_the_second_raters_labels) ... ok
 test_reports_paired_statistics_and_sensitivity (recommendations.test_statistics.EvaluateStatisticsTests.test_reports_paired_statistics_and_sensitivity) ... ok
 test_activity_with_recommendations_cannot_be_deleted (recommendations.tests.RecommendationTests.test_activity_with_recommendations_cannot_be_deleted) ... ok
 test_create_links_child_and_activity (recommendations.tests.RecommendationTests.test_create_links_child_and_activity) ... ok
@@ -636,7 +635,7 @@ test_text_hash_depends_on_model_and_text (recommendations.test_embeddings.Embedd
 test_vector_round_trip (recommendations.test_embeddings.EmbeddingHelperTests.test_vector_round_trip) ... ok
 test_real_model_ranks_paraphrases_above_unrelated_text (recommendations.test_embeddings.RealSbertModelTests.test_real_model_ranks_paraphrases_above_unrelated_text) ... 
 Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]
-Loading weights: 100%|##########| 103/103 [00:00<00:00, 1601.95it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1137.20it/s]
 ok
 test_k_must_be_positive (recommendations.test_evaluation.EvaluateTests.test_k_must_be_positive) ... ok
 test_means_and_unlabelled_counts (recommendations.test_evaluation.EvaluateTests.test_means_and_unlabelled_counts) ... ok
@@ -704,6 +703,13 @@ test_maximum_is_exactly_one_and_minimum_exactly_zero (recommendations.test_recom
 test_single_candidate_and_far_age (recommendations.test_recommendations_api.RankingScoreBoundTests.test_single_candidate_and_far_age) ... ok
 test_the_first_scenario_is_the_current_weights (recommendations.test_statistics.AgeScenarioTests.test_the_first_scenario_is_the_current_weights) ... ok
 test_weights_are_replaced_and_restored (recommendations.test_statistics.AgeScenarioTests.test_weights_are_replaced_and_restored) ... ok
+test_bootstrap_resamples_children_and_is_reproducible (recommendations.test_statistics.KappaTests.test_bootstrap_resamples_children_and_is_reproducible) ... ok
+test_confusion_matrix (recommendations.test_statistics.KappaTests.test_confusion_matrix) ... ok
+test_matches_scikit_learn (recommendations.test_statistics.KappaTests.test_matches_scikit_learn) ... ok
+test_perfect_agreement_is_one (recommendations.test_statistics.KappaTests.test_perfect_agreement_is_one) ... ok
+test_quadratic_counts_a_two_grade_disagreement_more (recommendations.test_statistics.KappaTests.test_quadratic_counts_a_two_grade_disagreement_more) ... ok
+test_undefined_cases_are_none (recommendations.test_statistics.KappaTests.test_undefined_cases_are_none) ... ok
+test_unknown_weights_are_an_error (recommendations.test_statistics.KappaTests.test_unknown_weights_are_an_error) ... ok
 test_bootstrap_interval_contains_the_mean_and_is_reproducible (recommendations.test_statistics.PairedStatisticsTests.test_bootstrap_interval_contains_the_mean_and_is_reproducible) ... ok
 test_constant_differences_give_a_point_interval (recommendations.test_statistics.PairedStatisticsTests.test_constant_differences_give_a_point_interval) ... ok
 test_no_pairs_is_an_error (recommendations.test_statistics.PairedStatisticsTests.test_no_pairs_is_an_error) ... ok
@@ -720,7 +726,7 @@ test_missing_model_is_skipped_not_fatal (recommendations.test_warmup.WarmUpTests
 test_the_test_runner_never_imports_the_server_entry_points (recommendations.test_warmup.WarmUpTests.test_the_test_runner_never_imports_the_server_entry_points) ... ok
 
 ----------------------------------------------------------------------
-Ran 649 tests in 538.170s
+Ran 657 tests in 477.253s
 
 OK
 Destroying test database for alias 'default' ('test_nurtura_db')...

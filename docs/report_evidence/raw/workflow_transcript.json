@@ -16,7 +16,7 @@
       "expires_in": 600,
       "resend_after": 30,
       "user": {
-        "id": 127,
+        "id": 158,
         "username": "<redacted>",
         "email": "<redacted>",
         "first_name": "",
@@ -40,7 +40,7 @@
     "response": {
       "token": "<redacted>",
       "user": {
-        "id": 127,
+        "id": 158,
         "username": "<redacted>",
         "email": "<redacted>",
         "first_name": "",
@@ -50,7 +50,7 @@
         "privacy_agreed_at": null,
         "has_password": true
       },
-      "device_trusted_until": "2026-12-12T19:03:42.954189+00:00"
+      "device_trusted_until": "2026-12-16T08:42:55.611890+00:00"
     }
   },
   {
@@ -72,7 +72,7 @@
     "response": {
       "token": "<redacted>",
       "user": {
-        "id": 127,
+        "id": 158,
         "username": "<redacted>",
         "email": "<redacted>",
         "first_name": "",
@@ -141,14 +141,14 @@
     },
     "status": 200,
     "response": {
-      "id": 127,
+      "id": 158,
       "username": "<redacted>",
       "email": "<redacted>",
       "first_name": "",
       "last_name": "",
       "role": "caregiver",
       "privacy_consent_required": false,
-      "privacy_agreed_at": "2026-11-12T19:03:43.852595Z",
+      "privacy_agreed_at": "2026-11-16T08:42:56.556631Z",
       "has_password": true
     }
   },
@@ -157,7 +157,7 @@
     "request": "POST /api/children/",
     "body": {
       "name": "Fictional Child",
-      "date_of_birth": "2025-10-12",
+      "date_of_birth": "2025-10-16",
       "interests": [
         "water"
       ],
@@ -167,9 +167,9 @@
     },
     "status": 201,
     "response": {
-      "id": 1167,
+      "id": 1321,
       "name": "Fictional Child",
-      "date_of_birth": "2025-10-12",
+      "date_of_birth": "2025-10-16",
       "gender": "unspecified",
       "interests": [
         "water"
@@ -178,13 +178,13 @@
       "concerns": [
         "Language"
       ],
-      "created_at": "2026-11-12T19:03:43.865781Z",
-      "updated_at": "2026-11-12T19:03:43.865796Z"
+      "created_at": "2026-11-16T08:42:56.570479Z",
+      "updated_at": "2026-11-16T08:42:56.570491Z"
     }
   },
   {
     "step": "Record \"Waves bye-bye\" as Not yet",
-    "request": "POST /api/children/1167/milestones/",
+    "request": "POST /api/children/1321/milestones/",
     "body": {
       "reference": 184,
       "status": "not_yet"
@@ -192,14 +192,14 @@
     "status": 201,
     "response": {
       "milestone": {
-        "id": 1220,
+        "id": 1369,
         "reference": 184,
         "reference_key": "CDC-12M-LA-01",
         "domain": "Language",
         "description": "Waves \"bye-bye\"",
         "status": "not_yet",
-        "observation_date": "2026-11-12",
-        "created_at": "2026-11-12T19:03:43.913202Z"
+        "observation_date": "2026-11-16",
+        "created_at": "2026-11-16T08:42:56.638766Z"
       },
       "profile": {
         "age_months": 13.0,
@@ -243,24 +243,24 @@
             "reason": "Enjoys “water”, which sensory activities build on."
           }
         ],
-        "generated_at": "2026-11-12T19:03:43.918550Z"
+        "generated_at": "2026-11-16T08:42:56.645793Z"
       }
     }
   },
   {
     "step": "Generate recommendations",
-    "request": "POST /api/children/1167/recommendations/",
+    "request": "POST /api/children/1321/recommendations/",
     "body": {},
     "status": 201,
     "response": {
-      "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
-      "generated_at": "2026-11-12T19:04:04.205437+00:00",
+      "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
+      "generated_at": "2026-11-16T08:43:23.033146+00:00",
       "recommendations": [
         {
-          "id": 1342,
-          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "id": 1462,
+          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
           "position": 1,
-          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "generated_at": "2026-11-16T08:43:23.033146+00:00",
           "activity_id": "ACT-0176",
           "activity_name": "Building on Baby's Words",
           "developmental_domain": "Language",
@@ -277,10 +277,10 @@
           "feedback": null
         },
         {
-          "id": 1343,
-          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "id": 1463,
+          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
           "position": 2,
-          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "generated_at": "2026-11-16T08:43:23.033146+00:00",
           "activity_id": "ACT-0179",
           "activity_name": "Songs About Daily Routines",
           "developmental_domain": "Language",
@@ -297,10 +297,10 @@
           "feedback": null
         },
         {
-          "id": 1344,
-          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "id": 1464,
+          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
           "position": 3,
-          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "generated_at": "2026-11-16T08:43:23.033146+00:00",
           "activity_id": "ACT-0180",
           "activity_name": "Talking Through a Soft Toy",
           "developmental_domain": "Language",
@@ -317,10 +317,10 @@
           "feedback": null
         },
         {
-          "id": 1345,
-          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "id": 1465,
+          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
           "position": 4,
-          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "generated_at": "2026-11-16T08:43:23.033146+00:00",
           "activity_id": "ACT-0375",
           "activity_name": "Real Words, Simple Directions",
           "developmental_domain": "Language",
@@ -337,10 +337,10 @@
           "feedback": null
         },
         {
-          "id": 1346,
-          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "id": 1466,
+          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
           "position": 5,
-          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "generated_at": "2026-11-16T08:43:23.033146+00:00",
           "activity_id": "ACT-0177",
           "activity_name": "Pointing, Naming and Waiting",
           "developmental_domain": "Language",
@@ -373,18 +373,18 @@
   },
   {
     "step": "Read the stored batch",
-    "request": "GET /api/children/1167/recommendations/",
+    "request": "GET /api/children/1321/recommendations/",
     "body": null,
     "status": 200,
     "response": {
-      "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
-      "generated_at": "2026-11-12T19:04:04.205437+00:00",
+      "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
+      "generated_at": "2026-11-16T08:43:23.033146+00:00",
       "recommendations": [
         {
-          "id": 1342,
-          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "id": 1462,
+          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
           "position": 1,
-          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "generated_at": "2026-11-16T08:43:23.033146+00:00",
           "activity_id": "ACT-0176",
           "activity_name": "Building on Baby's Words",
           "developmental_domain": "Language",
@@ -401,10 +401,10 @@
           "feedback": null
         },
         {
-          "id": 1343,
-          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "id": 1463,
+          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
           "position": 2,
-          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "generated_at": "2026-11-16T08:43:23.033146+00:00",
           "activity_id": "ACT-0179",
           "activity_name": "Songs About Daily Routines",
           "developmental_domain": "Language",
@@ -421,10 +421,10 @@
           "feedback": null
         },
         {
-          "id": 1344,
-          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "id": 1464,
+          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
           "position": 3,
-          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "generated_at": "2026-11-16T08:43:23.033146+00:00",
           "activity_id": "ACT-0180",
           "activity_name": "Talking Through a Soft Toy",
           "developmental_domain": "Language",
@@ -441,10 +441,10 @@
           "feedback": null
         },
         {
-          "id": 1345,
-          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "id": 1465,
+          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
           "position": 4,
-          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "generated_at": "2026-11-16T08:43:23.033146+00:00",
           "activity_id": "ACT-0375",
           "activity_name": "Real Words, Simple Directions",
           "developmental_domain": "Language",
@@ -461,10 +461,10 @@
           "feedback": null
         },
         {
-          "id": 1346,
-          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "id": 1466,
+          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
           "position": 5,
-          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "generated_at": "2026-11-16T08:43:23.033146+00:00",
           "activity_id": "ACT-0177",
           "activity_name": "Pointing, Naming and Waiting",
           "developmental_domain": "Language",
@@ -497,19 +497,19 @@
   },
   {
     "step": "Mark the first idea done",
-    "request": "PUT /api/recommendations/1342/completion/",
+    "request": "PUT /api/recommendations/1462/completion/",
     "body": {
       "status": "completed"
     },
     "status": 201,
     "response": {
       "status": "completed",
-      "completion_date": "2026-11-12"
+      "completion_date": "2026-11-16"
     }
   },
   {
     "step": "Give feedback",
-    "request": "PUT /api/recommendations/1342/feedback/",
+    "request": "PUT /api/recommendations/1462/feedback/",
     "body": {
       "outcome": "went_well",
       "interest": "loved_it",
@@ -523,7 +523,7 @@
       "outcome": "went_well",
       "issues": [],
       "interest": "loved_it",
-      "date_submitted": "2026-11-12T19:04:04.271938+00:00",
+      "date_submitted": "2026-11-16T08:43:23.081428+00:00",
       "recorded": []
     }
   }

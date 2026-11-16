@@ -4,9 +4,11 @@ import json
 import os
 import platform
 import shutil
+from datetime import date
 from importlib import metadata
 
 from _common import (
+    RAW,
     ROOT,
     django_setup,
     grep,
@@ -132,7 +134,35 @@ def main():
             or "UNKNOWN",
             "sdk": run([adb, "shell", "getprop", "ro.build.version.sdk"]).strip()
             or "UNKNOWN",
+            "read_on": date.today().isoformat(),
         }
+    phone_how = "`adb shell getprop`"
+    if phone["model"] == "UNKNOWN":
+        # No phone attached this run: keep the details last read from one,
+        # dated, rather than losing them.
+        previous = RAW / "environment.json"
+        try:
+            old = json.loads(previous.read_text(encoding="utf-8")).get("phone", {})
+        except (OSError, ValueError):
+            old = {}
+        if old.get("model", "UNKNOWN") != "UNKNOWN":
+            if "read_on" not in old:
+                old["read_on"] = (
+                    run(
+                        [
+                            "git",
+                            "log",
+                            "-1",
+                            "--format=%ad",
+                            "--date=short",
+                            "--",
+                            str(previous),
+                        ]
+                    ).strip()
+                    or "UNKNOWN"
+                )
+            phone = old
+            phone_how = f"`adb shell getprop`, read on {old['read_on']} (no phone attached at this run)"
 
     write_json(
         "environment.json", {"machine": machine, "libraries": libs, "phone": phone}
@@ -149,7 +179,7 @@ def main():
     ['PostgreSQL', machine['postgresql'], '`SELECT version()`'],
     ['Flutter', machine['flutter'], '`flutter --version --machine`'],
     ['Dart', machine['dart'], '`flutter --version --machine`'],
-    ['Phone', f"{phone['model']}, Android {phone['android']} (SDK {phone['sdk']})", '`adb shell getprop`'],
+    ['Phone', f"{phone['model']}, Android {phone['android']} (SDK {phone['sdk']})", phone_how],
 ])}
 
 ## Libraries

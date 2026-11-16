@@ -1,6 +1,6 @@
 # Environment and versions
 
-> Generated 2026-11-16T07:47:33+03:00 at commit `6238e1c` by `backend\venv\Scripts\python.exe scripts\report_evidence\environment.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-16T12:30:12+03:00 at commit `87b0f45` by `backend\venv\Scripts\python.exe scripts\report_evidence\environment.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1b. Machine
 
@@ -10,12 +10,12 @@
 | CPU | AMD Ryzen 5 5625U with Radeon Graphics | `Get-CimInstance Win32_Processor` |
 | Logical cores | 12 | `os.cpu_count()` |
 | RAM | 7.4 GB | `Get-CimInstance Win32_ComputerSystem` |
-| Disk C: | 476.0 GB total, 233.6 GB free | `shutil.disk_usage` |
+| Disk C: | 476.0 GB total, 234.9 GB free | `shutil.disk_usage` |
 | Python | 3.13.15 | backend venv |
 | PostgreSQL | PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit | `SELECT version()` |
 | Flutter | 3.47.4 | `flutter --version --machine` |
 | Dart | 3.13.3 | `flutter --version --machine` |
-| Phone | SM-A145F, Android 15 (SDK 35) | `adb shell getprop` |
+| Phone | SM-A145F, Android 15 (SDK 35) | `adb shell getprop`, read on 2026-11-16 (no phone attached at this run) |
 
 ## Libraries
 
@@ -32,6 +32,6 @@ Versions from the backend venv (`importlib.metadata`). "Imported by app code" se
 | numpy | 2.5.3 | yes | backend/activities/classifier.py:28, backend/recommendations/beyond_accuracy.py:23, backend/recommendations/browse.py:21 |
 | scikit-learn | 1.9.1 | yes | backend/activities/classifier.py:58, backend/activities/classifier.py:97, backend/activities/classifier.py:103 |
 | pandas | 3.0.6 | no | — |
-| scipy | 1.18.1 | yes | backend/recommendations/statistics.py:16 |
+| scipy | 1.18.1 | yes | backend/recommendations/statistics.py:19 |
 
 Raw: `raw/environment.json`.

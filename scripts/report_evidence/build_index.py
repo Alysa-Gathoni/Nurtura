@@ -95,6 +95,17 @@ def main():
     milestones = csv_rows("milestones_inventory.csv")
     explore = csv_rows("exploratory_top5.csv")
     freq = csv_rows("activity_frequency_alpha_0.7.csv")
+    rater_answer = "labels by one rater (the researcher), from repo docs"
+    if (RAW / "rater_agreement.json").exists():
+        ag = load("rater_agreement.json")
+        q = ag["kappa"]["quadratic"]
+        t = ag["test_second_rater"]
+        rater_answer = (
+            f"labels by the researcher, with a second rater (registered nurse) on "
+            f"{ag['rows_both']} rows: quadratic-weighted κ {q['kappa']:.3f} "
+            f"[{q['ci_low']:.3f}, {q['ci_high']:.3f}]; on the nurse's labels test "
+            f"nDCG@5 α = 0.7 {t['alpha_0.7']:.3f} vs SBERT-only {t['sbert_only']:.3f}"
+        )
 
     answers = [
         (
@@ -124,7 +135,7 @@ def main():
         ),
         (
             "1f",
-            f"Full tune curve and per-profile test table; test nDCG@5 α = 0.7 {float(test07['nDCG@5']):.3f} vs SBERT-only {float(test_base['nDCG@5']):.3f}; labels by one rater (the researcher), from repo docs; v1 document differs by design (54 activities).",
+            f"Full tune curve and per-profile test table; test nDCG@5 α = 0.7 {float(test07['nDCG@5']):.3f} vs SBERT-only {float(test_base['nDCG@5']):.3f}; {rater_answer}; v1 document differs by design (54 activities).",
             "04",
         ),
         (
