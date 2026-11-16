@@ -115,6 +115,19 @@ if os.getenv("DB_NAME"):
             "PASSWORD": os.getenv("DB_PASSWORD", ""),
             "HOST": os.getenv("DB_HOST", "localhost"),
             "PORT": os.getenv("DB_PORT", "5432"),
+            # A bounded connection pool (#226, psycopg 3). Without it every
+            # in-flight request opened its own connection, and under load
+            # PostgreSQL's limit (100 by default) ran out and requests
+            # failed. With the pool, a request waits up to DB_POOL_TIMEOUT
+            # seconds for a free connection instead. Keep DB_POOL_MAX_SIZE
+            # times the number of server processes below max_connections.
+            "OPTIONS": {
+                "pool": {
+                    "min_size": int(os.getenv("DB_POOL_MIN_SIZE", "2")),
+                    "max_size": int(os.getenv("DB_POOL_MAX_SIZE", "20")),
+                    "timeout": float(os.getenv("DB_POOL_TIMEOUT", "30")),
+                },
+            },
         }
     }
 else:
@@ -250,6 +263,40 @@ if DEBUG:
 SBERT_MODEL_PATH = Path(
     os.getenv("SBERT_MODEL_PATH", BASE_DIR / "models" / "all-MiniLM-L6-v2")
 )
+
+# PyTorch threads per encode (#226). A query is one short sentence: 2
+# threads encode it as fast as 6, and leave cores for other requests when
+# several arrive at once. Vectors are bit-identical at 1, 2 and 6 threads.
+# 0 leaves PyTorch's default (one per physical core).
+SBERT_TORCH_THREADS = int(os.getenv("SBERT_TORCH_THREADS", "2"))
+
+# Query embeddings kept in memory (#226): a child's unchanged profile and
+# repeated Explore searches don't run SBERT again. 0 turns the cache off.
+SBERT_QUERY_CACHE_SIZE = int(os.getenv("SBERT_QUERY_CACHE_SIZE", "2048"))
+
+# Server errors from request handling go to the console (#226), so a
+# host's logs show 500 errors; with DEBUG off and no ADMINS, Django would
+# otherwise report them nowhere.
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "plain": {"format": "{asctime} {levelname} {name}: {message}", "style": "{"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "plain"},
+    },
+    "loggers": {
+        # ERROR: 500s with their traceback. 4xx answers (a wrong code, a
+        # missing page) are expected and logged as warnings, so not here.
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+    },
+    "root": {"handlers": ["console"], "level": "WARNING"},
+}
 
 # The activity classifier (#181), written by train_activity_classifier.
 ACTIVITY_CLASSIFIER_PATH = Path(

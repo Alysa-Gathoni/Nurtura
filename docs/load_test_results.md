@@ -1,6 +1,8 @@
 # Load test: the backend under concurrent caregivers
 
 > **Last updated: 2026-11-16** (#224). Every figure is from the runs on that day; the raw Locust and sampler files are in [load_test/](load_test/).
+>
+> **Fixed since:** #226 added a connection pool, fewer PyTorch threads, a query cache and error logging. The same test then ran 200 users with no errors. See [performance_under_load.md](performance_under_load.md). This page records the first run.
 
 ## Summary
 

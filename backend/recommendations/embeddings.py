@@ -6,6 +6,8 @@ Django doesn't pay for loading PyTorch.
 """
 
 import hashlib
+import threading
+from collections import OrderedDict
 
 import numpy as np
 from django.conf import settings
@@ -17,14 +19,25 @@ _encoder = None
 
 
 class SentenceTransformerEncoder:
-    """Encodes texts into L2-normalised float32 vectors."""
+    """Encodes texts into L2-normalised float32 vectors.
 
-    def __init__(self, model, name=MODEL_NAME):
+    Single-text calls (a child's profile query, an Explore search) are
+    cached, up to cache_size texts, least recently used first out (#226): a
+    child whose profile hasn't changed, or a repeated search, doesn't run
+    SBERT again. Calls with several texts (embedding activities) are never
+    cached, so batch results are exactly as before. A cached vector is the
+    same array SBERT returned for that text, copied on the way out.
+    """
+
+    def __init__(self, model, name=MODEL_NAME, cache_size=0):
         self._model = model
         self.name = name
         self.dimensions = model.get_embedding_dimension()
+        self._cache_size = cache_size
+        self._cache = OrderedDict()
+        self._lock = threading.Lock()
 
-    def encode(self, texts):
+    def _encode(self, texts):
         vectors = self._model.encode(
             list(texts),
             normalize_embeddings=True,
@@ -32,6 +45,24 @@ class SentenceTransformerEncoder:
             show_progress_bar=False,
         )
         return np.asarray(vectors, dtype=np.float32)
+
+    def encode(self, texts):
+        texts = list(texts)
+        if len(texts) != 1 or self._cache_size <= 0:
+            return self._encode(texts)
+        text = texts[0]
+        with self._lock:
+            hit = self._cache.get(text)
+            if hit is not None:
+                self._cache.move_to_end(text)
+                return hit[np.newaxis, :].copy()
+        vector = self._encode(texts)[0]
+        with self._lock:
+            self._cache[text] = vector
+            self._cache.move_to_end(text)
+            while len(self._cache) > self._cache_size:
+                self._cache.popitem(last=False)
+        return vector[np.newaxis, :].copy()
 
 
 def get_encoder():
@@ -46,7 +77,15 @@ def get_encoder():
             )
         from sentence_transformers import SentenceTransformer
 
-        _encoder = SentenceTransformerEncoder(SentenceTransformer(str(path)))
+        if settings.SBERT_TORCH_THREADS > 0:
+            import torch
+
+            # See settings.SBERT_TORCH_THREADS (#226).
+            torch.set_num_threads(settings.SBERT_TORCH_THREADS)
+        _encoder = SentenceTransformerEncoder(
+            SentenceTransformer(str(path)),
+            cache_size=settings.SBERT_QUERY_CACHE_SIZE,
+        )
     return _encoder
 
 
