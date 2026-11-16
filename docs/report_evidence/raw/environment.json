@@ -5,7 +5,7 @@
     "cores_logical": 12,
     "ram_gb": 7.4,
     "disk_c_total_gb": 476.0,
-    "disk_c_free_gb": 234.6,
+    "disk_c_free_gb": 233.6,
     "python": "3.13.15",
     "postgresql": "PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit",
     "flutter": "3.47.4",
@@ -74,8 +74,8 @@
     }
   ],
   "phone": {
-    "model": "UNKNOWN",
-    "android": "UNKNOWN",
-    "sdk": "UNKNOWN"
+    "model": "SM-A145F",
+    "android": "15",
+    "sdk": "35"
   }
 }

@@ -682,6 +682,87 @@ def deployment():
     }
 
 
+def python_audit():
+    """pip-audit (from the pack's own venv) over the backend venv's installed
+    packages, using the OSV database. Nothing is installed into the backend."""
+    tool = ROOT / "scripts" / "report_evidence" / ".venv" / "Scripts" / "pip-audit.exe"
+    if not tool.exists():
+        return (
+            "UNKNOWN: pip-audit is not installed (`pip install -r scripts\\report_evidence\\requirements-figures.txt`).",
+            [],
+        )
+    out = ROOT / "docs" / "report_evidence" / "raw" / "pip_audit.json"
+    site = BACKEND / "venv" / "Lib" / "site-packages"
+    result = subprocess.run(
+        [
+            str(tool),
+            "--path",
+            str(site),
+            "-s",
+            "osv",
+            "--timeout",
+            "90",
+            "-f",
+            "json",
+            "-o",
+            str(out),
+            "--progress-spinner",
+            "off",
+        ],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+    )
+    if not out.exists():
+        return (
+            f"UNKNOWN: pip-audit didn't finish ({result.stderr.strip().splitlines()[-1][:160] if result.stderr.strip() else 'no output'}).",
+            [],
+        )
+    data = json.loads(out.read_text(encoding="utf-8"))
+    version = subprocess.run(
+        [str(tool), "--version"], capture_output=True, text=True
+    ).stdout.strip()
+
+    def names(path):
+        return {
+            l.split("==")[0].strip().lower()
+            for l in (BACKEND / path).read_text(encoding="utf-8").splitlines()
+            if "==" in l
+        }
+
+    runtime, dev = names("requirements.txt"), names("requirements-dev.txt")
+    rows = []
+    for dep in data["dependencies"]:
+        vulns = dep.get("vulns") or []
+        if not vulns:
+            continue
+        key = dep["name"].lower()
+        ids = sorted({v["id"] for v in vulns})
+        fixes = sorted({f for v in vulns for f in (v.get("fix_versions") or [])})
+        rows.append(
+            {
+                "package": dep["name"],
+                "version": dep["version"],
+                "vulnerabilities": len(ids),
+                "ids": " ".join(ids),
+                "fixed_in": ", ".join(fixes) or "none listed",
+                "required_by": (
+                    "requirements.txt (server)"
+                    if key in runtime
+                    else (
+                        "requirements-dev.txt (development only)"
+                        if key in dev
+                        else "installed, not pinned (packaging)"
+                    )
+                ),
+            }
+        )
+    total = sum(r["vulnerabilities"] for r in rows)
+    summary = f"{version}, `pip-audit --path backend/venv/Lib/site-packages -s osv` (OSV database; nothing installed into the backend): {len(data['dependencies'])} packages, {total} known vulnerabilities in {len(rows)} packages. `raw/pip_audit.json`, `raw/pip_audit_findings.csv`. No upgrades were made: this pack changes no dependencies."
+    return summary, rows
+
+
 def main():
     django_setup()
     neg = negative_tests()
@@ -692,14 +773,11 @@ def main():
         [dict(zip(["item", "value", "where"], r)) for r in impl],
     )
 
-    import importlib.util
-
-    audit = (
-        "UNKNOWN: neither pip-audit nor safety is installed in the backend venv."
-        if not (
-            importlib.util.find_spec("pip_audit") or importlib.util.find_spec("safety")
-        )
-        else "installed; see raw/pip_audit.txt"
+    audit, audit_rows = python_audit()
+    write_csv(
+        "pip_audit_findings.csv",
+        audit_rows,
+        ["package", "version", "vulnerabilities", "ids", "fixed_in", "required_by"],
     )
     pub = subprocess.run(
         "flutter.bat pub outdated --json",
@@ -744,6 +822,9 @@ def main():
 ## 4c. Dependency audit and secret scan
 
 - **Python dependency audit:** {audit}
+
+{table(['Package', 'Version', 'Known vulnerabilities', 'Fixed in', 'Required by'], [[r['package'], r['version'], r['vulnerabilities'], r['fixed_in'], r['required_by']] for r in audit_rows]) if audit_rows else ''}
+
 - **Flutter:** {pub_summary}
 - **Git history secret scan** (every added line in every commit on every branch, `git log --all -p`; counts and paths only, no values):
 

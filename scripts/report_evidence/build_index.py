@@ -181,6 +181,21 @@ def main():
     probe = csv_rows("permission_probe.csv")
     neg = csv_rows("security_negative_tests.csv")
     secrets = load("secret_scan.json")
+    audit_rows = (
+        csv_rows("pip_audit_findings.csv")
+        if (RAW / "pip_audit_findings.csv").exists()
+        else []
+    )
+    audit_note = (
+        f"{sum(int(r['vulnerabilities']) for r in audit_rows)} known vulnerabilities in {len(audit_rows)} packages ("
+        + ", ".join(
+            f"{r['package']} {r['version']} -> {r['fixed_in'].split(',')[-1].strip()}"
+            for r in audit_rows
+        )
+        + "), none upgraded here"
+        if audit_rows
+        else "UNKNOWN"
+    )
     dep = load("deployment.json")
     ch6 = load("chapter6_summary.json")
     since = csv_rows("changes_since_sprint6.csv")
@@ -242,7 +257,9 @@ def main():
         ),
         (
             "4c",
-            "Python audit UNKNOWN (no pip-audit or safety); Flutter pub outdated listed; secret scan: "
+            "Python audit: "
+            + audit_note
+            + "; Flutter pub outdated listed; secret scan: "
             + "; ".join(
                 f"{k} {v['added_lines']}"
                 for k, v in secrets["patterns"].items()

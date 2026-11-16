@@ -1,6 +1,6 @@
 # Environment and versions
 
-> Generated 2026-11-12T21:49:30+03:00 at commit `1b4c11e` by `backend\venv\Scripts\python.exe scripts\report_evidence\environment.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-16T07:47:33+03:00 at commit `6238e1c` by `backend\venv\Scripts\python.exe scripts\report_evidence\environment.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1b. Machine
 
@@ -10,12 +10,12 @@
 | CPU | AMD Ryzen 5 5625U with Radeon Graphics | `Get-CimInstance Win32_Processor` |
 | Logical cores | 12 | `os.cpu_count()` |
 | RAM | 7.4 GB | `Get-CimInstance Win32_ComputerSystem` |
-| Disk C: | 476.0 GB total, 234.6 GB free | `shutil.disk_usage` |
+| Disk C: | 476.0 GB total, 233.6 GB free | `shutil.disk_usage` |
 | Python | 3.13.15 | backend venv |
 | PostgreSQL | PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit | `SELECT version()` |
 | Flutter | 3.47.4 | `flutter --version --machine` |
 | Dart | 3.13.3 | `flutter --version --machine` |
-| Phone | UNKNOWN, Android UNKNOWN (SDK UNKNOWN) | `adb shell getprop` |
+| Phone | SM-A145F, Android 15 (SDK 35) | `adb shell getprop` |
 
 ## Libraries
 

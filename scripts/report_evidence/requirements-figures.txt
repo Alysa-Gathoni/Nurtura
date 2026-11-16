@@ -1,2 +1,4 @@
-# Only for the figures script (make_figures.py); not an app dependency.
+# Tools for the evidence pack only (figures and the dependency audit);
+# not app dependencies.
 matplotlib==3.10.7
+pip-audit==2.10.1

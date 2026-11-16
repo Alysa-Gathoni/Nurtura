@@ -1,6 +1,6 @@
 # Security, privacy and deployment
 
-> Generated 2026-11-16T07:31:04+03:00 at commit `6adb676` by `backend\venv\Scripts\python.exe scripts\report_evidence\security_privacy.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-16T07:48:42+03:00 at commit `6238e1c` by `backend\venv\Scripts\python.exe scripts\report_evidence\security_privacy.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 4a. Negative tests
 
@@ -51,7 +51,18 @@
 
 ## 4c. Dependency audit and secret scan
 
-- **Python dependency audit:** UNKNOWN: neither pip-audit nor safety is installed in the backend venv.
+- **Python dependency audit:** pip-audit 2.10.1, `pip-audit --path backend/venv/Lib/site-packages -s osv` (OSV database; nothing installed into the backend): 75 packages, 39 known vulnerabilities in 7 packages. `raw/pip_audit.json`, `raw/pip_audit_findings.csv`. No upgrades were made: this pack changes no dependencies.
+
+| Package | Version | Known vulnerabilities | Fixed in | Required by |
+|---|---|---|---|---|
+| black | 26.5.1 | 1 | 26.10.1 | requirements-dev.txt (development only) |
+| certifi | 2026.7.22 | 1 | 2026.10.18 | requirements.txt (server) |
+| djangorestframework | 3.18.1 | 3 | 3.18.2 | requirements.txt (server) |
+| filelock | 4.0.4 | 14 | 4.0.9, 4.2.1 | requirements.txt (server) |
+| pyasn1 | 0.6.4 | 4 | 0.6.5 | requirements.txt (server) |
+| setuptools | 84.0.0 | 1 | 84.1.0 | requirements.txt (server) |
+| virtualenv | 21.13.0 | 15 | 21.14.2, 21.14.4, 21.14.7, 21.14.9 | requirements-dev.txt (development only) |
+
 - **Flutter:** 19 packages have a newer version available (`flutter pub outdated` lists only those; direct and transitive). `raw/flutter_pub_outdated.json`.
 - **Git history secret scan** (every added line in every commit on every branch, `git log --all -p`; counts and paths only, no values):
 
@@ -62,7 +73,7 @@
 | Google API key | 0 | — |  |
 | GitHub token | 0 | — |  |
 | Slack token | 0 | — |  |
-| password/secret assignment with a literal | 24 | backend/insights/test_admin_api.py, backend/profiles/test_api.py, backend/profiles/test_google_sign_in.py, backend/profiles/test_password_reset.py, backend/profiles/test_password_reset_two_step.py, backend/profiles/test_token_expiry.py, backend/profiles/test_two_factor.py, mobile/nurtura_app/test/auth_screen_test.dart, mobile/nurtura_app/test/forgot_password_test.dart, mobile/nurtura_app/test/google_sign_in_test.dart, mobile/nurtura_app/test/verify_code_screen_test.dart, scripts/report_evidence/workflow_transcript.py |  |
+| password/secret assignment with a literal | 27 | backend/insights/test_admin_api.py, backend/profiles/test_api.py, backend/profiles/test_google_sign_in.py, backend/profiles/test_password_reset.py, backend/profiles/test_password_reset_two_step.py, backend/profiles/test_token_expiry.py, backend/profiles/test_two_factor.py, mobile/nurtura_app/test/auth_screen_test.dart, mobile/nurtura_app/test/forgot_password_test.dart, mobile/nurtura_app/test/google_sign_in_test.dart, mobile/nurtura_app/test/verify_code_screen_test.dart, scripts/report_evidence/sync_chapters.py, scripts/report_evidence/workflow_transcript.py |  |
 | Django SECRET_KEY literal | 1 | backend/nurtura_backend/settings.py | only the `django-insecure-` development fallback, used when DEBUG is on; production reads SECRET_KEY from the environment (backend/nurtura_backend/settings.py:42) |
 
 `.env` files ever committed: none. Matches of the generic "password/secret assignment" pattern are candidates to review, not confirmed secrets; `raw/secret_scan.json`.
