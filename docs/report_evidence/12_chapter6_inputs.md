@@ -1,6 +1,6 @@
 # Chapter 6 inputs
 
-> Generated 2026-11-16T07:32:55+03:00 at commit `6adb676` by `backend\venv\Scripts\python.exe scripts\report_evidence\chapter6.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-16T11:47:54+03:00 at commit `87b0f45` by `backend\venv\Scripts\python.exe scripts\report_evidence\chapter6.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 5a. Open issues, TODO/FIXME and known defects
 
@@ -8,7 +8,7 @@
 
 | # | Title | Labels | Milestone | Opened |
 |---|---|---|---|---|
-| 216 | Report evidence pack for the capstone report (Chapter 5) | docs | Sprint 9: Evaluation | 2026-11-12 |
+| 220 | Evidence pack: add the second rater's agreement results | docs | Sprint 10: Documentation | 2026-11-16 |
 
 **TODO / FIXME / XXX / HACK comments** in backend, app and scripts code (`raw/todo_fixme.csv`): 0.
 
@@ -20,53 +20,54 @@ None found.
 
 ## 5b. Stated limitations
 
-49 statements (`raw/limitations.csv`): every item in `docs/known_limitations.md`, lines that say "limitation" elsewhere in the README and docs, and code comments that state a limitation.
+50 statements (`raw/limitations.csv`): every item in `docs/known_limitations.md`, lines that say "limitation" elsewhere in the README and docs, and code comments that state a limitation.
 
 | Source | Statement |
 |---|---|
 | docs/known_limitations.md:13 | Explanation reader test (5 non-technical readers) / Materials ready ([explanation_reader_test.md](explanation_reader_test.md)); not run. Until it's scored, explanation wording and the evaluated ranking stay frozen / Before Sprint 9 |
 | docs/known_limitations.md:14 | Evaluation with caregivers: relevance, personalisation, explainability, usability (SUS), satisfaction / Materials drafted ([caregiver_evaluation.md](caregiver_evaluation.md)); ethics question and sample size to confirm with the supervisor; participants still t |
-| docs/known_limitations.md:18 | **Small and constructed.** α was chosen on 11 tune children and checked on 8 test children. They are realistic but hypothetical profiles, labelled by one rater who also designed the system, with no agreement measure. The results describe these children only an |
-| docs/known_limitations.md:19 | **v2 kept α = 0.7 against the rule's choice** (#170). On 449 activities the rule fixed before labelling chose α = 1.0, but at α = 1.0 ties are broken by activity ID, which puts the first-written activities first. α = 0.7 was kept and reported (test nDCG@5 0.83 |
-| docs/known_limitations.md:20 | **Recommendations concentrate on the priority area** (#199). At α = 0.7 a top 5 covers about 1.4 of the five areas on average, by design. A child flagged in one area sees few ideas from the others in Today; Explore lets caregivers browse every area. See [eval_ |
-| docs/known_limitations.md:21 | **The age weights were never tuned** (1 / 0.7 / 0.5 / 0.25 / 0.1). The v2 sensitivity check (#196) found that softer, harsher, symmetric and reversed weights give the same top 5 for every test child, so the exact values don't drive the results. Rule priority o |
-| docs/known_limitations.md:22 | **α is a reasonable default, not an optimum.** The test set preferred the α = 0 ablation (nDCG@5 0.873 against 0.814 for α = 0.7), and the tune curve is flat from 0.4 to 1.0. |
-| docs/known_limitations.md:23 | **Only the top 5 were labelled,** so the metrics can't be extended beyond k = 5. |
-| docs/known_limitations.md:27 | **54 Published activities, 396 more awaiting review** (batch 5, #156, and batch 6, #158). Five whose source did not support them were removed in #160, including `ACT-0021`, one of the original 54. The 54 Published ones were uneven: Socio-Emotional 17, Language |
-| docs/known_limitations.md:28 | **The options after feedback follow simple rules** (#177). Each thing that went wrong maps to one rule: too hard means a lower difficulty or the age band below, no materials means an activity listing none, and so on, with ties broken by how similar the activit |
-| docs/known_limitations.md:29 | **Learning from feedback is per child and simple** (#179). After the evaluated ranking, each score moves by up to 0.25 towards activities similar to ones that went well and away from ones similar to ones that didn't work (cosine similarity of the stored embedd |
-| docs/known_limitations.md:30 | **The activity classifier only suggests** (#181). It predicts an activity's area (cross-validated accuracy 0.764) and age band (0.541; 0.862 within one band) from its text, for admin suggestions and review flags. Its labels came with the content, so agreement  |
-| docs/known_limitations.md:31 | **Skills seen during an activity are recorded as Emerging** (#185). The "Well done!" sheet offers milestones of the activity's area that are due or coming up; ticking one records it as Emerging ("sometimes"), because seeing a skill once doesn't show it is secu |
-| docs/known_limitations.md:32 | **The Nurtura observation is written from templates** (#192). The weekly card on the Milestones tab is built from the child's own records (activities tried and how they went, milestones noted, the rule engine's focus area) using fixed sentences, not a language |
-| docs/known_limitations.md:33 | **Explore's search is by meaning, not by words** (#194). A search is encoded with SBERT and compared with the activity embeddings, so it finds related activities without exact words, but an exact name isn't guaranteed to come first. "Quick" means a Beginner ac |
-| docs/known_limitations.md:34 | **The clinic-visit suggestion is simple** (#161). It appears when at least one CDC or WHO milestone the child is past the expected age for is marked "Not yet", following CDC's "one or more milestones" advice. It can't notice lost skills (CDC's other sign), "Em |
-| docs/known_limitations.md:35 | **Sensory has no guideline milestones.** The CDC and WHO checklists have no Sensory category, so Sensory priority comes only from caregiver concerns and interests. |
-| docs/known_limitations.md:36 | **108 of 133 catalogue milestones are not yet verified** against the source documents (the 6 WHO ones and 19 CDC ones used in the evaluation are). |
-| docs/known_limitations.md:37 | **English only.** A language toggle (a SOFIA suggestion, not in Chapter 4) is undecided; if it isn't built, English-only is a stated limitation. |
-| docs/known_limitations.md:41 | **Portrait only** (#214). The app is locked to portrait on Android. The screens weren't designed for landscape, and Milestones overflowed when the phone was turned. |
-| docs/known_limitations.md:42 | **Not hosted yet.** The backend runs on a laptop. The phone reaches it over USB (`adb reverse`), because campus Wi-Fi blocks devices from reaching each other. Hosting is Sprint III ([deployment_requirements.md](deployment_requirements.md)). |
-| docs/known_limitations.md:43 | **The server address is built into the app** at build time (`--dart-define=API_BASE_URL`). A new address means rebuilding the app. |
-| docs/known_limitations.md:44 | **Android debug builds only.** No signed release build yet (the app has been tested on an Android phone and in Chrome). Nurtura is an Android app by design; the iOS project was removed (#186). |
-| docs/known_limitations.md:45 | **Offline use is partial.** The last recommendations and the child list are kept on the phone and shown offline. Recording milestones, Progress, and marking done or rating need a connection, and actions taken offline aren't queued. |
-| docs/known_limitations.md:46 | **Deleting an account is immediate and final** (#134). A caregiver deletes their account, with all their children's data, from the Family tab after confirming their password (or, for an account made with Google that has no password, its email); there is no gra |
-| docs/known_limitations.md:47 | **Sessions last 30 days, then end** (#162). A log-in token stops working 30 days after it was issued, however often it is used, so a caregiver logs in again about once a month (fingerprint log-in makes that quick). There is no sliding renewal or refresh token. |
-| docs/known_limitations.md:48 | **Fingerprint log-in is per phone** (#150). Turning it on gives the phone a random key from the server, kept in the phone's secure storage and sent only after Android's own fingerprint check (the phone's PIN or pattern is accepted too). The fingerprint never r |
-| docs/known_limitations.md:49 | **The email address can't be changed** in the app. Doing it safely needs a code sent to the new address first, so nobody can take over an account by typing someone else's email. A caregiver can delete the account and register again, or ask the privacy contact  |
-| docs/known_limitations.md:50 | **Continue with Google is Android only** (#130). Chrome needs its own OAuth client and set-up. Each signing key (every laptop's debug key, and the release key) needs its SHA-1 registered, and while the consent screen is in *Testing* only listed test users (up  |
-| docs/known_limitations.md:51 | **The privacy notice gates only a child's own data** (#136). Until a caregiver agrees to the current notice, adding or changing a child and recording milestones are refused; generating ideas, marking done and rating for children who already exist are not. Acco |
-| docs/known_limitations.md:52 | **Registration says when an email is already registered,** so an address's account can be confirmed there, although the password-reset request deliberately doesn't say. |
-| docs/known_limitations.md:53 | **Sign-in codes need email.** With no internet, codes can only be read from the backend console (development). The Gmail account used for sending has a daily sending limit (about 500 messages). |
-| docs/known_limitations.md:54 | **"Active caregivers" is approximate.** Token sign-ins don't update Django's `last_login`, so the admin dashboard counts a caregiver as active if they generated ideas, recorded a milestone, or marked done or rated in the last 7 days. |
-| docs/known_limitations.md:55 | **Memory and start-up.** With the SBERT model loaded, the backend committed about 1.2 GB of memory on the development laptop. Without the warm-up, the first recommendation after a start takes about 14–15 s ([performance_recommendations.md](performance_recommen |
-| docs/known_limitations.md:56 | **The end-to-end test needs a person** to type the emailed code. It can't run unattended in CI. |
-| docs/known_limitations.md:57 | **The admin's fonts come from Google Fonts.** Offline, the admin falls back to system fonts. |
+| docs/known_limitations.md:18 | **Small and constructed.** α was chosen on 11 tune children and checked on 8 test children. They are realistic but hypothetical profiles. The results describe these children only and support no statistical claims ([sprint5_alpha_results.md](sprint5_alpha_resul |
+| docs/known_limitations.md:19 | **Two raters, one of them the designer** (#218). The v2 labels are the researcher's. A registered nurse graded all 257 rows independently and blind: quadratic-weighted κ 0.661 (95% CI 0.589–0.718), with the nurse usually one grade stricter. The main result hol |
+| docs/known_limitations.md:20 | **v2 kept α = 0.7 against the rule's choice** (#170). On 449 activities the rule fixed before labelling chose α = 1.0, but at α = 1.0 ties are broken by activity ID, which puts the first-written activities first. α = 0.7 was kept and reported (test nDCG@5 0.83 |
+| docs/known_limitations.md:21 | **Recommendations concentrate on the priority area** (#199). At α = 0.7 a top 5 covers about 1.4 of the five areas on average, by design. A child flagged in one area sees few ideas from the others in Today; Explore lets caregivers browse every area. See [eval_ |
+| docs/known_limitations.md:22 | **The age weights were never tuned** (1 / 0.7 / 0.5 / 0.25 / 0.1). The v2 sensitivity check (#196) found that softer, harsher, symmetric and reversed weights give the same top 5 for every test child, so the exact values don't drive the results. Rule priority o |
+| docs/known_limitations.md:23 | **α is a reasonable default, not an optimum.** The test set preferred the α = 0 ablation (nDCG@5 0.873 against 0.814 for α = 0.7), and the tune curve is flat from 0.4 to 1.0. |
+| docs/known_limitations.md:24 | **Only the top 5 were labelled,** so the metrics can't be extended beyond k = 5. |
+| docs/known_limitations.md:28 | **54 Published activities, 396 more awaiting review** (batch 5, #156, and batch 6, #158). Five whose source did not support them were removed in #160, including `ACT-0021`, one of the original 54. The 54 Published ones were uneven: Socio-Emotional 17, Language |
+| docs/known_limitations.md:29 | **The options after feedback follow simple rules** (#177). Each thing that went wrong maps to one rule: too hard means a lower difficulty or the age band below, no materials means an activity listing none, and so on, with ties broken by how similar the activit |
+| docs/known_limitations.md:30 | **Learning from feedback is per child and simple** (#179). After the evaluated ranking, each score moves by up to 0.25 towards activities similar to ones that went well and away from ones similar to ones that didn't work (cosine similarity of the stored embedd |
+| docs/known_limitations.md:31 | **The activity classifier only suggests** (#181). It predicts an activity's area (cross-validated accuracy 0.764) and age band (0.541; 0.862 within one band) from its text, for admin suggestions and review flags. Its labels came with the content, so agreement  |
+| docs/known_limitations.md:32 | **Skills seen during an activity are recorded as Emerging** (#185). The "Well done!" sheet offers milestones of the activity's area that are due or coming up; ticking one records it as Emerging ("sometimes"), because seeing a skill once doesn't show it is secu |
+| docs/known_limitations.md:33 | **The Nurtura observation is written from templates** (#192). The weekly card on the Milestones tab is built from the child's own records (activities tried and how they went, milestones noted, the rule engine's focus area) using fixed sentences, not a language |
+| docs/known_limitations.md:34 | **Explore's search is by meaning, not by words** (#194). A search is encoded with SBERT and compared with the activity embeddings, so it finds related activities without exact words, but an exact name isn't guaranteed to come first. "Quick" means a Beginner ac |
+| docs/known_limitations.md:35 | **The clinic-visit suggestion is simple** (#161). It appears when at least one CDC or WHO milestone the child is past the expected age for is marked "Not yet", following CDC's "one or more milestones" advice. It can't notice lost skills (CDC's other sign), "Em |
+| docs/known_limitations.md:36 | **Sensory has no guideline milestones.** The CDC and WHO checklists have no Sensory category, so Sensory priority comes only from caregiver concerns and interests. |
+| docs/known_limitations.md:37 | **108 of 133 catalogue milestones are not yet verified** against the source documents (the 6 WHO ones and 19 CDC ones used in the evaluation are). |
+| docs/known_limitations.md:38 | **English only.** A language toggle (a SOFIA suggestion, not in Chapter 4) is undecided; if it isn't built, English-only is a stated limitation. |
+| docs/known_limitations.md:42 | **Portrait only** (#214). The app is locked to portrait on Android. The screens weren't designed for landscape, and Milestones overflowed when the phone was turned. |
+| docs/known_limitations.md:43 | **Not hosted yet.** The backend runs on a laptop. The phone reaches it over USB (`adb reverse`), because campus Wi-Fi blocks devices from reaching each other. Hosting is Sprint III ([deployment_requirements.md](deployment_requirements.md)). |
+| docs/known_limitations.md:44 | **The server address is built into the app** at build time (`--dart-define=API_BASE_URL`). A new address means rebuilding the app. |
+| docs/known_limitations.md:45 | **Android debug builds only.** No signed release build yet (the app has been tested on an Android phone and in Chrome). Nurtura is an Android app by design; the iOS project was removed (#186). |
+| docs/known_limitations.md:46 | **Offline use is partial.** The last recommendations and the child list are kept on the phone and shown offline. Recording milestones, Progress, and marking done or rating need a connection, and actions taken offline aren't queued. |
+| docs/known_limitations.md:47 | **Deleting an account is immediate and final** (#134). A caregiver deletes their account, with all their children's data, from the Family tab after confirming their password (or, for an account made with Google that has no password, its email); there is no gra |
+| docs/known_limitations.md:48 | **Sessions last 30 days, then end** (#162). A log-in token stops working 30 days after it was issued, however often it is used, so a caregiver logs in again about once a month (fingerprint log-in makes that quick). There is no sliding renewal or refresh token. |
+| docs/known_limitations.md:49 | **Fingerprint log-in is per phone** (#150). Turning it on gives the phone a random key from the server, kept in the phone's secure storage and sent only after Android's own fingerprint check (the phone's PIN or pattern is accepted too). The fingerprint never r |
+| docs/known_limitations.md:50 | **The email address can't be changed** in the app. Doing it safely needs a code sent to the new address first, so nobody can take over an account by typing someone else's email. A caregiver can delete the account and register again, or ask the privacy contact  |
+| docs/known_limitations.md:51 | **Continue with Google is Android only** (#130). Chrome needs its own OAuth client and set-up. Each signing key (every laptop's debug key, and the release key) needs its SHA-1 registered, and while the consent screen is in *Testing* only listed test users (up  |
+| docs/known_limitations.md:52 | **The privacy notice gates only a child's own data** (#136). Until a caregiver agrees to the current notice, adding or changing a child and recording milestones are refused; generating ideas, marking done and rating for children who already exist are not. Acco |
+| docs/known_limitations.md:53 | **Registration says when an email is already registered,** so an address's account can be confirmed there, although the password-reset request deliberately doesn't say. |
+| docs/known_limitations.md:54 | **Sign-in codes need email.** With no internet, codes can only be read from the backend console (development). The Gmail account used for sending has a daily sending limit (about 500 messages). |
+| docs/known_limitations.md:55 | **"Active caregivers" is approximate.** Token sign-ins don't update Django's `last_login`, so the admin dashboard counts a caregiver as active if they generated ideas, recorded a milestone, or marked done or rated in the last 7 days. |
+| docs/known_limitations.md:56 | **Memory and start-up.** With the SBERT model loaded, the backend committed about 1.2 GB of memory on the development laptop. Without the warm-up, the first recommendation after a start takes about 14–15 s ([performance_recommendations.md](performance_recommen |
+| docs/known_limitations.md:57 | **The end-to-end test needs a person** to type the emailed code. It can't run unattended in CI. |
+| docs/known_limitations.md:58 | **The admin's fonts come from Google Fonts.** Offline, the admin falls back to system fonts. |
 | README.md:7 | **Where things stand:** see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) for the project in plain language, [docs/sprint_ii_review.md](docs/sprint_ii_review.md) for the current sprint status, and [docs/known_limitations.md](docs/known_limitations.md) f |
 | README.md:295 | / [docs/known_limitations.md](docs/known_limitations.md) / Known limitations and outstanding defects / |
 | docs/activity_classifier_results.md:102 | ## Limitations |
 | docs/DEVELOPMENT_PLAN.md:359 | - Language toggle if keeping NFR-16, otherwise confirm Limitations notes |
 | docs/eval_v2_beyond_accuracy.md:48 | ## Limitations |
 | docs/eval_v2_results.md:116 | ## Limitations |
-| docs/eval_v2_statistics.md:92 | ## Limitations |
+| docs/eval_v2_statistics.md:152 | ## Limitations |
 | docs/PROJECT_OVERVIEW.md:197 | - **Language toggle (a SOFIA suggestion):** build it, or record English-only as a limitation. |
 | docs/sprint5_alpha_results.md:131 | **On test, the α = 0 ablation scored higher than the chosen α**: mean nDCG@5 was 0.873 against 0.814. On tune it was the other way round (0.737 against 0.873). Rule priority helped more on the tune children than on the test children. In particular, α = 0 alrea |
 | docs/sprint5_alpha_results.md:156 | ## Limitations |

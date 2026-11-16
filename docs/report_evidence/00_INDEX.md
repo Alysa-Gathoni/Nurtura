@@ -1,6 +1,6 @@
 # Report evidence pack: index
 
-> Built 2026-11-16T07:48:42+03:00 at commit `6238e1c`. Regenerate everything with `powershell -File scripts\report_evidence\run_all.ps1` from the repository root. Each page states the command, date and commit behind it.
+> Built 2026-11-16T12:30:13+03:00 at commit `87b0f45`. Regenerate everything with `powershell -File scripts\report_evidence\run_all.ps1` from the repository root. Each page states the command, date and commit behind it.
 
 Rules followed: facts come from a command, file and line, or query named on the page; anything that couldn't be verified says UNKNOWN. The database was only read: every row the scripts needed (fictional children, recommendations, the request transcript) was created inside a transaction that was rolled back. No secrets, real emails or names: they are `<redacted>`. Data is fictional.
 
@@ -8,21 +8,21 @@ Rules followed: facts come from a command, file and line, or query named on the 
 
 | # | Answer (short) | Page |
 |---|---|---|
-| 1a | Backend 649 tests, OK, 0 skipped locally; Flutter 190 passed. Latest CI on main: success. CI skips: {'Backend (Django, postgresql)': 3, 'Backend (Django, sqlite)': 4} (SBERT model absent in CI; PostgreSQL-only row-lock test on SQLite). | 01 |
+| 1a | Backend 657 tests, OK, 0 skipped locally; Flutter 190 passed. Latest CI on main: success. CI skips: {'Backend (Django, postgresql)': 3, 'Backend (Django, sqlite)': 4} (SBERT model absent in CI; PostgreSQL-only row-lock test on SQLite). | 01 |
 | 1b | Windows 11 (10.0.26200); AMD Ryzen 5 5625U with Radeon Graphics; 7.4 GB RAM; Python 3.13.15; PostgreSQL 18.6; Flutter 3.47.4, Dart 3.13.3. pandas installed but not imported; torch only via sentence-transformers. Phone: SM-A145F (UNKNOWN if not connected). | 02 |
 | 1c | `python manage.py seed_milestones`; 25 of 133 verified; all held-out milestones listed with their flag; Published activities by area × age table. | 03 |
 | 1d | `bytea` column (`BinaryField`), NumPy dot product; FAISS, pgvector and experta are not imported anywhere; reason quoted from PR #20. | 03 |
 | 1e | α = 1.0 ranks every eligible Published activity (rank() calls retrieve(limit=None)); file and line given. | 03 |
-| 1f | Full tune curve and per-profile test table; test nDCG@5 α = 0.7 0.836 vs SBERT-only 0.582; labels by one rater (the researcher), from repo docs; v1 document differs by design (54 activities). | 04 |
-| 1g | Mean areas per top 5 at α = 0.7: 1.40; 96 distinct activities in the 20 top-5s (catalogue is 449, not 54); latency p50 63.1 ms, p95 82.5 ms, peak working set 580 MB, start-up 21.2 s. | 04, 05 |
+| 1f | Full tune curve and per-profile test table; test nDCG@5 α = 0.7 0.836 vs SBERT-only 0.582; labels by the researcher, with a second rater (registered nurse) on 257 rows: quadratic-weighted κ 0.661 [0.589, 0.718]; on the nurse's labels test nDCG@5 α = 0.7 0.737 vs SBERT-only 0.398; v1 document differs by design (54 activities). | 04 |
+| 1g | Mean areas per top 5 at α = 0.7: 1.40; 96 distinct activities in the 20 top-5s (catalogue is 449, not 54); latency p50 57.3 ms, p95 88.9 ms, peak working set 612 MB, start-up 21.0 s. | 04, 05 |
 | 1h | 22 screen files listed; offline cache = last batch per child in shared preferences; offline launch covered by widget tests; the "not a medical check" footer is not found; 16 phone screenshots in docs/evidence/e2e_2026-10-15. | 08 |
-| 1i | https://github.com/Alysa-Gathoni/Nurtura; default branch main; tags sprint5-eval-v1, sprint6-explanations-v1, sprint9-eval-v2; 107 merged PRs; 107 closed issues; per-milestone table; contributors 1. | 08 |
+| 1i | https://github.com/Alysa-Gathoni/Nurtura; default branch main; tags sprint5-eval-v1, sprint6-explanations-v1, sprint9-eval-v2; 109 merged PRs; 109 closed issues; per-milestone table; contributors 1. | 08 |
 | 1j | UNKNOWN: no reader-test responses or scorer output in the repository. | 08 |
 | 2a | Activity and milestone inventories (CSV), heatmap, samples (activity, milestone, fictional child, recommendation row), preparation steps. | 03, 09 |
 | 2b | Configuration table generated from the module constants and settings, each with file:line. | 03 |
 | 2c | Three fictional profiles: rules fired with boosts, top five with similarity, priority, age weight and score, explanation text. | 06 |
 | 2d | Five 300-dpi figures with their CSVs and computed one-line insights; grade-0 sources by area and age band. | 04, 09 |
-| 2e | Test inventory (838 tests) and requirement coverage: {'Done (with a stated deviation)': 5, 'Done': 37, 'Partial': 6, 'Done (built); evidence pending': 3}. | 01 |
+| 2e | Test inventory (846 tests) and requirement coverage: {'Done (with a stated deviation)': 5, 'Done': 37, 'Partial': 6, 'Done (built); evidence pending': 3}. | 01 |
 | 2f | Register → verify → log out → log in → privacy consent → create child → record milestone → POST and GET recommendations → completion → feedback, all in a rolled-back transaction; rows read back. | 07 |
 | 3a | 14 models, 129 fields with type, null, blank, default, choices, constraints, indexes, foreign keys and on_delete; models match the migrations; Mermaid ER and class diagrams. | 10 |
 | 3b | 42 endpoints with methods, view, permission and throttle; fictional examples from the workflow transcript. | 10 |
@@ -32,14 +32,14 @@ Rules followed: facts come from a command, file and line, or query named on the 
 | 3f | Screens, tabs, navigation edges (Mermaid), API calls per service, and loading/empty/error handling per screen file. | 10 |
 | 3g | The recommendation request in 15 steps, each with file and line. | 10 |
 | 3h | 22 differences from the requirement text or the report, each with its evidence. | 10 |
-| 3i | 65 pull requests merged since sprint6-explanations-v1. | 10 |
+| 3i | 67 pull requests merged since sprint6-explanations-v1. | 10 |
 | 4a | 20 of 20 negative tests pass. | 11 |
 | 4b | Authentication, roles, throttling, password validators, token lifetime, admin restriction, deletion, DEBUG, ALLOWED_HOSTS and secure-cookie settings with file references. | 11 |
 | 4c | Python audit: 39 known vulnerabilities in 7 packages (black 26.5.1 -> 26.10.1, certifi 2026.7.22 -> 2026.10.18, djangorestframework 3.18.1 -> 3.18.2, filelock 4.0.4 -> 4.2.1, pyasn1 0.6.4 -> 0.6.5, setuptools 84.0.0 -> 84.1.0, virtualenv 21.13.0 -> 21.14.9), none upgraded here; Flutter pub outdated listed; secret scan: password/secret assignment with a literal 27; Django SECRET_KEY literal 1; no .env ever committed. | 11 |
 | 4d | Consent recorded and enforced; no data export; cascading deletion; no soft delete. | 11 |
-| 4e | No deployment files; nothing hosted (hosting details UNKNOWN); peak working set 580.0 MB, start-up 21.2 s; release APK signed with the debug key. | 11 |
+| 4e | No deployment files; nothing hosted (hosting details UNKNOWN); peak working set 612.0 MB, start-up 21.0 s; release APK signed with the debug key. | 11 |
 | 5a | 1 open issue(s); 0 TODO/FIXME comments; known defects: none listed. | 12 |
-| 5b | 49 stated limitations with file references. | 12 |
+| 5b | 50 stated limitations with file references. | 12 |
 | 5c | 32 decisions from PR decision sections, grouped by theme, dated. | 12 |
 | 5d | Handover: run, add and publish an activity, change α or a rule, rerun the evaluation. | 12 |
 
@@ -47,18 +47,18 @@ Rules followed: facts come from a command, file and line, or query named on the 
 
 | File | Covers | Script | Generated | Commit |
 |---|---|---|---|---|
-| `01_tests_and_requirements.md` | 1a, 2e, requirement coverage | `scripts/report_evidence/tests_and_ci.py` | 2026-11-12T22:14:14+03:00 | 1b4c11e |
-| `02_environment.md` | 1b | `scripts/report_evidence/environment.py` | 2026-11-16T07:47:33+03:00 | 6238e1c |
-| `03_catalogue_dataset_config.md` | 1c, 1d, 1e, 2a, 2b | `scripts/report_evidence/catalogue_and_config.py` | 2026-11-12T21:55:30+03:00 | 1b4c11e |
-| `04_evaluation.md` | 1f, 1g (coverage, areas per top 5), 2d data | `scripts/report_evidence/evaluation.py` | 2026-11-12T21:57:21+03:00 | 1b4c11e |
-| `05_latency.md` | 1g (latency, memory, start-up) | `scripts/report_evidence/latency.py` | 2026-11-12T21:58:59+03:00 | 1b4c11e |
-| `06_explanation_examples.md` | 2c | `scripts/report_evidence/explanation_examples.py` | 2026-11-12T22:02:27+03:00 | 1b4c11e |
-| `07_workflow_transcript.md` | 2f | `scripts/report_evidence/workflow_transcript.py` | 2026-11-12T22:04:04+03:00 | 1b4c11e |
-| `08_mobile_and_repository.md` | 1h, 1i, 1j | `scripts/report_evidence/mobile_and_repo.py` | 2026-11-16T07:22:49+03:00 | 6adb676 |
-| `09_figures.md` | 2d figures, 2a heatmap | `scripts/report_evidence/make_figures.py` | 2026-11-12T22:11:08+03:00 | 1b4c11e |
-| `10_chapters_1_to_4_sync.md` | 3a-3i | `scripts/report_evidence/sync_chapters.py` | 2026-11-16T07:27:09+03:00 | 6adb676 |
-| `11_security_privacy_deployment.md` | 4a-4e | `scripts/report_evidence/security_privacy.py` | 2026-11-16T07:48:42+03:00 | 6238e1c |
-| `12_chapter6_inputs.md` | 5a-5d | `scripts/report_evidence/chapter6.py` | 2026-11-16T07:32:55+03:00 | 6adb676 |
+| `01_tests_and_requirements.md` | 1a, 2e, requirement coverage | `scripts/report_evidence/tests_and_ci.py` | 2026-11-16T11:39:02+03:00 | 87b0f45 |
+| `02_environment.md` | 1b | `scripts/report_evidence/environment.py` | 2026-11-16T12:30:12+03:00 | 87b0f45 |
+| `03_catalogue_dataset_config.md` | 1c, 1d, 1e, 2a, 2b | `scripts/report_evidence/catalogue_and_config.py` | 2026-11-16T11:41:22+03:00 | 87b0f45 |
+| `04_evaluation.md` | 1f, 1g (coverage, areas per top 5), 2d data | `scripts/report_evidence/evaluation.py` | 2026-11-16T11:41:56+03:00 | 87b0f45 |
+| `05_latency.md` | 1g (latency, memory, start-up) | `scripts/report_evidence/latency.py` | 2026-11-16T11:42:25+03:00 | 87b0f45 |
+| `06_explanation_examples.md` | 2c | `scripts/report_evidence/explanation_examples.py` | 2026-11-16T11:42:49+03:00 | 87b0f45 |
+| `07_workflow_transcript.md` | 2f | `scripts/report_evidence/workflow_transcript.py` | 2026-11-16T11:43:23+03:00 | 87b0f45 |
+| `08_mobile_and_repository.md` | 1h, 1i, 1j | `scripts/report_evidence/mobile_and_repo.py` | 2026-11-16T11:45:29+03:00 | 87b0f45 |
+| `09_figures.md` | 2d figures, 2a heatmap | `scripts/report_evidence/make_figures.py` | 2026-11-16T11:47:56+03:00 | 87b0f45 |
+| `10_chapters_1_to_4_sync.md` | 3a-3i | `scripts/report_evidence/sync_chapters.py` | 2026-11-16T11:46:08+03:00 | 87b0f45 |
+| `11_security_privacy_deployment.md` | 4a-4e | `scripts/report_evidence/security_privacy.py` | 2026-11-16T11:47:38+03:00 | 87b0f45 |
+| `12_chapter6_inputs.md` | 5a-5d | `scripts/report_evidence/chapter6.py` | 2026-11-16T11:47:54+03:00 | 87b0f45 |
 
 The commit is the one checked out when the page was generated; the scripts themselves are added by this pull request.
 
@@ -104,11 +104,14 @@ The commit is the one checked out when the page was generated; the scripts thems
 - `raw/model_tables.csv`
 - `raw/open_issues.csv`
 - `raw/per_profile_test.csv`
+- `raw/per_profile_test_by_rater.csv`
 - `raw/permission_probe.csv`
 - `raw/pip_audit.json`
 - `raw/pip_audit_findings.csv`
 - `raw/published_by_domain_age.csv`
 - `raw/rank_grade_matrix.csv`
+- `raw/rater_agreement.json`
+- `raw/rater_confusion.csv`
 - `raw/repository.json`
 - `raw/request_flow.csv`
 - `raw/requirement_coverage.csv`
@@ -134,4 +137,4 @@ The commit is the one checked out when the page was generated; the scripts thems
 ## UNKNOWN items
 
 - `08_mobile_and_repository.md:121`: Exported responses or scorer output (CSV, JSON, XLSX or TXT among them): none. **UNKNOWN**: no reader-test responses or scorer output are in the repository (the test and the caregiver sessions have no
-- `11_security_privacy_deployment.md:94`: - **Hosting:** No deployment files in the repository; docs/known_limitations.md:42 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).
+- `11_security_privacy_deployment.md:94`: - **Hosting:** No deployment files in the repository; docs/known_limitations.md:43 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).

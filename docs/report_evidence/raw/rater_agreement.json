@@ -1,0 +1,55 @@
+{
+  "rows_both": 257,
+  "children": 20,
+  "second_rater": "a registered nurse, independent of the project (role only, with their agreement)",
+  "exact": 0.622568093385214,
+  "kappa": {
+    "unweighted": {
+      "kappa": 0.41556675653499,
+      "ci_low": 0.29743498822574477,
+      "ci_high": 0.5232922935830879
+    },
+    "linear": {
+      "kappa": 0.5327358542542837,
+      "ci_low": 0.44326697290426603,
+      "ci_high": 0.6121870257275572
+    },
+    "quadratic": {
+      "kappa": 0.6608151916251297,
+      "ci_low": 0.5886006077945615,
+      "ci_high": 0.7180946778594829
+    }
+  },
+  "confusion_rows_first_cols_second": [
+    [
+      27,
+      1,
+      0
+    ],
+    [
+      39,
+      48,
+      6
+    ],
+    [
+      2,
+      49,
+      85
+    ]
+  ],
+  "test_second_rater": {
+    "alpha_0.7": 0.7368857551033152,
+    "sbert_only": 0.3978480226988542,
+    "difference": 0.339037732404461,
+    "ci": [
+      0.15637828880206173,
+      0.5323752780515442
+    ],
+    "better_tied_worse": [
+      7,
+      0,
+      1
+    ],
+    "wilcoxon_p": 0.015625
+  }
+}

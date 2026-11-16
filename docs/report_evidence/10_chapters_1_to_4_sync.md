@@ -1,6 +1,6 @@
 # Chapters 1-4 against the build
 
-> Generated 2026-11-16T07:27:09+03:00 at commit `6adb676` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-16T11:46:08+03:00 at commit `87b0f45` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 3a. Data model
 
@@ -317,7 +317,7 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 
 ## 3i. Merged since tag `sprint6-explanations-v1` (2026-10-10)
 
-65 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
+67 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
 
 | PR | Merged | Title |
 |---|---|---|
@@ -386,3 +386,5 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 | #211 | 2026-11-12 | docs: #31 hand check superseded; requirement map done (#210) |
 | #213 | 2026-11-12 | fix: admin dashboard no longer fails on feedback without a rating (#212) |
 | #215 | 2026-11-12 | fix: phone test findings (#214) |
+| #217 | 2026-11-16 | docs: report evidence pack for Chapter 5 (#216) |
+| #219 | 2026-11-16 | test: second rater's grades and weighted kappa (#218) |

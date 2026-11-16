@@ -1,6 +1,66 @@
 [
   {
     "conclusion": "success",
+    "createdAt": "2026-11-16T08:19:48Z",
+    "databaseId": 43830335867,
+    "displayTitle": "Merge pull request #219 from <redacted>/test/218-second-rater",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T07:59:41Z",
+    "databaseId": 43827741322,
+    "displayTitle": "test: second rater's grades and weighted kappa (#218)",
+    "event": "pull_request",
+    "headBranch": "test/218-second-rater",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T05:03:15Z",
+    "databaseId": 43807746605,
+    "displayTitle": "Merge pull request #217 from <redacted>/docs/report-evidence",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T04:49:14Z",
+    "databaseId": 43806357456,
+    "displayTitle": "docs: report evidence pack for Chapter 5 (#216)",
+    "event": "pull_request",
+    "headBranch": "docs/report-evidence",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T04:34:35Z",
+    "databaseId": 43804932494,
+    "displayTitle": "docs: report evidence pack for Chapter 5 (#216)",
+    "event": "pull_request",
+    "headBranch": "docs/report-evidence",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T04:11:21Z",
+    "databaseId": 43802548511,
+    "displayTitle": "docs: report evidence pack for Chapter 5 (#216)",
+    "event": "pull_request",
+    "headBranch": "docs/report-evidence",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
     "createdAt": "2026-11-12T08:06:13Z",
     "databaseId": 43180218899,
     "displayTitle": "Merge pull request #215 from <redacted>/fix/214-phone-test-findings",
@@ -1934,66 +1994,6 @@
     "createdAt": "2026-10-10T07:46:28Z",
     "databaseId": 38035576804,
     "displayTitle": "Merge pull request #47 from <redacted>/feature/46-heldout-labellin…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T07:35:28Z",
-    "databaseId": 38034946032,
-    "displayTitle": "feat: one-child-at-a-time labelling page for the held-out sheet (#46)",
-    "event": "pull_request",
-    "headBranch": "feature/46-heldout-labelling-page",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-09T16:50:13Z",
-    "databaseId": 37961965576,
-    "displayTitle": "Merge pull request #45 from <redacted>/feature/44-heldout-provenan…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-09T16:49:58Z",
-    "databaseId": 37961935646,
-    "displayTitle": "Merge pull request #43 from <redacted>/feature/37-alpha-grid-searc…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-08T16:50:29Z",
-    "databaseId": 37811921064,
-    "displayTitle": "feat: provenance sidecar and unlabelled guard for held-out evaluation (#44)",
-    "event": "pull_request",
-    "headBranch": "feature/44-heldout-provenance-guard",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-08T15:42:58Z",
-    "databaseId": 37803027143,
-    "displayTitle": "feat: held-out set and alpha grid-search harness (#37)",
-    "event": "pull_request",
-    "headBranch": "feature/37-alpha-grid-search-heldout",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-08T15:21:07Z",
-    "databaseId": 37800039357,
-    "displayTitle": "Merge pull request #42 from <redacted>/docs/31-sprint4-retrieval-s…",
     "event": "push",
     "headBranch": "main",
     "status": "completed",

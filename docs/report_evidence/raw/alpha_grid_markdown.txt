@@ -92,4 +92,4 @@ Difference (hybrid minus SBERT-only):
 | H17 | +0.000 | +0.000 | -0.333 | -0.200 | -0.313 | -0.216 | worse |
 
 ## Agreement between raters
-No rows have both relevance and relevance_rater2 filled in.
+257 rows rated by both: exact agreement 62%; agreement on relevant (>= 1) 84%; on clearly relevant (>= 2) 78%.

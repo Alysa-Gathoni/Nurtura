@@ -6,17 +6,17 @@
     "sprint6-explanations-v1 2026-10-10",
     "sprint9-eval-v2 2026-11-02"
   ],
-  "merged_prs": 107,
-  "closed_issues": 107,
-  "commits_on_main": "271",
+  "merged_prs": 109,
+  "closed_issues": 109,
+  "commits_on_main": "277",
   "ci_conclusions": {
-    "success": 246,
+    "success": 251,
     "failure": 3
   },
   "contributors": [
     {
       "login": "<redacted>",
-      "contributions": 271
+      "contributions": 277
     }
   ]
 }

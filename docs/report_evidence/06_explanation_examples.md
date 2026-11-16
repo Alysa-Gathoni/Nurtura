@@ -1,6 +1,6 @@
 # Explanation examples
 
-> Generated 2026-11-12T22:02:27+03:00 at commit `1b4c11e` by `backend\venv\Scripts\python.exe scripts\report_evidence\explanation_examples.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-16T11:42:49+03:00 at commit `87b0f45` by `backend\venv\Scripts\python.exe scripts\report_evidence\explanation_examples.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 Three fictional children (not in the evaluation), created in a rolled-back transaction. Score = age weight × ((1 − α) × normalised similarity + α × priority), α = 0.7. Raw: `raw/explanation_rules_fired.csv`, `raw/explanation_top5.csv`, `raw/explanation_profiles.json`.
 
