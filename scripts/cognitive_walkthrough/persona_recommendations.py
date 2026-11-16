@@ -1,9 +1,9 @@
-"""The system's real top 5 for each simulated caregiver persona (#222).
+"""The system's real top 5 for each walkthrough persona (#222, #228).
 
 Usage (from the repository root):
-    backend/venv/Scripts/python.exe scripts/simulated_evaluation/persona_recommendations.py
+    backend/venv/Scripts/python.exe scripts/cognitive_walkthrough/persona_recommendations.py
 
-Creates each persona's child (docs/simulated_evaluation/personas_SIMULATED.json)
+Creates each persona's child (docs/cognitive_walkthrough/personas.json)
 with its B2 milestone, generates recommendations with the app's own
 generate(), and records the top 5, each "Why this?" text and any clinic-visit
 message. Everything is created inside a transaction that is rolled back, so
@@ -36,8 +36,8 @@ from recommendations.generation import generate  # noqa: E402
 from recommendations.heldout import AVERAGE_DAYS_PER_MONTH  # noqa: E402
 from recommendations.models import Recommendation  # noqa: E402
 
-PERSONAS = ROOT / "docs" / "simulated_evaluation" / "personas_SIMULATED.json"
-OUT = ROOT / "docs" / "simulated_evaluation" / "persona_recommendations_SIMULATED.json"
+PERSONAS = ROOT / "docs" / "cognitive_walkthrough" / "personas.json"
+OUT = ROOT / "docs" / "cognitive_walkthrough" / "persona_recommendations.json"
 
 
 class Rollback(Exception):
@@ -51,7 +51,7 @@ def main():
     try:
         with transaction.atomic():
             caregiver = get_user_model().objects.create_user(
-                username="simulated-personas@nurtura.invalid"
+                username="walkthrough-personas@nurtura.invalid"
             )
             for p in personas:
                 c = p["child"]
@@ -103,7 +103,7 @@ def main():
     OUT.write_text(
         json.dumps(
             {
-                "notice": "SIMULATED personas; the recommendations and explanations are the system's real output for them.",
+                "notice": "Fictional personas; the recommendations and explanations are the system's real output for them.",
                 "generated_on": today.isoformat(),
                 "results": results,
             },
