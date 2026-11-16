@@ -8,6 +8,9 @@ with caution:
 - a two-sided Wilcoxon signed-rank test on the paired differences. Zero
   differences (ties) are dropped, as in Wilcoxon's original method, so the
   effective sample size can be smaller than the number of children.
+
+Agreement between the two raters (#218) uses Cohen's kappa, unweighted
+and weighted, with the same bootstrap over children.
 """
 
 from dataclasses import dataclass
@@ -64,6 +67,77 @@ def wilcoxon(diffs):
         return 0, None, None
     result = stats.wilcoxon(nonzero, alternative="two-sided")
     return len(nonzero), float(result.statistic), float(result.pvalue)
+
+
+GRADES = (0, 1, 2)
+KAPPA_WEIGHTS = ("unweighted", "linear", "quadratic")
+
+
+def cohen_kappa(pairs, weights="quadratic", grades=GRADES):
+    """Cohen's kappa for [(grade_a, grade_b), ...] on an ordered scale (#218).
+
+    weights: "unweighted" (any disagreement counts fully), "linear" (by the
+    distance between grades) or "quadratic" (by its square, so a 0-2
+    disagreement counts four times a 0-1). Returns None when there are no
+    pairs or the expected disagreement is zero (both raters gave one grade).
+    """
+    if weights not in KAPPA_WEIGHTS:
+        raise ValueError(f"Unknown weights {weights!r}.")
+    if not pairs:
+        return None
+    index = {g: i for i, g in enumerate(grades)}
+    k = len(grades)
+    observed = np.zeros((k, k))
+    for a, b in pairs:
+        observed[index[a], index[b]] += 1
+    observed /= observed.sum()
+    expected = np.outer(observed.sum(axis=1), observed.sum(axis=0))
+    i, j = np.indices((k, k))
+    distance = np.abs(i - j) / (k - 1)
+    w = {
+        "unweighted": (i != j).astype(float),
+        "linear": distance,
+        "quadratic": distance**2,
+    }[weights]
+    expected_disagreement = (w * expected).sum()
+    if expected_disagreement == 0:
+        return None
+    return float(1 - (w * observed).sum() / expected_disagreement)
+
+
+def kappa_bootstrap_ci(
+    pairs_by_child,
+    weights="quadratic",
+    resamples=BOOTSTRAP_RESAMPLES,
+    seed=BOOTSTRAP_SEED,
+    confidence=CONFIDENCE,
+):
+    """Percentile bootstrap interval for kappa, resampling children (#218).
+
+    pairs_by_child: {child_id: [(grade_a, grade_b), ...]}. A child's rows are
+    kept together, because grades for one child are not independent.
+    Resamples where kappa is undefined are skipped.
+    """
+    groups = [p for p in pairs_by_child.values() if p]
+    if not groups:
+        raise ValueError("No rated pairs to resample.")
+    rng = np.random.default_rng(seed)
+    values = []
+    for _ in range(resamples):
+        picks = rng.integers(0, len(groups), size=len(groups))
+        value = cohen_kappa([p for g in picks for p in groups[g]], weights)
+        if value is not None:
+            values.append(value)
+    if not values:
+        raise ValueError("Kappa is undefined in every resample.")
+    tail = (1 - confidence) / 2 * 100
+    low, high = np.percentile(values, [tail, 100 - tail])
+    return float(low), float(high)
+
+
+def confusion(pairs, grades=GRADES):
+    """[[count of (a, b)] for b in grades] for a in grades]."""
+    return [[sum(1 for p in pairs if p == (a, b)) for b in grades] for a in grades]
 
 
 def paired(a, b, **bootstrap_options):

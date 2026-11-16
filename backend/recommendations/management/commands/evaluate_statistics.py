@@ -16,6 +16,10 @@ nothing:
    weights replaced by alternatives fixed before the first run. Mean
    nDCG@5 per split, plus the top-5 activities with no label, which count
    as not relevant (so a scenario with many is scored pessimistically).
+3. Agreement between the two raters, where relevance_rater2 is filled
+   (#218): Cohen's kappa (unweighted, linear, quadratic) with a bootstrap
+   95% interval over children, the confusion matrix, and nDCG@5 of the
+   compared rankings on each rater's labels.
 
 The children are created in a transaction that is rolled back.
 """
@@ -38,7 +42,16 @@ from recommendations.evaluation import (
     ndcg_at_k,
 )
 from recommendations.retrieval import retrieve
-from recommendations.statistics import BOOTSTRAP_RESAMPLES, BOOTSTRAP_SEED, paired
+from recommendations.statistics import (
+    BOOTSTRAP_RESAMPLES,
+    BOOTSTRAP_SEED,
+    GRADES,
+    KAPPA_WEIGHTS,
+    cohen_kappa,
+    confusion,
+    kappa_bootstrap_ci,
+    paired,
+)
 
 from .evaluate_alpha_grid import DEFAULT_LABELS
 
@@ -118,6 +131,7 @@ class Command(BaseCommand):
 
         self._paired_section(alpha, rankings, split, ndcg)
         self._sensitivity_section(alpha, rankings, split, ndcg, labels)
+        self._rater_section(alpha, rankings, split, labels, base)
 
     def _rankings(self, alpha):
         """{child_id: {method or scenario name: [activity_id, ...]}}."""
@@ -269,6 +283,107 @@ class Command(BaseCommand):
                 "Unlabelled top 5 (all)",
             ],
             rows,
+        )
+
+    def _rater_section(self, alpha, rankings, split, labels, base):
+        self._heading("Agreement between raters")
+        by_child = {
+            c: [
+                (g, labels.rater2[c][a])
+                for a, g in grades.items()
+                if a in labels.rater2.get(c, {})
+            ]
+            for c, grades in labels.relevance.items()
+        }
+        pairs = [p for ps in by_child.values() for p in ps]
+        if not pairs:
+            self._line("No rows have both relevance and relevance_rater2 filled in.")
+            return
+        children = sum(1 for ps in by_child.values() if ps)
+        self._line(
+            f"{len(pairs)} rows graded by both raters ({children} children). "
+            f"Bootstrap: {BOOTSTRAP_RESAMPLES:,} resamples of children (a child's "
+            f"rows stay together), seed {BOOTSTRAP_SEED}, percentile 95% interval."
+        )
+        self._line("")
+
+        def kappa_row(w):
+            value = cohen_kappa(pairs, w)
+            if value is None:
+                return [f"Cohen's kappa, {w}", "n/a", "-"]
+            low, high = kappa_bootstrap_ci(by_child, w)
+            return [f"Cohen's kappa, {w}", f"{value:.3f}", f"[{low:.3f}, {high:.3f}]"]
+
+        self._table(
+            ["Measure", "Value", "95% CI"],
+            [kappa_row(w) for w in KAPPA_WEIGHTS]
+            + [
+                [
+                    "Exact agreement",
+                    f"{mean(a == b for a, b in pairs):.3f}",
+                    "-",
+                ]
+            ],
+        )
+        self._line("")
+        self._line("Rows: first rater (relevance); columns: second rater.")
+        self._line("")
+        self._table(
+            ["", *(f"Second {g}" for g in GRADES), "Total"],
+            [
+                [f"**First {g}**", *(str(n) for n in row), str(sum(row))]
+                for g, row in zip(GRADES, confusion(pairs))
+            ],
+        )
+
+        self._heading(f"{SELECTION_METRIC} on each rater's labels")
+        missing = sum(
+            1
+            for c, methods in rankings.items()
+            for m in base
+            for a in methods[m][:K]
+            if a not in labels.rater2.get(c, {})
+        )
+        if missing:
+            self._line(
+                f"{missing} top-{K} activities of the compared rankings have no "
+                "second-rater grade, so results on the second rater's labels "
+                "aren't reported."
+            )
+            return
+
+        def score(grades, c, m):
+            return ndcg_at_k(rankings[c][m], grades.get(c, {}), K)
+
+        raters = (("First", labels.relevance), ("Second", labels.rater2))
+        rows = []
+        for m in base:
+            row = [method_name(m)]
+            for _, grades in raters:
+                for s in ("tune", "test"):
+                    row.append(f"{mean(score(grades, c, m) for c in split[s]):.3f}")
+            rows.append(row)
+        self._table(
+            [
+                "Ranking",
+                "First, tune",
+                "First, test",
+                "Second, tune",
+                "Second, test",
+            ],
+            rows,
+        )
+        self._line("")
+        test_ids = split["test"]
+        r = paired(
+            [score(labels.rater2, c, alpha) for c in test_ids],
+            [score(labels.rater2, c, heldout.BASELINE) for c in test_ids],
+        )
+        self._line(
+            f"Second rater, test: alpha {alpha:.1f} {r.mean_a:.3f} against "
+            f"SBERT-only {r.mean_b:.3f}, difference {r.mean_diff:+.3f} "
+            f"[{r.ci_low:+.3f}, {r.ci_high:+.3f}], {r.improved}/{r.tied}/"
+            f"{r.worse} better/tied/worse, Wilcoxon p = {fmt_p(r.p_value)}."
         )
 
     def _outside_bracket(self, child_id, activity_id):
