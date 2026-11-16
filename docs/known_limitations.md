@@ -11,7 +11,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 | Item | State | Planned |
 |---|---|---|
 | Explanation reader test (5 non-technical readers) | Materials ready ([explanation_reader_test.md](explanation_reader_test.md)); not run. Until it's scored, explanation wording and the evaluated ranking stay frozen | Before Sprint 9 |
-| Evaluation with caregivers: relevance, personalisation, explainability, usability (SUS), satisfaction | Materials drafted ([caregiver_evaluation.md](caregiver_evaluation.md)); ethics question and sample size to confirm with the supervisor; participants still to recruit | Sprint 9 |
+| Evaluation with caregivers: relevance, personalisation, explainability, usability (SUS), satisfaction | Materials drafted ([caregiver_evaluation.md](caregiver_evaluation.md)) and pre-tested with simulated participants, which are not user results ([simulated_evaluation.md](simulated_evaluation.md)); ethics question and sample size to confirm with the supervisor; real participants still to recruit | Sprint 9 |
 
 ## Evaluation limits
 
@@ -54,5 +54,6 @@ None known. Every defect found so far has been fixed and is recorded with its co
 - **Sign-in codes need email.** With no internet, codes can only be read from the backend console (development). The Gmail account used for sending has a daily sending limit (about 500 messages).
 - **"Active caregivers" is approximate.** Token sign-ins don't update Django's `last_login`, so the admin dashboard counts a caregiver as active if they generated ideas, recorded a milestone, or marked done or rated in the last 7 days.
 - **Memory and start-up.** With the SBERT model loaded, the backend committed about 1.2 GB of memory on the development laptop. Without the warm-up, the first recommendation after a start takes about 14–15 s ([performance_recommendations.md](performance_recommendations.md)).
+- **Load tested on the laptop only** (#224, #226). The first run, on the development server, failed about half the requests at 200 caregivers at once, because PostgreSQL's 100 connections ran out. A connection pool, fewer PyTorch threads per request, a query-embedding cache and error logging (#226) fixed that: 200 at once then ran with no errors (p95 350 ms; generating ideas 710 ms). The figures come from one laptop, not a production server, and need repeating on the host ([load_test_results.md](load_test_results.md), [performance_under_load.md](performance_under_load.md)).
 - **The end-to-end test needs a person** to type the emailed code. It can't run unattended in CI.
 - **The admin's fonts come from Google Fonts.** Offline, the admin falls back to system fonts.

@@ -1,0 +1,495 @@
+{
+  "notice": "SIMULATED personas; the recommendations and explanations are the system's real output for them.",
+  "generated_on": "2026-11-16",
+  "results": [
+    {
+      "participant": "P01",
+      "child_age_months": 5,
+      "b2": {
+        "milestone": "CDC-04M-MO-05",
+        "status": "not_yet"
+      },
+      "top5": [
+        {
+          "position": 1,
+          "activity_id": "ACT-0325",
+          "name": "Reaching for Their Toes",
+          "area": "Motor",
+          "age_range": "3-6 months",
+          "materials": "None",
+          "why_this": "You recorded “Pushes up onto elbows or forearms when on tummy” as not yet; most children do this by 4 months. It's designed for children aged 3–6 months, your child's age group. Its aim is to help your baby build strength by reaching for their feet."
+        },
+        {
+          "position": 2,
+          "activity_id": "ACT-0126",
+          "name": "Bouncing on Your Lap",
+          "area": "Motor",
+          "age_range": "3-6 months",
+          "materials": "None",
+          "why_this": "You recorded “Pushes up onto elbows or forearms when on tummy” as not yet; most children do this by 4 months. It's designed for children aged 3–6 months, your child's age group. Its aim is to help your baby push with their legs and feel their weight on their feet."
+        },
+        {
+          "position": 3,
+          "activity_id": "ACT-0025",
+          "name": "Reaching and Kicking at Toys",
+          "area": "Motor",
+          "age_range": "3-6 months",
+          "materials": "Soft toys placed within reach",
+          "why_this": "You recorded “Pushes up onto elbows or forearms when on tummy” as not yet; most children do this by 4 months. It's designed for children aged 3–6 months, your child's age group. Its aim is to help your baby learn to coordinate their arms and legs by reaching."
+        },
+        {
+          "position": 4,
+          "activity_id": "ACT-0131",
+          "name": "Floor Time Instead of Seats",
+          "area": "Motor",
+          "age_range": "3-6 months",
+          "materials": "A clean mat or blanket",
+          "why_this": "You recorded “Pushes up onto elbows or forearms when on tummy” as not yet; most children do this by 4 months. It's designed for children aged 3–6 months, your child's age group. Its aim is to give your baby plenty of time to move freely on the floor."
+        },
+        {
+          "position": 5,
+          "activity_id": "ACT-0322",
+          "name": "Front Reach on the Tummy",
+          "area": "Motor",
+          "age_range": "3-6 months",
+          "materials": "Toys",
+          "why_this": "You recorded “Pushes up onto elbows or forearms when on tummy” as not yet; most children do this by 4 months. It's designed for children aged 3–6 months, your child's age group. Its aim is to help your baby practise reaching while on their tummy."
+        }
+      ],
+      "clinic_message": {
+        "message": "You've marked something as “Not yet” that most children do by Baby T's age. Every child grows at their own pace, and this doesn't mean something is wrong. It's worth mentioning at your next clinic visit, so a health worker can look at it with you.",
+        "source": "CDC Learn the Signs. Act Early. (2022)",
+        "milestones": [
+          {
+            "description": "Pushes up onto elbows or forearms when on tummy",
+            "domain": "Motor",
+            "expected_age_months": 4.0,
+            "source": "CDC"
+          }
+        ]
+      }
+    },
+    {
+      "participant": "P02",
+      "child_age_months": 14,
+      "b2": {
+        "milestone": "CDC-12M-MO-02",
+        "status": "achieved"
+      },
+      "top5": [
+        {
+          "position": 1,
+          "activity_id": "ACT-0382",
+          "name": "First Kicks",
+          "area": "Motor",
+          "age_range": "12-18 months",
+          "materials": "Ball",
+          "why_this": "You said you'd like support with movement. It uses balls, which you said your child enjoys. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn to kick a ball."
+        },
+        {
+          "position": 2,
+          "activity_id": "ACT-0024",
+          "name": "Balancing While Holding Hands",
+          "area": "Motor",
+          "age_range": "12-18 months",
+          "materials": "Open indoor or outdoor space",
+          "why_this": "You said you'd like support with movement. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child build balance and confidence in walking."
+        },
+        {
+          "position": 3,
+          "activity_id": "ACT-0185",
+          "name": "Cruising Along Furniture",
+          "area": "Motor",
+          "age_range": "12-18 months",
+          "materials": "Sturdy furniture at about the child's chest height",
+          "why_this": "You said you'd like support with movement. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child step sideways while holding on to furniture."
+        },
+        {
+          "position": 4,
+          "activity_id": "ACT-0182",
+          "name": "Push Toys and Empty Boxes",
+          "area": "Motor",
+          "age_range": "12-18 months",
+          "materials": "A sturdy box or push toy",
+          "why_this": "You said you'd like support with movement. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child practise walking by pushing something sturdy."
+        },
+        {
+          "position": 5,
+          "activity_id": "ACT-0380",
+          "name": "Walk and Carry",
+          "area": "Motor",
+          "age_range": "12-18 months",
+          "materials": "Light objects",
+          "why_this": "You said you'd like support with movement. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child walk steadily while carrying things."
+        }
+      ],
+      "clinic_message": null
+    },
+    {
+      "participant": "P03",
+      "child_age_months": 10,
+      "b2": {
+        "milestone": "CDC-09M-LA-01",
+        "status": "not_yet"
+      },
+      "top5": [
+        {
+          "position": 1,
+          "activity_id": "ACT-0151",
+          "name": "Repeating Sounds and Adding Words",
+          "area": "Language",
+          "age_range": "6-12 months",
+          "materials": "None",
+          "why_this": "You recorded “Makes a lot of different sounds like ‘mamamama’ and ‘babababa’” as not yet; most children do this by 9 months. You said you'd like support with language and communication. It's designed for children aged 6–12 months, your child's age group. Its aim is to help your baby move from sounds to words."
+        },
+        {
+          "position": 2,
+          "activity_id": "ACT-0030",
+          "name": "Turn-Taking Sound Games",
+          "area": "Language",
+          "age_range": "6-12 months",
+          "materials": "None",
+          "why_this": "You recorded “Makes a lot of different sounds like ‘mamamama’ and ‘babababa’” as not yet; most children do this by 9 months. You said you'd like support with language and communication. It's designed for children aged 6–12 months, your child's age group. Its aim is to help your baby learn to take turns, like in a conversation."
+        },
+        {
+          "position": 3,
+          "activity_id": "ACT-0052",
+          "name": "Waiting for Baby's Response",
+          "area": "Language",
+          "age_range": "6-12 months",
+          "materials": "None",
+          "why_this": "You recorded “Makes a lot of different sounds like ‘mamamama’ and ‘babababa’” as not yet; most children do this by 9 months. You said you'd like support with language and communication. It's designed for children aged 6–12 months, your child's age group. Its aim is to help your baby learn to have a conversation by giving them time to respond."
+        },
+        {
+          "position": 4,
+          "activity_id": "ACT-0152",
+          "name": "Waving Bye-Bye and Other Gestures",
+          "area": "Language",
+          "age_range": "6-12 months",
+          "materials": "None",
+          "why_this": "You recorded “Makes a lot of different sounds like ‘mamamama’ and ‘babababa’” as not yet; most children do this by 9 months. You said you'd like support with language and communication. It's designed for children aged 6–12 months, your child's age group. Its aim is to help your baby use gestures to communicate."
+        },
+        {
+          "position": 5,
+          "activity_id": "ACT-0347",
+          "name": "Pretend Phone Calls",
+          "area": "Language",
+          "age_range": "6-12 months",
+          "materials": "Toy phone or old phone",
+          "why_this": "You recorded “Makes a lot of different sounds like ‘mamamama’ and ‘babababa’” as not yet; most children do this by 9 months. You said you'd like support with language and communication. It's designed for children aged 6–12 months, your child's age group. Its aim is to help your baby practise listening and talking."
+        }
+      ],
+      "clinic_message": {
+        "message": "You've marked something as “Not yet” that most children do by Zawadi's age. Every child grows at their own pace, and this doesn't mean something is wrong. It's worth mentioning at your next clinic visit, so a health worker can look at it with you.",
+        "source": "CDC Learn the Signs. Act Early. (2022)",
+        "milestones": [
+          {
+            "description": "Makes a lot of different sounds like \"mamamama\" and \"babababa\"",
+            "domain": "Language",
+            "expected_age_months": 9.0,
+            "source": "CDC"
+          }
+        ]
+      }
+    },
+    {
+      "participant": "P04",
+      "child_age_months": -3,
+      "b2": null,
+      "top5": [
+        {
+          "position": 1,
+          "activity_id": "ACT-0042",
+          "name": "Sharing Hopes and Worries About the Baby",
+          "area": "Socio-Emotional",
+          "age_range": "Prenatal",
+          "materials": "None",
+          "why_this": "You said you'd like support with social and emotional development. It's an activity for parents during pregnancy. Its aim is to support your emotional wellbeing, which shapes your baby's early surroundings."
+        },
+        {
+          "position": 2,
+          "activity_id": "ACT-0039",
+          "name": "Responding Joyfully to Baby's Movements",
+          "area": "Socio-Emotional",
+          "age_range": "Prenatal",
+          "materials": "None",
+          "why_this": "You said you'd like support with social and emotional development. It's an activity for parents during pregnancy. Its aim is to help you bond with your baby and get used to noticing and answering their signals."
+        },
+        {
+          "position": 3,
+          "activity_id": "ACT-0043",
+          "name": "Daily Rest and Relaxing Routine",
+          "area": "Socio-Emotional",
+          "age_range": "Prenatal",
+          "materials": "None",
+          "why_this": "You said you'd like support with social and emotional development. It's an activity for parents during pregnancy. Its aim is to support your rest and calm, which both affect your baby's wellbeing."
+        },
+        {
+          "position": 4,
+          "activity_id": "ACT-0081",
+          "name": "Asking for Help with Household Work",
+          "area": "Socio-Emotional",
+          "age_range": "Prenatal",
+          "materials": "None",
+          "why_this": "You said you'd like support with social and emotional development. It's an activity for parents during pregnancy. Its aim is to get the support you need so you can rest and stay well."
+        },
+        {
+          "position": 5,
+          "activity_id": "ACT-0044",
+          "name": "End-of-Day Talk as a Couple or Family",
+          "area": "Socio-Emotional",
+          "age_range": "Prenatal",
+          "materials": "None",
+          "why_this": "You said you'd like support with social and emotional development. It's an activity for parents during pregnancy. Its aim is to help your family talk and support each other around your baby's arrival."
+        }
+      ],
+      "clinic_message": null
+    },
+    {
+      "participant": "P05",
+      "child_age_months": 22,
+      "b2": {
+        "milestone": "CDC-18M-LA-01",
+        "status": "not_yet"
+      },
+      "top5": [
+        {
+          "position": 1,
+          "activity_id": "ACT-0207",
+          "name": "Animal Walks and Animal Sounds",
+          "area": "Language",
+          "age_range": "18-24 months",
+          "materials": "Open space",
+          "why_this": "You recorded “Tries to say three or more words besides ‘mama’ or ‘dada’” as not yet; most children do this by 18 months. You said you'd like support with language and communication. It's designed for children aged 18–24 months, your child's age group. Its aim is to help your child learn animal names and sounds while moving."
+        },
+        {
+          "position": 2,
+          "activity_id": "ACT-0202",
+          "name": "Simple Questions About What They See",
+          "area": "Language",
+          "age_range": "18-24 months",
+          "materials": "None",
+          "why_this": "You recorded “Tries to say three or more words besides ‘mama’ or ‘dada’” as not yet; most children do this by 18 months. You said you'd like support with language and communication. It's designed for children aged 18–24 months, your child's age group. Its aim is to help your child think and answer simple questions."
+        },
+        {
+          "position": 3,
+          "activity_id": "ACT-0403",
+          "name": "Copy My Words Game",
+          "area": "Language",
+          "age_range": "18-24 months",
+          "materials": "None",
+          "why_this": "You recorded “Tries to say three or more words besides ‘mama’ or ‘dada’” as not yet; most children do this by 18 months. You said you'd like support with language and communication. It's designed for children aged 18–24 months, your child's age group. Its aim is to help your child practise saying new words."
+        },
+        {
+          "position": 4,
+          "activity_id": "ACT-0203",
+          "name": "Talking at Eye Level",
+          "area": "Language",
+          "age_range": "18-24 months",
+          "materials": "None",
+          "why_this": "You recorded “Tries to say three or more words besides ‘mama’ or ‘dada’” as not yet; most children do this by 18 months. You said you'd like support with language and communication. It's designed for children aged 18–24 months, your child's age group. Its aim is to help your child see your face and understand you when you talk."
+        },
+        {
+          "position": 5,
+          "activity_id": "ACT-0205",
+          "name": "Building Short Sentences",
+          "area": "Language",
+          "age_range": "18-24 months",
+          "materials": "None",
+          "why_this": "You recorded “Tries to say three or more words besides ‘mama’ or ‘dada’” as not yet; most children do this by 18 months. You said you'd like support with language and communication. It's designed for children aged 18–24 months, your child's age group. Its aim is to help your child put words together into short sentences."
+        }
+      ],
+      "clinic_message": {
+        "message": "You've marked something as “Not yet” that most children do by Mwana's age. Every child grows at their own pace, and this doesn't mean something is wrong. It's worth mentioning at your next clinic visit, so a health worker can look at it with you.",
+        "source": "CDC Learn the Signs. Act Early. (2022)",
+        "milestones": [
+          {
+            "description": "Tries to say three or more words besides \"mama\" or \"dada\"",
+            "domain": "Language",
+            "expected_age_months": 18.0,
+            "source": "CDC"
+          }
+        ]
+      }
+    },
+    {
+      "participant": "P06",
+      "child_age_months": 8,
+      "b2": {
+        "milestone": "CDC-06M-MO-01",
+        "status": "achieved"
+      },
+      "top5": [
+        {
+          "position": 1,
+          "activity_id": "ACT-0006",
+          "name": "Texture Exploration",
+          "area": "Sensory",
+          "age_range": "6-12 months",
+          "materials": "Safe objects with different textures, such as a soft cloth, a wooden spoon, a smooth gourd, or a clean sisal item",
+          "why_this": "You said your child enjoys water, which points us towards activities for the senses. It's designed for children aged 6–12 months, your child's age group. Its aim is to help your baby explore different textures by touch."
+        },
+        {
+          "position": 2,
+          "activity_id": "ACT-0357",
+          "name": "Backyard Touch and Talk",
+          "area": "Sensory",
+          "age_range": "6-12 months",
+          "materials": "None",
+          "why_this": "You said your child enjoys water, which points us towards activities for the senses. It's designed for children aged 6–12 months, your child's age group. Its aim is to help your baby explore new feelings, smells and sounds outside."
+        },
+        {
+          "position": 3,
+          "activity_id": "ACT-0161",
+          "name": "New Tastes and Textures at Mealtimes",
+          "area": "Sensory",
+          "age_range": "6-12 months",
+          "materials": "A variety of soft family foods",
+          "why_this": "You said your child enjoys water, which points us towards activities for the senses. It's designed for children aged 6–12 months, your child's age group. Its aim is to help your baby get used to many tastes and textures."
+        },
+        {
+          "position": 4,
+          "activity_id": "ACT-0164",
+          "name": "Noisy and Quiet Objects",
+          "area": "Sensory",
+          "age_range": "6-12 months",
+          "materials": "Safe items that crinkle, rattle or are silent",
+          "why_this": "You said your child enjoys water, which points us towards activities for the senses. It's designed for children aged 6–12 months, your child's age group. Its aim is to help your baby notice which things make noise and which are quiet."
+        },
+        {
+          "position": 5,
+          "activity_id": "ACT-0358",
+          "name": "Rain Shaker for Bath Time",
+          "area": "Sensory",
+          "age_range": "6-12 months",
+          "materials": "Plastic container with a lid; nail to punch holes",
+          "why_this": "You said your child enjoys water, which points us towards activities for the senses; this activity uses water. It's designed for children aged 6–12 months, your child's age group. Its aim is to help your baby enjoy using their senses at bath time."
+        }
+      ],
+      "clinic_message": null
+    },
+    {
+      "participant": "P07",
+      "child_age_months": 3,
+      "b2": {
+        "milestone": "CDC-02M-SE-04",
+        "status": "achieved"
+      },
+      "top5": [
+        {
+          "position": 1,
+          "activity_id": "ACT-0125",
+          "name": "Songs Every Day",
+          "area": "Language",
+          "age_range": "3-6 months",
+          "materials": "None, or music from a radio or phone",
+          "why_this": "You haven't asked for help with a particular area, so this is a general activity for your child's age. It's designed for children aged 3–6 months, your child's age group. Its aim is to fill your baby's day with songs to help their language grow."
+        },
+        {
+          "position": 2,
+          "activity_id": "ACT-0328",
+          "name": "Listening Walk",
+          "area": "Sensory",
+          "age_range": "3-6 months",
+          "materials": "None",
+          "why_this": "You haven't asked for help with a particular area, so this is a general activity for your child's age. It's designed for children aged 3–6 months, your child's age group. Its aim is to help your baby notice new sounds outdoors."
+        },
+        {
+          "position": 3,
+          "activity_id": "ACT-0325",
+          "name": "Reaching for Their Toes",
+          "area": "Motor",
+          "age_range": "3-6 months",
+          "materials": "None",
+          "why_this": "You haven't asked for help with a particular area, so this is a general activity for your child's age. It's designed for children aged 3–6 months, your child's age group. Its aim is to help your baby build strength by reaching for their feet."
+        },
+        {
+          "position": 4,
+          "activity_id": "ACT-0138",
+          "name": "Noticing What Baby Likes",
+          "area": "Socio-Emotional",
+          "age_range": "3-6 months",
+          "materials": "None",
+          "why_this": "You haven't asked for help with a particular area, so this is a general activity for your child's age. It's designed for children aged 3–6 months, your child's age group. Its aim is to learn what your baby enjoys and what they don't."
+        },
+        {
+          "position": 5,
+          "activity_id": "ACT-0121",
+          "name": "Pictures and Babbling Every Day",
+          "area": "Language",
+          "age_range": "3-6 months",
+          "materials": "Colourful pictures, a book or a magazine",
+          "why_this": "You haven't asked for help with a particular area, so this is a general activity for your child's age. It's designed for children aged 3–6 months, your child's age group. Its aim is to help your baby babble back and forth while you look at pictures."
+        }
+      ],
+      "clinic_message": null
+    },
+    {
+      "participant": "P08",
+      "child_age_months": 30,
+      "b2": {
+        "milestone": "CDC-30M-CO-04",
+        "status": "not_yet"
+      },
+      "top5": [
+        {
+          "position": 1,
+          "activity_id": "ACT-0429",
+          "name": "Free Play with Everyday Objects",
+          "area": "Cognitive",
+          "age_range": "24-36 months",
+          "materials": "Safe household items",
+          "why_this": "You recorded “Shows they know at least one colour, like pointing to a red crayon when asked” as not yet; most children do this by 30 months. You said you'd like support with thinking and problem-solving. It's designed for children aged 24–36 months, your child's age group. Its aim is to help your child explore their own ideas in free play."
+        },
+        {
+          "position": 2,
+          "activity_id": "ACT-0038",
+          "name": "Simple Puzzle and Sorting Play",
+          "area": "Cognitive",
+          "age_range": "24-36 months",
+          "materials": "A simple puzzle with shapes, colors, or animals",
+          "why_this": "You recorded “Shows they know at least one colour, like pointing to a red crayon when asked” as not yet; most children do this by 30 months. You said you'd like support with thinking and problem-solving. It's designed for children aged 24–36 months, your child's age group. Its aim is to help your child solve simple problems and recognise shapes and colours."
+        },
+        {
+          "position": 3,
+          "activity_id": "ACT-0229",
+          "name": "Working Out Small Problems",
+          "area": "Cognitive",
+          "age_range": "24-36 months",
+          "materials": "Everyday situations",
+          "why_this": "You recorded “Shows they know at least one colour, like pointing to a red crayon when asked” as not yet; most children do this by 30 months. You said you'd like support with thinking and problem-solving. It's designed for children aged 24–36 months, your child's age group. Its aim is to help your child learn to work out problems with your support."
+        },
+        {
+          "position": 4,
+          "activity_id": "ACT-0427",
+          "name": "Press It and See",
+          "area": "Cognitive",
+          "age_range": "24-36 months",
+          "materials": "Toy with buttons or levers",
+          "why_this": "You recorded “Shows they know at least one colour, like pointing to a red crayon when asked” as not yet; most children do this by 30 months. You said you'd like support with thinking and problem-solving. It's designed for children aged 24–36 months, your child's age group. Its aim is to help your child find out how actions make things happen."
+        },
+        {
+          "position": 5,
+          "activity_id": "ACT-0426",
+          "name": "What Might Happen Next?",
+          "area": "Cognitive",
+          "age_range": "24-36 months",
+          "materials": "Picture book",
+          "why_this": "You recorded “Shows they know at least one colour, like pointing to a red crayon when asked” as not yet; most children do this by 30 months. You said you'd like support with thinking and problem-solving. It's designed for children aged 24–36 months, your child's age group. Its aim is to help your child think ahead and talk about stories."
+        }
+      ],
+      "clinic_message": {
+        "message": "You've marked something as “Not yet” that most children do by Toto's age. Every child grows at their own pace, and this doesn't mean something is wrong. It's worth mentioning at your next clinic visit, so a health worker can look at it with you.",
+        "source": "CDC Learn the Signs. Act Early. (2022)",
+        "milestones": [
+          {
+            "description": "Shows they know at least one colour, like pointing to a red crayon when asked",
+            "domain": "Cognitive",
+            "expected_age_months": 30.0,
+            "source": "CDC"
+          }
+        ]
+      }
+    }
+  ]
+}

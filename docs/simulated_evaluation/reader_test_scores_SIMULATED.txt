@@ -1,0 +1,149 @@
+SIMULATED PARTICIPANTS: NOT REAL DATA (docs/simulated_evaluation.md)
+
+EXPLANATION READER TEST: AUTOMATIC MARKS FOR REVIEW (nothing is saved)
+
+Respondents: 10; valid: 10; excluded (had seen the project): 0
+Valid respondents who look after a child under 5: 9 of 10
+
+=== Card 1: 10/10 understood (100%) -> PASS (auto)
+    Main reason (answer key): The parent asked for support with social and emotional development, and it's an activity for pregnancy.
+    [understood: age, need] reader_test_A_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Mum asked for help with emotions while pregnant.
+    [understood: age, need] reader_test_A_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The mother asked for support with feelings and relationships, and this is something to do during pregnancy.
+    [understood: need] reader_test_A_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): To support the mother's emotional wellbeing.
+    [understood: age, need] reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Mother wants help with feelings when pregnant.
+    [understood: age] reader_test_A_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Pregnancy.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): She asked for social and emotional support, and it's a pregnancy activity.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The mother wants help with feelings during pregnancy.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): She wants emotional support in pregnancy.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): The mother asked for emotional support and she is expecting.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Parent chose social-emotional support; it's for pregnancy.
+
+=== Card 2: 10/10 understood (100%) -> PASS (auto)
+    Main reason (answer key): The baby isn't yet holding their head up on their tummy, which most babies do by 2 months.
+    [understood: need] reader_test_A_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Baby can't hold the head up on the tummy yet.
+    [understood: age, need] reader_test_A_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The baby isn't yet holding up the head when lying on the tummy, which most babies do by two months.
+    [understood: need] reader_test_A_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): To build neck strength for rolling and crawling.
+    [understood: need] reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Baby cannot lift head on tummy.
+    [understood: need] reader_test_A_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Baby can't lift head.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Not holding head up on tummy yet; most do by 2 months.
+    [understood: need] reader_test_B_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The baby is not yet holding the head up on the tummy.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Baby can't hold head up on tummy, most do by 2 months.
+    [understood: need] reader_test_B_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): The baby isn't holding the head up on the tummy yet.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Head not up on tummy yet; expected by 2 months.
+
+=== Card 3: 9/10 understood (90%) -> PASS (auto)
+    Main reason (answer key): The baby isn't yet smiling back, which most babies do by 2 months.
+    [understood: need] reader_test_A_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Baby is not smiling back yet.
+    [understood: age, need] reader_test_A_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The baby doesn't smile back yet when spoken to; most do by two months.
+    [NOT understood] reader_test_A_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): So the baby and parent feel close.
+    [understood: need] reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Baby does not smile yet.
+    [understood: need] reader_test_A_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Not smiling.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Not smiling when spoken to yet; expected by 2 months.
+    [understood: need] reader_test_B_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): Baby not smiling back yet.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Baby isn't smiling yet, most do by 2 months.
+    [understood: need] reader_test_B_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): The baby is not smiling back yet.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Not smiling in response yet; expected by 2 months.
+
+=== Card 4: 10/10 understood (100%) -> PASS (auto)
+    Main reason (answer key): The parent asked for sensory support, and the baby enjoys music.
+    [understood: interest, need] reader_test_A_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Parent wants sensory help and baby likes music.
+    [understood: interest, need] reader_test_A_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The parent wants help with the senses, and the baby enjoys music, so a sound activity.
+    [understood: interest] reader_test_A_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Because the baby likes music.
+    [understood: interest, need] reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Parent wants 'sensory', I don't know this word, but baby likes music.
+    [understood: interest] reader_test_A_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Likes music.
+    [understood: interest, need] reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Sensory support was asked for and the baby likes music.
+    [understood: interest, need] reader_test_B_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): They asked for senses and baby likes music.
+    [understood: interest, need] reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Parent asked for sensory and baby likes music and rattles.
+    [understood: interest, need] reader_test_B_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Sensory support was asked for and the baby enjoys music.
+    [understood: interest, need] reader_test_B_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Parent asked for sensory, baby likes music.
+
+=== Card 5: 9/10 understood (90%) -> PASS (auto)
+    Main reason (answer key): It's a general activity that suits the child's age (nothing in particular was asked for).
+    [understood: age, need] reader_test_A_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Just a general activity for a 7 month old.
+    [understood: age, need] reader_test_A_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): Nothing in particular was asked, so it is a general activity for a seven-month-old.
+    [understood: age] reader_test_A_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): It's for babies of that age.
+    [understood: age] reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): It is for the age of the baby.
+    [understood: age] reader_test_A_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): His age.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): No specific request, so a general activity for 7 months.
+    [NOT understood] reader_test_B_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): Because the baby already laughs and rolls, so this is the next thing.
+    [understood: age] reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): No problems, just right for the baby's age.
+    [understood: age] reader_test_B_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Nothing specific was asked; it suits a 7-month-old.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): General activity for the child's age; nothing asked.
+
+=== Card 6: 10/10 understood (100%) -> PASS (auto)
+    Main reason (answer key): The child isn't yet taking a few steps alone, which most children do by 15 months.
+    [understood: age, need] reader_test_A_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Child not walking alone yet at 15 months.
+    [understood: age, need] reader_test_A_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The child is not yet taking steps alone, which most children do by fifteen months.
+    [understood: need] reader_test_A_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): To help with balance when walking.
+    [understood: need] reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Child is not walking alone.
+    [understood: need] reader_test_A_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Not walking.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Not taking a few steps alone yet; most do by 15 months.
+    [understood: need] reader_test_B_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The child is not walking alone yet.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Not walking alone yet by 15 months.
+    [understood: need] reader_test_B_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): The child hasn't taken steps alone yet.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Not walking a few steps alone; expected by 15 months.
+
+=== Card 7: 10/10 understood (100%) -> PASS (auto)
+    Main reason (answer key): The child isn't yet playing with toys in a simple way, which most children do by 18 months.
+    [understood: need] reader_test_A_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): He doesn't play with toys like pushing a car yet.
+    [understood: age, need] reader_test_A_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The child isn't yet playing simply with toys, such as pushing a car, expected by 18 months.
+    [understood: need] reader_test_A_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Because the child hasn't started playing with toys like a car yet.
+    [understood: need] reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Child does not play with toys yet.
+    [understood: need] reader_test_A_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Doesn't play with toys.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Not playing with toys in a simple way; most do by 18 months.
+    [understood: need] reader_test_B_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): Not playing with toys like a car yet.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Not pushing toy cars yet; most do by 18 months.
+    [understood: need] reader_test_B_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): The child isn't playing with toys simply, like pushing a car.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Not playing simply with toys; expected by 18 months.
+
+=== Card 8: 10/10 understood (100%) -> PASS (auto)
+    Main reason (answer key): The parent asked for sensory support and the child enjoys textures, which this activity uses. It's meant for slightly younger children.
+    [understood: interest, need] reader_test_A_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Child likes textures and parent wanted sensory.
+    [understood: age, interest, need] reader_test_A_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The parent asked for help with the senses and the child enjoys textures; it is meant for younger children.
+    [understood: need] reader_test_A_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Water play is good for the senses.
+    [understood: interest] reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Child likes touching things, textures.
+    [understood: interest] reader_test_A_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Likes touching textures.
+    [understood: age, interest, need] reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Sensory support asked, child enjoys textures; activity is for 12-18 months, so may be easy.
+    [understood: interest, need] reader_test_B_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): Asked for senses, the child likes textures, water play has textures.
+    [understood: interest, need] reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Asked for sensory and child likes textures.
+    [understood: interest, need] reader_test_B_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Sensory was asked for and the child enjoys textures.
+    [understood: age, interest, need] reader_test_B_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Sensory request plus interest in textures; it's for slightly younger children.
+
+=== Card 9: 10/10 understood (100%) -> PASS (auto)
+    Main reason (answer key): The child isn't yet waving bye-bye (most do by 12 months), and saying three or more words is the next step (most do by 18 months).
+    [understood: need] reader_test_A_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Not waving bye-bye yet, and words come next.
+    [understood: need] reader_test_A_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The child isn't waving bye-bye yet, and saying more words is the next step.
+    [understood: need] reader_test_A_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): To help the child learn more words.
+    [understood: need] reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Child does not wave bye-bye.
+    [understood: need] reader_test_A_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Can't wave.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Not waving bye-bye (12 months); three words is the next thing (18 months).
+    [understood: need] reader_test_B_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): Not waving bye-bye yet.
+    [understood: need] reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Not waving yet and the next step is talking more words.
+    [understood: need] reader_test_B_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): The child isn't waving bye-bye yet.
+    [understood: need] reader_test_B_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Not waving bye-bye yet; more words come next.
+
+=== Card 10: 9/10 understood (90%) -> PASS (auto)
+    Main reason (answer key): The child isn't yet standing with help, which almost all children do by about 12 months.
+    [understood: age, need] reader_test_A_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Can't stand with help yet, most do by 12 months.
+    [understood: need] reader_test_A_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): The child cannot yet stand with help, which almost all children do by about a year.
+    [NOT understood] reader_test_A_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): To build balance and confidence.
+    [understood: need] reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Child cannot stand even with help.
+    [understood: need] reader_test_A_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Can't stand.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Not standing with assistance yet; almost all do by about 12 months.
+    [understood: need] reader_test_B_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): Not standing with help yet.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Not standing with help; almost all babies do by 12 months.
+    [understood: need] reader_test_B_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): The child cannot stand with help yet.
+    [understood: age, need] reader_test_B_SIMULATED.csv row 6 (2026/11/16 12:00:00 PM EAT): Not standing with help yet; expected by 12 months.
+
+=== Worried or confused (quoted as given)
+  Card 2, reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Q2 = Yes (tell us below); Q3 = "Most children do this by 2 months" and the baby is 2½: is she late?
+  Card 3, reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Q2 = Yes (tell us below); Q3 = "Most children do this by 2 months" makes me think my baby is behind.
+  Card 4, reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Q2 = Yes (tell us below); Q3 = I don't understand "sensory development".
+  Card 8, reader_test_A_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Q2 = Yes (tell us below); Q3 = "Your child may find it easy": then why suggest it?
+  Card 8, reader_test_A_SIMULATED.csv row 5 (2026/11/16 12:00:00 PM EAT): Q2 = Yes (tell us below); Q3 = "Sensory" again, I don't know it.
+  Card 9, reader_test_B_SIMULATED.csv row 2 (2026/11/16 12:00:00 PM EAT): Q2 = Yes (tell us below); Q3 = "Often comes next": does it mean the child is behind on words too?
+  Card 10, reader_test_A_SIMULATED.csv row 3 (2026/11/16 12:00:00 PM EAT): Q2 = Yes (tell us below); Q3 = "Almost all children do this by about 12 months" would frighten a parent.
+  Card 10, reader_test_B_SIMULATED.csv row 4 (2026/11/16 12:00:00 PM EAT): Q2 = Yes (tell us below); Q3 = "Almost all children": that sounds serious.
+
+Cards passing (auto): 10 of 10 (needs 8); valid respondents: 10 (needs 10)
+TEST PASSES on the automatic marks. Review every answer above and correct the marks before reporting.

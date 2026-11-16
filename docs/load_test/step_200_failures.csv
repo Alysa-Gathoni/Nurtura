@@ -1,0 +1,20 @@
+Method,Name,Error,Occurrences,First Seen,Last Seen
+
+GET,GET recommendations (Today),CatchResponseError(500),409,2026-11-16T10:30:08Z,2026-11-16T10:31:45Z
+
+GET,GET Explore (browse),"ConnectionRefusedError(10061, '[WinError 10061] No connection could be made because the target machine actively refused it.')",1,2026-11-16T10:30:05Z,2026-11-16T10:30:05Z
+
+GET,GET Explore (browse),HTTPError('500 Server Error: Internal Server Error for url: GET Explore (browse)'),129,2026-11-16T10:30:09Z,2026-11-16T10:31:43Z
+
+GET,GET milestone search,HTTPError('500 Server Error: Internal Server Error for url: GET milestone search'),93,2026-11-16T10:30:09Z,2026-11-16T10:31:41Z
+
+GET,"GET Explore (search, SBERT)","HTTPError('500 Server Error: Internal Server Error for url: GET Explore (search, SBERT)')",120,2026-11-16T10:30:08Z,2026-11-16T10:31:45Z
+
+PUT,PUT feedback,HTTPError('500 Server Error: Internal Server Error for url: PUT feedback'),32,2026-11-16T10:30:09Z,2026-11-16T10:31:40Z
+
+POST,POST recommendations (generate),CatchResponseError(500),323,2026-11-16T10:30:08Z,2026-11-16T10:31:45Z
+
+GET,GET options after feedback,HTTPError('500 Server Error: Internal Server Error for url: GET options after feedback'),28,2026-11-16T10:30:10Z,2026-11-16T10:31:45Z
+
+GET,GET milestone tracker,HTTPError('500 Server Error: Internal Server Error for url: GET milestone tracker'),107,2026-11-16T10:30:09Z,2026-11-16T10:31:45Z
+

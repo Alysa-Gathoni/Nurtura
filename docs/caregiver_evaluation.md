@@ -18,6 +18,8 @@ The fifth dimension, **personalisation effectiveness** (diversity, novelty and c
 
 > **Status: draft.** Confirm the two open decisions at the end with the supervisor before the first session.
 
+> **Pre-test (2026-11-16, #222):** the whole protocol, including the reader test, was run once with **simulated** participants to check the materials and find likely problems. Those results are not user results. See [simulated_evaluation.md](simulated_evaluation.md).
+
 ---
 
 ## Who takes part

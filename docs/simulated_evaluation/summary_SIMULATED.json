@@ -1,0 +1,57 @@
+{
+  "notice": "SIMULATED. Responses written for fictional personas by a large language model, following the session sheet. Not real participants; not evidence of real users' views. The activities and explanations they react to are the system's real output (persona_recommendations_SIMULATED.json). See docs/simulated_evaluation.md.",
+  "tasks": {
+    "B1": {
+      "unaided": 6,
+      "with help": 2,
+      "median_minutes": 2.0
+    },
+    "B2": {
+      "unaided": 6,
+      "with help": 1,
+      "not done": 1,
+      "median_minutes": 2.5
+    },
+    "B3": {
+      "unaided": 8,
+      "median_minutes": 0.5
+    },
+    "B4": {
+      "unaided": 8,
+      "median_minutes": 0.5
+    },
+    "B5": {
+      "unaided": 7,
+      "with help": 1,
+      "median_minutes": 1.5
+    }
+  },
+  "c1_ratings": {
+    "1": 17,
+    "2": 23
+  },
+  "c1_share_at_least_1": 1.0,
+  "c1_share_2": 0.575,
+  "c1_by_position_mean": [
+    1.625,
+    1.625,
+    1.625,
+    1.375,
+    1.625
+  ],
+  "c2_understood": 7,
+  "c2_answered": 8,
+  "reader_cards_understood_reviewed": {
+    "1": 8,
+    "2": 9,
+    "3": 9,
+    "4": 10,
+    "5": 9,
+    "6": 9,
+    "7": 10,
+    "8": 10,
+    "9": 9,
+    "10": 9
+  },
+  "reader_cards_passing_reviewed": 10
+}

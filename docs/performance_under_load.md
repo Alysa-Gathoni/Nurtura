@@ -1,6 +1,6 @@
 # Performance under load: before and after #226
 
-> **Last updated: 2026-11-16.** Both runs used the same laptop, the same Locust scenario (signed-in caregivers pausing 3–10 s between actions), a fresh scratch copy of the development database, 2-minute steps and the development server with `DEBUG` off. The method and the "before" run are in the load-test write-up (#224, `docs/load_test_results.md`). The "after" figures are in [load_test_after_226/](load_test_after_226/).
+> **Last updated: 2026-11-16.** Both runs used the same laptop, the same Locust scenario (signed-in caregivers pausing 3–10 s between actions), a fresh scratch copy of the development database, 2-minute steps and the development server with `DEBUG` off. The method and the "before" run are in [load_test_results.md](load_test_results.md) (#224). The "after" figures are in [load_test_after_226/](load_test_after_226/).
 
 ## What #226 changed
 
