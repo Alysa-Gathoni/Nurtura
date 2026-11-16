@@ -1,0 +1,3 @@
+# Load-test tools only (#224); not needed to run Nurtura.
+locust==2.47.0
+psutil==7.2.2

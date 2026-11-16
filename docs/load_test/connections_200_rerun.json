@@ -1,0 +1,1 @@
+{"max_connections": 100, "peak_connections_to_scratch_db": 96, "seconds_sampled": 100, "new_connection_errors": 4, "first_error": "connection to server at \"localhost\" (::1), port 5432 failed: FATAL:  remaining connection slots are reserved for roles with the SUPERUSER attribute"}
