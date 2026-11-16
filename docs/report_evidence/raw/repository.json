@@ -1,0 +1,22 @@
+{
+  "url": "https://github.com/Alysa-Gathoni/Nurtura",
+  "default_branch": "main",
+  "tags": [
+    "sprint5-eval-v1 2026-10-10",
+    "sprint6-explanations-v1 2026-10-10",
+    "sprint9-eval-v2 2026-11-02"
+  ],
+  "merged_prs": 107,
+  "closed_issues": 107,
+  "commits_on_main": "271",
+  "ci_conclusions": {
+    "success": 246,
+    "failure": 3
+  },
+  "contributors": [
+    {
+      "login": "<redacted>",
+      "contributions": 271
+    }
+  ]
+}

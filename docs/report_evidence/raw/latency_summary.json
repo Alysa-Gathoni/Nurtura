@@ -1,0 +1,17 @@
+{
+  "requests": 100,
+  "p50_ms": 63.1,
+  "p95_ms": 82.5,
+  "max_ms": 358.1,
+  "new_batch": {
+    "n": 20,
+    "p50_ms": 67.8
+  },
+  "identical_batch": {
+    "n": 80,
+    "p50_ms": 61.3
+  },
+  "startup_s": 21.2,
+  "peak_working_set_mb_after_model_load": 551.0,
+  "peak_working_set_mb_end": 580.0
+}

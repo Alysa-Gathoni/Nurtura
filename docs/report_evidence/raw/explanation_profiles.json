@@ -1,0 +1,62 @@
+[
+  {
+    "profile": "E1",
+    "description": "Fictional: expecting in about 3 months; caregiver wants support with language.",
+    "query": "Activities for an expecting parent during pregnancy to support language and communication: talking, babbling, first words, listening, singing and reading together.",
+    "raw_scores": {
+      "Cognitive": 1.0,
+      "Language": 6.0,
+      "Motor": 1.0,
+      "Sensory": 1.0,
+      "Socio-Emotional": 1.0
+    },
+    "priorities": {
+      "Cognitive": 0.167,
+      "Language": 1.0,
+      "Motor": 0.167,
+      "Sensory": 0.167,
+      "Socio-Emotional": 0.167
+    },
+    "eligible_activities": 60
+  },
+  {
+    "profile": "E2",
+    "description": "Fictional: 13 months; \"Waves bye-bye\" (CDC, by 12 months) recorded as Not yet.",
+    "query": "Activities for a 13-month-old toddler to support language and communication: talking, babbling, first words, listening, singing and reading together. Still working on: Waves \"bye-bye\".",
+    "raw_scores": {
+      "Cognitive": 1.0,
+      "Language": 11.0,
+      "Motor": 1.0,
+      "Sensory": 1.0,
+      "Socio-Emotional": 1.0
+    },
+    "priorities": {
+      "Cognitive": 0.091,
+      "Language": 1.0,
+      "Motor": 0.091,
+      "Sensory": 0.091,
+      "Socio-Emotional": 0.091
+    },
+    "eligible_activities": 389
+  },
+  {
+    "profile": "E3",
+    "description": "Fictional: 8 months; enjoys water, sand and different textures; no concerns.",
+    "query": "Activities for a 8-month-old baby to support the senses: touch and textures, sounds and music, sights, and calming sensory play. Enjoys water, sand, textures.",
+    "raw_scores": {
+      "Cognitive": 1.0,
+      "Language": 1.0,
+      "Motor": 1.0,
+      "Sensory": 7.0,
+      "Socio-Emotional": 1.0
+    },
+    "priorities": {
+      "Cognitive": 0.143,
+      "Language": 0.143,
+      "Motor": 0.143,
+      "Sensory": 1.0,
+      "Socio-Emotional": 0.143
+    },
+    "eligible_activities": 389
+  }
+]

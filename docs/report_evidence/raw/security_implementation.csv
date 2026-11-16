@@ -1,0 +1,16 @@
+item,value,where
+Authentication,"ExpiringTokenAuthentication, SessionAuthentication",backend/nurtura_backend/settings.py:219
+Token lifecycle,"expires after 30 days, 0:00:00; two-step email code at login",backend/nurtura_backend/settings.py:213; backend/profiles/authentication.py:36; backend/profiles/two_factor.py
+Default permission,IsAuthenticated,backend/nurtura_backend/settings.py:225
+Roles,"IsCaregiver, IsAdministrator, HasPrivacyConsent",backend/profiles/permissions.py:6
+Throttling,"{'login': '5/minute', 'two_factor': '10/minute', 'password_reset': '5/minute', 'account_delete': '5/minute'}",backend/nurtura_backend/settings.py:229
+Password validators,"UserAttributeSimilarityValidator, MinimumLengthValidator, CommonPasswordValidator, NumericPasswordValidator",backend/nurtura_backend/settings.py:135
+Admin restriction,is_staff follows the Administrator role; admin site needs an active staff user,backend/profiles/models.py:71
+Deletion rules,account deletion confirms with password (or email for Google accounts); child data cascades,backend/profiles/views.py:363; see 4d
+DEBUG,default False unless DEBUG env is 1/true/yes (this run: True),backend/nurtura_backend/settings.py:33
+ALLOWED_HOSTS,"from env, default localhost,127.0.0.1 (this run: ['localhost', '127.0.0.1', '10.24.114.180'])",backend/nurtura_backend/settings.py:44
+SESSION_COOKIE_SECURE,False,backend/nurtura_backend/settings.py (not set: Django default)
+CSRF_COOKIE_SECURE,False,backend/nurtura_backend/settings.py (not set: Django default)
+SECURE_SSL_REDIRECT,False,backend/nurtura_backend/settings.py (not set: Django default)
+SECURE_HSTS_SECONDS,0,backend/nurtura_backend/settings.py (not set: Django default)
+DATA_UPLOAD_MAX_MEMORY_SIZE,2621440,backend/nurtura_backend/settings.py (not set: Django default)

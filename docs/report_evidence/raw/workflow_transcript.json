@@ -1,0 +1,530 @@
+[
+  {
+    "step": "Register",
+    "request": "POST /api/auth/register/",
+    "body": {
+      "username": "<redacted>",
+      "email": "<redacted>",
+      "password": "<redacted>",
+      "device_id": "<redacted>"
+    },
+    "status": 201,
+    "response": {
+      "two_factor_required": true,
+      "challenge": "<redacted>",
+      "email_hint": "f***@nurtura.invalid",
+      "expires_in": 600,
+      "resend_after": 30,
+      "user": {
+        "id": 127,
+        "username": "<redacted>",
+        "email": "<redacted>",
+        "first_name": "",
+        "last_name": "",
+        "role": "caregiver",
+        "privacy_consent_required": true,
+        "privacy_agreed_at": null,
+        "has_password": true
+      }
+    }
+  },
+  {
+    "step": "Verify the emailed code (register)",
+    "request": "POST /api/auth/login/verify/",
+    "body": {
+      "challenge": "<redacted>",
+      "code": "<redacted>",
+      "device_id": "<redacted>"
+    },
+    "status": 200,
+    "response": {
+      "token": "<redacted>",
+      "user": {
+        "id": 127,
+        "username": "<redacted>",
+        "email": "<redacted>",
+        "first_name": "",
+        "last_name": "",
+        "role": "caregiver",
+        "privacy_consent_required": true,
+        "privacy_agreed_at": null,
+        "has_password": true
+      },
+      "device_trusted_until": "2026-12-12T19:03:42.954189+00:00"
+    }
+  },
+  {
+    "step": "Log out",
+    "request": "POST /api/auth/logout/",
+    "body": null,
+    "status": 204,
+    "response": null
+  },
+  {
+    "step": "Log in",
+    "request": "POST /api/auth/login/",
+    "body": {
+      "username": "<redacted>",
+      "password": "<redacted>",
+      "device_id": "<redacted>"
+    },
+    "status": 200,
+    "response": {
+      "token": "<redacted>",
+      "user": {
+        "id": 127,
+        "username": "<redacted>",
+        "email": "<redacted>",
+        "first_name": "",
+        "last_name": "",
+        "role": "caregiver",
+        "privacy_consent_required": true,
+        "privacy_agreed_at": null,
+        "has_password": true
+      },
+      "device_trusted_until": null
+    }
+  },
+  {
+    "step": "Read the privacy notice",
+    "request": "GET /api/privacy-notice/",
+    "body": null,
+    "status": 200,
+    "response": {
+      "version": "2026-10-26",
+      "title": "How Nurtura uses your information",
+      "sections": [
+        {
+          "heading": "About Nurtura",
+          "body": "Nurtura is a student project at Strathmore University. It suggests everyday activities to support a young child's development, from pregnancy to 3 years. It gives ideas, not medical advice: it doesn't diagnose anything or replace a health worker."
+        },
+        {
+          "heading": "What we keep",
+          "body": "Your account: your email address, your password (stored only in a scrambled form that can't be read back) and whether you're a caregiver. If you sign in with Google, only your email is kept. For each child: the name you give (a nickname is fine), their date of birth or due date, their interests and the areas you'd like support with. Also the milestones you record, the activities suggested and why, and whether you marked them done, with any rating or comment. For signing in: one-time codes and the phones you chose to trust, stored only in scrambled form."
+        },
+        {
+          "heading": "Why we keep it",
+          "body": "Only to suggest activities that fit your child, explain why each one was suggested and show your child's progress. Ratings and comments help us see which activities work. We don't sell your information, show adverts or use it for anything else."
+        },
+        {
+          "heading": "Who can see it",
+          "body": "You. Nurtura's administrators can read ratings and comments to review activities, but without your child's name or your email. Sign-in codes reach you through an email service."
+        },
+        {
+          "heading": "On your phone",
+          "body": "So the app works offline, it keeps your children's list and their latest suggestions on your phone. They are removed when you log out or delete your account."
+        },
+        {
+          "heading": "How long we keep it",
+          "body": "Until you delete it. You can delete a child's profile, or your whole account, at any time from the Family tab. Deleting is immediate and can't be undone: everything linked to that child or account is removed."
+        },
+        {
+          "heading": "Your child's information",
+          "body": "Only add a child if you are their parent or guardian, or their parent or guardian has agreed. You can use a nickname instead of their real name."
+        },
+        {
+          "heading": "Your rights",
+          "body": "Under Kenya's Data Protection Act, 2019, you can ask what we hold about you, correct it (you can edit a child's profile in the app), have it deleted, and withdraw your agreement at any time by deleting your account. If you're unhappy with how your information is handled, you can complain to the Office of the Data Protection Commissioner (www.odpc.go.ke)."
+        },
+        {
+          "heading": "Changes and questions",
+          "body": "If this notice changes, the app will ask you to read and agree to the new version. For questions or requests, contact <redacted>."
+        }
+      ]
+    }
+  },
+  {
+    "step": "Agree to the privacy notice",
+    "request": "POST /api/auth/privacy-consent/",
+    "body": {
+      "version": "2026-10-26"
+    },
+    "status": 200,
+    "response": {
+      "id": 127,
+      "username": "<redacted>",
+      "email": "<redacted>",
+      "first_name": "",
+      "last_name": "",
+      "role": "caregiver",
+      "privacy_consent_required": false,
+      "privacy_agreed_at": "2026-11-12T19:03:43.852595Z",
+      "has_password": true
+    }
+  },
+  {
+    "step": "Create a child (about 13 months)",
+    "request": "POST /api/children/",
+    "body": {
+      "name": "Fictional Child",
+      "date_of_birth": "2025-10-12",
+      "interests": [
+        "water"
+      ],
+      "concerns": [
+        "Language"
+      ]
+    },
+    "status": 201,
+    "response": {
+      "id": 1167,
+      "name": "Fictional Child",
+      "date_of_birth": "2025-10-12",
+      "gender": "unspecified",
+      "interests": [
+        "water"
+      ],
+      "preferences": {},
+      "concerns": [
+        "Language"
+      ],
+      "created_at": "2026-11-12T19:03:43.865781Z",
+      "updated_at": "2026-11-12T19:03:43.865796Z"
+    }
+  },
+  {
+    "step": "Record \"Waves bye-bye\" as Not yet",
+    "request": "POST /api/children/1167/milestones/",
+    "body": {
+      "reference": 184,
+      "status": "not_yet"
+    },
+    "status": 201,
+    "response": {
+      "milestone": {
+        "id": 1220,
+        "reference": 184,
+        "reference_key": "CDC-12M-LA-01",
+        "domain": "Language",
+        "description": "Waves \"bye-bye\"",
+        "status": "not_yet",
+        "observation_date": "2026-11-12",
+        "created_at": "2026-11-12T19:03:43.913202Z"
+      },
+      "profile": {
+        "age_months": 13.0,
+        "scores": {
+          "Cognitive": 0.062,
+          "Language": 1.0,
+          "Motor": 0.062,
+          "Sensory": 0.188,
+          "Socio-Emotional": 0.062
+        },
+        "ranked_domains": [
+          "Language",
+          "Sensory",
+          "Cognitive",
+          "Motor",
+          "Socio-Emotional"
+        ],
+        "reasons": [
+          {
+            "rule": "due-milestone-not-yet",
+            "source": "CDC 2022 checklist / WHO 2006 motor windows (expected age); ASQ-3 scoring convention (Not yet = 0 of 10 points)",
+            "adjustments": {
+              "Language": 10.0
+            },
+            "reason": "Not yet: “Waves \"bye-bye\"” — most children do this by 12 months (CDC)."
+          },
+          {
+            "rule": "caregiver-concern",
+            "source": "Caregiver-reported concern",
+            "adjustments": {
+              "Language": 5.0
+            },
+            "reason": "You told us you'd like support with Language development."
+          },
+          {
+            "rule": "sensory-interest",
+            "source": "Caregiver-reported interest",
+            "adjustments": {
+              "Sensory": 2.0
+            },
+            "reason": "Enjoys “water”, which sensory activities build on."
+          }
+        ],
+        "generated_at": "2026-11-12T19:03:43.918550Z"
+      }
+    }
+  },
+  {
+    "step": "Generate recommendations",
+    "request": "POST /api/children/1167/recommendations/",
+    "body": {},
+    "status": 201,
+    "response": {
+      "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+      "generated_at": "2026-11-12T19:04:04.205437+00:00",
+      "recommendations": [
+        {
+          "id": 1342,
+          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "position": 1,
+          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "activity_id": "ACT-0176",
+          "activity_name": "Building on Baby's Words",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and…",
+          "description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and smile to show you understood them.",
+          "materials": "None",
+          "cultural_relevance": "Works in any language spoken at home.",
+          "source": "CDC",
+          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn new words by building on the ones they say.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1343,
+          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "position": 2,
+          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "activity_id": "ACT-0179",
+          "activity_name": "Songs About Daily Routines",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "Talk through daily routines as you do them and make up short songs about them: a washing-hands song, a getting-dressed song. Use the same songs every day so…",
+          "description": "Talk through daily routines as you do them and make up short songs about them: a washing-hands song, a getting-dressed song. Use the same songs every day so the child learns the words.",
+          "materials": "None",
+          "cultural_relevance": "Make up songs in Kiswahili or the mother tongue to familiar tunes.",
+          "source": "CDC",
+          "source_url": "https://www.cdc.gov/act-early/milestones/1-year.html",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn words for the things you do every day.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1344,
+          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "position": 3,
+          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "activity_id": "ACT-0180",
+          "activity_name": "Talking Through a Soft Toy",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "Hold a soft toy and pretend it is talking to the child: 'Hello! What are you eating?' Give the child their own toy and see if they talk back or copy you. Keep…",
+          "description": "Hold a soft toy and pretend it is talking to the child: 'Hello! What are you eating?' Give the child their own toy and see if they talk back or copy you. Keep the voices playful.",
+          "materials": "A soft toy or doll",
+          "cultural_relevance": "A homemade cloth doll works as well as a bought one.",
+          "source": "CDC",
+          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to invite your child to talk and pretend with a soft toy.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1345,
+          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "position": 4,
+          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "activity_id": "ACT-0375",
+          "activity_name": "Real Words, Simple Directions",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "Speak to the child simply using real words rather than baby talk. Give short directions like 'Roll the ball' and show them what you mean.",
+          "description": "Speak to the child simply using real words rather than baby talk. Give short directions like 'Roll the ball' and show them what you mean.",
+          "materials": "Ball",
+          "cultural_relevance": "Use clear words in your home language.",
+          "source": "Pathways.org",
+          "source_url": "https://www.pathways.org/activities/simple-directions",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child understand short, simple instructions.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1346,
+          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "position": 5,
+          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "activity_id": "ACT-0177",
+          "activity_name": "Pointing, Naming and Waiting",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "When the child points to something, name it, then wait a few seconds to see if they make a sound. Whatever sound they make, respond warmly and say the name…",
+          "description": "When the child points to something, name it, then wait a few seconds to see if they make a sound. Whatever sound they make, respond warmly and say the name again.",
+          "materials": "None",
+          "cultural_relevance": "A good habit for every carer, from parents to grandparents.",
+          "source": "CDC",
+          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child try to say the names of things they point to.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        }
+      ],
+      "referral": {
+        "message": "You've marked something as “Not yet” that most children do by Fictional Child's age. Every child grows at their own pace, and this doesn't mean something is wrong. It's worth mentioning at your next clinic visit, so a health worker can look at it with you.",
+        "source": "CDC Learn the Signs. Act Early. (2022)",
+        "milestones": [
+          {
+            "description": "Waves \"bye-bye\"",
+            "domain": "Language",
+            "expected_age_months": 12.0,
+            "source": "CDC"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "Read the stored batch",
+    "request": "GET /api/children/1167/recommendations/",
+    "body": null,
+    "status": 200,
+    "response": {
+      "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+      "generated_at": "2026-11-12T19:04:04.205437+00:00",
+      "recommendations": [
+        {
+          "id": 1342,
+          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "position": 1,
+          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "activity_id": "ACT-0176",
+          "activity_name": "Building on Baby's Words",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and…",
+          "description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and smile to show you understood them.",
+          "materials": "None",
+          "cultural_relevance": "Works in any language spoken at home.",
+          "source": "CDC",
+          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn new words by building on the ones they say.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1343,
+          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "position": 2,
+          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "activity_id": "ACT-0179",
+          "activity_name": "Songs About Daily Routines",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "Talk through daily routines as you do them and make up short songs about them: a washing-hands song, a getting-dressed song. Use the same songs every day so…",
+          "description": "Talk through daily routines as you do them and make up short songs about them: a washing-hands song, a getting-dressed song. Use the same songs every day so the child learns the words.",
+          "materials": "None",
+          "cultural_relevance": "Make up songs in Kiswahili or the mother tongue to familiar tunes.",
+          "source": "CDC",
+          "source_url": "https://www.cdc.gov/act-early/milestones/1-year.html",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn words for the things you do every day.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1344,
+          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "position": 3,
+          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "activity_id": "ACT-0180",
+          "activity_name": "Talking Through a Soft Toy",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "Hold a soft toy and pretend it is talking to the child: 'Hello! What are you eating?' Give the child their own toy and see if they talk back or copy you. Keep…",
+          "description": "Hold a soft toy and pretend it is talking to the child: 'Hello! What are you eating?' Give the child their own toy and see if they talk back or copy you. Keep the voices playful.",
+          "materials": "A soft toy or doll",
+          "cultural_relevance": "A homemade cloth doll works as well as a bought one.",
+          "source": "CDC",
+          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to invite your child to talk and pretend with a soft toy.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1345,
+          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "position": 4,
+          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "activity_id": "ACT-0375",
+          "activity_name": "Real Words, Simple Directions",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "Speak to the child simply using real words rather than baby talk. Give short directions like 'Roll the ball' and show them what you mean.",
+          "description": "Speak to the child simply using real words rather than baby talk. Give short directions like 'Roll the ball' and show them what you mean.",
+          "materials": "Ball",
+          "cultural_relevance": "Use clear words in your home language.",
+          "source": "Pathways.org",
+          "source_url": "https://www.pathways.org/activities/simple-directions",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child understand short, simple instructions.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1346,
+          "batch": "33b10ed5-a75b-4f2e-af71-7a1b3014cfa6",
+          "position": 5,
+          "generated_at": "2026-11-12T19:04:04.205437+00:00",
+          "activity_id": "ACT-0177",
+          "activity_name": "Pointing, Naming and Waiting",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "When the child points to something, name it, then wait a few seconds to see if they make a sound. Whatever sound they make, respond warmly and say the name…",
+          "description": "When the child points to something, name it, then wait a few seconds to see if they make a sound. Whatever sound they make, respond warmly and say the name again.",
+          "materials": "None",
+          "cultural_relevance": "A good habit for every carer, from parents to grandparents.",
+          "source": "CDC",
+          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child try to say the names of things they point to.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        }
+      ],
+      "referral": {
+        "message": "You've marked something as “Not yet” that most children do by Fictional Child's age. Every child grows at their own pace, and this doesn't mean something is wrong. It's worth mentioning at your next clinic visit, so a health worker can look at it with you.",
+        "source": "CDC Learn the Signs. Act Early. (2022)",
+        "milestones": [
+          {
+            "description": "Waves \"bye-bye\"",
+            "domain": "Language",
+            "expected_age_months": 12.0,
+            "source": "CDC"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "Mark the first idea done",
+    "request": "PUT /api/recommendations/1342/completion/",
+    "body": {
+      "status": "completed"
+    },
+    "status": 201,
+    "response": {
+      "status": "completed",
+      "completion_date": "2026-11-12"
+    }
+  },
+  {
+    "step": "Give feedback",
+    "request": "PUT /api/recommendations/1342/feedback/",
+    "body": {
+      "outcome": "went_well",
+      "interest": "loved_it",
+      "rating": 5,
+      "comment": "Fictional note"
+    },
+    "status": 201,
+    "response": {
+      "rating": 5,
+      "comment": "Fictional note",
+      "outcome": "went_well",
+      "issues": [],
+      "interest": "loved_it",
+      "date_submitted": "2026-11-12T19:04:04.271938+00:00",
+      "recorded": []
+    }
+  }
+]

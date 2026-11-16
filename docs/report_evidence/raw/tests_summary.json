@@ -1,0 +1,24 @@
+{
+  "backend": {
+    "ran": 649,
+    "seconds": 538.17,
+    "verdict": "OK",
+    "counted": {
+      "ok": 3
+    },
+    "skipped": [],
+    "exit_code": 0
+  },
+  "flutter": {
+    "results": {
+      "success": 190
+    },
+    "skipped": [],
+    "total": 190,
+    "exit_code": 0
+  },
+  "ci_conclusions": {
+    "success": 198,
+    "failure": 2
+  }
+}

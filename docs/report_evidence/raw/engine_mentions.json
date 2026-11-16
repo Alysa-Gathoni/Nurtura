@@ -1,0 +1,11 @@
+{
+  "faiss": [
+    "docs/requirements_traceability.md:145: - **DR-09 and Section 3.2.2:** vectors stored in PostgreSQL, not FAISS."
+  ],
+  "pgvector": [],
+  "experta": [
+    "docs/DEVELOPMENT_PLAN.md:156: - Rule engine implementation (`experta`, or your documented custom IF-THEN",
+    "docs/requirements_traceability.md:50: | FR-05 | Developmental profile generation | Custom IF-THEN rule engine, `profiles/rules/`; `DevelopmentalProfile` with 0–1 priority per area | `profiles/test_r",
+    "docs/requirements_traceability.md:139: - **FR-05:** a custom IF-THEN engine (not experta)."
+  ]
+}

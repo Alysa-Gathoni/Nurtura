@@ -1,0 +1,21 @@
+ranking,child,split,rank,activity_id,domain,age_range,age_band_vs_child
+alpha 0.7,H08,tune,3,ACT-0355,Motor,6-12 months,same band
+alpha 0.7,H08,tune,5,ACT-0354,Motor,6-12 months,same band
+alpha 0.7,H09,tune,1,ACT-0048,Socio-Emotional,6-12 months,same band
+alpha 0.7,H12,tune,3,ACT-0373,Cognitive,12-18 months,same band
+SBERT-only,H03,test,1,ACT-0325,Motor,3-6 months,+1 band(s)
+SBERT-only,H03,test,5,ACT-0355,Motor,6-12 months,+2 band(s)
+SBERT-only,H04,test,2,ACT-0048,Socio-Emotional,6-12 months,+2 band(s)
+SBERT-only,H06,tune,1,ACT-0429,Cognitive,24-36 months,+4 band(s)
+SBERT-only,H06,tune,2,ACT-0400,Cognitive,18-24 months,+3 band(s)
+SBERT-only,H06,tune,4,ACT-0202,Language,18-24 months,+3 band(s)
+SBERT-only,H08,tune,5,ACT-0034,Motor,18-24 months,+2 band(s)
+SBERT-only,H09,tune,2,ACT-0048,Socio-Emotional,6-12 months,same band
+SBERT-only,H12,tune,2,ACT-0400,Cognitive,18-24 months,+1 band(s)
+SBERT-only,H12,tune,3,ACT-0440,Motor,24-36 months,+2 band(s)
+SBERT-only,H12,tune,5,ACT-0202,Language,18-24 months,+1 band(s)
+SBERT-only,H14,test,2,ACT-0025,Motor,3-6 months,-2 band(s)
+SBERT-only,H14,test,3,ACT-0325,Motor,3-6 months,-2 band(s)
+SBERT-only,H14,test,4,ACT-0101,Motor,0-3 months,-3 band(s)
+SBERT-only,H19,tune,5,ACT-0185,Motor,12-18 months,-2 band(s)
+SBERT-only,H20,tune,4,ACT-0006,Sensory,6-12 months,-3 band(s)

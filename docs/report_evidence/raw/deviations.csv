@@ -1,0 +1,23 @@
+what,difference,evidence
+FR-01 Registration and authentication,"self-registration always creates a Caregiver. The first administrator is made with `createsuperuser` and others from the web admin, so nobody can register as one. Apple sign-in (wireframe) was not built.",docs/requirements_traceability.md:46
+FR-03 Child profile management,"`preferences` is stored and accepted by the API, but the app doesn't ask for it and nothing uses it. Contextual information (home, resources, routines) isn't collected.",docs/requirements_traceability.md:48
+FR-04 Developmental information recording,"developmental goals aren't collected. Free-text milestones aren't accepted, so every observation maps to a catalogue milestone.",docs/requirements_traceability.md:49
+FR-05 Developmental profile generation,"a custom engine, not experta (Section 3.2.2 allowed either).",docs/requirements_traceability.md:50
+FR-10 Ranking and scoring,"ranks by developmental need, similarity and age fit. Caregiver preferences and context aren't weighted. Interests enter only through the retrieval query and the explanation. Feedback changes later suggestions only through the options and personalisation steps (#175 to #180).",docs/requirements_traceability.md:55
+NFR-08 Compatibility,Android only. iOS was removed (#186).,docs/requirements_traceability.md:76
+NFR-12 Recommendation quality,"relevance is judged by graded human labels, not similarity scores. Area diversity is low (about 1.4 areas per top 5) because the priority area comes first.",docs/requirements_traceability.md:80
+DR-02 Child profile data,"age, interests, gender and concerns are stored; preferences are stored but unused; context isn't stored.",docs/requirements_traceability.md:88
+DR-03 Developmental data,goals aren't stored.,docs/requirements_traceability.md:89
+DR-11 Data protection,access is restricted by role (NFR-03). Data is in a local PostgreSQL on the development machine; secure hosting waits for deployment.,docs/requirements_traceability.md:97
+IR-09 Secure communication,"HTTPS depends on deployment, which is on hold. Development runs over local HTTP (`adb reverse` or the hotspot).",docs/requirements_traceability.md:111
+Report wording: FR-01,"administrators are created with `createsuperuser` or the web admin, not by registration.",docs/requirements_traceability.md:136
+"Report wording: FR-03, DR-02","preferences and context are not collected, or are future work.",docs/requirements_traceability.md:137
+"Report wording: FR-04, DR-03","milestones come from the CDC/WHO catalogue with status Achieved, Emerging or Not yet; developmental goals are not collected.",docs/requirements_traceability.md:138
+Report wording: FR-05,a custom IF-THEN engine (not experta).,docs/requirements_traceability.md:139
+Report wording: FR-10,ranking is `age_weight × ((1 − α)·similarity + α·priority)`; preferences and context aren't weighted.,docs/requirements_traceability.md:140
+"Report wording: FR-11, NFR-10","explanations name the area, milestones or concerns, age fit and interests; scores aren't shown to caregivers.",docs/requirements_traceability.md:141
+Report wording: NFR-01,"a measurable threshold, for example ""95% of requests within 1 second after start-up on the reference environment"".",docs/requirements_traceability.md:142
+Report wording: NFR-08,Android only.,docs/requirements_traceability.md:143
+Report wording: NFR-12,"relevance judged by graded human labels with precision@k and nDCG@k, not similarity scores.",docs/requirements_traceability.md:144
+Report wording: DR-09 and Section 3.2.2,"vectors stored in PostgreSQL, not FAISS.",docs/requirements_traceability.md:145
+Report wording: Additions,"state the SOFIA additions above, with their own IDs if the chapter is renumbered.",docs/requirements_traceability.md:146

@@ -1,0 +1,32 @@
+{
+  "per_job": {
+    "Backend (Django, postgresql)": 3,
+    "Backend (Django, sqlite)": 4
+  },
+  "conditions": [
+    {
+      "class": "RealSbertModelTests",
+      "file": "backend/recommendations/test_embeddings.py:156",
+      "runs_only_if": "settings.SBERT_MODEL_PATH.exists()",
+      "reason": "SBERT model not downloaded (run setup_sbert.py); skipped in CI"
+    },
+    {
+      "class": "ConcurrentPostTests",
+      "file": "backend/recommendations/test_recommendations_api.py:465",
+      "runs_only_if": "connection.vendor == \"postgresql\"",
+      "reason": "Row locking needs PostgreSQL; SQLite serialises writes differently"
+    },
+    {
+      "class": "RealModelRetrievalTests",
+      "file": "backend/recommendations/test_retrieval.py:274",
+      "runs_only_if": "settings.SBERT_MODEL_PATH.exists()",
+      "reason": "SBERT model not downloaded (run setup_sbert.py); skipped in CI"
+    },
+    {
+      "class": "RealModelSpotCheckTests",
+      "file": "backend/recommendations/test_spot_check.py:169",
+      "runs_only_if": "settings.SBERT_MODEL_PATH.exists()",
+      "reason": "SBERT model not downloaded (run setup_sbert.py); skipped in CI"
+    }
+  ]
+}

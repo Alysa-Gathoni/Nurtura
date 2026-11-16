@@ -1,0 +1,134 @@
+milestone_key,source,domain,expected_age_months,verified,description
+CDC-02M-CO-01,CDC,Cognitive,2.0,False,Watches you as you move
+CDC-02M-CO-02,CDC,Cognitive,2.0,False,Looks at a toy for several seconds
+CDC-02M-LA-01,CDC,Language,2.0,False,Makes sounds other than crying
+CDC-02M-LA-02,CDC,Language,2.0,False,Reacts to loud sounds
+CDC-02M-MO-01,CDC,Motor,2.0,True,Holds head up when on tummy
+CDC-02M-MO-02,CDC,Motor,2.0,False,Moves both arms and both legs
+CDC-02M-MO-03,CDC,Motor,2.0,False,Opens hands briefly
+CDC-02M-SE-01,CDC,Socio-Emotional,2.0,False,Calms down when spoken to or picked up
+CDC-02M-SE-02,CDC,Socio-Emotional,2.0,False,Looks at your face
+CDC-02M-SE-03,CDC,Socio-Emotional,2.0,False,Seems happy to see you when you walk up to them
+CDC-02M-SE-04,CDC,Socio-Emotional,2.0,True,Smiles when you talk to or smile at them
+CDC-04M-CO-01,CDC,Cognitive,4.0,False,"If hungry, opens mouth when they see the breast or bottle"
+CDC-04M-CO-02,CDC,Cognitive,4.0,True,Looks at their hands with interest
+CDC-04M-LA-01,CDC,Language,4.0,False,"Makes sounds like ""oooo"" or ""aahh"" (cooing)"
+CDC-04M-LA-02,CDC,Language,4.0,True,Makes sounds back when you talk to them
+CDC-04M-LA-03,CDC,Language,4.0,False,Turns head towards the sound of your voice
+CDC-04M-MO-01,CDC,Motor,4.0,False,Holds head steady without support when you are holding them
+CDC-04M-MO-02,CDC,Motor,4.0,False,Holds a toy when you put it in their hand
+CDC-04M-MO-03,CDC,Motor,4.0,False,Uses their arm to swing at toys
+CDC-04M-MO-04,CDC,Motor,4.0,False,Brings hands to mouth
+CDC-04M-MO-05,CDC,Motor,4.0,False,Pushes up onto elbows or forearms when on tummy
+CDC-04M-SE-01,CDC,Socio-Emotional,4.0,False,Smiles on their own to get your attention
+CDC-04M-SE-02,CDC,Socio-Emotional,4.0,False,Chuckles (not yet a full laugh) when you try to make them laugh
+CDC-04M-SE-03,CDC,Socio-Emotional,4.0,False,"Looks at you, moves, or makes sounds to get or keep your attention"
+CDC-06M-CO-01,CDC,Cognitive,6.0,False,Puts things in their mouth to explore them
+CDC-06M-CO-02,CDC,Cognitive,6.0,False,Reaches to grab a toy they want
+CDC-06M-CO-03,CDC,Cognitive,6.0,False,Closes lips to show they don't want more food
+CDC-06M-LA-01,CDC,Language,6.0,False,Takes turns making sounds with you
+CDC-06M-LA-02,CDC,Language,6.0,False,"Blows ""raspberries"" (sticks tongue out and blows)"
+CDC-06M-LA-03,CDC,Language,6.0,False,Makes squealing noises
+CDC-06M-MO-01,CDC,Motor,6.0,True,Rolls from tummy to back
+CDC-06M-MO-02,CDC,Motor,6.0,False,Pushes up with straight arms when on tummy
+CDC-06M-MO-03,CDC,Motor,6.0,False,Leans on hands to support themselves when sitting
+CDC-06M-SE-01,CDC,Socio-Emotional,6.0,False,Knows familiar people
+CDC-06M-SE-02,CDC,Socio-Emotional,6.0,False,Likes to look at themselves in a mirror
+CDC-06M-SE-03,CDC,Socio-Emotional,6.0,True,Laughs
+CDC-09M-CO-01,CDC,Cognitive,9.0,False,Looks for objects when dropped out of sight
+CDC-09M-CO-02,CDC,Cognitive,9.0,False,Bangs two things together
+CDC-09M-LA-01,CDC,Language,9.0,False,"Makes a lot of different sounds like ""mamamama"" and ""babababa"""
+CDC-09M-LA-02,CDC,Language,9.0,False,Lifts arms up to be picked up
+CDC-09M-MO-01,CDC,Motor,9.0,False,Gets to a sitting position by themselves
+CDC-09M-MO-02,CDC,Motor,9.0,False,Moves things from one hand to the other hand
+CDC-09M-MO-03,CDC,Motor,9.0,False,"Uses fingers to ""rake"" food towards themselves"
+CDC-09M-MO-04,CDC,Motor,9.0,False,Sits without support
+CDC-09M-SE-01,CDC,Socio-Emotional,9.0,False,"Is shy, clingy, or fearful around strangers"
+CDC-09M-SE-02,CDC,Socio-Emotional,9.0,False,"Shows several facial expressions, like happy, sad, angry, and surprised"
+CDC-09M-SE-03,CDC,Socio-Emotional,9.0,False,Looks when you call their name
+CDC-09M-SE-04,CDC,Socio-Emotional,9.0,False,"Reacts when you leave (looks, reaches for you, or cries)"
+CDC-09M-SE-05,CDC,Socio-Emotional,9.0,True,Smiles or laughs when you play peek-a-boo
+CDC-12M-CO-01,CDC,Cognitive,12.0,False,"Puts something in a container, like a block in a cup"
+CDC-12M-CO-02,CDC,Cognitive,12.0,False,"Looks for things they see you hide, like a toy under a blanket"
+CDC-12M-LA-01,CDC,Language,12.0,True,"Waves ""bye-bye"""
+CDC-12M-LA-02,CDC,Language,12.0,True,"Calls a parent ""mama"", ""dada"", or another special name"
+CDC-12M-LA-03,CDC,Language,12.0,False,"Understands ""no"" (pauses briefly or stops when you say it)"
+CDC-12M-MO-01,CDC,Motor,12.0,False,Pulls up to stand
+CDC-12M-MO-02,CDC,Motor,12.0,False,"Walks, holding on to furniture"
+CDC-12M-MO-03,CDC,Motor,12.0,False,"Drinks from a cup without a lid, as you hold it"
+CDC-12M-MO-04,CDC,Motor,12.0,False,"Picks things up between thumb and pointer finger, like small bits of food"
+CDC-12M-SE-01,CDC,Socio-Emotional,12.0,False,"Plays games with you, like pat-a-cake"
+CDC-15M-CO-01,CDC,Cognitive,15.0,False,"Tries to use things the right way, like a phone, cup, or book"
+CDC-15M-CO-02,CDC,Cognitive,15.0,True,"Stacks at least two small objects, like blocks"
+CDC-15M-LA-01,CDC,Language,15.0,False,"Tries to say one or two words besides ""mama"" or ""dada"""
+CDC-15M-LA-02,CDC,Language,15.0,False,Looks at a familiar object when you name it
+CDC-15M-LA-03,CDC,Language,15.0,False,Follows directions given with both a gesture and words
+CDC-15M-LA-04,CDC,Language,15.0,False,Points to ask for something or to get help
+CDC-15M-MO-01,CDC,Motor,15.0,True,Takes a few steps on their own
+CDC-15M-MO-02,CDC,Motor,15.0,False,Uses fingers to feed themselves some food
+CDC-15M-SE-01,CDC,Socio-Emotional,15.0,False,Copies other children while playing
+CDC-15M-SE-02,CDC,Socio-Emotional,15.0,False,Shows you an object they like
+CDC-15M-SE-03,CDC,Socio-Emotional,15.0,False,Claps when excited
+CDC-15M-SE-04,CDC,Socio-Emotional,15.0,False,Hugs a stuffed doll or other toy
+CDC-15M-SE-05,CDC,Socio-Emotional,15.0,True,"Shows you affection (hugs, cuddles, or kisses you)"
+CDC-18M-CO-01,CDC,Cognitive,18.0,False,"Copies you doing chores, like sweeping with a broom"
+CDC-18M-CO-02,CDC,Cognitive,18.0,True,"Plays with toys in a simple way, like pushing a toy car"
+CDC-18M-LA-01,CDC,Language,18.0,False,"Tries to say three or more words besides ""mama"" or ""dada"""
+CDC-18M-LA-02,CDC,Language,18.0,False,"Follows one-step directions without any gestures, like giving you a toy when you say ""Give it to me"""
+CDC-18M-MO-01,CDC,Motor,18.0,False,Walks without holding on to anyone or anything
+CDC-18M-MO-02,CDC,Motor,18.0,False,Scribbles
+CDC-18M-MO-03,CDC,Motor,18.0,False,Drinks from a cup without a lid and may spill sometimes
+CDC-18M-MO-04,CDC,Motor,18.0,False,Feeds themselves with their fingers
+CDC-18M-MO-05,CDC,Motor,18.0,False,Tries to use a spoon
+CDC-18M-MO-06,CDC,Motor,18.0,False,Climbs on and off a couch or chair without help
+CDC-18M-SE-01,CDC,Socio-Emotional,18.0,False,"Moves away from you, but looks to make sure you are close by"
+CDC-18M-SE-02,CDC,Socio-Emotional,18.0,True,Points to show you something interesting
+CDC-18M-SE-03,CDC,Socio-Emotional,18.0,False,Puts hands out for you to wash them
+CDC-18M-SE-04,CDC,Socio-Emotional,18.0,False,Looks at a few pages in a book with you
+CDC-18M-SE-05,CDC,Socio-Emotional,18.0,False,Helps you dress them by pushing an arm through a sleeve or lifting a foot
+CDC-24M-CO-01,CDC,Cognitive,24.0,False,"Holds something in one hand while using the other hand, like holding a container and taking the lid off"
+CDC-24M-CO-02,CDC,Cognitive,24.0,False,"Tries to use switches, knobs, or buttons on a toy"
+CDC-24M-CO-03,CDC,Cognitive,24.0,False,"Plays with more than one toy at the same time, like putting toy food on a toy plate"
+CDC-24M-LA-01,CDC,Language,24.0,False,"Points to things in a book when you ask, like ""Where is the bear?"""
+CDC-24M-LA-02,CDC,Language,24.0,True,"Says at least two words together, like ""More milk"""
+CDC-24M-LA-03,CDC,Language,24.0,True,Points to at least two body parts when you ask
+CDC-24M-LA-04,CDC,Language,24.0,False,"Uses more gestures than just waving and pointing, like blowing a kiss or nodding yes"
+CDC-24M-MO-01,CDC,Motor,24.0,False,Kicks a ball
+CDC-24M-MO-02,CDC,Motor,24.0,False,Runs
+CDC-24M-MO-03,CDC,Motor,24.0,False,Walks (not climbs) up a few stairs with or without help
+CDC-24M-MO-04,CDC,Motor,24.0,False,Eats with a spoon
+CDC-24M-SE-01,CDC,Socio-Emotional,24.0,False,"Notices when others are hurt or upset, like pausing or looking sad when someone is crying"
+CDC-24M-SE-02,CDC,Socio-Emotional,24.0,False,Looks at your face to see how to react in a new situation
+CDC-30M-CO-01,CDC,Cognitive,30.0,False,"Uses things to pretend, like feeding a block to a doll as if it were food"
+CDC-30M-CO-02,CDC,Cognitive,30.0,True,"Shows simple problem-solving skills, like standing on a small stool to reach something"
+CDC-30M-CO-03,CDC,Cognitive,30.0,False,"Follows two-step instructions like ""Put the toy down and close the door"""
+CDC-30M-CO-04,CDC,Cognitive,30.0,False,"Shows they know at least one colour, like pointing to a red crayon when asked"
+CDC-30M-LA-01,CDC,Language,30.0,True,Says about 50 words
+CDC-30M-LA-02,CDC,Language,30.0,False,"Says two or more words together with one action word, like ""Doggie run"""
+CDC-30M-LA-03,CDC,Language,30.0,False,"Names things in a book when you point and ask ""What is this?"""
+CDC-30M-LA-04,CDC,Language,30.0,False,"Says words like ""I"", ""me"", or ""we"""
+CDC-30M-MO-01,CDC,Motor,30.0,False,"Uses hands to twist things, like turning doorknobs or unscrewing lids"
+CDC-30M-MO-02,CDC,Motor,30.0,False,"Takes some clothes off by themselves, like loose trousers or an open jacket"
+CDC-30M-MO-03,CDC,Motor,30.0,True,Jumps off the ground with both feet
+CDC-30M-MO-04,CDC,Motor,30.0,False,"Turns book pages, one at a time, when you read together"
+CDC-30M-SE-01,CDC,Socio-Emotional,30.0,False,Plays next to other children and sometimes plays with them
+CDC-30M-SE-02,CDC,Socio-Emotional,30.0,False,"Shows you what they can do by saying ""Look at me!"""
+CDC-30M-SE-03,CDC,Socio-Emotional,30.0,False,"Follows simple routines when told, like helping to pick up toys at clean-up time"
+CDC-36M-CO-01,CDC,Cognitive,36.0,False,Draws a circle when you show them how
+CDC-36M-CO-02,CDC,Cognitive,36.0,False,"Avoids touching hot objects, like a stove, when you warn them"
+CDC-36M-LA-01,CDC,Language,36.0,False,Talks with you in conversation using at least two back-and-forth exchanges
+CDC-36M-LA-02,CDC,Language,36.0,False,"Asks ""who"", ""what"", ""where"", or ""why"" questions"
+CDC-36M-LA-03,CDC,Language,36.0,False,"Says what action is happening in a picture or book when asked, like ""running"" or ""eating"""
+CDC-36M-LA-04,CDC,Language,36.0,False,Says their first name when asked
+CDC-36M-LA-05,CDC,Language,36.0,False,"Talks well enough for others to understand, most of the time"
+CDC-36M-MO-01,CDC,Motor,36.0,False,"Strings items together, like large beads or macaroni"
+CDC-36M-MO-02,CDC,Motor,36.0,False,"Puts on some clothes by themselves, like loose trousers or a jacket"
+CDC-36M-MO-03,CDC,Motor,36.0,False,Uses a fork
+CDC-36M-SE-01,CDC,Socio-Emotional,36.0,False,"Calms down within 10 minutes after you leave, like at a childcare drop-off"
+CDC-36M-SE-02,CDC,Socio-Emotional,36.0,False,Notices other children and joins them to play
+WHO-MO-01,WHO,Motor,9.2,True,Sitting without support
+WHO-MO-02,WHO,Motor,11.4,True,Standing with assistance
+WHO-MO-03,WHO,Motor,13.5,True,Hands-and-knees crawling
+WHO-MO-04,WHO,Motor,13.7,True,Walking with assistance
+WHO-MO-05,WHO,Motor,16.9,True,Standing alone
+WHO-MO-06,WHO,Motor,17.6,True,Walking alone

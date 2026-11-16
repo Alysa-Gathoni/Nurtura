@@ -1,0 +1,185 @@
+classDiagram
+    class User {
+        BigAutoField id
+        CharField password
+        DateTimeField last_login
+        BooleanField is_superuser
+        CharField username
+        CharField first_name
+        CharField last_name
+        CharField email
+        BooleanField is_staff
+        BooleanField is_active
+        DateTimeField date_joined
+        CharField role
+        CharField privacy_notice_version
+        DateTimeField privacy_agreed_at
+        ManyToManyField groups
+        ManyToManyField user_permissions
+        +Role()
+        +save()
+        +NotUpdated()
+    }
+    class ChildProfile {
+        BigAutoField id
+        ForeignKey caregiver
+        CharField name
+        DateField date_of_birth
+        CharField gender
+        JSONField interests
+        JSONField preferences
+        JSONField concerns
+        DateTimeField created_at
+        DateTimeField updated_at
+        +Gender()
+        +refresh_developmental_profile()
+        +record_milestone()
+        +NotUpdated()
+    }
+    class ReferenceMilestone {
+        BigAutoField id
+        CharField milestone_key
+        CharField source
+        DecimalField expected_age_months
+        CharField domain
+        CharField description
+        CharField source_reference
+        TextField notes
+        BooleanField verified
+        DateTimeField updated_at
+        +NotUpdated()
+    }
+    class DevelopmentalMilestone {
+        BigAutoField id
+        ForeignKey child
+        ForeignKey reference
+        CharField domain
+        TextField description
+        CharField status
+        DateField observation_date
+        DateTimeField created_at
+        +Status()
+        +clean()
+        +NotUpdated()
+    }
+    class DevelopmentalProfile {
+        BigAutoField id
+        OneToOneField child
+        FloatField age_months
+        JSONField scores
+        JSONField ranked_domains
+        JSONField reasons
+        DateTimeField generated_at
+        +NotUpdated()
+    }
+    class LoginChallenge {
+        UUIDField id
+        ForeignKey user
+        CharField purpose
+        CharField code_hash
+        DateTimeField created_at
+        DateTimeField expires_at
+        DateTimeField last_sent_at
+        PositiveSmallIntegerField sends
+        PositiveSmallIntegerField attempts
+        DateTimeField used_at
+        +Purpose()
+        +NotUpdated()
+    }
+    class TrustedDevice {
+        BigAutoField id
+        ForeignKey user
+        CharField device_hash
+        DateTimeField trusted_until
+        DateTimeField created_at
+        DateTimeField last_used_at
+        +NotUpdated()
+    }
+    class FingerprintKey {
+        BigAutoField id
+        ForeignKey user
+        CharField device_hash
+        CharField key_hash
+        DateTimeField created_at
+        DateTimeField last_used_at
+        +NotUpdated()
+    }
+    class DevelopmentalActivity {
+        BigAutoField id
+        CharField activity_id
+        CharField activity_name
+        CharField developmental_domain
+        CharField age_range
+        TextField developmental_goal
+        TextField materials
+        CharField difficulty_level
+        TextField description
+        TextField cultural_relevance
+        CharField plain_aim
+        CharField source
+        CharField source_url
+        CharField content_status
+        DateTimeField created_at
+        DateTimeField updated_at
+        +transition_to()
+        +NotUpdated()
+    }
+    class Recommendation {
+        BigAutoField id
+        ForeignKey child
+        ForeignKey activity
+        UUIDField batch
+        PositiveSmallIntegerField position
+        FloatField similarity_score
+        FloatField ranking_score
+        FloatField rule_priority
+        FloatField age_weight
+        FloatField alpha
+        CharField profile_fingerprint
+        CharField ranking_version
+        TextField explanation
+        BooleanField pinned
+        CharField pin_note
+        CharField explanation_version
+        DateTimeField date_generated
+        +NotUpdated()
+    }
+    class ActivityEmbedding {
+        BigAutoField id
+        OneToOneField activity
+        CharField model_name
+        PositiveSmallIntegerField dimensions
+        CharField text_hash
+        BinaryField vector
+        DateTimeField updated_at
+        +NotUpdated()
+    }
+    class SavedActivity {
+        BigAutoField id
+        ForeignKey child
+        ForeignKey activity
+        DateTimeField saved_at
+        +NotUpdated()
+    }
+    class CompletedActivity {
+        BigAutoField id
+        OneToOneField recommendation
+        DateField completion_date
+        CharField status
+        +Status()
+        +NotUpdated()
+    }
+    class Feedback {
+        BigAutoField id
+        ForeignKey recommendation
+        PositiveSmallIntegerField rating
+        TextField comment
+        CharField outcome
+        JSONField issues
+        CharField interest
+        DateTimeField date_submitted
+        +Outcome()
+        +Issue()
+        +Interest()
+        +NotUpdated()
+    }

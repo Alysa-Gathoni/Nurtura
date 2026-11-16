@@ -1,0 +1,95 @@
+
+## Provenance
+Matches the state the sheet was generated from (2026-10-31T11:25:47+00:00): same Published activities and content, rule weights, ranking settings, milestone catalogue, embeddings and sheet rows.
+
+## Labelling status
+257 of 257 rows labelled (0 blank; blank rows count as not relevant).
+
+Top-5 candidates with no label, per ranking:
+
+| Ranking | tune | test | gap | total |
+|---|---|---|---|---|
+| SBERT-only | 0 | 0 | 0 | 0 |
+| alpha 0.0 | 0 | 0 | 0 | 0 |
+| alpha 0.1 | 0 | 0 | 0 | 0 |
+| alpha 0.2 | 0 | 0 | 0 | 0 |
+| alpha 0.3 | 0 | 0 | 0 | 0 |
+| alpha 0.4 | 0 | 0 | 0 | 0 |
+| alpha 0.5 | 0 | 0 | 0 | 0 |
+| alpha 0.6 | 0 | 0 | 0 | 0 |
+| alpha 0.7 | 0 | 0 | 0 | 0 |
+| alpha 0.8 | 0 | 0 | 0 | 0 |
+| alpha 0.9 | 0 | 0 | 0 | 0 |
+| alpha 1.0 | 0 | 0 | 0 | 0 |
+
+## Tune set (11 children): mean of each metric
+| Ranking | P@3>=1 | P@5>=1 | P@3>=2 | P@5>=2 | nDCG@3 | nDCG@5 |
+|---|---|---|---|---|---|---|
+| SBERT-only | 0.848 | 0.818 | 0.364 | 0.364 | 0.549 | 0.548 |
+| alpha 0.0 | 0.879 | 0.891 | 0.515 | 0.527 | 0.666 | 0.677 |
+| alpha 0.1 | 0.909 | 0.927 | 0.576 | 0.545 | 0.711 | 0.711 |
+| alpha 0.2 | 0.909 | 0.927 | 0.606 | 0.618 | 0.722 | 0.745 |
+| alpha 0.3 | 0.909 | 0.927 | 0.606 | 0.618 | 0.722 | 0.745 |
+| alpha 0.4 | 0.909 | 0.927 | 0.606 | 0.600 | 0.722 | 0.736 |
+| alpha 0.5 | 0.909 | 0.927 | 0.606 | 0.600 | 0.722 | 0.736 |
+| alpha 0.6 | 0.909 | 0.927 | 0.606 | 0.600 | 0.722 | 0.736 |
+| alpha 0.7 | 0.909 | 0.927 | 0.606 | 0.600 | 0.722 | 0.736 |
+| alpha 0.8 | 0.909 | 0.927 | 0.606 | 0.600 | 0.722 | 0.736 |
+| alpha 0.9 | 0.909 | 0.927 | 0.606 | 0.600 | 0.722 | 0.736 |
+| **alpha 1.0 (chosen)** | 0.970 | 0.909 | 0.788 | 0.673 | 0.878 | 0.829 |
+
+Best mean nDCG@5 on tune: 0.829. Within 0.02 of it: alpha 1.0. Chosen alpha (middle of that range): 1.0.
+
+Reporting alpha 0.7, fixed in advance, instead of the tune choice (1.0), as asked with --report-alpha.
+
+## Test set: alpha 0.7 vs SBERT-only
+| Child | Ranking | P@3>=1 | P@5>=1 | P@3>=2 | P@5>=2 | nDCG@3 | nDCG@5 |
+|---|---|---|---|---|---|---|---|
+| H02 | alpha 0.7 | 1.000 | 1.000 | 0.667 | 0.800 | 0.844 | 0.887 |
+| H02 | SBERT-only | 1.000 | 1.000 | 1.000 | 0.800 | 1.000 | 0.903 |
+| H03 | alpha 0.7 | 1.000 | 1.000 | 0.333 | 0.200 | 0.490 | 0.548 |
+| H03 | SBERT-only | 0.667 | 0.600 | 0.000 | 0.000 | 0.177 | 0.217 |
+| H04 | alpha 0.7 | 1.000 | 1.000 | 0.667 | 0.600 | 0.803 | 0.760 |
+| H04 | SBERT-only | 0.667 | 0.800 | 0.333 | 0.600 | 0.547 | 0.673 |
+| H07 | alpha 0.7 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
+| H07 | SBERT-only | 1.000 | 1.000 | 0.667 | 0.600 | 0.844 | 0.799 |
+| H10 | alpha 0.7 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 |
+| H10 | SBERT-only | 1.000 | 1.000 | 1.000 | 0.600 | 1.000 | 0.815 |
+| H14 | alpha 0.7 | 1.000 | 1.000 | 1.000 | 0.600 | 1.000 | 0.815 |
+| H14 | SBERT-only | 0.333 | 0.400 | 0.000 | 0.200 | 0.156 | 0.244 |
+| H15 | alpha 0.7 | 1.000 | 1.000 | 0.667 | 0.800 | 0.687 | 0.774 |
+| H15 | SBERT-only | 1.000 | 1.000 | 0.333 | 0.200 | 0.646 | 0.559 |
+| H18 | alpha 0.7 | 1.000 | 1.000 | 1.000 | 0.800 | 1.000 | 0.903 |
+| H18 | SBERT-only | 1.000 | 1.000 | 0.333 | 0.200 | 0.490 | 0.446 |
+| Mean | alpha 0.7 | 1.000 | 1.000 | 0.792 | 0.725 | 0.853 | 0.836 |
+| Mean | SBERT-only | 0.833 | 0.850 | 0.458 | 0.400 | 0.608 | 0.582 |
+
+Difference (hybrid minus SBERT-only):
+
+| Child | P@3>=1 | P@5>=1 | P@3>=2 | P@5>=2 | nDCG@3 | nDCG@5 | On nDCG@5 |
+|---|---|---|---|---|---|---|---|
+| H02 | +0.000 | +0.000 | -0.333 | +0.000 | -0.156 | -0.016 | worse |
+| H03 | +0.333 | +0.400 | +0.333 | +0.200 | +0.313 | +0.331 | improved |
+| H04 | +0.333 | +0.200 | +0.333 | +0.000 | +0.255 | +0.087 | improved |
+| H07 | +0.000 | +0.000 | +0.333 | +0.400 | +0.156 | +0.201 | improved |
+| H10 | +0.000 | +0.000 | +0.000 | +0.400 | +0.000 | +0.185 | improved |
+| H14 | +0.667 | +0.600 | +1.000 | +0.400 | +0.844 | +0.571 | improved |
+| H15 | +0.000 | +0.000 | +0.333 | +0.600 | +0.041 | +0.214 | improved |
+| H18 | +0.000 | +0.000 | +0.667 | +0.600 | +0.510 | +0.456 | improved |
+
+On nDCG@5: 7 improved, 0 tied, 1 worse (of 8). With this few children, no significance claims are made.
+
+## Content-gap child (reported separately): alpha 0.7 vs SBERT-only
+| Child | Ranking | P@3>=1 | P@5>=1 | P@3>=2 | P@5>=2 | nDCG@3 | nDCG@5 |
+|---|---|---|---|---|---|---|---|
+| H17 | alpha 0.7 | 1.000 | 1.000 | 0.667 | 0.600 | 0.687 | 0.686 |
+| H17 | SBERT-only | 1.000 | 1.000 | 1.000 | 0.800 | 1.000 | 0.903 |
+
+Difference (hybrid minus SBERT-only):
+
+| Child | P@3>=1 | P@5>=1 | P@3>=2 | P@5>=2 | nDCG@3 | nDCG@5 | On nDCG@5 |
+|---|---|---|---|---|---|---|---|
+| H17 | +0.000 | +0.000 | -0.333 | -0.200 | -0.313 | -0.216 | worse |
+
+## Agreement between raters
+No rows have both relevance and relevance_rater2 filled in.

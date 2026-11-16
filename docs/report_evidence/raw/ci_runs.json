@@ -1,0 +1,2002 @@
+[
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T08:06:13Z",
+    "databaseId": 43180218899,
+    "displayTitle": "Merge pull request #215 from <redacted>/fix/214-phone-test-findings",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T08:05:56Z",
+    "databaseId": 43180181460,
+    "displayTitle": "Merge pull request #213 from <redacted>/fix/212-dashboard-unrated-…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T07:57:48Z",
+    "databaseId": 43179128631,
+    "displayTitle": "fix: phone test findings (#214)",
+    "event": "pull_request",
+    "headBranch": "fix/214-phone-test-findings",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T07:23:16Z",
+    "databaseId": 43174880119,
+    "displayTitle": "fix: admin dashboard no longer fails on feedback without a rating (#212)",
+    "event": "pull_request",
+    "headBranch": "fix/212-dashboard-unrated-feedback",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T06:31:00Z",
+    "databaseId": 43168681619,
+    "displayTitle": "Merge pull request #211 from <redacted>/docs/210-status-docs",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T06:08:39Z",
+    "databaseId": 43166062313,
+    "displayTitle": "docs: #31 hand check superseded; requirement map done (#210)",
+    "event": "pull_request",
+    "headBranch": "docs/210-status-docs",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T06:05:17Z",
+    "databaseId": 43165671468,
+    "displayTitle": "Merge pull request #207 from <redacted>/test/206-accessibility",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T06:00:48Z",
+    "databaseId": 43165155378,
+    "displayTitle": "test: accessibility checks and fixes for large text and contrast (#206)",
+    "event": "pull_request",
+    "headBranch": "test/206-accessibility",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T05:58:56Z",
+    "databaseId": 43164947285,
+    "displayTitle": "Merge pull request #205 from <redacted>/docs/204-traceability-nfr12",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T05:48:37Z",
+    "databaseId": 43163836992,
+    "displayTitle": "test: accessibility checks and fixes for large text and contrast (#206)",
+    "event": "pull_request",
+    "headBranch": "test/206-accessibility",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T05:48:32Z",
+    "databaseId": 43163826325,
+    "displayTitle": "docs: NFR-12 met, with the beyond-accuracy measures (#204)",
+    "event": "pull_request",
+    "headBranch": "docs/204-traceability-nfr12",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T05:46:37Z",
+    "databaseId": 43163619204,
+    "displayTitle": "Merge pull request #209 from <redacted>/fix/208-deploy-check-summary",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-12T05:42:49Z",
+    "databaseId": 43163200662,
+    "displayTitle": "fix: deployment check always passes and summarises its findings (#208)",
+    "event": "pull_request",
+    "headBranch": "fix/208-deploy-check-summary",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-10T16:12:55Z",
+    "databaseId": 42852268035,
+    "displayTitle": "test: accessibility checks and fixes for large text and contrast (#206)",
+    "event": "pull_request",
+    "headBranch": "test/206-accessibility",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-10T15:19:38Z",
+    "databaseId": 42843159212,
+    "displayTitle": "docs: NFR-12 met, with the beyond-accuracy measures (#204)",
+    "event": "pull_request",
+    "headBranch": "docs/204-traceability-nfr12",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-10T15:18:30Z",
+    "databaseId": 42842972596,
+    "displayTitle": "Merge pull request #203 from <redacted>/chore/200-hygiene",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-10T15:15:52Z",
+    "databaseId": 42842526461,
+    "displayTitle": "Merge pull request #202 from <redacted>/test/199-beyond-accuracy",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-10T15:15:22Z",
+    "databaseId": 42842440713,
+    "displayTitle": "Merge pull request #201 from <redacted>/docs/198-requirements-trac…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-10T15:09:01Z",
+    "databaseId": 42841339365,
+    "displayTitle": "chore: app README, dev requirements and a non-blocking deploy check (#200)",
+    "event": "pull_request",
+    "headBranch": "chore/200-hygiene",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-10T15:08:55Z",
+    "databaseId": 42841320357,
+    "displayTitle": "test: diversity, novelty, coverage and personalisation of the rankings (#199)",
+    "event": "pull_request",
+    "headBranch": "test/199-beyond-accuracy",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-10T14:54:32Z",
+    "databaseId": 42838873973,
+    "displayTitle": "docs: requirements traceability against proposal Chapter 4 (#198)",
+    "event": "pull_request",
+    "headBranch": "docs/198-requirements-traceability",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-09T11:02:35Z",
+    "databaseId": 42605772548,
+    "displayTitle": "Merge pull request #197 from <redacted>/test/196-eval-statistics",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-09T10:59:15Z",
+    "databaseId": 42605313994,
+    "displayTitle": "Merge pull request #195 from <redacted>/feature/194-explore-activi…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-09T10:58:19Z",
+    "databaseId": 42605196203,
+    "displayTitle": "test: confidence intervals, Wilcoxon tests and age-weight sensitivity for v2 (#196)",
+    "event": "pull_request",
+    "headBranch": "test/196-eval-statistics",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-09T10:39:56Z",
+    "databaseId": 42602529330,
+    "displayTitle": "feat: Explore tab to browse, search, save and try activities (#194)",
+    "event": "pull_request",
+    "headBranch": "feature/194-explore-activities",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-09T10:24:38Z",
+    "databaseId": 42600668888,
+    "displayTitle": "Merge pull request #193 from <redacted>/feature/192-milestone-tracker",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-09T10:20:06Z",
+    "databaseId": 42600117016,
+    "displayTitle": "feat: milestone tracker by area, with a weekly Nurtura observation (#192)",
+    "event": "pull_request",
+    "headBranch": "feature/192-milestone-tracker",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-09T10:00:19Z",
+    "databaseId": 42597652308,
+    "displayTitle": "Merge pull request #191 from <redacted>/chore/190-data-tidy",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-09T09:50:34Z",
+    "databaseId": 42596470075,
+    "displayTitle": "chore: one data file per section (#190)",
+    "event": "pull_request",
+    "headBranch": "chore/190-data-tidy",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-09T09:34:50Z",
+    "databaseId": 42594516868,
+    "displayTitle": "Merge pull request #189 from <redacted>/docs/183-learned-ranker-re…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-06T07:07:31Z",
+    "databaseId": 42178802656,
+    "displayTitle": "Merge pull request #188 from <redacted>/feature/185-well-done-sheet",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-06T07:06:38Z",
+    "databaseId": 42178705176,
+    "displayTitle": "docs: learned ranker results; alpha = 0.7 stays (#183)",
+    "event": "pull_request",
+    "headBranch": "docs/183-learned-ranker-results",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-06T07:05:37Z",
+    "databaseId": 42178592492,
+    "displayTitle": "Merge pull request #184 from <redacted>/test/183-learned-ranker",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-04T14:01:28Z",
+    "databaseId": 41843465830,
+    "displayTitle": "feat: \"Well done!\" sheet with interest level and skills seen (#185)",
+    "event": "pull_request",
+    "headBranch": "feature/185-well-done-sheet",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T19:16:00Z",
+    "databaseId": 41701643824,
+    "displayTitle": "test: learned ranker trained on the tune children (#183)",
+    "event": "pull_request",
+    "headBranch": "test/183-learned-ranker",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T19:07:39Z",
+    "databaseId": 41700325517,
+    "displayTitle": "Merge pull request #187 from <redacted>/chore/186-remove-ios",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T18:50:05Z",
+    "databaseId": 41697558398,
+    "displayTitle": "chore: remove the iOS project; Nurtura is an Android app (#186)",
+    "event": "pull_request",
+    "headBranch": "chore/186-remove-ios",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T18:40:26Z",
+    "databaseId": 41696044059,
+    "displayTitle": "Merge pull request #182 from <redacted>/feature/181-activity-class…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T18:36:06Z",
+    "databaseId": 41695371064,
+    "displayTitle": "feat: activity classifier for area and age band, with admin suggestions (#181)",
+    "event": "pull_request",
+    "headBranch": "feature/181-activity-classifier",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T16:14:42Z",
+    "databaseId": 41672176476,
+    "displayTitle": "test: learned ranker trained on the tune children (#183)",
+    "event": "pull_request",
+    "headBranch": "test/183-learned-ranker",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T15:41:11Z",
+    "databaseId": 41666442549,
+    "displayTitle": "Merge pull request #180 from <redacted>/feature/179-feedback-ranking",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T15:37:15Z",
+    "databaseId": 41665776342,
+    "displayTitle": "feat: learn from each child's feedback when generating ideas (#179)",
+    "event": "pull_request",
+    "headBranch": "feature/179-feedback-ranking",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T11:55:33Z",
+    "databaseId": 41631436602,
+    "displayTitle": "Merge pull request #178 from <redacted>/feature/177-feedback-options",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T11:52:31Z",
+    "databaseId": 41631031683,
+    "displayTitle": "feat: learn from each child's feedback when generating ideas (#179)",
+    "event": "pull_request",
+    "headBranch": "feature/179-feedback-ranking",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T11:32:18Z",
+    "databaseId": 41628321694,
+    "displayTitle": "feat: offer options after feedback, and pin the one chosen (#177)",
+    "event": "pull_request",
+    "headBranch": "feature/177-feedback-options",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T11:07:15Z",
+    "databaseId": 41624882886,
+    "displayTitle": "Merge pull request #176 from <redacted>/feature/175-feedback-outcome",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-03T11:03:27Z",
+    "databaseId": 41624350157,
+    "displayTitle": "feat: ask how an activity went and what got in the way (#175)",
+    "event": "pull_request",
+    "headBranch": "feature/175-feedback-outcome",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-02T18:27:14Z",
+    "databaseId": 41500714267,
+    "displayTitle": "Merge pull request #173 from <redacted>/test/172-embedding-model-c…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-02T18:23:18Z",
+    "databaseId": 41500085724,
+    "displayTitle": "test: tool and plan to compare a search-trained embedding model (#172)",
+    "event": "pull_request",
+    "headBranch": "test/172-embedding-model-comparison",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-02T18:21:24Z",
+    "databaseId": 41499779020,
+    "displayTitle": "Merge pull request #171 from <redacted>/docs/170-eval-v2-results",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-02T18:13:45Z",
+    "databaseId": 41498551637,
+    "displayTitle": "test: tool and plan to compare a search-trained embedding model (#172)",
+    "event": "pull_request",
+    "headBranch": "test/172-embedding-model-comparison",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-02T17:50:14Z",
+    "databaseId": 41494883749,
+    "displayTitle": "docs: held-out evaluation v2 results on 449 activities (#170)",
+    "event": "pull_request",
+    "headBranch": "docs/170-eval-v2-results",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-31T15:03:26Z",
+    "databaseId": 41212995545,
+    "displayTitle": "Merge pull request #169 from <redacted>/test/168-heldout-v2",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-31T15:03:08Z",
+    "databaseId": 41212970568,
+    "displayTitle": "Merge pull request #167 from <redacted>/docs/166-approve-plain-aims",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-31T11:35:39Z",
+    "databaseId": 41197502257,
+    "displayTitle": "test: held-out evaluation v2 sheet on the 449-activity pool (#168)",
+    "event": "pull_request",
+    "headBranch": "test/168-heldout-v2",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-31T11:23:13Z",
+    "databaseId": 41196644134,
+    "displayTitle": "data: approve the plain aims for batches 5 and 6 (#166)",
+    "event": "pull_request",
+    "headBranch": "docs/166-approve-plain-aims",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-31T10:57:37Z",
+    "databaseId": 41194848343,
+    "displayTitle": "Merge pull request #165 from <redacted>/feature/162-token-expiry",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-31T10:57:20Z",
+    "databaseId": 41194830380,
+    "displayTitle": "Merge pull request #164 from <redacted>/feature/161-referral-path",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-31T10:32:06Z",
+    "databaseId": 41193137572,
+    "displayTitle": "feat: suggest a clinic visit when a due milestone is \"Not yet\" (#161)",
+    "event": "pull_request",
+    "headBranch": "feature/161-referral-path",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-31T10:20:07Z",
+    "databaseId": 41192323415,
+    "displayTitle": "Merge pull request #163 from <redacted>/data/160-held-activities",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T17:38:30Z",
+    "databaseId": 41100505062,
+    "displayTitle": "feat: log-in tokens expire after 30 days (#162)",
+    "event": "pull_request",
+    "headBranch": "feature/162-token-expiry",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T17:22:52Z",
+    "databaseId": 41098318637,
+    "displayTitle": "feat: suggest a clinic visit when a due milestone is \"Not yet\" (#161)",
+    "event": "pull_request",
+    "headBranch": "feature/161-referral-path",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T17:06:44Z",
+    "databaseId": 41095930950,
+    "displayTitle": "data: fix or remove the 7 activities their source did not support (#160)",
+    "event": "pull_request",
+    "headBranch": "data/160-held-activities",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T15:56:25Z",
+    "databaseId": 41085305830,
+    "displayTitle": "Merge pull request #159 from <redacted>/data/158-batch6-activities",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T14:57:54Z",
+    "databaseId": 41076310454,
+    "displayTitle": "Merge pull request #159 from <redacted>/data/158-batch6-activities",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T14:46:27Z",
+    "databaseId": 41074604504,
+    "displayTitle": "data: 200 more activities from verified sources, batch 6 (#158)",
+    "event": "pull_request",
+    "headBranch": "data/158-batch6-activities",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T14:43:42Z",
+    "databaseId": 41074186203,
+    "displayTitle": "Merge pull request #157 from <redacted>/data/156-more-activities",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T14:38:39Z",
+    "databaseId": 41073421490,
+    "displayTitle": "data: 200 more activities from verified sources (#156)",
+    "event": "pull_request",
+    "headBranch": "data/156-more-activities",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T12:28:54Z",
+    "databaseId": 41055656312,
+    "displayTitle": "Merge pull request #155 from <redacted>/data/154-source-links",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T12:19:45Z",
+    "databaseId": 41054506139,
+    "displayTitle": "data: 200 more activities from verified sources, batch 6 (#158)",
+    "event": "pull_request",
+    "headBranch": "data/158-batch6-activities",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T11:39:33Z",
+    "databaseId": 41049654110,
+    "displayTitle": "data: 200 more activities from verified sources (#156)",
+    "event": "pull_request",
+    "headBranch": "data/156-more-activities",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-30T11:19:08Z",
+    "databaseId": 41047216977,
+    "displayTitle": "data: source links for the 24 activities that had none (#154)",
+    "event": "pull_request",
+    "headBranch": "data/154-source-links",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T19:27:35Z",
+    "databaseId": 40940267933,
+    "displayTitle": "Merge pull request #153 from <redacted>/fix/152-logout-flash",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T19:27:18Z",
+    "databaseId": 40940228127,
+    "displayTitle": "Merge pull request #151 from <redacted>/feature/150-fingerprint-un…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T19:20:30Z",
+    "databaseId": 40939202950,
+    "displayTitle": "fix: log out straight to the login screen (#152)",
+    "event": "pull_request",
+    "headBranch": "fix/152-logout-flash",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T19:03:44Z",
+    "databaseId": 40936612784,
+    "displayTitle": "feat: fingerprint log-in and lock (#150)",
+    "event": "pull_request",
+    "headBranch": "feature/150-fingerprint-unlock",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T18:53:50Z",
+    "databaseId": 40935084003,
+    "displayTitle": "feat: fingerprint log-in and lock (#150)",
+    "event": "pull_request",
+    "headBranch": "feature/150-fingerprint-unlock",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T18:19:39Z",
+    "databaseId": 40929737548,
+    "displayTitle": "feat: fingerprint log-in and lock (#150)",
+    "event": "pull_request",
+    "headBranch": "feature/150-fingerprint-unlock",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T16:57:37Z",
+    "databaseId": 40916660315,
+    "displayTitle": "Merge pull request #149 from <redacted>/feature/146-two-step-reset",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T15:47:10Z",
+    "databaseId": 40905060361,
+    "displayTitle": "feat: reset a password in three steps: email, code, new password (#146)",
+    "event": "pull_request",
+    "headBranch": "feature/146-two-step-reset",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T15:47:05Z",
+    "databaseId": 40905047135,
+    "displayTitle": "Merge pull request #148 from <redacted>/feature/147-meter-on-chang…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T15:29:32Z",
+    "databaseId": 40902098135,
+    "displayTitle": "feat: strength meter on the Change password screen (#147)",
+    "event": "pull_request",
+    "headBranch": "feature/147-meter-on-change-password",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T10:58:20Z",
+    "databaseId": 40861717807,
+    "displayTitle": "Merge pull request #145 from <redacted>/fix/144-email-send-failure",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T10:58:02Z",
+    "databaseId": 40861678627,
+    "displayTitle": "Merge pull request #143 from <redacted>/feature/142-change-password",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T10:57:44Z",
+    "databaseId": 40861642890,
+    "displayTitle": "Merge pull request #141 from <redacted>/feature/140-livelier-sign-in",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T10:47:02Z",
+    "databaseId": 40860267860,
+    "displayTitle": "fix: say when a code email can't be sent, instead of a 500 (#144)",
+    "event": "pull_request",
+    "headBranch": "fix/144-email-send-failure",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T10:13:15Z",
+    "databaseId": 40855810336,
+    "displayTitle": "feat: change password while signed in, for caregivers and admins (#142)",
+    "event": "pull_request",
+    "headBranch": "feature/142-change-password",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T09:36:30Z",
+    "databaseId": 40850968100,
+    "displayTitle": "feat: a livelier sign-in screen, and a password strength meter (#140)",
+    "event": "pull_request",
+    "headBranch": "feature/140-livelier-sign-in",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T09:33:15Z",
+    "databaseId": 40850536377,
+    "displayTitle": "feat: a livelier sign-in screen, and a password strength meter (#140)",
+    "event": "pull_request",
+    "headBranch": "feature/140-livelier-sign-in",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T08:33:56Z",
+    "databaseId": 40843042060,
+    "displayTitle": "Merge pull request #139 from <redacted>/feature/138-activity-detai…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T08:29:17Z",
+    "databaseId": 40842471607,
+    "displayTitle": "feat: full activity details, and polish from the phone walkthrough (#138)",
+    "event": "pull_request",
+    "headBranch": "feature/138-activity-details-and-polish",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T08:21:55Z",
+    "databaseId": 40841599005,
+    "displayTitle": "feat: full activity details, and polish from the phone walkthrough (#138)",
+    "event": "pull_request",
+    "headBranch": "feature/138-activity-details-and-polish",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T08:13:58Z",
+    "databaseId": 40840661324,
+    "displayTitle": "feat: full activity details, and polish from the phone walkthrough (#138)",
+    "event": "pull_request",
+    "headBranch": "feature/138-activity-details-and-polish",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T08:09:37Z",
+    "databaseId": 40840150800,
+    "displayTitle": "Merge pull request #137 from <redacted>/feature/136-privacy-consent",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T08:00:06Z",
+    "databaseId": 40839045142,
+    "displayTitle": "feat: privacy notice and consent before adding a child's data (#136)",
+    "event": "pull_request",
+    "headBranch": "feature/136-privacy-consent",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-29T07:49:22Z",
+    "databaseId": 40837897654,
+    "displayTitle": "Merge pull request #135 from <redacted>/feature/134-account-and-ch…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-26T12:52:01Z",
+    "databaseId": 40325835252,
+    "displayTitle": "feat: privacy notice and consent before adding a child's data (#136)",
+    "event": "pull_request",
+    "headBranch": "feature/136-privacy-consent",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-25T20:26:19Z",
+    "databaseId": 40230762355,
+    "displayTitle": "feat: delete my account, and edit or delete a child in the app (#134)",
+    "event": "pull_request",
+    "headBranch": "feature/134-account-and-child-deletion",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-25T20:16:38Z",
+    "databaseId": 40229998274,
+    "displayTitle": "Merge pull request #133 from <redacted>/docs/132-caregiver-evaluat…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-25T20:16:21Z",
+    "databaseId": 40229976510,
+    "displayTitle": "Merge pull request #131 from <redacted>/feature/130-google-sign-in",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-25T19:18:46Z",
+    "databaseId": 40225429799,
+    "displayTitle": "feat: delete my account, and edit or delete a child in the app (#134)",
+    "event": "pull_request",
+    "headBranch": "feature/134-account-and-child-deletion",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-25T16:53:39Z",
+    "databaseId": 40213854942,
+    "displayTitle": "docs: caregiver evaluation materials (#132)",
+    "event": "pull_request",
+    "headBranch": "docs/132-caregiver-evaluation-materials",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-25T16:35:40Z",
+    "databaseId": 40212423491,
+    "displayTitle": "docs: caregiver evaluation materials (#132)",
+    "event": "pull_request",
+    "headBranch": "docs/132-caregiver-evaluation-materials",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-22T15:20:29Z",
+    "databaseId": 39803906864,
+    "displayTitle": "feat: Continue with Google, as a choice next to email (#130)",
+    "event": "pull_request",
+    "headBranch": "feature/130-google-sign-in",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-22T15:12:22Z",
+    "databaseId": 39802607454,
+    "displayTitle": "Merge pull request #129 from <redacted>/feature/128-password-autofill",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-21T17:01:44Z",
+    "databaseId": 39640081470,
+    "displayTitle": "feat: work with Google's \"Suggest strong password\" and password saving (#128)",
+    "event": "pull_request",
+    "headBranch": "feature/128-password-autofill",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-21T16:42:40Z",
+    "databaseId": 39637206553,
+    "displayTitle": "Merge pull request #127 from <redacted>/feature/126-password-reset",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-21T16:33:46Z",
+    "databaseId": 39635876895,
+    "displayTitle": "feat: reset a forgotten password with an emailed code (#126)",
+    "event": "pull_request",
+    "headBranch": "feature/126-password-reset",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-21T16:09:31Z",
+    "databaseId": 39632243024,
+    "displayTitle": "Merge pull request #125 from <redacted>/feature/123-admin-screens",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-21T16:09:17Z",
+    "databaseId": 39632204842,
+    "displayTitle": "Merge pull request #124 from <redacted>/feature/122-admin-api",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-21T16:09:02Z",
+    "databaseId": 39632166360,
+    "displayTitle": "Merge pull request #119 from <redacted>/docs/118-sprint-review-ali…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-21T12:29:54Z",
+    "databaseId": 39600062724,
+    "displayTitle": "docs: align the repository with the Sprint I and Sprint II review requirements (#118)",
+    "event": "pull_request",
+    "headBranch": "docs/118-sprint-review-alignment",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-21T12:27:39Z",
+    "databaseId": 39599760928,
+    "displayTitle": "feat: administrator screens in the Flutter app (#123)",
+    "event": "pull_request",
+    "headBranch": "feature/123-admin-screens",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-21T12:10:29Z",
+    "databaseId": 39597499883,
+    "displayTitle": "feat: administrator API for the app (overview, activities, feedback) (#122)",
+    "event": "pull_request",
+    "headBranch": "feature/122-admin-api",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-19T07:04:42Z",
+    "databaseId": 39213674807,
+    "displayTitle": "feat: redesign the admin dashboard as a modern operations overview (#120)",
+    "event": "pull_request",
+    "headBranch": "feature/120-admin-dashboard-redesign",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-19T06:41:43Z",
+    "databaseId": 39211389947,
+    "displayTitle": "docs: align the repository with the Sprint I and Sprint II review requirements (#118)",
+    "event": "pull_request",
+    "headBranch": "docs/118-sprint-review-alignment",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-19T06:16:53Z",
+    "databaseId": 39209003559,
+    "displayTitle": "docs: align the repository with the Sprint I and Sprint II review requirements (#118)",
+    "event": "pull_request",
+    "headBranch": "docs/118-sprint-review-alignment",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-16T06:42:42Z",
+    "databaseId": 38862752653,
+    "displayTitle": "Merge pull request #117 from <redacted>/feature/116-admin-dashboard",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-16T06:38:35Z",
+    "databaseId": 38862368194,
+    "displayTitle": "feat: analytics dashboard on the admin home page (#116)",
+    "event": "pull_request",
+    "headBranch": "feature/116-admin-dashboard",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-15T20:06:15Z",
+    "databaseId": 38799242021,
+    "displayTitle": "Merge pull request #115 from <redacted>/feature/114-admin-theme",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-15T19:45:47Z",
+    "databaseId": 38796514916,
+    "displayTitle": "feat: style the Django admin to match the app's village theme (#114)",
+    "event": "pull_request",
+    "headBranch": "feature/114-admin-theme",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-15T19:33:32Z",
+    "databaseId": 38794884478,
+    "displayTitle": "Merge pull request #113 from <redacted>/feature/112-village-restyle",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-15T19:33:14Z",
+    "databaseId": 38794842877,
+    "displayTitle": "Merge pull request #111 from <redacted>/docs/110-testing-record",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-15T19:19:58Z",
+    "databaseId": 38793018771,
+    "displayTitle": "feat: 'Village in Your Pocket' restyle, app icon and splash (#112)",
+    "event": "pull_request",
+    "headBranch": "feature/112-village-restyle",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-15T18:54:05Z",
+    "databaseId": 38789439854,
+    "displayTitle": "docs: testing and evaluation record, phone-run screenshots and demo checklist (#110)",
+    "event": "pull_request",
+    "headBranch": "docs/110-testing-record",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-15T18:10:25Z",
+    "databaseId": 38783410955,
+    "displayTitle": "Merge pull request #109 from <redacted>/fix/108-e2e-clean-session",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-15T18:10:08Z",
+    "databaseId": 38783369219,
+    "displayTitle": "Merge pull request #107 from <redacted>/docs/106-project-overview",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-15T17:48:41Z",
+    "databaseId": 38780418287,
+    "displayTitle": "test: make the end-to-end test pass on a real Android phone (#108)",
+    "event": "pull_request",
+    "headBranch": "fix/108-e2e-clean-session",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-15T08:22:54Z",
+    "databaseId": 38705245125,
+    "displayTitle": "docs: bring PROJECT_OVERVIEW.md up to date after Sprints 6-8 (#106)",
+    "event": "pull_request",
+    "headBranch": "docs/106-project-overview",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T18:53:57Z",
+    "databaseId": 38619066539,
+    "displayTitle": "Merge pull request #105 from <redacted>/test/104-e2e-round-trip",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T18:53:42Z",
+    "databaseId": 38619032060,
+    "displayTitle": "Merge pull request #103 from <redacted>/fix/102-offline-launch",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T18:53:25Z",
+    "databaseId": 38618993014,
+    "displayTitle": "Merge pull request #101 from <redacted>/feature/100-done-and-feedb…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T18:53:08Z",
+    "databaseId": 38618952744,
+    "displayTitle": "Merge pull request #99 from <redacted>/feature/96-admin-feedback-r…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T18:52:51Z",
+    "databaseId": 38618910833,
+    "displayTitle": "Merge pull request #98 from <redacted>/feature/95-feedback-manager",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T18:52:38Z",
+    "databaseId": 38618880718,
+    "displayTitle": "Merge pull request #97 from <redacted>/feature/94-mark-completed",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T17:12:22Z",
+    "databaseId": 38604662901,
+    "displayTitle": "test: end-to-end round trip on the real backend for the tabbed app (#104)",
+    "event": "pull_request",
+    "headBranch": "test/104-e2e-round-trip",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T17:10:17Z",
+    "databaseId": 38604359003,
+    "displayTitle": "fix: stay signed in when the app is opened offline (#102)",
+    "event": "pull_request",
+    "headBranch": "fix/102-offline-launch",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T17:06:12Z",
+    "databaseId": 38603769243,
+    "displayTitle": "feat: mark done and leave feedback from the activity screen (#100)",
+    "event": "pull_request",
+    "headBranch": "feature/100-done-and-feedback-mobile",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T17:00:45Z",
+    "databaseId": 38602975712,
+    "displayTitle": "feat: administrator feedback review (#96)",
+    "event": "pull_request",
+    "headBranch": "feature/96-admin-feedback-review",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T16:54:03Z",
+    "databaseId": 38602005391,
+    "displayTitle": "feat: submit feedback on a recommendation via FeedbackManager (#95)",
+    "event": "pull_request",
+    "headBranch": "feature/95-feedback-manager",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T16:48:18Z",
+    "databaseId": 38601180834,
+    "displayTitle": "feat: mark a recommendation as completed (#94)",
+    "event": "pull_request",
+    "headBranch": "feature/94-mark-completed",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T10:23:27Z",
+    "databaseId": 38549230648,
+    "displayTitle": "Merge pull request #93 from <redacted>/feature/91-two-step-mobile",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T10:22:43Z",
+    "databaseId": 38549144606,
+    "displayTitle": "Merge pull request #87 from <redacted>/feature/86-two-step-verific…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T10:22:27Z",
+    "databaseId": 38549113313,
+    "displayTitle": "Merge pull request #92 from <redacted>/feature/90-redesign",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T10:22:06Z",
+    "databaseId": 38549073217,
+    "displayTitle": "Merge pull request #89 from <redacted>/feature/85-offline-recommen…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-14T10:21:55Z",
+    "databaseId": 38549050449,
+    "displayTitle": "Merge pull request #88 from <redacted>/feature/84-activity-detail",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-11T07:44:04Z",
+    "databaseId": 38122366050,
+    "displayTitle": "feat: two-step verification code screen in the app (#91)",
+    "event": "pull_request",
+    "headBranch": "feature/91-two-step-mobile",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-11T07:44:01Z",
+    "databaseId": 38122362477,
+    "displayTitle": "feat: modern, playful redesign with light and dark mode and a tabbed home (#90)",
+    "event": "pull_request",
+    "headBranch": "feature/90-redesign",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-11T07:23:08Z",
+    "databaseId": 38121184249,
+    "displayTitle": "feat: show the last recommendations offline (#85)",
+    "event": "pull_request",
+    "headBranch": "feature/85-offline-recommendations",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-11T07:23:03Z",
+    "databaseId": 38121179398,
+    "displayTitle": "feat: activity detail screen from a recommendation card (#84)",
+    "event": "pull_request",
+    "headBranch": "feature/84-activity-detail",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T20:37:28Z",
+    "databaseId": 38084469468,
+    "displayTitle": "feat: two-step verification by emailed code for app login (#86)",
+    "event": "pull_request",
+    "headBranch": "feature/86-two-step-verification",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T20:23:11Z",
+    "databaseId": 38083539337,
+    "displayTitle": "Merge pull request #83 from <redacted>/feature/82-recommendations-…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T20:22:57Z",
+    "databaseId": 38083522995,
+    "displayTitle": "Merge pull request #81 from <redacted>/docs/80-reader-test-form",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T18:37:06Z",
+    "databaseId": 38076501400,
+    "displayTitle": "feat: recommendations screen for the selected child (#82)",
+    "event": "pull_request",
+    "headBranch": "feature/82-recommendations-screen",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T18:29:19Z",
+    "databaseId": 38075969797,
+    "displayTitle": "docs: Google Form, hand-build guide and scorer for the reader test (#80)",
+    "event": "pull_request",
+    "headBranch": "docs/80-reader-test-form",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T18:12:26Z",
+    "databaseId": 38074840523,
+    "displayTitle": "Merge pull request #79 from <redacted>/docs/78-reader-test-cards",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T18:05:42Z",
+    "databaseId": 38074392740,
+    "displayTitle": "docs: printable reader-test cards and session sheet (#78)",
+    "event": "pull_request",
+    "headBranch": "docs/78-reader-test-cards",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T17:59:43Z",
+    "databaseId": 38073979517,
+    "displayTitle": "Merge pull request #77 from <redacted>/feature/76-load-plain-aims",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T17:59:27Z",
+    "databaseId": 38073962408,
+    "displayTitle": "Merge pull request #75 from <redacted>/docs/71-explanation-reader-…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T17:59:13Z",
+    "databaseId": 38073946083,
+    "displayTitle": "Merge pull request #74 from <redacted>/data/70-plain-aim-drafts",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T17:58:57Z",
+    "databaseId": 38073929629,
+    "displayTitle": "Merge pull request #73 from <redacted>/feature/69-explanations",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T17:58:40Z",
+    "databaseId": 38073912600,
+    "displayTitle": "Merge pull request #72 from <redacted>/feature/68-plain-aim-proven…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T16:57:39Z",
+    "databaseId": 38069771675,
+    "displayTitle": "docs: explanation reader test (#71)",
+    "event": "pull_request",
+    "headBranch": "docs/71-explanation-reader-test",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T16:46:43Z",
+    "databaseId": 38069033927,
+    "displayTitle": "data: plain_aim drafts for review (#70)",
+    "event": "pull_request",
+    "headBranch": "data/70-plain-aim-drafts",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T16:06:31Z",
+    "databaseId": 38066310905,
+    "displayTitle": "feat: load_plain_aims, which never touches content status (#76)",
+    "event": "pull_request",
+    "headBranch": "feature/76-load-plain-aims",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T15:57:17Z",
+    "databaseId": 38065687636,
+    "displayTitle": "data: plain_aim drafts for review (#70)",
+    "event": "pull_request",
+    "headBranch": "data/70-plain-aim-drafts",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T15:55:57Z",
+    "databaseId": 38065601624,
+    "displayTitle": "feat: caregiver-readable recommendation explanations (#69)",
+    "event": "pull_request",
+    "headBranch": "feature/69-explanations",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T15:07:11Z",
+    "databaseId": 38062318024,
+    "displayTitle": "docs: explanation reader test (#71)",
+    "event": "pull_request",
+    "headBranch": "docs/71-explanation-reader-test",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T15:01:33Z",
+    "databaseId": 38061944522,
+    "displayTitle": "data: plain_aim drafts for review (#70)",
+    "event": "pull_request",
+    "headBranch": "data/70-plain-aim-drafts",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T14:59:18Z",
+    "databaseId": 38061784508,
+    "displayTitle": "feat: caregiver-readable recommendation explanations (#69)",
+    "event": "pull_request",
+    "headBranch": "feature/69-explanations",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T14:52:00Z",
+    "databaseId": 38061307806,
+    "displayTitle": "feat: add plain_aim and narrow the provenance hash (#68)",
+    "event": "pull_request",
+    "headBranch": "feature/68-plain-aim-provenance",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T14:42:55Z",
+    "databaseId": 38060710484,
+    "displayTitle": "Merge pull request #67 from <redacted>/fix/66-warmup-default-off",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T14:22:09Z",
+    "databaseId": 38059327226,
+    "displayTitle": "fix: model warm-up off by default in development (#66)",
+    "event": "pull_request",
+    "headBranch": "fix/66-warmup-default-off",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T14:12:05Z",
+    "databaseId": 38058667195,
+    "displayTitle": "Merge pull request #65 from <redacted>/docs/61-performance-note",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T14:11:55Z",
+    "databaseId": 38058656338,
+    "displayTitle": "Merge pull request #64 from <redacted>/feature/58-model-warmup",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T14:11:41Z",
+    "databaseId": 38058641793,
+    "displayTitle": "Merge pull request #63 from <redacted>/ci/59-postgres-service",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T14:11:26Z",
+    "databaseId": 38058625101,
+    "displayTitle": "Merge pull request #62 from <redacted>/fix/60-fingerprint-query",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T14:11:15Z",
+    "databaseId": 38058612579,
+    "displayTitle": "Merge pull request #57 from <redacted>/feature/52-ranked-recommend…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T14:10:59Z",
+    "databaseId": 38058597302,
+    "displayTitle": "Merge pull request #56 from <redacted>/docs/55-project-overview",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T14:10:39Z",
+    "databaseId": 38058576114,
+    "displayTitle": "Merge pull request #54 from <redacted>/docs/53-ranking-scope-note",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T10:38:56Z",
+    "databaseId": 38045630116,
+    "displayTitle": "docs: latency note for the recommendations endpoint (#61)",
+    "event": "pull_request",
+    "headBranch": "docs/61-performance-note",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T10:28:02Z",
+    "databaseId": 38044992017,
+    "displayTitle": "feat: warm up the SBERT model at server start (#58)",
+    "event": "pull_request",
+    "headBranch": "feature/58-model-warmup",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "failure",
+    "createdAt": "2026-10-10T10:23:35Z",
+    "databaseId": 38044735204,
+    "displayTitle": "feat: warm up the SBERT model at server start (#58)",
+    "event": "pull_request",
+    "headBranch": "feature/58-model-warmup",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "failure",
+    "createdAt": "2026-10-10T10:20:24Z",
+    "databaseId": 38044554220,
+    "displayTitle": "feat: warm up the SBERT model at server start (#58)",
+    "event": "pull_request",
+    "headBranch": "feature/58-model-warmup",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T10:07:50Z",
+    "databaseId": 38043828978,
+    "displayTitle": "ci: run backend tests on PostgreSQL as well as SQLite (#59)",
+    "event": "pull_request",
+    "headBranch": "ci/59-postgres-service",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T10:06:52Z",
+    "databaseId": 38043772675,
+    "displayTitle": "fix: include the retrieval query in profile_fingerprint (#60)",
+    "event": "pull_request",
+    "headBranch": "fix/60-fingerprint-query",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T09:58:54Z",
+    "databaseId": 38043298576,
+    "displayTitle": "feat: generate and store ranked recommendations end to end (#52)",
+    "event": "pull_request",
+    "headBranch": "feature/52-ranked-recommendations-endpoint",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T09:29:26Z",
+    "databaseId": 38041563814,
+    "displayTitle": "docs: refresh and add the project overview (#55)",
+    "event": "pull_request",
+    "headBranch": "docs/55-project-overview",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T09:26:29Z",
+    "databaseId": 38041392573,
+    "displayTitle": "docs: record preference and contextual weighting as out of scope (#53)",
+    "event": "pull_request",
+    "headBranch": "docs/53-ranking-scope-note",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T09:17:48Z",
+    "databaseId": 38040884144,
+    "displayTitle": "Merge pull request #51 from <redacted>/docs/50-sprint5-alpha-results",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T08:56:18Z",
+    "databaseId": 38039614883,
+    "displayTitle": "docs: Sprint 5 wrap-up, alpha = 0.7 and results (#50)",
+    "event": "pull_request",
+    "headBranch": "docs/50-sprint5-alpha-results",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T08:46:28Z",
+    "databaseId": 38039048492,
+    "displayTitle": "Merge pull request #49 from <redacted>/chore/48-heldout-relevance-…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T08:24:01Z",
+    "databaseId": 38037739494,
+    "displayTitle": "chore: add held-out relevance labels (#48)",
+    "event": "pull_request",
+    "headBranch": "chore/48-heldout-relevance-labels",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T07:46:28Z",
+    "databaseId": 38035576804,
+    "displayTitle": "Merge pull request #47 from <redacted>/feature/46-heldout-labellin…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-10T07:35:28Z",
+    "databaseId": 38034946032,
+    "displayTitle": "feat: one-child-at-a-time labelling page for the held-out sheet (#46)",
+    "event": "pull_request",
+    "headBranch": "feature/46-heldout-labelling-page",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-09T16:50:13Z",
+    "databaseId": 37961965576,
+    "displayTitle": "Merge pull request #45 from <redacted>/feature/44-heldout-provenan…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-09T16:49:58Z",
+    "databaseId": 37961935646,
+    "displayTitle": "Merge pull request #43 from <redacted>/feature/37-alpha-grid-searc…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-08T16:50:29Z",
+    "databaseId": 37811921064,
+    "displayTitle": "feat: provenance sidecar and unlabelled guard for held-out evaluation (#44)",
+    "event": "pull_request",
+    "headBranch": "feature/44-heldout-provenance-guard",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-08T15:42:58Z",
+    "databaseId": 37803027143,
+    "displayTitle": "feat: held-out set and alpha grid-search harness (#37)",
+    "event": "pull_request",
+    "headBranch": "feature/37-alpha-grid-search-heldout",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-10-08T15:21:07Z",
+    "databaseId": 37800039357,
+    "displayTitle": "Merge pull request #42 from <redacted>/docs/31-sprint4-retrieval-s…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  }
+]
