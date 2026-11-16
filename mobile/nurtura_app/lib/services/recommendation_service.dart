@@ -27,6 +27,13 @@ class RecommendationService {
             as Map<String, dynamic>,
       );
 
+  /// How many activities the child has done, for Progress (#231).
+  Future<ActivitiesDone> activitiesDone(int childId) async =>
+      ActivitiesDone.fromJson(
+        await _api.get('/api/children/$childId/activities-done/')
+            as Map<String, dynamic>,
+      );
+
   /// Marks the activity done, or partly done (FR-14).
   Future<Completion> markDone(
     int recommendationId, {

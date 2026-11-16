@@ -3,9 +3,11 @@ import 'package:provider/provider.dart';
 
 import '../logic/progress.dart';
 import '../models/child_profile.dart';
+import '../models/recommendation.dart';
 import '../models/reference_milestone.dart';
 import '../services/api_client.dart';
 import '../services/milestone_service.dart';
+import '../services/recommendation_service.dart';
 import '../state/engagement.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
@@ -35,7 +37,11 @@ class _ProgressScreenState extends State<ProgressScreen> {
   late final MilestoneService _service = MilestoneService(
     context.read<ApiClient>(),
   );
+  late final RecommendationService _ideas = RecommendationService(
+    context.read<ApiClient>(),
+  );
   List<MilestoneObservation>? _history;
+  ActivitiesDone? _done;
   String? _error;
 
   @override
@@ -46,6 +52,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
 
   Future<void> _load() async {
     setState(() => _error = null);
+    _loadDone();
     if (widget.child.isExpecting) {
       return setState(() => _history = const []);
     }
@@ -54,6 +61,17 @@ class _ProgressScreenState extends State<ProgressScreen> {
       if (mounted) setState(() => _history = history);
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  /// Activities done (#231). Optional: if it fails, the card is left out
+  /// and the rest of Progress still shows.
+  Future<void> _loadDone() async {
+    try {
+      final done = await _ideas.activitiesDone(widget.child.id);
+      if (mounted) setState(() => _done = done);
+    } on ApiException {
+      if (mounted) setState(() => _done = null);
     }
   }
 
@@ -103,6 +121,10 @@ class _ProgressScreenState extends State<ProgressScreen> {
             best: engagement.bestStreak,
             checkedInToday: engagement.checkedInToday,
           ),
+          if (_done != null) ...[
+            const SizedBox(height: 14),
+            _ActivitiesDoneCard(done: _done!),
+          ],
           if (!widget.child.isExpecting) ...[
             const SizedBox(height: 22),
             _SectionTitle(
@@ -283,6 +305,61 @@ class _StreakCard extends StatelessWidget {
                       color: p.mutedText,
                     ),
                   ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Activities done with the child (#231): a count, never a comparison.
+class _ActivitiesDoneCard extends StatelessWidget {
+  const _ActivitiesDoneCard({required this.done});
+
+  final ActivitiesDone done;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final total = done.total;
+    final title = total == 0
+        ? 'No activities done yet'
+        : '$total ${total == 1 ? 'activity' : 'activities'} done';
+    final detail = total == 0
+        ? 'Mark an idea done and it will show here.'
+        : [
+            if (done.partly > 0) '${done.partly} of them partly',
+            '${done.lastSevenDays} in the last 7 days',
+          ].join(' · ');
+    return AppCard(
+      key: const Key('activitiesDoneCard'),
+      color: p.primarySoft,
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(color: p.primary, shape: BoxShape.circle),
+            child: Icon(Icons.check_rounded, color: p.card, size: 28),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  key: const Key('activitiesDoneTitle'),
+                  style: AppText.quicksand(size: 18, color: p.ink),
+                ),
+                Text(
+                  detail,
+                  key: const Key('activitiesDoneDetail'),
+                  style: AppText.nunito(size: 13, color: p.ink),
+                ),
               ],
             ),
           ),

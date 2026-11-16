@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -113,6 +114,28 @@ void main() {
     // The profile changed, so going back asks for a fresh batch.
     await progress.back(tester);
     expect(backend.to(recs.path).last.method, 'POST');
+  });
+
+  testWidgets('Edit starts from what the sheet saved (#231)', (tester) async {
+    final backend = wellDoneBackend();
+    await progress.openDetail(tester, backend);
+    await progress.tapOnDetail(tester, find.byKey(const Key('markDoneButton')));
+    await tapInSheet(tester, 'interest_happy');
+    await tapInSheet(tester, 'sheetOutcome_went_well');
+    await tester.enterText(find.byKey(const Key('wellDoneNote')), 'Giggles');
+    await tapInSheet(tester, 'saveProgressButton');
+
+    await progress.tapOnDetail(
+      tester,
+      find.byKey(const Key('editFeedbackButton')),
+    );
+    ChoiceChip chip(String key) =>
+        tester.widget<ChoiceChip>(find.byKey(Key(key)));
+    // Before #231 the outcome came back empty, and saving said
+    // "Choose how it went." although it had been chosen in the sheet.
+    expect(chip('outcome_went_well').selected, isTrue);
+    expect(chip('cardInterest_happy').selected, isTrue);
+    expect(find.text('Giggles'), findsOneWidget);
   });
 
   testWidgets("didn't work asks what got in the way", (tester) async {

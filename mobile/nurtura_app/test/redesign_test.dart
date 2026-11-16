@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:nurtura_app/logic/progress.dart';
 import 'package:nurtura_app/models/reference_milestone.dart';
 import 'package:nurtura_app/state/engagement.dart';
@@ -146,8 +147,15 @@ void main() {
   });
 
   group('home shell', () {
-    FakeBackend backend({List<Map<String, dynamic>>? history}) => FakeBackend(
+    FakeBackend backend({
+      List<Map<String, dynamic>>? history,
+      bool doneFails = false,
+    }) => FakeBackend(
       (r) async {
+        if (r.url.path.endsWith('/activities-done/')) {
+          if (doneFails) return http.Response('', 500);
+          return json({'completed': 1, 'partly': 1, 'last_7_days': 2});
+        }
         if (r.url.path.endsWith('/recommendations/')) {
           final id = r.url.pathSegments[2];
           return json(
@@ -190,6 +198,15 @@ void main() {
       expect(b.to('/api/children/4/recommendations/'), isNotEmpty);
     });
 
+    testWidgets('Progress still shows if the activities count fails (#231)', (
+      tester,
+    ) async {
+      await pumpApp(tester, backend(doneFails: true), savedToken: 'tok');
+      await tapVisible(tester, find.byKey(const Key('tab_progress')));
+      expect(find.byKey(const Key('activitiesDoneCard')), findsNothing);
+      expect(find.byKey(const Key('streakCard')), findsOneWidget);
+    });
+
     testWidgets('Progress shows celebrated milestones, areas and badges', (
       tester,
     ) async {
@@ -205,6 +222,17 @@ void main() {
       );
       await tapVisible(tester, find.byKey(const Key('tab_progress')));
       expect(find.text('1 milestone celebrated'), findsOneWidget);
+      // Activities done (#231).
+      expect(find.text('2 activities done'), findsOneWidget);
+      expect(
+        find.text('1 of them partly · 2 in the last 7 days'),
+        findsOneWidget,
+      );
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('area_Language')),
+        200,
+        scrollable: find.byType(Scrollable).last,
+      );
       expect(find.byKey(const Key('area_Language')), findsOneWidget);
       expect(find.text('1 celebrated'), findsOneWidget);
       expect(find.text('0 celebrated · 1 practising'), findsOneWidget);

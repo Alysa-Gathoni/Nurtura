@@ -45,6 +45,41 @@ def feedback_json(feedback):
     }
 
 
+class ActivitiesDoneView(APIView):
+    """GET a child's count of activities done, for the Progress tab (#231).
+
+    Distinct activities marked done (`completed`) or partly done
+    (`partly`), and how many of either in the last 7 days. Counts only, for
+    the caregiver's own child; nothing is compared with other children.
+    """
+
+    permission_classes = [IsCaregiver]
+
+    def get(self, request, child_id):
+        from datetime import timedelta
+
+        from profiles.models import ChildProfile
+
+        child = get_object_or_404(ChildProfile, pk=child_id, caregiver=request.user)
+        done = CompletedActivity.objects.filter(recommendation__child=child)
+
+        def distinct(qs):
+            return qs.values("recommendation__activity").distinct().count()
+
+        week_start = timezone.localdate() - timedelta(days=6)
+        return Response(
+            {
+                "completed": distinct(
+                    done.filter(status=CompletedActivity.Status.COMPLETED)
+                ),
+                "partly": distinct(
+                    done.filter(status=CompletedActivity.Status.PARTIALLY_COMPLETED)
+                ),
+                "last_7_days": distinct(done.filter(completion_date__gte=week_start)),
+            }
+        )
+
+
 class CompletionSerializer(serializers.Serializer):
     status = serializers.ChoiceField(
         choices=CompletedActivity.Status.choices,

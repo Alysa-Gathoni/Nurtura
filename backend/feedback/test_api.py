@@ -261,3 +261,61 @@ class FeedbackAPITests(OwnRecommendationTestCase):
         self.as_others(self.put)
         self.as_others(lambda: self.client.get(self.url()))
         self.assertEqual(Feedback.objects.get().rating, 5)
+
+
+class ActivitiesDoneAPITests(OwnRecommendationTestCase):
+    """The Progress tab's count of activities done (#231)."""
+
+    def url(self, child=None):
+        return reverse("child-activities-done", args=[(child or self.child).pk])
+
+    def recommend(self, activity_id):
+        activity = DevelopmentalActivity.objects.create(
+            **activity_fields(
+                activity_id=activity_id,
+                activity_name=f"Activity {activity_id}",
+                content_status=ContentStatus.PUBLISHED,
+            )
+        )
+        return Recommendation.objects.create(
+            child=self.child, activity=activity, similarity_score=0.5, ranking_score=0.5
+        )
+
+    def done(self, recommendation, status_value="completed", days_ago=0):
+        CompletedActivity.objects.create(
+            recommendation=recommendation,
+            status=status_value,
+            completion_date=datetime.date(2026, 11, 16)
+            - datetime.timedelta(days=days_ago),
+        )
+
+    @mock.patch(
+        "django.utils.timezone.localdate", return_value=datetime.date(2026, 11, 16)
+    )
+    def test_counts_done_partly_and_last_seven_days(self, _):
+        self.assertEqual(
+            self.client.get(self.url()).json(),
+            {"completed": 0, "partly": 0, "last_7_days": 0},
+        )
+        self.done(self.recommendation)
+        self.done(self.recommend("ACT002"), "partially_completed", days_ago=6)
+        self.done(self.recommend("ACT003"), days_ago=7)  # outside the week
+        response = self.client.get(self.url())
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.json(), {"completed": 2, "partly": 1, "last_7_days": 2}
+        )
+
+    def test_the_same_activity_in_two_batches_counts_once(self):
+        again = Recommendation.objects.create(
+            child=self.child,
+            activity=self.recommendation.activity,
+            similarity_score=0.8,
+            ranking_score=0.7,
+        )
+        self.done(self.recommendation)
+        self.done(again)
+        self.assertEqual(self.client.get(self.url()).json()["completed"], 1)
+
+    def test_only_the_childs_caregiver_may_read(self):
+        self.as_others(lambda: self.client.get(self.url()))

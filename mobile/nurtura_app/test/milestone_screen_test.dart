@@ -230,6 +230,32 @@ void main() {
     );
   });
 
+  testWidgets('choosing a milestone with the keyboard open does not overflow '
+      '(#231)', (tester) async {
+    const panel = 'How is Amani doing with this?';
+    await openMilestoneScreen(tester);
+    await tapVisible(tester, find.byKey(const Key('milestone_CDC-12M-LA-01')));
+    expect(find.text(panel), findsOneWidget);
+
+    // Searching again with a milestone selected: the keyboard (half the
+    // screen) and the panel don't both fit, so the panel waits.
+    await tester.tap(find.byKey(const Key('milestoneSearchField')));
+    tester.view.viewInsets = const FakeViewPadding(bottom: 700);
+    addTearDown(tester.view.resetViewInsets);
+    await tester.pumpAndSettle();
+    expect(tester.testTextInput.isVisible, isTrue);
+    expect(find.text(panel), findsNothing);
+    expect(tester.takeException(), isNull); // no "BOTTOM OVERFLOWED"
+
+    // Choosing a milestone closes the keyboard and brings the panel back.
+    await tester.tap(find.byKey(const Key('milestone_CDC-09M-MO-04')));
+    tester.view.resetViewInsets();
+    await tester.pumpAndSettle();
+    expect(tester.testTextInput.isVisible, isFalse);
+    expect(find.text(panel), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('records a Not yet milestone and confirms the profile update', (
     tester,
   ) async {
