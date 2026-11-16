@@ -30,7 +30,7 @@ The protocol is v1's, applied to the current catalogue:
   - 80 rows carried their v1 label, because the child, activity, name and description were unchanged. The researcher revised 4 of them while labelling (H06/ACT-0012 1→2, H07/ACT-0020 0→1, H10/ACT-0020 0→1, H16/ACT-0012 0→1).
   - 177 rows were new.
   - All 257 are labelled: 136 graded 2, 93 graded 1, 28 graded 0. No top-5 candidate in any ranking is unlabelled.
-  - One rater, so no agreement is reported.
+  - A second, independent rater (a registered nurse) graded all 257 rows blind on 2026-11-16 (#218): quadratic-weighted κ 0.661, 95% CI [0.589, 0.718]. See [eval_v2_statistics.md](eval_v2_statistics.md#agreement-between-raters-218).
 - **Metrics:** as in v1. Precision@3 and @5 counting grade ≥ 1 and grade 2, and nDCG@3 and @5 (gain 2^grade − 1).
 
 ## Tune set (11 children): the full curve
@@ -116,7 +116,7 @@ SBERT alone does better in v2 (0.452 → 0.582) because there are now several re
 ## Limitations
 
 - **Small and constructed:** 8 test children, all hypothetical profiles.
-- **One rater,** who also designed the system, with no agreement measure. 80 labels were carried from v1.
+- **The first rater designed the system.** 80 labels were carried from v1. A second, independent rater agreed substantially (quadratic-weighted κ 0.661), and on their labels α = 0.7 still beats SBERT alone on test (0.737 against 0.398, 7 of 8 children better). See [eval_v2_statistics.md](eval_v2_statistics.md#agreement-between-raters-218).
 - **The α decision departs from the rule fixed in advance,** for the reason given above.
 - **The ID tie-break at α = 1.0** is a weakness of the ranking at that setting. It doesn't affect α = 0.7, where ties are broken by similarity.
 - **Only the top 5 were labelled,** so the metrics can't be extended beyond k = 5.

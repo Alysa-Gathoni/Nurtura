@@ -1,6 +1,6 @@
 # Known limitations and outstanding defects
 
-> **Last updated: 2026-11-12.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
+> **Last updated: 2026-11-16.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
 
 ## Outstanding defects
 
@@ -15,7 +15,8 @@ None known. Every defect found so far has been fixed and is recorded with its co
 
 ## Evaluation limits
 
-- **Small and constructed.** α was chosen on 11 tune children and checked on 8 test children. They are realistic but hypothetical profiles, labelled by one rater who also designed the system, with no agreement measure. The results describe these children only and support no statistical claims ([sprint5_alpha_results.md](sprint5_alpha_results.md)).
+- **Small and constructed.** α was chosen on 11 tune children and checked on 8 test children. They are realistic but hypothetical profiles. The results describe these children only and support no statistical claims ([sprint5_alpha_results.md](sprint5_alpha_results.md)).
+- **Two raters, one of them the designer** (#218). The v2 labels are the researcher's. A registered nurse graded all 257 rows independently and blind: quadratic-weighted κ 0.661 (95% CI 0.589–0.718), with the nurse usually one grade stricter. The main result holds on the nurse's labels (test nDCG@5 0.737 against 0.398 for SBERT alone). One second rater can't stand for clinicians in general ([eval_v2_statistics.md](eval_v2_statistics.md#agreement-between-raters-218)).
 - **v2 kept α = 0.7 against the rule's choice** (#170). On 449 activities the rule fixed before labelling chose α = 1.0, but at α = 1.0 ties are broken by activity ID, which puts the first-written activities first. α = 0.7 was kept and reported (test nDCG@5 0.836 against 0.582); the rule's choice scored 0.876. See [eval_v2_results.md](eval_v2_results.md).
 - **Recommendations concentrate on the priority area** (#199). At α = 0.7 a top 5 covers about 1.4 of the five areas on average, by design. A child flagged in one area sees few ideas from the others in Today; Explore lets caregivers browse every area. See [eval_v2_beyond_accuracy.md](eval_v2_beyond_accuracy.md).
 - **The age weights were never tuned** (1 / 0.7 / 0.5 / 0.25 / 0.1). The v2 sensitivity check (#196) found that softer, harsher, symmetric and reversed weights give the same top 5 for every test child, so the exact values don't drive the results. Rule priority on top of the age weight isn't shown to help on the test children (+0.029, 95% CI [−0.007, +0.095]). See [eval_v2_statistics.md](eval_v2_statistics.md).

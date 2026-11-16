@@ -226,7 +226,9 @@ At the chosen α, for each test child and on average:
 - the **per-child difference** (hybrid minus SBERT-only) for each metric; and
 - the **count of test children improved, tied or worse** on nDCG@5 (the selection metric). A child with no relevant labels has no nDCG and is counted separately.
 
-With 8 test children, no significance claims are made. The gap child (H17) is reported separately in the same way. If `relevance_rater2` has been filled in for some rows, the simple agreement between the two raters is reported for those rows: the exact match rate, and the match rate on relevant/not relevant at ≥ 1 and at ≥ 2.
+With 8 test children, no significance claims are made. The gap child (H17) is reported separately in the same way. If `relevance_rater2` has been filled in for some rows, the simple agreement between the two raters is reported for those rows: the exact match rate, and the match rate on relevant/not relevant at ≥ 1 and at ≥ 2. `python manage.py evaluate_statistics` adds Cohen's kappa (unweighted, linear and quadratic-weighted, with a bootstrap interval over children), the confusion matrix, and nDCG@5 on each rater's labels (#218).
+
+**Second rater (2026-11-16):** a registered nurse, independent of the project, graded all 257 rows in second-rater mode. Results: [docs/eval_v2_statistics.md](../../docs/eval_v2_statistics.md#agreement-between-raters-218).
 
 ## Metrics on this set
 

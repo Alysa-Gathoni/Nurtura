@@ -1,4 +1,5 @@
-"""Tests for the held-out statistics and age-weight sensitivity (#196)."""
+"""Tests for the held-out statistics, age-weight sensitivity (#196) and
+agreement between raters (#218)."""
 
 import csv
 from io import StringIO
@@ -48,6 +49,68 @@ class PairedStatisticsTests(SimpleTestCase):
             statistics.paired([None], [0.5])
 
 
+class KappaTests(SimpleTestCase):
+    """Cohen's kappa for the second rater (#218)."""
+
+    PAIRS = [
+        (0, 0),
+        (0, 1),
+        (1, 1),
+        (1, 0),
+        (1, 2),
+        (2, 2),
+        (2, 1),
+        (2, 2),
+        (1, 1),
+        (0, 0),
+    ]
+
+    def test_matches_scikit_learn(self):
+        from sklearn.metrics import cohen_kappa_score
+
+        a, b = zip(*self.PAIRS)
+        for ours, theirs in (
+            ("unweighted", None),
+            ("linear", "linear"),
+            ("quadratic", "quadratic"),
+        ):
+            self.assertAlmostEqual(
+                statistics.cohen_kappa(self.PAIRS, ours),
+                cohen_kappa_score(a, b, weights=theirs),
+            )
+
+    def test_perfect_agreement_is_one(self):
+        self.assertEqual(statistics.cohen_kappa([(0, 0), (1, 1), (2, 2)]), 1.0)
+
+    def test_quadratic_counts_a_two_grade_disagreement_more(self):
+        near = [(0, 0), (1, 1), (2, 2), (0, 1)]
+        far = [(0, 0), (1, 1), (2, 2), (0, 2)]
+        self.assertGreater(statistics.cohen_kappa(near), statistics.cohen_kappa(far))
+
+    def test_undefined_cases_are_none(self):
+        self.assertIsNone(statistics.cohen_kappa([]))
+        self.assertIsNone(statistics.cohen_kappa([(1, 1), (1, 1)]))
+
+    def test_unknown_weights_are_an_error(self):
+        with self.assertRaises(ValueError):
+            statistics.cohen_kappa(self.PAIRS, "cubic")
+
+    def test_bootstrap_resamples_children_and_is_reproducible(self):
+        by_child = {f"H{i}": self.PAIRS[i::3] for i in range(3)}
+        low, high = statistics.kappa_bootstrap_ci(by_child, resamples=500)
+        value = statistics.cohen_kappa([p for ps in by_child.values() for p in ps])
+        self.assertLessEqual(low, value)
+        self.assertGreaterEqual(high, value)
+        self.assertEqual(
+            (low, high), statistics.kappa_bootstrap_ci(by_child, resamples=500)
+        )
+
+    def test_confusion_matrix(self):
+        self.assertEqual(
+            statistics.confusion(self.PAIRS), [[2, 1, 0], [1, 2, 1], [0, 1, 2]]
+        )
+
+
 class AgeScenarioTests(SimpleTestCase):
     def test_the_first_scenario_is_the_current_weights(self):
         _, weights = AGE_SCENARIOS[0]
@@ -82,11 +145,13 @@ class EvaluateStatisticsTests(HeldOutCommandTestCase):
         )
         return out.getvalue()
 
-    def label_every_row(self):
+    def label_every_row(self, second_rater=False):
         with open(self.path, newline="", encoding="utf-8") as f:
             rows = list(csv.DictReader(f))
         for row in rows:
             row["relevance"] = str(int(row["activity_id"][-1]) % 3)
+            if second_rater:
+                row["relevance_rater2"] = str((int(row["activity_id"][-1]) + 1) % 3)
         with open(self.path, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=COLUMNS)
             writer.writeheader()
@@ -110,5 +175,24 @@ class EvaluateStatisticsTests(HeldOutCommandTestCase):
             "95% CI",
             "Age-weight sensitivity at alpha 0.7",
             *(name for name, _ in AGE_SCENARIOS),
+        ):
+            self.assertIn(text, output)
+        self.assertIn("No rows have both relevance and relevance_rater2", output)
+
+    def test_reports_agreement_and_results_on_the_second_raters_labels(self):
+        self.publish()
+        self.export()
+        self.label_every_row(second_rater=True)
+        output = self.run_command()
+        for text in (
+            "Agreement between raters",
+            "Cohen's kappa, unweighted",
+            "Cohen's kappa, linear",
+            "Cohen's kappa, quadratic",
+            "Exact agreement",
+            "**First 2**",
+            "nDCG@5 on each rater's labels",
+            "Second, test",
+            "Second rater, test: alpha 0.7",
         ):
             self.assertIn(text, output)
