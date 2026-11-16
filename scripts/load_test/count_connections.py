@@ -11,7 +11,10 @@ import sys
 import time
 from pathlib import Path
 
-import psycopg2
+try:  # psycopg 3 since #226; psycopg2 before
+    import psycopg as pg
+except ImportError:
+    import psycopg2 as pg
 from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -27,7 +30,7 @@ def main():
         host=os.getenv("DB_HOST", "localhost"),
         port=os.getenv("DB_PORT", "5432"),
     )
-    conn = psycopg2.connect(**kwargs)  # opened before the load, so it keeps a slot
+    conn = pg.connect(**kwargs)  # opened before the load, so it keeps a slot
     conn.autocommit = True
     cur = conn.cursor()
     cur.execute("SHOW max_connections")
@@ -40,8 +43,8 @@ def main():
         )
         counts.append(cur.fetchone()[0])
         try:  # can a new client still connect?
-            psycopg2.connect(**kwargs).close()
-        except psycopg2.OperationalError as exc:
+            pg.connect(**kwargs).close()
+        except pg.OperationalError as exc:
             errors.append(str(exc).strip().splitlines()[0])
         time.sleep(1)
     result = {

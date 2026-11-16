@@ -15,7 +15,10 @@ import os
 import sys
 from pathlib import Path
 
-import psycopg2
+try:  # psycopg 3 since #226; psycopg2 before
+    import psycopg as pg
+except ImportError:
+    import psycopg2 as pg
 from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -24,7 +27,7 @@ SCRATCH = "nurtura_loadtest"
 
 def connect():
     load_dotenv(ROOT / "backend" / ".env")
-    conn = psycopg2.connect(
+    conn = pg.connect(
         dbname="postgres",
         user=os.getenv("DB_USER", ""),
         password=os.getenv("DB_PASSWORD", ""),
