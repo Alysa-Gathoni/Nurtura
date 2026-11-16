@@ -411,3 +411,24 @@ class RecommendationBatch {
     'referral': referral?.toJson(),
   };
 }
+
+/// How many activities a child has done, for the Progress tab (#231).
+class ActivitiesDone {
+  const ActivitiesDone({
+    required this.completed,
+    required this.partly,
+    required this.lastSevenDays,
+  });
+
+  factory ActivitiesDone.fromJson(Map<String, dynamic> json) => ActivitiesDone(
+    completed: json['completed'] as int? ?? 0,
+    partly: json['partly'] as int? ?? 0,
+    lastSevenDays: json['last_7_days'] as int? ?? 0,
+  );
+
+  final int completed;
+  final int partly;
+  final int lastSevenDays;
+
+  int get total => completed + partly;
+}

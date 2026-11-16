@@ -63,6 +63,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
   ApiException? _loadError;
 
   ReferenceMilestone? _selected;
+  bool _searching = false; // the search field has focus (keyboard up)
   MilestoneStatus? _status;
   bool _submitting = false;
   ApiException? _submitError;
@@ -123,6 +124,9 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
   }
 
   void _select(ReferenceMilestone milestone) {
+    // Close the keyboard: the status panel needs the room it took, and
+    // with both on screen the picker overflowed on a phone.
+    FocusScope.of(context).unfocus();
     setState(() {
       _selected = _selected?.id == milestone.id ? null : milestone;
       _status = null;
@@ -261,14 +265,21 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const SizedBox(height: 14),
-              AppTextField(
-                key: const Key('milestoneSearchField'),
-                label: 'Search milestones',
-                hint: 'e.g. waves, crawls, words',
-                controller: _search,
-                prefixIcon: Icons.search_rounded,
-                textInputAction: TextInputAction.search,
-                onChanged: _onSearchChanged,
+              // Reports when the search field (and so the keyboard) is in use.
+              Focus(
+                canRequestFocus: false,
+                skipTraversal: true,
+                onFocusChange: (focused) =>
+                    setState(() => _searching = focused),
+                child: AppTextField(
+                  key: const Key('milestoneSearchField'),
+                  label: 'Search milestones',
+                  hint: 'e.g. waves, crawls, words',
+                  controller: _search,
+                  prefixIcon: Icons.search_rounded,
+                  textInputAction: TextInputAction.search,
+                  onChanged: _onSearchChanged,
+                ),
               ),
               const SizedBox(height: 12),
             ],
@@ -304,7 +315,11 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
         ),
         const SizedBox(height: 10),
         Expanded(child: _resultsList()),
-        if (_selected != null) _statusPanel(),
+        // Hidden while the search field has the keyboard (typing a new
+        // search with a milestone selected): header, chips and panel don't
+        // all fit above a phone keyboard. It comes back when the search
+        // field lets go of focus.
+        if (_selected != null && !_searching) _statusPanel(),
       ],
     );
   }

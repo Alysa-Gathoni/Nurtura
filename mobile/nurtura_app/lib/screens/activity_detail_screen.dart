@@ -171,12 +171,26 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     if (mounted) setState(() => _savingDone = false);
   }
 
+  /// Makes the feedback editor show [saved], so "Edit" starts from what was
+  /// actually saved: outcome, issues, interest, rating and comment.
+  void _loadEditor(ActivityFeedback saved) {
+    _outcome = saved.outcome;
+    _interest = saved.interest;
+    _rating = saved.rating ?? 0;
+    _issues
+      ..clear()
+      ..addAll(saved.issues);
+    _comment.text = saved.comment;
+  }
+
   /// Shows newly saved feedback, its options, and any milestones recorded.
   Future<void> _feedbackSaved(ActivityFeedback saved) async {
     _update(_r.withProgress(feedback: saved));
     setState(() {
       _editingFeedback = false;
-      _interest = saved.interest;
+      // The "Well done!" sheet saves feedback that this screen's editor
+      // hasn't seen; without this, Edit showed the interest but no outcome.
+      _loadEditor(saved);
     });
     if (saved.recorded.isNotEmpty) {
       widget.onProfileChanged?.call();
@@ -228,7 +242,10 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
       );
       if (!mounted) return;
       _update(_r.withProgress(feedback: feedback));
-      setState(() => _editingFeedback = false);
+      setState(() {
+        _editingFeedback = false;
+        _loadEditor(feedback);
+      });
       await _loadOptions();
     }, (message) => setState(() => _feedbackError = message));
     if (mounted) setState(() => _sendingFeedback = false);
