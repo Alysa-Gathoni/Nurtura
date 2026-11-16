@@ -18,7 +18,7 @@ The fifth dimension, **personalisation effectiveness** (diversity, novelty and c
 
 > **Status: draft.** Confirm the two open decisions at the end with the supervisor before the first session.
 
-> **Pre-test (2026-11-16, #222):** the whole protocol, including the reader test, was run once with **simulated** participants to check the materials and find likely problems. Those results are not user results. See [simulated_evaluation.md](simulated_evaluation.md).
+> **Cognitive walkthrough (2026-11-16, #228):** tasks B1–B5 and the reader-test explanations were inspected step by step with fictional personas, to find likely problems before the sessions. It is an expert inspection, not a user study, and gives no usability score. See [cognitive_walkthrough.md](cognitive_walkthrough.md).
 
 ---
 

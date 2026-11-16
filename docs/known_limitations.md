@@ -11,7 +11,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 | Item | State | Planned |
 |---|---|---|
 | Explanation reader test (5 non-technical readers) | Materials ready ([explanation_reader_test.md](explanation_reader_test.md)); not run. Until it's scored, explanation wording and the evaluated ranking stay frozen | Before Sprint 9 |
-| Evaluation with caregivers: relevance, personalisation, explainability, usability (SUS), satisfaction | Materials drafted ([caregiver_evaluation.md](caregiver_evaluation.md)) and pre-tested with simulated participants, which are not user results ([simulated_evaluation.md](simulated_evaluation.md)); ethics question and sample size to confirm with the supervisor; real participants still to recruit | Sprint 9 |
+| Evaluation with caregivers: relevance, personalisation, explainability, usability (SUS), satisfaction | Materials drafted ([caregiver_evaluation.md](caregiver_evaluation.md)); tasks inspected by a cognitive walkthrough, which finds likely problems but gives no score ([cognitive_walkthrough.md](cognitive_walkthrough.md)); ethics question and sample size to confirm with the supervisor; real participants still to recruit | Sprint 9 |
 
 ## Evaluation limits
 
