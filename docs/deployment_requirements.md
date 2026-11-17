@@ -53,7 +53,7 @@ Behind a proxy or load balancer, the admin's login form also needs `CSRF_TRUSTED
 1. Create the database, set the environment variables, install the requirements and run `python setup_sbert.py`.
 2. `python manage.py migrate`, then `python manage.py collectstatic`.
 3. `python manage.py createsuperuser` for the first administrator.
-4. Load and publish the content: `seed_activities` and `seed_milestones`, review and publish in the admin, `load_plain_aims`, then `embed_activities` (see the README). Alternatively, restore a database copy from development.
+4. Load and publish the content: `seed_activities` and `seed_milestones`, review and publish in the admin, `load_plain_aims`, then `embed_activities` (see the README). Alternatively, restore a backup of the development database ([database_backup.md](database_backup.md)).
 5. Start the WSGI server behind HTTPS, and check `/admin/` and `/api/auth/me/` (a 401 without a token is correct).
 6. Build the release app with the hosted `API_BASE_URL` and install it on a phone.
 
