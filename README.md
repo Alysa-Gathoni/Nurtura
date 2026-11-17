@@ -128,6 +128,8 @@ To run `python manage.py test` against PostgreSQL, the database user also needs 
 ALTER USER nurtura_user CREATEDB;
 ```
 
+To back up the database and restore it, see [docs/database_backup.md](docs/database_backup.md). Backups are never committed.
+
 ### Users and roles
 
 There are two roles:
@@ -298,6 +300,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/testing_and_evaluation_record.md](docs/testing_and_evaluation_record.md) | Tests run, expected and actual results, defects and corrections, evaluation so far |
 | [docs/known_limitations.md](docs/known_limitations.md) | Known limitations and outstanding defects |
 | [docs/deployment_requirements.md](docs/deployment_requirements.md) | What hosting needs (Sprint III) |
+| [docs/database_backup.md](docs/database_backup.md) | Backing up and restoring the PostgreSQL database, and the backups taken |
 | [docs/demo_checklist.md](docs/demo_checklist.md) | Running a live demo on a phone |
 | [docs/sprint5_alpha_results.md](docs/sprint5_alpha_results.md) | The ranking evaluation v1 on 54 activities (held-out children, nDCG, choice of α) |
 | [docs/requirements_traceability.md](docs/requirements_traceability.md) | Every Chapter 4 requirement: where it is built, its tests and its status, with the old-ID crosswalk |
