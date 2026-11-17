@@ -230,6 +230,22 @@ void main() {
     );
   });
 
+  testWidgets('the picker fits a small phone (360 x 640) and milestones can '
+      'be reached (#237)', (tester) async {
+    await openMilestoneScreen(tester);
+    // A common budget phone: 720 x 1280 pixels at density 2.
+    tester.view.physicalSize = const Size(720, 1280);
+    tester.view.devicePixelRatio = 2.0;
+    await tester.pumpAndSettle();
+    // Before #237 the fixed header and chips left the list no height:
+    // "A RenderFlex overflowed by ... pixels on the bottom".
+    expect(tester.takeException(), isNull);
+
+    await tapVisible(tester, find.byKey(const Key('milestone_CDC-09M-MO-04')));
+    expect(find.text('How is Amani doing with this?'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('choosing a milestone with the keyboard open does not overflow '
       '(#231)', (tester) async {
     const panel = 'How is Amani doing with this?';
