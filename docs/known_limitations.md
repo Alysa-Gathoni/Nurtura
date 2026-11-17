@@ -1,6 +1,6 @@
 # Known limitations and outstanding defects
 
-> **Last updated: 2026-11-16.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
+> **Last updated: 2026-11-17.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
 
 ## Outstanding defects
 
@@ -34,7 +34,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 - **Explore's search is by meaning, not by words** (#194). A search is encoded with SBERT and compared with the activity embeddings, so it finds related activities without exact words, but an exact name isn't guaranteed to come first. "Quick" means a Beginner activity with a short description, as there is no duration field. Activities from Explore are added to the ideas as pinned ideas; browsing changes nothing else.
 - **The clinic-visit suggestion is simple** (#161). It appears when at least one CDC or WHO milestone the child is past the expected age for is marked "Not yet", following CDC's "one or more milestones" advice. It can't notice lost skills (CDC's other sign), "Emerging" answers and free-text milestones don't count, and the wording has not been reviewed by a health worker. It never changes the ranking.
 - **Sensory has no guideline milestones.** The CDC and WHO checklists have no Sensory category, so Sensory priority comes only from caregiver concerns and interests.
-- **108 of 133 catalogue milestones are not yet verified** against the source documents (the 6 WHO ones and 19 CDC ones used in the evaluation are).
+- **The milestone catalogue paraphrases CDC in places** (#235). All 133 milestones are verified against their sources. 28 of the 127 CDC entries leave out CDC's example or reword it slightly, and all use "they" where CDC alternates he and she; ages and domains are CDC's. The checklists were copied from CDC's pages on 17 Nov 2026; if CDC revises them, the catalogue needs checking again (`data/review/milestone_verification.csv`).
 - **English only.** A language toggle (a SOFIA suggestion, not in Chapter 4) is undecided; if it isn't built, English-only is a stated limitation.
 
 ## App and backend
