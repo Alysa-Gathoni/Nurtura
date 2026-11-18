@@ -1,0 +1,14 @@
+﻿{
+    "label":  "tablet",
+    "avd":  "nurtura_tablet",
+    "model":  "sdk_gphone16k_x86_64",
+    "android":  "17",
+    "sdk":  "37",
+    "screen":  "2560x1600",
+    "density":  "320",
+    "font_scale":  "1.0",
+    "boot_seconds":  123,
+    "test_seconds":  356,
+    "passed":  true,
+    "exit_code":  0
+}

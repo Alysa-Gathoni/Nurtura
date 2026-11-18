@@ -33,6 +33,14 @@ const password = String.fromEnvironment(
   defaultValue: 'Nurtura-E2E-pass-2026',
 );
 
+/// `--dart-define=E2E_SCREENSHOTS=false` turns the screenshots off. On a
+/// windowless emulator (software rendering) the first capture never
+/// returned and the run hung (#230); the steps are what the run checks.
+const takeScreenshots = bool.fromEnvironment(
+  'E2E_SCREENSHOTS',
+  defaultValue: true,
+);
+
 /// Pumps frames until [finder] matches; real network calls take time and
 /// spinners never settle, so pumpAndSettle can't be used.
 Future<void> pumpUntil(
@@ -98,6 +106,22 @@ Future<void> tapOnDetail(WidgetTester tester, Finder finder) async {
   await tap(tester, finder);
 }
 
+/// Scrolls the screen's vertical list until [finder] is built and visible.
+/// A lazily built list doesn't build what's below the fold, so on a small
+/// phone waiting for such a widget alone never ends (#230).
+Future<void> scrollDownTo(WidgetTester tester, Finder finder) async {
+  await tester.scrollUntilVisible(
+    finder,
+    250,
+    scrollable: find
+        .byWidgetPredicate(
+          (w) => w is Scrollable && w.axisDirection == AxisDirection.down,
+        )
+        .first,
+  );
+  await tester.pump(const Duration(milliseconds: 300));
+}
+
 Finder keyStartingWith(String prefix) => find.byWidgetPredicate(
   (w) =>
       w.key is ValueKey<String> &&
@@ -121,6 +145,7 @@ void main() {
   var humanStepsDone = kIsWeb;
 
   Future<void> screenshot(String name) async {
+    if (!takeScreenshots) return;
     if (!humanStepsDone) {
       debugPrint('Screenshot $name skipped: the tester still has to type');
       return;
@@ -168,10 +193,19 @@ void main() {
     await screenshot('03_code_screen');
     await pumpUntil(
       tester,
-      find.byKey(const Key('privacyAgreeCheckbox')),
+      find.text('Before you start'),
       timeout: const Duration(minutes: 3),
     );
     humanStepsDone = true;
+    // The agree checkbox is at the end of a long, lazily built notice: on a
+    // phone it isn't built until it's scrolled to, so waiting for it alone
+    // timed out (#230).
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('privacyAgreeCheckbox')),
+      300,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pump(const Duration(milliseconds: 300));
 
     // A new caregiver agrees to the privacy notice before anything else
     // (#136); it isn't asked again at the next login.
@@ -219,7 +253,21 @@ void main() {
 
     // 5. Search the catalogue and record a due milestone as Not yet.
     await type(tester, 'milestoneSearchField', 'cooing');
-    await pumpUntil(tester, find.byKey(const Key('milestone_CDC-04M-LA-01')));
+    // On a small phone the keyboard and the header leave the result below
+    // the fold, where the list hasn't built it yet: close the keyboard and
+    // scroll to it, as a person would (#230, #237).
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pump(const Duration(milliseconds: 800));
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('milestone_CDC-04M-LA-01')),
+      200,
+      scrollable: find
+          .descendant(
+            of: find.byKey(const Key('milestonePicker')),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
     await tester.pump(const Duration(milliseconds: 500));
     await tap(tester, find.byKey(const Key('milestone_CDC-04M-LA-01')));
     await tap(tester, find.byKey(const Key('status_not_yet')));
@@ -244,10 +292,16 @@ void main() {
     await pumpUntil(tester, find.byKey(const Key('activityDetail')));
     await screenshot('12_activity_detail');
     await tapOnDetail(tester, find.byKey(const Key('markDoneButton')));
+    // Since #185, "Done!" opens the "Well done!" sheet over the screen: how
+    // it went and the child's interest are given there (#230).
+    await pumpUntil(tester, find.byKey(const Key('wellDoneSheet')));
+    await tap(tester, find.byKey(const Key('interest_happy')));
+    await tap(tester, find.byKey(const Key('sheetOutcome_went_well')));
+    await tap(tester, find.byKey(const Key('saveProgressButton')));
+    await pumpUntilGone(tester, find.byKey(const Key('wellDoneSheet')));
     await pumpUntil(tester, find.byKey(const Key('doneStatus')));
-    // The "Well done!" message covers the bottom of the screen for a few
-    // seconds; a caregiver would wait for it too.
-    await pumpUntilGone(tester, find.byType(SnackBar));
+    // Then a rating and a comment, through Edit on the saved feedback.
+    await tapOnDetail(tester, find.byKey(const Key('editFeedbackButton')));
     await tapOnDetail(tester, find.byKey(const Key('star_4')));
     await type(tester, 'feedbackComment', 'Lots of smiles. (E2E test)');
     await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
@@ -260,11 +314,15 @@ void main() {
     expect(keyStartingWith('ratingChip_'), findsOneWidget);
     await screenshot('14_card_done_and_rated');
 
-    // 8. Progress, then the whole app in dark mode.
+    // 8. Progress, then the whole app in dark mode. On a small phone both
+    // the area grid and the theme switch are below the fold (#230).
     await tap(tester, find.byKey(const Key('tab_progress')));
-    await pumpUntil(tester, find.byKey(const Key('area_Language')));
+    await pumpUntil(tester, find.byKey(const Key('progressList')));
+    await scrollDownTo(tester, find.byKey(const Key('area_Language')));
     await screenshot('15_progress');
     await tap(tester, find.byKey(const Key('tab_family')));
+    await tester.pump(const Duration(milliseconds: 800));
+    await scrollDownTo(tester, find.byKey(const Key('toggle_Dark')));
     await tap(tester, find.byKey(const Key('toggle_Dark')));
     await tap(tester, find.byKey(const Key('tab_today')));
     await pumpUntil(tester, keyStartingWith('recommendation_'));

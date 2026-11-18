@@ -247,6 +247,8 @@ flutter drive -d <device-id> \
 
 In Chrome, start [ChromeDriver](https://googlechromelabs.github.io/chrome-for-testing/) on port 4444 and use `-d chrome` instead. `flutter drive` replaces the app on the phone with a test build; run `flutter run` again afterwards.
 
+The same test runs unattended on Android emulators (the code is typed for you) with `scripts/device_tests/`; `--dart-define=E2E_SCREENSHOTS=false` turns off the screenshots, which hang on a windowless emulator. How, and the results on four configurations: [docs/device_tests.md](docs/device_tests.md).
+
 ## Git hooks
 
 Black runs on staged Python files before each commit. Install the hook once per clone, with the backend venv active:
@@ -300,6 +302,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/testing_and_evaluation_record.md](docs/testing_and_evaluation_record.md) | Tests run, expected and actual results, defects and corrections, evaluation so far |
 | [docs/known_limitations.md](docs/known_limitations.md) | Known limitations and outstanding defects |
 | [docs/deployment_requirements.md](docs/deployment_requirements.md) | What hosting needs (Sprint III) |
+| [docs/device_tests.md](docs/device_tests.md) | The end-to-end test on four emulated devices (Android 7.0 small phone to tablet, large text): results and how to rerun |
 | [docs/database_backup.md](docs/database_backup.md) | Backing up and restoring the PostgreSQL database, and the backups taken |
 | [docs/demo_checklist.md](docs/demo_checklist.md) | Running a live demo on a phone |
 | [docs/sprint5_alpha_results.md](docs/sprint5_alpha_results.md) | The ranking evaluation v1 on 54 activities (held-out children, nDCG, choice of α) |

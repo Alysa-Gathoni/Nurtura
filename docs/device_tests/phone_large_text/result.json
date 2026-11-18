@@ -1,0 +1,14 @@
+﻿{
+    "label":  "phone_large_text",
+    "avd":  "Medium_Phone",
+    "model":  "sdk_gphone16k_x86_64",
+    "android":  "17",
+    "sdk":  "37",
+    "screen":  "1080x2400",
+    "density":  "420",
+    "font_scale":  "1.3",
+    "boot_seconds":  56,
+    "test_seconds":  225,
+    "passed":  true,
+    "exit_code":  0
+}
