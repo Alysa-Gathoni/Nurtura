@@ -8,12 +8,18 @@ import 'recommendations_screen_test.dart' as recs;
 
 const listPath = '/api/children/3/activities/';
 
-Map<String, dynamic> activity(String id, String name, {bool saved = false}) => {
+Map<String, dynamic> activity(
+  String id,
+  String name, {
+  bool saved = false,
+  String domain = 'Sensory',
+  String shortDescription = 'Splash and pour together.',
+}) => {
   'activity_id': id,
   'activity_name': name,
-  'developmental_domain': 'Sensory',
+  'developmental_domain': domain,
   'age_range': '6-12 months',
-  'short_description': 'Splash and pour together.',
+  'short_description': shortDescription,
   'description': 'Splash and pour together in a basin.',
   'materials': 'None',
   'cultural_relevance': 'A sufuria works well.',
@@ -22,8 +28,12 @@ Map<String, dynamic> activity(String id, String name, {bool saved = false}) => {
   'saved': saved,
 };
 
-/// The app on the Explore tab, for a child who likes water.
-Future<FakeBackend> openExplore(WidgetTester tester) async {
+/// The app on the Explore tab, for a child who likes water. [forInterests]
+/// replaces the "Based on … interests" results.
+Future<FakeBackend> openExplore(
+  WidgetTester tester, {
+  List<Map<String, dynamic>>? forInterests,
+}) async {
   tester.view.physicalSize = const Size(420, 1600);
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.reset);
@@ -34,7 +44,7 @@ Future<FakeBackend> openExplore(WidgetTester tester) async {
         if (q['for'] == 'interests') {
           return json({
             'query': 'Activities for a child who enjoys water',
-            'results': [activity('ACT-0001', 'Splash Time')],
+            'results': forInterests ?? [activity('ACT-0001', 'Splash Time')],
           });
         }
         if (q['saved'] == '1') {
@@ -100,6 +110,30 @@ void main() {
     expect(find.text('All ideas for Amani'), findsOneWidget);
     expect(find.text('Saved Song'), findsOneWidget);
     expect(find.text('Peekaboo'), findsOneWidget);
+  });
+
+  testWidgets('the interests cards fit when their chips wrap (#242)', (
+    tester,
+  ) async {
+    // Larger text, as on the phone where it overflowed: the area and age
+    // chips no longer fit side by side in a 250-wide card.
+    tester.platformDispatcher.textScaleFactorTestValue = 1.3;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await openExplore(
+      tester,
+      forInterests: [
+        activity(
+          'ACT-0001',
+          'Dance Party',
+          domain: 'Socio-Emotional',
+          shortDescription:
+              'Put on lively music and have a dance party. Stamp, clap '
+              'and sway together, then freeze when the music stops.',
+        ),
+      ],
+    );
+    expect(find.text('Dance Party'), findsWidgets);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('searching asks the server and shows results', (tester) async {
