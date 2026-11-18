@@ -237,84 +237,24 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
   }
 
   Widget _picker() {
+    // Header, chips and list scroll together (#237): on a small phone
+    // (360 x 640 dp) the fixed header and chips used to take all the height,
+    // so the list got none ("overflowed by 137 pixels"). The status panel
+    // stays pinned below the scrolling part.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (widget.justCreated) ...[
-                _savedBanner(),
-                const SizedBox(height: 12),
-              ],
-              // In the tabs the header already names the child (#138).
-              if (!widget.embedded) ...[
-                Text(
-                  '${widget.child.name} · ${widget.child.ageDescription}',
-                  style: AppText.quicksand(
-                    size: 20,
-                    color: context.palette.primary,
-                  ),
-                ),
-                const SizedBox(height: 2),
-              ],
-              Text(
-                'From the CDC and WHO checklists.',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              const SizedBox(height: 14),
-              // Reports when the search field (and so the keyboard) is in use.
-              Focus(
-                canRequestFocus: false,
-                skipTraversal: true,
-                onFocusChange: (focused) =>
-                    setState(() => _searching = focused),
-                child: AppTextField(
-                  key: const Key('milestoneSearchField'),
-                  label: 'Search milestones',
-                  hint: 'e.g. waves, crawls, words',
-                  controller: _search,
-                  prefixIcon: Icons.search_rounded,
-                  textInputAction: TextInputAction.search,
-                  onChanged: _onSearchChanged,
-                ),
-              ),
-              const SizedBox(height: 12),
+        Expanded(
+          child: CustomScrollView(
+            key: const Key('milestonePicker'),
+            slivers: [
+              SliverToBoxAdapter(child: _pickerHeader()),
+              SliverToBoxAdapter(child: _domainChips()),
+              const SliverToBoxAdapter(child: SizedBox(height: 10)),
+              ..._resultSlivers(),
             ],
           ),
         ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            children: [
-              PillChip(
-                key: const Key('domain_All'),
-                label: 'All',
-                color: context.palette.primary,
-                background: context.palette.primarySoft,
-                selected: _domain == null,
-                onTap: () => _setDomain(null),
-              ),
-              for (final domain in developmentalDomains)
-                if (domain !=
-                    'Sensory') // no Sensory milestones in the guidelines
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: DomainChip(
-                      domain,
-                      key: Key('domain_$domain'),
-                      selected: _domain == domain,
-                      onTap: () => _setDomain(domain),
-                    ),
-                  ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-        Expanded(child: _resultsList()),
         // Hidden while the search field has the keyboard (typing a new
         // search with a milestone selected): header, chips and panel don't
         // all fit above a phone keyboard. It comes back when the search
@@ -324,43 +264,143 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
     );
   }
 
-  Widget _resultsList() {
-    if (_loadError != null) {
-      return Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            MessageBanner.error(_loadError!.message),
+  Widget _pickerHeader() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (widget.justCreated) ...[
+            _savedBanner(),
             const SizedBox(height: 12),
-            SecondaryButton(
-              key: const Key('retrySearchButton'),
-              label: 'Try again',
-              icon: Icons.refresh_rounded,
-              onPressed: _load,
-            ),
           ],
+          // In the tabs the header already names the child (#138).
+          if (!widget.embedded) ...[
+            Text(
+              '${widget.child.name} · ${widget.child.ageDescription}',
+              style: AppText.quicksand(
+                size: 20,
+                color: context.palette.primary,
+              ),
+            ),
+            const SizedBox(height: 2),
+          ],
+          Text(
+            'From the CDC and WHO checklists.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: 14),
+          // Reports when the search field (and so the keyboard) is in use.
+          Focus(
+            canRequestFocus: false,
+            skipTraversal: true,
+            onFocusChange: (focused) => setState(() => _searching = focused),
+            child: AppTextField(
+              key: const Key('milestoneSearchField'),
+              label: 'Search milestones',
+              hint: 'e.g. waves, crawls, words',
+              controller: _search,
+              prefixIcon: Icons.search_rounded,
+              textInputAction: TextInputAction.search,
+              onChanged: _onSearchChanged,
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
+      ),
+    );
+  }
+
+  Widget _domainChips() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        children: [
+          PillChip(
+            key: const Key('domain_All'),
+            label: 'All',
+            color: context.palette.primary,
+            background: context.palette.primarySoft,
+            selected: _domain == null,
+            onTap: () => _setDomain(null),
+          ),
+          for (final domain in developmentalDomains)
+            if (domain != 'Sensory') // no Sensory milestones in the guidelines
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: DomainChip(
+                  domain,
+                  key: Key('domain_$domain'),
+                  selected: _domain == domain,
+                  onTap: () => _setDomain(domain),
+                ),
+              ),
+        ],
+      ),
+    );
+  }
+
+  /// The results, as slivers of the picker's scroll view (#237).
+  List<Widget> _resultSlivers() {
+    if (_loadError != null) {
+      return [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                MessageBanner.error(_loadError!.message),
+                const SizedBox(height: 12),
+                SecondaryButton(
+                  key: const Key('retrySearchButton'),
+                  label: 'Try again',
+                  icon: Icons.refresh_rounded,
+                  onPressed: _load,
+                ),
+              ],
+            ),
+          ),
         ),
-      );
+      ];
     }
     if (_loading && _results.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return const [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+        ),
+      ];
     }
     if (_results.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.all(20),
-        child: Text(
-          'No milestones match "${_search.text.trim()}". Try another word.',
-          key: const Key('noResults'),
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodySmall,
+      return [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              'No milestones match "${_search.text.trim()}". Try another word.',
+              key: const Key('noResults'),
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
         ),
-      );
+      ];
     }
-    return Stack(
-      children: [
-        ListView.separated(
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+    return [
+      // A new search is loading: a thin bar above the current results.
+      SliverToBoxAdapter(
+        child: SizedBox(
+          height: 3,
+          child: _loading ? const LinearProgressIndicator(minHeight: 3) : null,
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+        sliver: SliverList.separated(
           itemCount: _results.length,
           separatorBuilder: (_, _) => const SizedBox(height: 10),
           itemBuilder: (_, i) {
@@ -372,13 +412,8 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
             );
           },
         ),
-        if (_loading)
-          const Align(
-            alignment: Alignment.topCenter,
-            child: LinearProgressIndicator(minHeight: 3),
-          ),
-      ],
-    );
+      ),
+    ];
   }
 
   Widget _statusPanel() {
