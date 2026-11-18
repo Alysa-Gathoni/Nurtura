@@ -293,8 +293,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 "Based on $name's interests",
                 widget.child.interests.join(', '),
               ),
+              // Grows with the phone's text size; inside, the description
+              // takes only the space left, so the cards never overflow (#242).
               SizedBox(
-                height: 210,
+                height: MediaQuery.textScalerOf(context).scale(210),
                 child: ListView(
                   key: const Key('exploreInterests'),
                   scrollDirection: Axis.horizontal,
@@ -412,12 +414,41 @@ class _ActivityCard extends StatelessWidget {
           ),
           if (a.shortDescription.isNotEmpty) ...[
             const SizedBox(height: 8),
-            Text(
-              a.shortDescription,
-              maxLines: compact ? 2 : 3,
-              overflow: TextOverflow.ellipsis,
-              style: AppText.nunito(size: 14),
-            ),
+            if (compact)
+              // A fixed-height card: when the chips wrap onto two lines,
+              // the description gives up the room (#242).
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, box) {
+                    // Two lines if two fit, measured as drawn (Android's
+                    // text scaling isn't linear), otherwise one.
+                    final style = AppText.nunito(size: 14);
+                    final scaler = MediaQuery.textScalerOf(context);
+                    final two = TextPainter(
+                      text: TextSpan(text: a.shortDescription, style: style),
+                      maxLines: 2,
+                      ellipsis: '…',
+                      textScaler: scaler,
+                      textDirection: Directionality.of(context),
+                    )..layout(maxWidth: box.maxWidth);
+                    final lines = two.height <= box.maxHeight ? 2 : 1;
+                    two.dispose();
+                    return Text(
+                      a.shortDescription,
+                      maxLines: lines,
+                      overflow: TextOverflow.ellipsis,
+                      style: style,
+                    );
+                  },
+                ),
+              )
+            else
+              Text(
+                a.shortDescription,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: AppText.nunito(size: 14),
+              ),
           ],
         ],
       ),
