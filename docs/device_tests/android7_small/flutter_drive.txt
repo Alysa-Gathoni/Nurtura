@@ -1,0 +1,143 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.2.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_ui 1.1.1 (1.1.6 available)
+  google_sign_in_android 7.2.18 (7.2.19 available)
+  google_sign_in_ios 6.3.8 (6.4.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.5.0 (1.11.0 available)
+  meta 1.18.3 (1.19.0 available)
+  objective_c 9.5.0 (9.6.4 available)
+  record_use 0.6.0 (1.1.1 available)
+  shared_preferences_android 2.4.28 (2.5.5 available)
+  shared_preferences_foundation 2.5.7 (2.6.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+Got dependencies!
+19 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Installing ..\..\..\..\AppData\Local\Temp\claude\f6d1fb89b8f7162a\b9e7ce74-cbad-48d9-9281-7f64042f9e00\scratchpad\e2e_main_fix237.apk...        20.9s
+I/art     ( 3439): Rejecting re-init on previously-failed class java.lang.Class<io.flutter.view.AccessibilityBridge$$ExternalSyntheticLambda0>: java.lang.NoClassDefFoundError: Failed resolution of: Landroid/app/UiModeManager$ContrastChangeListener;
+I/art     ( 3439):   at void io.flutter.embedding.android.FlutterView.attachToFlutterEngine(io.flutter.embedding.engine.FlutterEngine) (FlutterView.java:1219)
+I/art     ( 3439):   at android.view.View io.flutter.embedding.android.FlutterActivityAndFragmentDelegate.onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle, int, boolean) (FlutterActivityAndFragmentDelegate.java:437)
+I/art     ( 3439):   at android.view.View io.flutter.embedding.android.FlutterFragment.onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle) (FlutterFragment.java:1121)
+I/art     ( 3439):   at void androidx.fragment.app.Fragment.performCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle) (Fragment.java:3119)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentStateManager.createView() (FragmentStateManager.java:577)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentStateManager.moveToExpectedState() (FragmentStateManager.java:286)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentManager.executeOpsTogether(java.util.ArrayList, java.util.ArrayList, int, int) (FragmentManager.java:2214)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentManager.removeRedundantOperationsAndExecute(java.util.ArrayList, java.util.ArrayList) (FragmentManager.java:2109)
+I/art     ( 3439):   at boolean androidx.fragment.app.FragmentManager.execPendingActions(boolean) (FragmentManager.java:2052)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentManager.dispatchStateChange(int) (FragmentManager.java:3327)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentManager.dispatchActivityCreated() (FragmentManager.java:3237)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentController.dispatchActivityCreated() (FragmentController.java:263)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentActivity.onStart() (FragmentActivity.java:350)
+I/art     ( 3439):   at void android.app.Instrumentation.callActivityOnStart(android.app.Activity) (Instrumentation.java:1248)
+I/art     ( 3439):   at void android.app.Activity.performStart() (Activity.java:6679)
+I/art     ( 3439):   at android.app.Activity android.app.ActivityThread.performLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent) (ActivityThread.java:2609)
+I/art     ( 3439):   at void android.app.ActivityThread.handleLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:2707)
+I/art     ( 3439):   at void android.app.ActivityThread.-wrap12(android.app.ActivityThread, android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:-1)
+I/art     ( 3439):   at void android.app.ActivityThread$H.handleMessage(android.os.Message) (ActivityThread.java:1460)
+I/art     ( 3439):   at void android.os.Handler.dispatchMessage(android.os.Message) (Handler.java:102)
+I/art     ( 3439):   at void android.os.Looper.loop() (Looper.java:154)
+I/art     ( 3439):   at void android.app.ActivityThread.main(java.lang.String[]) (ActivityThread.java:6077)
+I/art     ( 3439):   at java.lang.Object java.lang.reflect.Method.invoke!(java.lang.Object, java.lang.Object[]) (Method.java:-2)
+I/art     ( 3439):   at void com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run() (ZygoteInit.java:866)
+I/art     ( 3439):   at void com.android.internal.os.ZygoteInit.main(java.lang.String[]) (ZygoteInit.java:756)
+I/art     ( 3439): Caused by: java.lang.ClassNotFoundException: Didn't find class "android.app.UiModeManager$ContrastChangeListener" on path: DexPathList[[zip file "/data/app/com.sofia.nurtura_app-1/base.apk"],nativeLibraryDirectories=[/data/app/com.sofia.nurtura_app-1/lib/x86_64, /data/app/com.sofia.nurtura_app-1/base.apk!/lib/x86_64, /system/lib64, /vendor/lib64]]
+I/art     ( 3439):   at java.lang.Class dalvik.system.BaseDexClassLoader.findClass(java.lang.String) (BaseDexClassLoader.java:56)
+I/art     ( 3439):   at java.lang.Class java.lang.ClassLoader.loadClass(java.lang.String, boolean) (ClassLoader.java:380)
+I/art     ( 3439):   at java.lang.Class java.lang.ClassLoader.loadClass(java.lang.String) (ClassLoader.java:312)
+I/art     ( 3439):   at void io.flutter.embedding.android.FlutterView.attachToFlutterEngine(io.flutter.embedding.engine.FlutterEngine) (FlutterView.java:1219)
+I/art     ( 3439):   at android.view.View io.flutter.embedding.android.FlutterActivityAndFragmentDelegate.onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle, int, boolean) (FlutterActivityAndFragmentDelegate.java:437)
+I/art     ( 3439):   at android.view.View io.flutter.embedding.android.FlutterFragment.onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle) (FlutterFragment.java:1121)
+I/art     ( 3439):   at void androidx.fragment.app.Fragment.performCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle) (Fragment.java:3119)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentStateManager.createView() (FragmentStateManager.java:577)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentStateManager.moveToExpectedState() (FragmentStateManager.java:286)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentManager.executeOpsTogether(java.util.ArrayList, java.util.ArrayList, int, int) (FragmentManager.java:2214)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentManager.removeRedundantOperationsAndExecute(java.util.ArrayList, java.util.ArrayList) (FragmentManager.java:2109)
+I/art     ( 3439):   at boolean androidx.fragment.app.FragmentManager.execPendingActions(boolean) (FragmentManager.java:2052)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentManager.dispatchStateChange(int) (FragmentManager.java:3327)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentManager.dispatchActivityCreated() (FragmentManager.java:3237)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentController.dispatchActivityCreated() (FragmentController.java:263)
+I/art     ( 3439):   at void androidx.fragment.app.FragmentActivity.onStart() (FragmentActivity.java:350)
+I/art     ( 3439):   at void android.app.Instrumentation.callActivityOnStart(android.app.Activity) (Instrumentation.java:1248)
+I/art     ( 3439):   at void android.app.Activity.performStart() (Activity.java:6679)
+I/art     ( 3439):   at android.app.Activity android.app.ActivityThread.performLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent) (ActivityThread.java:2609)
+I/art     ( 3439):   at void android.app.ActivityThread.handleLaunchActivity(android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:2707)
+I/art     ( 3439):   at void android.app.ActivityThread.-wrap12(android.app.ActivityThread, android.app.ActivityThread$ActivityClientRecord, android.content.Intent, java.lang.String) (ActivityThread.java:-1)
+I/art     ( 3439):   at void android.app.ActivityThread$H.handleMessage(android.os.Message) (ActivityThread.java:1460)
+I/art     ( 3439):   at void android.os.Handler.dispatchMessage(android.os.Message) (Handler.java:102)
+I/art     ( 3439):   at void android.os.Looper.loop() (Looper.java:154)
+I/art     ( 3439):   at void android.app.ActivityThread.main(java.lang.String[]) (ActivityThread.java:6077)
+I/art     ( 3439):   at java.lang.Object java.lang.reflect.Method.invoke!(java.lang.Object, java.lang.Object[]) (Method.java:-2)
+I/art     ( 3439):   at void com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run() (ZygoteInit.java:866)
+I/art     ( 3439):   at void com.android.internal.os.ZygoteInit.main(java.lang.String[]) (ZygoteInit.java:756)
+I/art     ( 3439): 
+D/AccessibilityBridge( 3439): Setting not found: accessibility_display_inversion_enabled, using default: 0
+D/FlutterRenderer( 3439): Width is zero. 0,0
+I/Choreographer( 3439): Skipped 191 frames!  The application may be doing too much work on its main thread.
+D/FlutterRenderer( 3439): Width is zero. 0,0
+D/FlutterRenderer( 3439): Width is zero. 0,0
+I/OpenGLRenderer( 3439): Initialized EGL, version 1.4
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/OpenGLRenderer( 3439): Swap behavior 1
+D/        ( 3439): HostConnection::get() New Host Connection established 0x7ebac56b1f20, tid 3480
+D/EGL_emulation( 3439): eglCreateContext: 0x7ebad5756280: maj 2 min 0 rcv 2
+D/EGL_emulation( 3439): eglMakeCurrent: 0x7ebad5756280: ver 2 0 (tinfo 0x7ebac57a32a0)
+D/        ( 3439): HostConnection::get() New Host Connection established 0x7ebac5c422c0, tid 3458
+D/EGL_emulation( 3439): eglMakeCurrent: 0x7ebaef732680: ver 2 0 (tinfo 0x7ebad56bf680)
+D/EGL_emulation( 3439): eglCreateContext: 0x7ebaef7f63e0: maj 2 min 0 rcv 2
+D/EGL_emulation( 3439): eglMakeCurrent: 0x7ebaef7f63e0: ver 2 0 (tinfo 0x7ebad56bf680)
+D/EGL_emulation( 3439): eglMakeCurrent: 0x7ebaef732680: ver 2 0 (tinfo 0x7ebad56bf680)
+D/EGL_emulation( 3439): eglMakeCurrent: 0x7ebaef732680: ver 2 0 (tinfo 0x7ebad56bf680)
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+I/flutter ( 3439): 00:00 +0: the Sprint 8 round trip on the real backend
+I/Choreographer( 3439): Skipped 32 frames!  The application may be doing too much work on its main thread.
+I/art     ( 3439): Do partial code cache collection, code=11KB, data=30KB
+I/art     ( 3439): After code cache collection, code=11KB, data=30KB
+I/art     ( 3439): Increasing code cache capacity to 128KB
+I/Choreographer( 3439): Skipped 75 frames!  The application may be doing too much work on its main thread.
+D/EGL_emulation( 3439): eglMakeCurrent: 0x7ebad5756280: ver 2 0 (tinfo 0x7ebac57a32a0)
+D/ProfileInstaller( 3439): Installing profile for com.sofia.nurtura_app
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor( 3439): The input method toggled cursor monitoring on
+D/InputConnectionAdaptor( 3439): The input method toggled cursor monitoring on
+I/art     ( 3439): Do partial code cache collection, code=35KB, data=59KB
+I/art     ( 3439): After code cache collection, code=35KB, data=59KB
+I/art     ( 3439): Increasing code cache capacity to 256KB
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor( 3439): The input method toggled cursor monitoring on
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor( 3439): The input method toggled cursor monitoring on
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor( 3439): The input method toggled cursor monitoring on
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor( 3439): The input method toggled cursor monitoring on
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor( 3439): The input method toggled cursor monitoring on
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor( 3439): The input method toggled cursor monitoring on
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor( 3439): The input method toggled cursor monitoring on
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor( 3439): The input method toggled cursor monitoring on
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor( 3439): The input method toggled cursor monitoring on
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+D/FlutterJNI( 3439): Sending viewport metrics to the engine.
+I/flutter ( 3439): 01:23 +1: (tearDownAll)
+All tests passed.
+I/flutter ( 3439): 01:23 +2: All tests passed!

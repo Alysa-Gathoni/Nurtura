@@ -1,0 +1,14 @@
+﻿{
+    "label":  "android7_small",
+    "avd":  "nurtura_api24_small",
+    "model":  "Android SDK built for x86_64",
+    "android":  "7.0",
+    "sdk":  "24",
+    "screen":  "720x1280",
+    "density":  "320",
+    "font_scale":  "null",
+    "boot_seconds":  19,
+    "test_seconds":  122,
+    "passed":  true,
+    "exit_code":  0
+}

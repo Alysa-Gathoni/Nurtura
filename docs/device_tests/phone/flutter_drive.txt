@@ -1,0 +1,292 @@
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.2.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_ui 1.1.1 (1.1.6 available)
+  google_sign_in_android 7.2.18 (7.2.19 available)
+  google_sign_in_ios 6.3.8 (6.4.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  material_ui 1.5.0 (1.11.0 available)
+  meta 1.18.3 (1.19.0 available)
+  objective_c 9.5.0 (9.6.4 available)
+  record_use 0.6.0 (1.1.1 available)
+  shared_preferences_android 2.4.28 (2.5.5 available)
+  shared_preferences_foundation 2.5.7 (2.6.2 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+Got dependencies!
+19 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Installing ..\..\..\..\AppData\Local\Temp\claude\f6d1fb89b8f7162a\b9e7ce74-cbad-48d9-9281-7f64042f9e00\scratchpad\e2e_main_fix237.apk...        39.8s
+D/nativeloader( 3375): Load /data/app/~~eE4yxaUfoukRtsvvSMVqxw==/com.sofia.nurtura_app-8sSQ9P6VSqOpW-V6puf8Mw==/base.apk!/lib/x86_64/libdartjni.so using class loader ns clns-9 (caller=/data/app/~~eE4yxaUfoukRtsvvSMVqxw==/com.sofia.nurtura_app-8sSQ9P6VSqOpW-V6puf8Mw==/base.apk!2): ok
+I/fia.nurtura_app( 3375): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityNodeInfo;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported,test-api) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=36) using reflection: allowed
+I/fia.nurtura_app( 3375): hiddenapi: Accessing hidden method Landroid/view/accessibility/AccessibilityRecord;->getSourceNodeId()J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=36) using reflection: allowed
+I/fia.nurtura_app( 3375): hiddenapi: Accessing hidden field Landroid/view/accessibility/AccessibilityNodeInfo;->mChildNodeIds:Landroid/util/LongArray; (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=36) using reflection: allowed
+I/fia.nurtura_app( 3375): hiddenapi: Accessing hidden method Landroid/util/LongArray;->get(I)J (runtime_flags=0, domain=platform, api=unsupported) from Lio/flutter/view/AccessibilityViewEmbedder$ReflectionAccessors; (domain=app, TargetSdkVersion=36) using reflection: allowed
+D/AccessibilityBridge( 3375): Setting not found: accessibility_display_inversion_enabled, using default: 0
+D/FlutterRenderer( 3375): Width is zero. 0,0
+W/HWUI    ( 3375): Unknown dataspace 0
+D/ProfileInstaller( 3375): Installing profile for com.sofia.nurtura_app
+W/libc    ( 3375): Access denied finding property "vendor.mesa.virtgpu.kumquat"
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+I/WindowExtensionsImpl( 3375): Initializing Window Extensions, vendor API level=10, activity embedding enabled=true
+W/UiContextUtils( 3375): Requested context is a non-UI Context. Creating a UI-Context with display: 0. Context: Context=android.app.Application@feb1043, of which baseContext=android.app.ContextImpl@c5b4164
+D/VRI[MainActivity]( 3375): WindowInsets changed: 1080x2400 statusBars:[0,63,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,63,0,84] 
+D/FlutterRenderer( 3375): Width is zero. 0,0
+I/Surface ( 3375): Creating surface for consumer unnamed-3375-0 with slotExpansion=1 for 64 slots
+I/Surface ( 3375): Creating surface for consumer VRI[MainActivity]#0(BLAST Consumer)0 with slotExpansion=1 for 64 slots
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/Surface ( 3375): Creating surface for consumer unnamed-3375-1 with slotExpansion=1 for 64 slots
+I/Surface ( 3375): Creating surface for consumer 80ab2ce SurfaceView[com.sofia.nurtura_app/com.sofia.nurtura_app.MainActivity]#1(BLAST Consumer)1 with slotExpansion=1 for 64 slots
+I/Choreographer( 3375): Skipped 108 frames!  The application may be doing too much work on its main thread.
+D/WindowLayoutComponentImpl( 3375): Register WindowLayoutInfoListener on Context=com.sofia.nurtura_app.MainActivity@22b58fc, of which baseContext=android.app.ContextImpl@fdcf63d
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/HWUI    ( 3375): Using FreeType backend (prop=Auto)
+I/flutter ( 3375): 00:00 +0: the Sprint 8 round trip on the real backend
+I/Choreographer( 3375): Skipped 59 frames!  The application may be doing too much work on its main thread.
+I/Choreographer( 3375): Skipped 137 frames!  The application may be doing too much work on its main thread.
+I/fia.nurtura_app( 3375): Background concurrent mark compact GC freed 2164KB AllocSpace bytes, 3(96KB) LOS objects, 49% free, 3578KB/7157KB, paused 33.237ms,81.677ms total 822.973ms
+I/fia.nurtura_app( 3375): Compiler allocated 4518KB to compile void android.view.ViewRootImpl.performTraversals(long)
+I/Choreographer( 3375): Skipped 306 frames!  The application may be doing too much work on its main thread.
+I/HWUI    ( 3375): Davey! duration=5755ms; Flags=1, FrameTimelineVsyncId=9914, IntendedVsync=134151986026, Vsync=139251985822, InputEventId=0, HandleInputStart=139264673000, AnimationStart=139264722700, PerformTraversalsStart=139264792200, DrawStart=139271282000, FrameDeadline=134168652692, FrameStartTime=139260471800, FrameInterval=16666666, WorkloadTarget=16666666, AnimationTime=139251985822, AnimationCounter=-1, SyncQueued=139284299800, SyncStart=139286525400, IssueDrawCommandsStart=139288146300, SwapBuffers=139393590700, FrameCompleted=139909326000, DequeueBufferDuration=6375500, QueueBufferDuration=844600, GpuCompleted=139902644800, SwapBuffersCompleted=139909326000, DisplayPresentTime=35192962090439, CommandSubmissionCompleted=139393590700, 
+I/Choreographer( 3375): Skipped 94 frames!  The application may be doing too much work on its main thread.
+D/InsetsController( 3375): hide(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:6fd9300f: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+I/ImeTracker( 3375): com.sofia.nurtura_app:a769c384: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 511 (was 503)
+I/ImeTracker( 3375): com.sofia.nurtura_app:27af100c: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:27af100c: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+I/Choreographer( 3375): Skipped 238 frames!  The application may be doing too much work on its main thread.
+I/HWUI    ( 3375): Davey! duration=4045ms; Flags=0, FrameTimelineVsyncId=10645, IntendedVsync=153235318596, Vsync=157201985104, InputEventId=0, HandleInputStart=157206981300, AnimationStart=157207514500, PerformTraversalsStart=157207584800, DrawStart=157208901600, FrameDeadline=153251985262, FrameStartTime=157205944200, FrameInterval=16666666, WorkloadTarget=16666666, AnimationTime=157201985104, AnimationCounter=-1, SyncQueued=157209723200, SyncStart=157210191500, IssueDrawCommandsStart=157227157700, SwapBuffers=157232452600, FrameCompleted=157280973800, DequeueBufferDuration=24869400, QueueBufferDuration=1132700, GpuCompleted=157255862500, SwapBuffersCompleted=157280973800, DisplayPresentTime=35192962093649, CommandSubmissionCompleted=157232452600, 
+D/InputConnectionAdaptor( 3375): The input method toggled cursor monitoring on
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@9251066
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.view.ImeBackAnimationController@9251066
+I/ImeTracker( 3375): com.sofia.nurtura_app:4fe6abd6: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:4fe6abd6: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+I/ImeTracker( 3375): com.sofia.nurtura_app:d79a0ecd: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:d79a0ecd: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+D/InputConnectionAdaptor( 3375): The input method toggled cursor monitoring on
+I/ImeTracker( 3375): com.sofia.nurtura_app:03aed69e: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:03aed69e: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+I/ImeTracker( 3375): com.sofia.nurtura_app:da50aeb6: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:da50aeb6: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+D/VRI[MainActivity]( 3375): WindowInsets changed: ime:[0,0,0,883] 
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/AssistStructure( 3375): Flattened final assist data: 1132 bytes, containing 1 windows, 5 views
+I/AssistStructure( 3375): Flattened final assist data: 1132 bytes, containing 1 windows, 5 views
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+W/InteractionJankMonitor( 3375): Initializing without READ_DEVICE_CONFIG permission. enabled=false, interval=1, missedFrameThreshold=3, frameTimeThreshold=64, package=com.sofia.nurtura_app
+I/ImeTracker( 3375): system_server:8a25b806: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+I/Choreographer( 3375): Skipped 44 frames!  The application may be doing too much work on its main thread.
+I/ImeTracker( 3375): com.sofia.nurtura_app:a769c384: onShown
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/VRI[MainActivity]( 3375): WindowInsets changed: ime:[0,0,0,972] 
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/ImeTracker( 3375): com.sofia.nurtura_app:e64a1ea4: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): hide(ime())
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/InsetsController( 3375): Setting requestedVisibleTypes to 503 (was 511)
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/CompatChangeReporter( 3375): Compat change id reported: 395521150; UID 10230; state: ENABLED
+D/VRI[MainActivity]( 3375): WindowInsets changed: ime:null 
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/HWUI    ( 3375): Davey! duration=862ms; Flags=0, FrameTimelineVsyncId=11170, IntendedVsync=165285318114, Vsync=166018651418, InputEventId=0, HandleInputStart=166033809100, AnimationStart=166033941100, PerformTraversalsStart=166070820200, DrawStart=166074979900, FrameDeadline=165418651442, FrameStartTime=166029825800, FrameInterval=16666666, WorkloadTarget=16666666, AnimationTime=166018651418, AnimationCounter=-1, SyncQueued=166075518200, SyncStart=166079687700, IssueDrawCommandsStart=166081863200, SwapBuffers=166096234900, FrameCompleted=166152480300, DequeueBufferDuration=45900, QueueBufferDuration=1053300, GpuCompleted=166116095400, SwapBuffersCompleted=166152480300, DisplayPresentTime=35210142020208, CommandSubmissionCompleted=166096234900, 
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/ImeTracker( 3375): system_server:f3ef6bff: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+W/RemoteInputConnectionImpl( 3375): getSurroundingText on inactive InputConnection
+W/RemoteInputConnectionImpl( 3375): requestCursorUpdates on inactive InputConnection
+I/ImeTracker( 3375): com.sofia.nurtura_app:16efc1e3: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 511 (was 503)
+I/ImeTracker( 3375): com.sofia.nurtura_app:d6db167b: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:d6db167b: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+D/InputConnectionAdaptor( 3375): The input method toggled cursor monitoring on
+I/AssistStructure( 3375): Flattened final assist data: 456 bytes, containing 1 windows, 3 views
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@9251066
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.view.ImeBackAnimationController@9251066
+D/VRI[MainActivity]( 3375): WindowInsets changed: ime:[0,0,0,972] 
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/ImeTracker( 3375): com.sofia.nurtura_app:16efc1e3: onShown
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/ImeTracker( 3375): system_server:3f5466cf: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+I/Choreographer( 3375): Skipped 40 frames!  The application may be doing too much work on its main thread.
+D/VRI[MainActivity]( 3375): WindowInsets changed: ime:[0,0,0,883] 
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/HWUI    ( 3375): Davey! duration=760ms; Flags=0, FrameTimelineVsyncId=12384, IntendedVsync=180151984186, Vsync=180818650826, InputEventId=-952241382, HandleInputStart=180857011200, AnimationStart=180857089000, PerformTraversalsStart=180857179700, DrawStart=180870219500, FrameDeadline=180168650852, FrameStartTime=180833356000, FrameInterval=16666666, WorkloadTarget=16666666, AnimationTime=180818650826, AnimationCounter=-1, SyncQueued=180870598000, SyncStart=180870736700, IssueDrawCommandsStart=180874412400, SwapBuffers=180882363700, FrameCompleted=180913108500, DequeueBufferDuration=35500, QueueBufferDuration=955700, GpuCompleted=180912866200, SwapBuffersCompleted=180913108500, DisplayPresentTime=35201552073126, CommandSubmissionCompleted=180882363700, 
+W/InputMethodManager( 3375): Timeout waiting for IME to handle input event after 2500 ms: com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME
+I/ImeTracker( 3375): com.sofia.nurtura_app:24ec16fa: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): hide(ime())
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/InsetsController( 3375): Setting requestedVisibleTypes to 503 (was 511)
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/VRI[MainActivity]( 3375): WindowInsets changed: ime:null 
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/Choreographer( 3375): Skipped 37 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/ImeTracker( 3375): system_server:30f44cf7: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/ImeTracker( 3375): com.sofia.nurtura_app:bb8c6974: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 511 (was 503)
+I/ImeTracker( 3375): com.sofia.nurtura_app:45fec118: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:45fec118: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+I/AssistStructure( 3375): Flattened final assist data: 808 bytes, containing 1 windows, 4 views
+D/InputConnectionAdaptor( 3375): The input method toggled cursor monitoring on
+I/ImeTracker( 3375): com.sofia.nurtura_app:67e5d35f: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:67e5d35f: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+I/ImeTracker( 3375): com.sofia.nurtura_app:0ad93736: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:0ad93736: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+I/AssistStructure( 3375): Flattened final assist data: 832 bytes, containing 1 windows, 4 views
+I/ImeTracker( 3375): com.sofia.nurtura_app:0f714aec: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): hide(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 503 (was 511)
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@9251066
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.view.ImeBackAnimationController@9251066
+W/RemoteInputConnectionImpl( 3375): requestCursorUpdates on inactive InputConnection
+W/RemoteInputConnectionImpl( 3375): getSurroundingText on inactive InputConnection
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+I/ImeTracker( 3375): com.sofia.nurtura_app:91bdf10c: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 511 (was 503)
+I/ImeTracker( 3375): com.sofia.nurtura_app:a3b6b5d9: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:a3b6b5d9: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+D/InputConnectionAdaptor( 3375): The input method toggled cursor monitoring on
+I/ImeTracker( 3375): com.sofia.nurtura_app:94b4e491: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): hide(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 503 (was 511)
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@9251066
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.view.ImeBackAnimationController@9251066
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+I/ImeTracker( 3375): com.sofia.nurtura_app:c1b6cf84: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 511 (was 503)
+I/ImeTracker( 3375): com.sofia.nurtura_app:605eff65: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:605eff65: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+D/InputConnectionAdaptor( 3375): The input method toggled cursor monitoring on
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@9251066
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.view.ImeBackAnimationController@9251066
+I/fia.nurtura_app( 3375): NativeAlloc concurrent mark compact GC freed 2321KB AllocSpace bytes, 0(0B) LOS objects, 49% free, 3770KB/7541KB, paused 1.444ms,592.470ms total 3.782s
+I/ImeTracker( 3375): com.sofia.nurtura_app:25156288: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): hide(ime())
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+D/InsetsController( 3375): Setting requestedVisibleTypes to 503 (was 511)
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+I/ImeTracker( 3375): com.sofia.nurtura_app:c1b6cf84: onCancelled at PHASE_CLIENT_ANIMATION_CANCEL
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/Choreographer( 3375): Skipped 112 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/HWUI    ( 3375): Davey! duration=2121ms; Flags=0, FrameTimelineVsyncId=18005, IntendedVsync=247968659242, Vsync=249835325834, InputEventId=0, HandleInputStart=249877163000, AnimationStart=249877192200, PerformTraversalsStart=249877228900, DrawStart=249915881100, FrameDeadline=247985325908, FrameStartTime=249842345800, FrameInterval=16666666, WorkloadTarget=16666666, AnimationTime=249835325834, AnimationCounter=-1, SyncQueued=249920635900, SyncStart=249952048000, IssueDrawCommandsStart=249976611800, SwapBuffers=250074969300, FrameCompleted=250121998700, DequeueBufferDuration=118200, QueueBufferDuration=1943900, GpuCompleted=250121361500, SwapBuffersCompleted=250121998700, DisplayPresentTime=0, CommandSubmissionCompleted=250074969300, 
+I/Choreographer( 3375): Skipped 80 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/ImeTracker( 3375): system_server:55a73d82: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+I/ImeTracker( 3375): system_server:ed4a6b15: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+I/HWUI    ( 3375): Davey! duration=1377ms; Flags=0, FrameTimelineVsyncId=18114, IntendedVsync=249885314730, Vsync=251218648010, InputEventId=0, HandleInputStart=251230694900, AnimationStart=251230739500, PerformTraversalsStart=251235271200, DrawStart=251235571000, FrameDeadline=250151992488, FrameStartTime=251221120400, FrameInterval=16666666, WorkloadTarget=16666666, AnimationTime=251218648010, AnimationCounter=-1, SyncQueued=251235752200, SyncStart=251235964700, IssueDrawCommandsStart=251236222300, SwapBuffers=251237131300, FrameCompleted=251263233500, DequeueBufferDuration=48700, QueueBufferDuration=5985500, GpuCompleted=251262945200, SwapBuffersCompleted=251263233500, DisplayPresentTime=0, CommandSubmissionCompleted=251237131300, 
+I/Choreographer( 3375): Skipped 141 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/HWUI    ( 3375): Davey! duration=2714ms; Flags=0, FrameTimelineVsyncId=18231, IntendedVsync=251235314676, Vsync=253585314582, InputEventId=0, HandleInputStart=253624961100, AnimationStart=253625004600, PerformTraversalsStart=253666751600, DrawStart=253671604900, FrameDeadline=251285314674, FrameStartTime=253601861400, FrameInterval=16666666, WorkloadTarget=16666666, AnimationTime=253585314582, AnimationCounter=-1, SyncQueued=253674112300, SyncStart=253677236900, IssueDrawCommandsStart=253685499700, SwapBuffers=253902023300, FrameCompleted=253952488900, DequeueBufferDuration=51200, QueueBufferDuration=3305000, GpuCompleted=253952124800, SwapBuffersCompleted=253952488900, DisplayPresentTime=35188667085460, CommandSubmissionCompleted=253902023300, 
+I/Choreographer( 3375): Skipped 37 frames!  The application may be doing too much work on its main thread.
+I/ImeTracker( 3375): com.sofia.nurtura_app:7a8510ec: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 511 (was 503)
+I/ImeTracker( 3375): com.sofia.nurtura_app:bf2d03e7: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:bf2d03e7: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+D/InputConnectionAdaptor( 3375): The input method toggled cursor monitoring on
+I/ImeTracker( 3375): com.sofia.nurtura_app:cb6a6528: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): hide(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 503 (was 511)
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@9251066
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.view.ImeBackAnimationController@9251066
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+I/ImeTracker( 3375): com.sofia.nurtura_app:52e7e789: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 511 (was 503)
+I/ImeTracker( 3375): com.sofia.nurtura_app:8c4974ac: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:8c4974ac: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+D/InputConnectionAdaptor( 3375): The input method toggled cursor monitoring on
+I/ImeTracker( 3375): com.sofia.nurtura_app:60216cdd: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): hide(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 503 (was 511)
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@9251066
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.view.ImeBackAnimationController@9251066
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+I/ImeTracker( 3375): com.sofia.nurtura_app:f0e67da3: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+D/InsetsController( 3375): Setting requestedVisibleTypes to 511 (was 503)
+I/ImeTracker( 3375): com.sofia.nurtura_app:6979f094: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): show(ime())
+I/ImeTracker( 3375): com.sofia.nurtura_app:6979f094: onCancelled at PHASE_CLIENT_REPORT_REQUESTED_VISIBLE_TYPES
+D/InputConnectionAdaptor( 3375): The input method toggled cursor monitoring on
+I/AssistStructure( 3375): Flattened final assist data: 524 bytes, containing 1 windows, 3 views
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.view.ImeBackAnimationController@9251066
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.view.ImeBackAnimationController@9251066
+D/VRI[MainActivity]( 3375): WindowInsets changed: ime:[0,0,0,883] 
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/ImeTracker( 3375): com.sofia.nurtura_app:518edb3e: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false userId 0 displayId 0
+D/InsetsController( 3375): hide(ime())
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+D/InsetsController( 3375): Setting requestedVisibleTypes to 503 (was 511)
+I/ImeTracker( 3375): com.sofia.nurtura_app:f0e67da3: onCancelled at PHASE_CLIENT_ANIMATION_CANCEL
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/VRI[MainActivity]( 3375): WindowInsets changed: ime:null 
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: androidx.activity.OnBackPressedDispatcher$Api34Impl$createOnBackAnimationCallback$1@594b65e
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/ImeTracker( 3375): system_server:d435f690: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+D/FlutterJNI( 3375): Sending viewport metrics to the engine.
+I/Choreographer( 3375): Skipped 47 frames!  The application may be doing too much work on its main thread.
+D/WindowOnBackDispatcher( 3375): setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+D/WindowOnBackDispatcher( 3375): setOnBackInvokedCallbackInfo: android.app.Activity$$ExternalSyntheticLambda0@e537fb3
+I/flutter ( 3375): 03:00 +1: (tearDownAll)
+I/flutter ( 3375): 03:00 +2: All tests passed!
+All tests passed.
