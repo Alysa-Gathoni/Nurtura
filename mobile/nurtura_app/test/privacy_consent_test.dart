@@ -50,6 +50,49 @@ void main() {
   setUp(() => dates.clock = () => DateTime(2026, 10, 1, 9));
   tearDown(() => dates.clock = DateTime.now);
 
+  group('the short notice (#238)', () {
+    FakeBackend withSummary() => backendWith((r) async {
+      if (r.url.path != '/api/privacy-notice/') return null;
+      return json({
+        ...noticeJson(),
+        'summary': [
+          'Nurtura gives activity ideas, not medical advice.',
+          "It's kept until you delete it.",
+        ],
+      });
+    });
+
+    testWidgets('on a small phone the agreement works without scrolling', (
+      tester,
+    ) async {
+      // 360 x 640: a common budget phone.
+      tester.view.physicalSize = const Size(720, 1280);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(tester.view.reset);
+      final backend = withSummary();
+      await pumpApp(tester, backend, savedToken: 'tok');
+
+      expect(find.text("It's kept until you delete it."), findsOneWidget);
+      // The full sections wait behind "Read the full notice".
+      expect(find.text('How long we keep it'), findsNothing);
+      // Tapped where they are, with no scrolling first: a tap on anything
+      // off screen or covered fails the test.
+      await tester.tap(find.byKey(const Key('privacyAgreeCheckbox')));
+      await tester.pumpAndSettle();
+      await tester.tap(agreeButton);
+      await tester.pumpAndSettle();
+      expect(backend.to('/api/auth/privacy-consent/'), hasLength(1));
+    });
+
+    testWidgets('the full notice is one tap away', (tester) async {
+      await pumpApp(tester, withSummary(), savedToken: 'tok');
+      await tapVisible(tester, find.byKey(const Key('privacyFullToggle')));
+      expect(find.text('How long we keep it'), findsOneWidget);
+      expect(find.text('Until you delete it.'), findsOneWidget);
+      expect(find.text('Hide the full notice'), findsOneWidget);
+    });
+  });
+
   testWidgets('a caregiver who has not agreed sees the notice first', (
     tester,
   ) async {
