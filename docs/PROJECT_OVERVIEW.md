@@ -149,7 +149,7 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 | | |
 |---|---|
 | Activities | **54**, all reviewed and Published: Socio-Emotional 17, Language 12, Cognitive 10, Motor 8, Sensory 7; 8 of them for pregnancy |
-| Reference milestones | **133**: 127 CDC (2022 checklists) and 6 WHO (motor study). **25 verified** against the source: the 6 WHO ones and the 19 CDC ones used in the evaluation. The other 108 are still to check. |
+| Reference milestones | **133**: 127 CDC (2022 checklists) and 6 WHO (motor study). **All 133 verified** against the source (the last 108 CDC ones on 17 Nov 2026, #235; the comparison is in `data/review/milestone_verification.csv`). |
 | Automated tests | **378** backend tests and **78** app tests, run on every change (GitHub Actions), plus one end-to-end test against the real backend |
 | Engineering history | **53** merged pull requests, **137** commits on `main` |
 

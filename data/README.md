@@ -187,10 +187,20 @@ Sources:
 
 The entries were written from these publications and **must each be checked against the source document**. Load them with `python manage.py seed_milestones` (also part of `make seed-data`); every entry starts unverified. An administrator marks entries verified in the Django admin (**Reference milestones**, "Mark selected milestones as verified"). Re-loading keeps the verified flag unless an entry's content changed, in which case it is marked unverified for re-checking.
 
+**All 133 are verified** (17 Nov 2026, #235).
+- **WHO:** the 6 WHO entries were checked against the Motor Development Study.
+- **The CDC wording:** CDC's checklist text for every age, copied from the ten checklist pages, is in `reference/cdc_2022_checklists.json`.
+- **The comparison:** `scripts/verify_milestones.py` matched each of the 127 CDC entries to the item of the same age and domain. Every entry has exactly one match and every CDC item is used once. Each comparison is in `review/milestone_verification.csv`.
+- **How the wording differs:**
+  - 99 are the same apart from pronouns ("they" for CDC's he or she), British spelling or punctuation;
+  - 18 leave out CDC's example (e.g. "Copies other children while playing" without "…, like taking toys out of a container when another child does");
+  - 10 are reworded, each read by hand: verb agreement after "they", "for example" for "like", "at clean-up time" for 'when you say, "It's clean-up time."'.
+- **Ages and domains:** none differ from CDC's.
+
 ## Access, privacy and ethics
 
 - **Open, published sources only.** Activities are written in our own words from published WHO, CDC, UNICEF, Montessori and Pathways.org guidance, each with its source (and, where available, a link). The milestone catalogue cites the CDC 2022 checklists and the WHO Motor Development Study. No licensed or restricted dataset is used, and nothing needs an access agreement.
-- **Not yet fully verified.** 25 of the 133 catalogue milestones have been checked against the source documents: the 6 WHO ones and the 19 CDC ones used in the evaluation. The other 108 are still to check (see the guideline section above).
+- **Verified against the sources.** All 133 catalogue milestones have been checked against the source documents: the 6 WHO ones and the 19 CDC ones used in the evaluation first, the other 108 CDC ones on 17 Nov 2026 (#235; see the guideline section above).
 - **No personal data in the repository.** Caregiver accounts, child profiles, milestones and feedback live only in the running database, which is never committed (`.env` and local databases are gitignored). Test accounts made during development and end-to-end runs are deleted afterwards.
 - **Caregivers agree to a privacy notice first** (#136). [docs/privacy_notice.md](../docs/privacy_notice.md) says what is stored, why, who sees it and that it's kept until the caregiver deletes it. The version agreed to and the time are stored on the account.
 - **Signing in with Google keeps only the email.** Continue with Google (#130) uses the Google account's verified email to find or create the account; the name and photo Google also sends are not stored.

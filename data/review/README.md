@@ -6,6 +6,7 @@
 |---|---|
 | **The caregiver wording of every activity's aim** | `plain_aims.csv`: one sheet, 449 rows, all approved |
 | Activities whose area or age band the classifier doubts | `classifier_flags.csv` (60 rows, #181) |
+| How each CDC milestone compares with CDC's own wording | `milestone_verification.csv` (127 rows, #235): catalogue wording, CDC's text, the page, how they differ, verdict. Rebuild with `python data/scripts/verify_milestones.py` |
 
 ## `plain_aims.csv`: caregiver wording of each activity's aim
 
