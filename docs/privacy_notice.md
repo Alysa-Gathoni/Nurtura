@@ -6,9 +6,18 @@
 
 # How Nurtura uses your information
 
-**Version:** 2026-10-26
+**Version:** 2026-11-18
 
 Caregivers read this notice in the app, and agree to it, before they can add a child or record anything about one (#136). Reading and deleting what is already stored never needs agreement, so information can always be erased. Administrators aren't asked.
+
+**In short.** This is what the app shows first, above the agreement; the full notice below is one tap away (#238).
+
+- Nurtura is a student project at Strathmore University. It gives activity ideas, not medical advice.
+- We keep your email and, for each child, a name (a nickname is fine), their date of birth or due date, their interests, the milestones you record and how activities went.
+- We use it only to suggest activities and explain why. We don't sell it or show adverts.
+- Administrators see ratings and comments, never your child's name or your email.
+- It's kept until you delete it. You can delete a child or your whole account at any time from the Family tab.
+- Under Kenya's Data Protection Act, 2019, you can ask what we hold, correct it or have it deleted. Questions: {contact}.
 
 ## About Nurtura
 

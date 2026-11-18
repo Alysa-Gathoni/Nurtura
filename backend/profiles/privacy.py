@@ -12,8 +12,27 @@ asked to agree again. `{contact}` is replaced with settings.PRIVACY_CONTACT.
 from django.conf import settings
 from django.utils import timezone
 
-NOTICE_VERSION = "2026-10-26"
+NOTICE_VERSION = "2026-11-18"
 TITLE = "How Nurtura uses your information"
+
+# The notice in short (#238): what a caregiver sees first, before agreeing,
+# so the agreement fits on the screen. The full sections below are one tap
+# away and say the same in more detail; nothing here goes beyond them.
+SUMMARY = (
+    "Nurtura is a student project at Strathmore University. It gives "
+    "activity ideas, not medical advice.",
+    "We keep your email and, for each child, a name (a nickname is fine), "
+    "their date of birth or due date, their interests, the milestones you "
+    "record and how activities went.",
+    "We use it only to suggest activities and explain why. We don't sell it "
+    "or show adverts.",
+    "Administrators see ratings and comments, never your child's name or "
+    "your email.",
+    "It's kept until you delete it. You can delete a child or your whole "
+    "account at any time from the Family tab.",
+    "Under Kenya's Data Protection Act, 2019, you can ask what we hold, "
+    "correct it or have it deleted. Questions: {contact}.",
+)
 
 SECTIONS = (
     (
@@ -90,6 +109,7 @@ def notice():
     return {
         "version": NOTICE_VERSION,
         "title": TITLE,
+        "summary": [point.format(contact=contact) for point in SUMMARY],
         "sections": [
             {"heading": heading, "body": body.format(contact=contact)}
             for heading, body in SECTIONS

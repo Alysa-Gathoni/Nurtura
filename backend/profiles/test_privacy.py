@@ -35,6 +35,11 @@ class NoticeTests(APITestCase):
         for promise in ("Until you delete it", "Data Protection Act, 2019"):
             with self.subTest(promise=promise):
                 self.assertIn(promise, text)
+        # The short version shown first (#238).
+        summary = response.data["summary"]
+        self.assertEqual(len(summary), len(privacy.SUMMARY))
+        self.assertIn("Questions: privacy@example.org.", summary[-1])
+        self.assertNotIn("{contact}", " ".join(summary))
 
     def test_doc_mirrors_the_notice_word_for_word(self):
         doc = NOTICE_DOC.read_text(encoding="utf-8")
@@ -42,6 +47,27 @@ class NoticeTests(APITestCase):
         self.assertIn(f"# {privacy.TITLE}", doc)
         sections = re.findall(r"^## (.+)\n\n(.+)$", doc, flags=re.M)
         self.assertEqual(sections, list(privacy.SECTIONS))
+        # The "In short" list, in order, before the first section (#238).
+        short = doc.split("\n## ", 1)[0]
+        points = re.findall(r"^- (.+)$", short, flags=re.M)
+        self.assertEqual(points, list(privacy.SUMMARY))
+
+    def test_the_summary_promises_nothing_the_notice_does_not(self):
+        # Each point restates part of a full section (#238): these are the
+        # facts it relies on, all of which the full notice says.
+        full = " ".join(body for _, body in privacy.SECTIONS)
+        for fact in (
+            "student project at Strathmore University",
+            "not medical advice",
+            "a nickname is fine",
+            "We don't sell your information, show adverts",
+            "without your child's name or your email",
+            "Until you delete it",
+            "from the Family tab",
+            "Data Protection Act, 2019",
+        ):
+            with self.subTest(fact=fact):
+                self.assertIn(fact, full)
 
 
 class ConsentTests(APITestCase):
