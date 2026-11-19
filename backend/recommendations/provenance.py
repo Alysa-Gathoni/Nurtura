@@ -35,7 +35,7 @@ from activities.models import DevelopmentalActivity
 from profiles.models import ReferenceMilestone
 from profiles.rules import GUIDELINE_RULES, RuleEngine, guidelines
 
-from . import embeddings, ranking, retrieval
+from . import embeddings, lexical, ranking, retrieval
 from .models import ActivityEmbedding
 
 FORMAT = 2
@@ -113,7 +113,7 @@ def rule_weights():
 
 
 def ranking_settings():
-    return {
+    result = {
         "age_weights": {
             "same_bracket": ranking.SAME_BRACKET,
             "one_younger": ranking.ONE_YOUNGER,
@@ -124,6 +124,12 @@ def ranking_settings():
         "focus_threshold": retrieval.FOCUS_THRESHOLD,
         "domain_descriptions_sha256": _sha256(retrieval.DOMAIN_DESCRIPTIONS),
     }
+    # TF-IDF in the similarity (#248). Recorded only when it's used, so the
+    # evaluated SBERT-only configuration (beta = 1) keeps its fingerprint.
+    beta = retrieval.retrieval_beta()
+    if beta < 1.0:
+        result["retrieval"] = {"beta": beta, "tfidf": lexical.SETTINGS}
+    return result
 
 
 def catalogue_version():

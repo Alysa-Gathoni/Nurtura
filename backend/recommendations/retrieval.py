@@ -21,7 +21,9 @@ from profiles.models import DevelopmentalMilestone
 from profiles.rules import build_profile
 from profiles.rules.facts import MilestoneFact
 
-from . import embeddings
+from django.conf import settings
+
+from . import embeddings, lexical
 from .models import ActivityEmbedding
 
 # Domains scoring at least this much (top domain = 1.0) shape the query.
@@ -42,6 +44,14 @@ DOMAIN_DESCRIPTIONS = {
     "Socio-Emotional": "social and emotional development: bonding, feelings, "
     "smiling, copying and playing with others",
 }
+
+
+def retrieval_beta():
+    """Weight of SBERT against TF-IDF in the similarity (#248): 1 = SBERT only."""
+    beta = float(getattr(settings, "RETRIEVAL_BETA", 1.0))
+    if not 0.0 <= beta <= 1.0:
+        raise ValueError(f"RETRIEVAL_BETA must be between 0 and 1, not {beta}.")
+    return beta
 
 
 @dataclass(frozen=True)
@@ -129,6 +139,11 @@ def retrieve(child, limit=DEFAULT_LIMIT, on_date=None):
     # Vectors are L2-normalised, so the dot product is the cosine similarity.
     # Clipped because float rounding can land a hair outside [-1, 1].
     similarities = np.clip(matrix @ query_vector, -1.0, 1.0)
+    beta = retrieval_beta()
+    if beta < 1.0:
+        # Hybrid with TF-IDF (#248): word overlap alongside meaning.
+        lexical_scores = lexical.similarities(query, [r.activity_id for r in rows])
+        similarities = beta * similarities + (1.0 - beta) * lexical_scores
     order = np.argsort(-similarities, kind="stable")[:limit]
     candidates = [
         Candidate(activity=rows[i].activity, similarity=float(similarities[i]))
