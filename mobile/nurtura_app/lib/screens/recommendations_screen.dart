@@ -87,7 +87,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
             );
       if (!batch.isEmpty) await _cache.write(widget.child.id, batch);
       if (!mounted) return;
-      // Checking today's ideas keeps the day streak going.
+      // Checking the week's ideas keeps the week streak going.
       await context.read<EngagementState>().checkIn();
       if (!mounted) return;
       setState(() {
@@ -298,6 +298,14 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
               if (referral != null) ...[
                 ReferralNotice(referral),
                 const SizedBox(height: 12),
+              ],
+              if (_batch!.plan case final plan?) ...[
+                _WeekSummary(
+                  plan: plan,
+                  tried: _batch!.tried,
+                  of: items.length,
+                ),
+                const SizedBox(height: 6),
               ],
               Row(
                 children: [
@@ -528,6 +536,41 @@ class ExplanationBox extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// The week these ideas are for and how many have been tried (#244).
+class _WeekSummary extends StatelessWidget {
+  const _WeekSummary({
+    required this.plan,
+    required this.tried,
+    required this.of,
+  });
+
+  final WeekPlan plan;
+  final int tried;
+  final int of;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final next = plan.ends.add(const Duration(days: 1));
+    return Column(
+      key: const Key('weekSummary'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'This week: ${formatWeek(plan.starts, plan.ends)}',
+          key: const Key('weekDates'),
+          style: AppText.quicksand(size: 18, color: p.ink),
+        ),
+        Text(
+          '$tried of $of tried · New ideas on ${formatShortDate(next)}',
+          key: const Key('weekProgress'),
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
     );
   }
 }

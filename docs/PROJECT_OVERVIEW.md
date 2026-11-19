@@ -176,14 +176,14 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 **Mobile app (Flutter)**
 - **Sign in:** register or log in, with the emailed code on a new phone.
 - **Four tabs:**
-  - **Today:** the selected child's recommendations, with explanations;
+  - **This week** (Today until #244): the selected child's weekly plan of recommendations, with explanations;
   - **Progress:** milestones celebrated, a ring for each area and badges, all from the child's own records and never compared with other children (a SOFIA addition);
   - **Milestones:** record from the searchable checklist;
   - **Family:** children, theme and logout.
 - **Administrator screens:** an administrator account opens Dashboard, Activities, Feedback and Account tabs instead. Together they cover the system's use and health, adding, editing and publishing activities, and reviewing ratings without family details.
 - **Activity screen:** the full activity, then "How did it go?": Done or Partly done (with undo), and 1–5 stars with a comment.
 - **Offline (a SOFIA addition):** the last recommendations and the child list are kept on the phone. Opening the app offline keeps the caregiver signed in and shows them, marked as saved.
-- **Look and feel:** a playful design with light and dark mode, a day streak and badges, inspired by Kinedu. It keeps the agreed teal, coral and gold colours, rounded cards, and the Nunito and Quicksand fonts.
+- **Look and feel:** a playful design with light and dark mode, a week streak and badges (a day streak until #244), inspired by Kinedu. It keeps the agreed teal, coral and gold colours, rounded cards, and the Nunito and Quicksand fonts.
 - Runs on a real Android phone against the backend.
 
 ---

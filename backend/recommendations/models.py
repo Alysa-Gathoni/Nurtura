@@ -82,6 +82,14 @@ class Recommendation(models.Model):
         "(blank for batches stored before explanations, #69).",
     )
     date_generated = models.DateTimeField(default=timezone.now)
+    # The first day of the weekly plan this batch belongs to (#244). A plan
+    # lasts generation.PLAN_DAYS days; batches stored during it (a new
+    # milestone, a pinned option) keep its start date.
+    plan_start = models.DateField(
+        null=True,
+        blank=True,
+        help_text="First day of the weekly plan this batch belongs to.",
+    )
 
     class Meta:
         ordering = ["-date_generated", "-ranking_score", "position"]

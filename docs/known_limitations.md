@@ -1,6 +1,6 @@
 # Known limitations and outstanding defects
 
-> **Last updated: 2026-11-17.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
+> **Last updated: 2026-11-19.** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
 
 ## Outstanding defects
 
@@ -39,6 +39,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 
 ## App and backend
 
+- **Ideas come as a weekly plan** (#244). A plan lasts 7 days from the day it starts; the This week tab shows its dates and how many ideas have been tried, and the next visit after it ends starts a new plan. A new milestone or an edited profile refreshes the ideas mid-week but keeps the week. A new week doesn't rotate ideas: ideas not yet tried come back if they're still the best fit, because which ideas are chosen is the evaluated ranking, unchanged (still 5). Plan dates use the server's date (UTC), so a plan started between midnight and 3 a.m. in Kenya carries the previous day's date. The streak counts weeks in a row (Monday to Sunday) in which the ideas were checked.
 - **Portrait only** (#214). The app is locked to portrait on Android. The screens weren't designed for landscape, and Milestones overflowed when the phone was turned.
 - **Not hosted yet.** The backend runs on a laptop. The phone reaches it over USB (`adb reverse`), because campus Wi-Fi blocks devices from reaching each other. Hosting is Sprint III ([deployment_requirements.md](deployment_requirements.md)).
 - **The server address is built into the app** at build time (`--dart-define=API_BASE_URL`). A new address means rebuilding the app.

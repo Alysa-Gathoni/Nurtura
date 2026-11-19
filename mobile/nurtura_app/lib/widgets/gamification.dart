@@ -42,11 +42,11 @@ class ChildAvatar extends StatelessWidget {
   }
 }
 
-/// "3-day streak" with a flame; grey until the first day is checked.
+/// "3-week streak" with a flame; grey until the first week is checked.
 class StreakChip extends StatelessWidget {
-  const StreakChip({super.key, required this.days, this.onDark = false});
+  const StreakChip({super.key, required this.weeks, this.onDark = false});
 
-  final int days;
+  final int weeks;
 
   /// On the coloured header, use a translucent white pill.
   final bool onDark;
@@ -54,9 +54,9 @@ class StreakChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    final active = days > 0;
+    final active = weeks > 0;
     return Semantics(
-      label: active ? '$days-day streak' : 'No streak yet',
+      label: active ? '$weeks-week streak' : 'No streak yet',
       child: Container(
         key: const Key('streakChip'),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
@@ -76,7 +76,7 @@ class StreakChip extends StatelessWidget {
             ),
             const SizedBox(width: 4),
             Text(
-              '$days',
+              '$weeks',
               style: AppText.nunito(
                 size: 14,
                 weight: FontWeight.w900,

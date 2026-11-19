@@ -95,9 +95,20 @@ def _payload(child, recommendations):
     prefetch_related_objects(recommendations, "completion", "feedback")
     first = recommendations[0] if recommendations else None
     referral = referral_for(child)
+    plan = generation.plan_for(recommendations)
     return {
         "batch": str(first.batch) if first else None,
         "generated_at": first.date_generated.isoformat() if first else None,
+        # The weekly plan (#244). "ended": the app asks for a new plan.
+        "plan": (
+            {
+                "starts": plan["starts"].isoformat(),
+                "ends": plan["ends"].isoformat(),
+                "ended": plan["ended"],
+            }
+            if plan
+            else None
+        ),
         "recommendations": [_card(r) for r in recommendations],
         # Worked out on each request and never stored or ranked (#161).
         "referral": referral.to_dict() if referral else None,
@@ -110,7 +121,8 @@ class ChildRecommendationsView(APIView):
     GET returns the newest stored batch and never generates. POST ranks the
     child's eligible activities (the ranking evaluated at sprint5-eval-v1)
     and stores the top 5 as a new batch: 201 when a batch is stored, 200 when
-    the newest batch already matches. Both include the clinic-visit referral
+    the newest batch already matches and its weekly plan is still running.
+    Both include the plan's dates and whether it has ended (#244). Both include the clinic-visit referral
     (#161), or null. Only the child's own caregiver may use either; other
     caregivers' children are 404 and administrators 403.
     """

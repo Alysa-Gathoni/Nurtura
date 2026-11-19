@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Small key-value storage on the device for app preferences (theme) and
-/// light engagement data (the day streak). Not for anything secret.
+/// light engagement data (the week streak). Not for anything secret.
 abstract class Preferences {
   Future<String?> getString(String key);
   Future<void> setString(String key, String value);

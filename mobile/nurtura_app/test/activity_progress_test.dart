@@ -99,7 +99,7 @@ void main() {
     expect(find.byKey(const Key('wellDoneSheet')), findsNothing);
     expect(find.text('Done on 14 Oct 2026'), findsOneWidget);
     expect(find.textContaining("It won't come up again"), findsOneWidget);
-    expect(engagement.checkedInToday, isTrue);
+    expect(engagement.checkedInThisWeek, isTrue);
 
     await back(tester);
     expect(find.byKey(const Key('doneChip_ACT-0004')), findsOneWidget);

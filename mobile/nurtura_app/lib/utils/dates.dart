@@ -29,6 +29,21 @@ String formatDate(DateTime date) =>
 String formatShortDate(DateTime date) =>
     '${date.day} ${_months[date.month - 1]}';
 
+/// A week of dates: "19–25 Nov", or "28 Nov – 4 Dec" across two months.
+String formatWeek(DateTime starts, DateTime ends) =>
+    starts.month == ends.month && starts.year == ends.year
+    ? '${starts.day}–${formatShortDate(ends)}'
+    : '${formatShortDate(starts)} – ${formatShortDate(ends)}';
+
+/// The Monday of [day]'s week.
+DateTime weekOf(DateTime day) {
+  return DateTime(
+    day.year,
+    day.month,
+    day.day - (day.weekday - DateTime.monday),
+  );
+}
+
 /// The API's date format, e.g. "2027-02-01".
 String apiDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-'

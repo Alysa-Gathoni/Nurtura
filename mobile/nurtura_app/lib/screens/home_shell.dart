@@ -90,7 +90,7 @@ class _HomeShellState extends State<HomeShell> {
         'From the village',
         child.isExpecting
             ? 'Gentle ideas for your pregnancy'
-            : 'Picked for ${child.name}',
+            : "${child.name}'s ideas for the week",
       ),
       explore => ('Explore', 'Ideas to browse for ${child.name}'),
       progress => ('Progress', 'Every step counts'),
@@ -153,9 +153,9 @@ class _HomeShellState extends State<HomeShell> {
         destinations: const [
           NavigationDestination(
             key: Key('tab_today'),
-            icon: Icon(Icons.wb_sunny_outlined),
-            selectedIcon: Icon(Icons.wb_sunny_rounded),
-            label: 'Today',
+            icon: Icon(Icons.date_range_outlined),
+            selectedIcon: Icon(Icons.date_range_rounded),
+            label: 'This week',
           ),
           NavigationDestination(
             key: Key('tab_explore'),

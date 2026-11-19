@@ -119,7 +119,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
           _StreakCard(
             streak: engagement.streak,
             best: engagement.bestStreak,
-            checkedInToday: engagement.checkedInToday,
+            checkedInThisWeek: engagement.checkedInThisWeek,
           ),
           if (_done != null) ...[
             const SizedBox(height: 14),
@@ -253,12 +253,12 @@ class _StreakCard extends StatelessWidget {
   const _StreakCard({
     required this.streak,
     required this.best,
-    required this.checkedInToday,
+    required this.checkedInThisWeek,
   });
 
   final int streak;
   final int best;
-  final bool checkedInToday;
+  final bool checkedInThisWeek;
 
   @override
   Widget build(BuildContext context) {
@@ -287,18 +287,18 @@ class _StreakCard extends StatelessWidget {
                 Text(
                   streak == 0
                       ? 'Start a streak'
-                      : '$streak-day streak${streak >= 3 ? '!' : ''}',
+                      : '$streak-week streak${streak >= 3 ? '!' : ''}',
                   style: AppText.quicksand(size: 18, color: p.ink),
                 ),
                 Text(
-                  checkedInToday
-                      ? 'You checked today’s ideas. See you tomorrow!'
-                      : 'Open today’s ideas to keep it going.',
+                  checkedInThisWeek
+                      ? 'You checked this week’s ideas. See you next week!'
+                      : 'Open this week’s ideas to keep it going.',
                   style: AppText.nunito(size: 13, color: p.ink),
                 ),
                 if (best > 1)
                   Text(
-                    'Best: $best days',
+                    'Best: $best weeks',
                     style: AppText.nunito(
                       size: 12,
                       weight: FontWeight.w700,

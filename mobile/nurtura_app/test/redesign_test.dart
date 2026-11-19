@@ -107,33 +107,40 @@ void main() {
     });
   });
 
-  group('day streak', () {
-    test('counts consecutive days, keeping yesterday’s streak alive', () async {
-      var now = DateTime(2026, 10, 1, 9);
-      final prefs = MemoryPreferences();
-      final e = EngagementState(prefs, clock: () => now);
-      await e.checkIn();
-      expect(e.streak, 1);
-      now = DateTime(2026, 10, 2, 8);
-      expect(e.streak, 1); // not checked yet today, still counts yesterday
-      await e.checkIn();
-      await e.checkIn(); // twice on one day counts once
-      expect(e.streak, 2);
-      now = DateTime(2026, 10, 4, 8); // a day missed
-      expect(e.streak, 0);
-      await e.checkIn();
-      expect(e.streak, 1);
-      expect(e.bestStreak, 2);
+  group('week streak (#244)', () {
+    test(
+      'counts consecutive weeks, keeping last week’s streak alive',
+      () async {
+        var now = DateTime(2026, 11, 18, 9); // a Wednesday
+        final prefs = MemoryPreferences();
+        final e = EngagementState(prefs, clock: () => now);
+        await e.checkIn();
+        expect(e.streak, 1);
+        expect(e.checkedInThisWeek, isTrue);
+        now = DateTime(2026, 11, 22, 8); // Sunday, same week
+        await e.checkIn(); // more days in one week count once
+        expect(e.streak, 1);
+        now = DateTime(2026, 11, 23, 8); // Monday: a new week
+        expect(e.checkedInThisWeek, isFalse);
+        expect(e.streak, 1); // not checked yet this week, still counts last
+        await e.checkIn();
+        expect(e.streak, 2);
+        now = DateTime(2026, 12, 8, 8); // the week of 30 Nov missed
+        expect(e.streak, 0);
+        await e.checkIn();
+        expect(e.streak, 1);
+        expect(e.bestStreak, 2);
 
-      final reloaded = EngagementState(prefs, clock: () => now);
-      await reloaded.load();
-      expect(reloaded.streak, 1);
-      expect(reloaded.bestStreak, 2);
+        final reloaded = EngagementState(prefs, clock: () => now);
+        await reloaded.load();
+        expect(reloaded.streak, 1);
+        expect(reloaded.bestStreak, 2);
 
-      await reloaded.clear();
-      expect(reloaded.streak, 0);
-      expect(prefs.values, isEmpty);
-    });
+        await reloaded.clear();
+        expect(reloaded.streak, 0);
+        expect(prefs.values, isEmpty);
+      },
+    );
   });
 
   test('theme mode is remembered on the device', () async {

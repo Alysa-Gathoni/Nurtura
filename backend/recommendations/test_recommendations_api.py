@@ -1,5 +1,6 @@
 """Tests for stored, ranked recommendations and their API (#52)."""
 
+import datetime
 import threading
 import unittest
 import uuid
@@ -366,7 +367,7 @@ class GenerateTests(RecommendationAPITestCase):
         body = self.get().json()
         self.assertEqual(
             {k: v for k, v in body.items() if k != "referral"},
-            {"batch": None, "generated_at": None, "recommendations": []},
+            {"batch": None, "generated_at": None, "plan": None, "recommendations": []},
         )
         self.assertFalse(Recommendation.objects.exists())
         posted = self.post().json()
@@ -442,6 +443,83 @@ class GenerateTests(RecommendationAPITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()["recommendations"], [])
         self.assertFalse(Recommendation.objects.exists())
+
+
+class WeeklyPlanTests(RecommendationAPITestCase):
+    """Ideas come as a weekly plan (#244); which ideas is unchanged."""
+
+    START = datetime.date(2026, 11, 19)
+
+    def on(self, days):
+        """Patch 'today' to START + days."""
+        day = self.START + datetime.timedelta(days=days)
+        return mock.patch("django.utils.timezone.localdate", return_value=day)
+
+    def test_a_new_plan_runs_for_seven_days(self):
+        with self.on(0):
+            body = self.post().json()
+        self.assertEqual(
+            body["plan"],
+            {"starts": "2026-11-19", "ends": "2026-11-25", "ended": False},
+        )
+        self.assertEqual(
+            set(Recommendation.objects.values_list("plan_start", flat=True)),
+            {self.START},
+        )
+        with self.on(6):
+            self.assertFalse(self.get().json()["plan"]["ended"])
+        with self.on(7):
+            self.assertTrue(self.get().json()["plan"]["ended"])
+
+    def test_repeat_post_in_the_same_week_returns_the_same_plan(self):
+        with self.on(0):
+            first = self.post().json()
+        with self.on(3):
+            again = self.post()
+        self.assertEqual(again.status_code, status.HTTP_200_OK)
+        self.assertEqual(again.json()["batch"], first["batch"])
+
+    def test_a_mid_week_change_refreshes_the_ideas_but_keeps_the_week(self):
+        with self.on(0):
+            first = self.post().json()
+        self.child.record_milestone(
+            reference=ReferenceMilestone.objects.get(milestone_key="CDC-02M-SE-04"),
+            status="not_yet",
+        )
+        with self.on(4):
+            second = self.post()
+        self.assertEqual(second.status_code, status.HTTP_201_CREATED)
+        self.assertNotEqual(second.json()["batch"], first["batch"])
+        self.assertEqual(second.json()["plan"], first["plan"])
+
+    def test_after_the_week_a_new_plan_starts_even_with_the_same_ideas(self):
+        with self.on(0):
+            first = self.post().json()
+        with self.on(7):
+            second = self.post()
+        self.assertEqual(second.status_code, status.HTTP_201_CREATED)
+        body = second.json()
+        self.assertNotEqual(body["batch"], first["batch"])
+        self.assertEqual(
+            body["plan"],
+            {"starts": "2026-11-26", "ends": "2026-12-02", "ended": False},
+        )
+        # Which ideas: unchanged, still the evaluated order.
+        self.assertEqual(
+            [c["activity_id"] for c in body["recommendations"]],
+            [c["activity_id"] for c in first["recommendations"]],
+        )
+
+    def test_older_batches_start_on_the_day_they_were_generated(self):
+        with self.on(0):
+            self.post()
+        generated = datetime.datetime(2026, 11, 10, 9, 0, tzinfo=datetime.UTC)
+        Recommendation.objects.update(plan_start=None, date_generated=generated)
+        with self.on(0):
+            plan = self.get().json()["plan"]
+        self.assertEqual(
+            plan, {"starts": "2026-11-10", "ends": "2026-11-16", "ended": True}
+        )
 
 
 class ReferralAPITests(RecommendationAPITestCase):
