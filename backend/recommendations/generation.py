@@ -27,8 +27,14 @@ are stored as one batch of Recommendation rows.
   #179): activities similar to ones that went well move up, ones similar to
   ones that didn't work move down, and an activity that didn't work isn't
   suggested again. A child with no feedback gets the evaluated order.
+- Ideas come as a weekly plan (#244). A plan starts on the day its first
+  batch is stored and lasts PLAN_DAYS days. Batches stored during it (a new
+  milestone, an edited profile, a pinned option) keep its start date; the
+  first request after it ends starts a new plan, even if the ideas are the
+  same. Which ideas are chosen is unchanged.
 """
 
+import datetime
 import hashlib
 import json
 import uuid
@@ -50,6 +56,7 @@ from .ranking import child_bracket, rank
 RECOMMENDATIONS_PER_BATCH = 5
 MAX_PINNED = 2
 SHORT_DESCRIPTION_LENGTH = 160
+PLAN_DAYS = 7
 
 # ranking_version() at tag sprint5-eval-v1: the rule weights, ranking
 # settings, alpha (0.7), embedding model and batch size that were evaluated.
@@ -134,6 +141,30 @@ def latest_batch(child):
     )
 
 
+def _plan_start_of(row):
+    """A stored row's plan start (older rows: the day it was generated)."""
+    return row.plan_start or timezone.localtime(row.date_generated).date()
+
+
+def plan_for(recommendations, today=None):
+    """The weekly plan of a batch: its first and last day, and whether it
+    has ended. None for an empty batch."""
+    if not recommendations:
+        return None
+    today = today or timezone.localdate()
+    start = _plan_start_of(recommendations[0])
+    ends = start + datetime.timedelta(days=PLAN_DAYS - 1)
+    return {"starts": start, "ends": ends, "ended": today > ends}
+
+
+def current_plan_start(newest, today):
+    """The newest batch's plan start while that plan runs, else today."""
+    plan = plan_for(newest, today)
+    if plan is None or plan["ended"]:
+        return today
+    return plan["starts"]
+
+
 @dataclass(frozen=True)
 class GenerationResult:
     recommendations: list
@@ -197,8 +228,11 @@ def generate(child_id, caregiver, pin=None):
             for r in top
         ]
 
+        plan_start = current_plan_start(newest, timezone.localdate())
         if newest and (
-            [r.activity_id for r in newest] == [r.activity.pk for r in top]
+            # the same week: a new week stores a new plan, even if identical
+            _plan_start_of(newest[0]) == plan_start
+            and [r.activity_id for r in newest] == [r.activity.pk for r in top]
             and [r.pinned for r in newest] == [r.activity.pk in notes for r in top]
             and all(
                 r.alpha == alpha
@@ -235,6 +269,7 @@ def generate(child_id, caregiver, pin=None):
                     pinned=r.activity.pk in notes,
                     pin_note=notes.get(r.activity.pk, ""),
                     date_generated=now,
+                    plan_start=plan_start,
                 )
                 for position, (r, text) in enumerate(zip(top, texts), start=1)
             ]

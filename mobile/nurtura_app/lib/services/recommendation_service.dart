@@ -1,4 +1,5 @@
 import '../models/recommendation.dart';
+import '../utils/dates.dart';
 import 'api_client.dart';
 
 /// A child's ranked recommendations (`/api/children/<id>/recommendations/`).
@@ -108,7 +109,10 @@ class RecommendationService {
     void Function()? onGenerating,
   }) async {
     final stored = await latest(childId);
-    if (!stored.isEmpty) return stored;
+    // A weekly plan (#244): once its week is over, ask for the next one.
+    if (!stored.isEmpty && !(stored.plan?.endedOn(today()) ?? false)) {
+      return stored;
+    }
     onGenerating?.call();
     return generate(childId);
   }

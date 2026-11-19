@@ -154,7 +154,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
       final completion = await _service.markDone(_r.id, partial: partial);
       if (!mounted) return;
       _update(_r.withProgress(completion: () => completion));
-      // Doing an activity counts toward the day streak too.
+      // Doing an activity counts toward the week streak too.
       await context.read<EngagementState>().checkIn();
       if (!mounted) return;
       setState(() => _savingDone = false);

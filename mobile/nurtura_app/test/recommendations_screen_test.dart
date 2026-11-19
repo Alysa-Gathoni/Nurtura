@@ -180,6 +180,66 @@ void main() {
     });
   }
 
+  group('weekly plan (#244)', () {
+    Map<String, dynamic> weekBatch({required bool ended}) => {
+      ...batch([
+        {
+          ...card('ACT-0004', 'Naming Everyday Objects'),
+          'completion': {
+            'status': 'completed',
+            'completion_date': '2026-11-20',
+          },
+        },
+        card('ACT-0031', 'Naming Pictures in a Book', position: 2),
+      ]),
+      'plan': {'starts': '2026-11-19', 'ends': '2026-11-25', 'ended': ended},
+    };
+
+    testWidgets('shows the week, how many were tried and when new ideas come', (
+      tester,
+    ) async {
+      final backend = FakeBackend((r) async => json(weekBatch(ended: false)));
+      await pumpScreen(tester, backend);
+      await tester.pumpAndSettle();
+
+      expect(backend.to(path).map((r) => r.method), ['GET']);
+      expect(find.text('This week: 19–25 Nov'), findsOneWidget);
+      expect(find.text('1 of 2 tried · New ideas on 26 Nov'), findsOneWidget);
+    });
+
+    testWidgets('a plan whose week has ended is replaced by a new one', (
+      tester,
+    ) async {
+      final backend = FakeBackend((r) async {
+        if (r.method == 'GET') return json(weekBatch(ended: true));
+        return json({
+          ...batch([card('ACT-0023', 'Animal Sound Imitation Game')]),
+          'plan': {
+            'starts': '2026-11-26',
+            'ends': '2026-12-02',
+            'ended': false,
+          },
+        }, 201);
+      });
+      await pumpScreen(tester, backend);
+      await tester.pumpAndSettle();
+
+      expect(backend.to(path).map((r) => r.method), ['GET', 'POST']);
+      expect(find.text('Animal Sound Imitation Game'), findsOneWidget);
+      expect(find.text('This week: 26 Nov – 2 Dec'), findsOneWidget);
+      expect(find.text('0 of 1 tried · New ideas on 3 Dec'), findsOneWidget);
+    });
+
+    test('a saved plan counts as ended once its last day has passed', () {
+      final plan = WeekPlan(
+        starts: DateTime(2026, 11, 19),
+        ends: DateTime(2026, 11, 25),
+      );
+      expect(plan.endedOn(DateTime(2026, 11, 25, 23, 59)), isFalse);
+      expect(plan.endedOn(DateTime(2026, 11, 26)), isTrue);
+    });
+  });
+
   testWidgets('shows "Gathering ideas…" while generating', (tester) async {
     final post = Completer<http.Response>();
     final backend = FakeBackend((r) async {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/dates.dart';
+
 /// The caregiver marked the activity as done, fully or partly (FR-14).
 class Completion {
   const Completion({required this.partial, required this.date});
@@ -366,12 +368,46 @@ class Referral {
 }
 
 /// The newest batch of recommendations for a child (possibly empty).
+/// The week a batch of ideas is for (#244): a plan lasts 7 days, then the
+/// app asks for the next one.
+class WeekPlan {
+  const WeekPlan({
+    required this.starts,
+    required this.ends,
+    this.ended = false,
+  });
+
+  factory WeekPlan.fromJson(Map<String, dynamic> json) => WeekPlan(
+    starts: DateTime.parse(json['starts'] as String),
+    ends: DateTime.parse(json['ends'] as String),
+    ended: json['ended'] as bool? ?? false,
+  );
+
+  /// First and last day of the plan (dates only).
+  final DateTime starts;
+  final DateTime ends;
+
+  /// The server said the week is over when this batch was fetched.
+  final bool ended;
+
+  /// The week is over on [day] (e.g. a copy saved on the phone last week).
+  bool endedOn(DateTime day) =>
+      ended || DateTime(day.year, day.month, day.day).isAfter(ends);
+
+  Map<String, dynamic> toJson() => {
+    'starts': apiDate(starts),
+    'ends': apiDate(ends),
+    'ended': ended,
+  };
+}
+
 class RecommendationBatch {
   const RecommendationBatch({
     required this.batch,
     required this.generatedAt,
     required this.items,
     this.referral,
+    this.plan,
   });
 
   factory RecommendationBatch.fromJson(Map<String, dynamic> json) {
@@ -381,11 +417,13 @@ class RecommendationBatch {
     ]..sort((a, b) => a.position.compareTo(b.position));
     final generated = json['generated_at'] as String?;
     final referral = json['referral'] as Map<String, dynamic>?;
+    final plan = json['plan'] as Map<String, dynamic>?;
     return RecommendationBatch(
       batch: json['batch'] as String?,
       generatedAt: generated == null ? null : DateTime.parse(generated),
       items: items,
       referral: referral == null ? null : Referral.fromJson(referral),
+      plan: plan == null ? null : WeekPlan.fromJson(plan),
     );
   }
 
@@ -394,7 +432,13 @@ class RecommendationBatch {
   final List<Recommendation> items;
   final Referral? referral;
 
+  /// The week these ideas are for (null from an older server or when empty).
+  final WeekPlan? plan;
+
   bool get isEmpty => items.isEmpty;
+
+  /// Ideas marked done or partly done.
+  int get tried => items.where((r) => r.completion != null).length;
 
   /// The same batch with [updated] in place of the item with its id.
   RecommendationBatch replacing(Recommendation updated) => RecommendationBatch(
@@ -402,11 +446,13 @@ class RecommendationBatch {
     generatedAt: generatedAt,
     items: [for (final r in items) r.id == updated.id ? updated : r],
     referral: referral,
+    plan: plan,
   );
 
   Map<String, dynamic> toJson() => {
     'batch': batch,
     'generated_at': generatedAt?.toIso8601String(),
+    'plan': plan?.toJson(),
     'recommendations': [for (final r in items) r.toJson()],
     'referral': referral?.toJson(),
   };

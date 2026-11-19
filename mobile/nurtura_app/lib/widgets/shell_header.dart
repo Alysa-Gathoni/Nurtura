@@ -11,7 +11,7 @@ import 'gamification.dart';
 import 'village.dart';
 
 /// The header of each tab, on a watercolour wash: the selected child (tap to
-/// switch), the day streak, and the tab's title.
+/// switch), the week streak, and the tab's title.
 class ShellHeader extends StatelessWidget {
   const ShellHeader({
     super.key,
@@ -55,7 +55,7 @@ class ShellHeader extends StatelessWidget {
                     const Spacer(),
                   ?trailing,
                   const SizedBox(width: 8),
-                  StreakChip(days: streak),
+                  StreakChip(weeks: streak),
                 ],
               ),
               const SizedBox(height: 16),
