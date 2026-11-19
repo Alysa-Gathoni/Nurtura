@@ -30,8 +30,13 @@ are stored as one batch of Recommendation rows.
 - Ideas come as a weekly plan (#244). A plan starts on the day its first
   batch is stored and lasts PLAN_DAYS days. Batches stored during it (a new
   milestone, an edited profile, a pinned option) keep its start date; the
-  first request after it ends starts a new plan, even if the ideas are the
-  same. Which ideas are chosen is unchanged.
+  first request after it ends starts a new plan.
+- Ideas rotate between weeks (#246). Of last week's ideas that weren't tried
+  (done or partly done), only the KEEP_UNTRIED best-ranked come back; the
+  rest of the week is ideas that weren't in last week's plan, in ranked
+  order, topped up with more of last week's if there aren't enough. Pinned
+  ideas are kept regardless. The ranking itself is unchanged, so the first
+  week is the evaluated top 5.
 """
 
 import datetime
@@ -57,6 +62,8 @@ RECOMMENDATIONS_PER_BATCH = 5
 MAX_PINNED = 2
 SHORT_DESCRIPTION_LENGTH = 160
 PLAN_DAYS = 7
+# Rotation (#246): how many of last week's untried ideas a new week keeps.
+KEEP_UNTRIED = 2
 
 # ranking_version() at tag sprint5-eval-v1: the rule weights, ranking
 # settings, alpha (0.7), embedding model and batch size that were evaluated.
@@ -183,6 +190,50 @@ def _pins(newest, completed, pin):
     return pins[:MAX_PINNED]
 
 
+def tried_activity_ids(child):
+    """Activities the child has done or partly done, on any batch."""
+    return set(
+        CompletedActivity.objects.filter(recommendation__child=child).values_list(
+            "recommendation__activity_id", flat=True
+        )
+    )
+
+
+def previous_plan_ids(child, plan_start):
+    """Activities in the newest batch of the plan before plan_start."""
+    newest = (
+        Recommendation.objects.filter(child=child, plan_start__lt=plan_start)
+        .order_by("-date_generated", "-id")
+        .values_list("batch", flat=True)
+        .first()
+    )
+    if newest is None:
+        return set()
+    return set(
+        Recommendation.objects.filter(child=child, batch=newest).values_list(
+            "activity_id", flat=True
+        )
+    )
+
+
+def rotate(candidates, rested, count, keep=KEEP_UNTRIED):
+    """Choose `count` of the ranked `candidates` for a new week (#246).
+
+    `rested` are last week's ideas that weren't tried: the `keep` best of
+    them stay, and the rest of the week is ideas that weren't in last week's
+    plan. If there aren't enough of those, more rested ideas fill the gap.
+    The chosen ideas keep their ranked order.
+    """
+    rested_ranked = [c for c in candidates if c.activity.pk in rested]
+    fresh = [c for c in candidates if c.activity.pk not in rested]
+    held = rested_ranked[:keep]
+    chosen = held + fresh[: count - len(held)]
+    if len(chosen) < count:
+        chosen += rested_ranked[keep:][: count - len(chosen)]
+    order = {c.activity.pk: i for i, c in enumerate(candidates)}
+    return sorted(chosen, key=lambda c: order[c.activity.pk])
+
+
 def generate(child_id, caregiver, pin=None):
     """Rank, then store a new batch or return the identical newest one.
 
@@ -205,9 +256,15 @@ def generate(child_id, caregiver, pin=None):
             if pk in ranked and pk not in personal.excluded
         }
         skip = completed | personal.excluded | set(notes)
-        top = [ranked[pk] for pk in notes] + [
-            r for r in personal.ranked if r.activity.pk not in skip
-        ][: RECOMMENDATIONS_PER_BATCH - len(notes)]
+        candidates = [r for r in personal.ranked if r.activity.pk not in skip]
+        # Rotation (#246): from the second week on, last week's untried
+        # ideas mostly rest. Decided by the previous plan, so a mid-week
+        # refresh keeps the week's mix.
+        plan_start = current_plan_start(newest, timezone.localdate())
+        rested = previous_plan_ids(child, plan_start) - tried_activity_ids(child)
+        top = [ranked[pk] for pk in notes] + rotate(
+            candidates, rested - set(notes), RECOMMENDATIONS_PER_BATCH - len(notes)
+        )
         alpha = result.alpha
         fingerprint = profile_fingerprint(result.evaluation, result.query)
         version = ranking_version()
@@ -228,7 +285,6 @@ def generate(child_id, caregiver, pin=None):
             for r in top
         ]
 
-        plan_start = current_plan_start(newest, timezone.localdate())
         if newest and (
             # the same week: a new week stores a new plan, even if identical
             _plan_start_of(newest[0]) == plan_start
