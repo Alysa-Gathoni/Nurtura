@@ -9,18 +9,21 @@ SENSORY_INTEREST_WEIGHT,2.0,backend/profiles/rules/guidelines.py:41
 NOT_A_DELAY_SIGNAL,"{""WHO-MO-03""}",backend/profiles/rules/guidelines.py:56
 REFERRAL_MIN_NOT_YET,1,backend/profiles/rules/referral.py:22
 SOURCE,"""CDC Learn the Signs. Act Early. (2022)""",backend/profiles/rules/referral.py:24
-FOCUS_THRESHOLD,0.5,backend/recommendations/retrieval.py:28
-DEFAULT_LIMIT,10,backend/recommendations/retrieval.py:29
-MAX_LIMIT,50,backend/recommendations/retrieval.py:30
+FOCUS_THRESHOLD,0.5,backend/recommendations/retrieval.py:30
+DEFAULT_LIMIT,10,backend/recommendations/retrieval.py:31
+MAX_LIMIT,50,backend/recommendations/retrieval.py:32
 BRACKET_INDEX,"{age_range: i for i, (age_range, _, _) in enumerate(AGE_BRACKETS)}",backend/recommendations/ranking.py:42
 SAME_BRACKET,1.0,backend/recommendations/ranking.py:48
 ONE_YOUNGER,0.7,backend/recommendations/ranking.py:49
 ONE_OLDER,0.5,backend/recommendations/ranking.py:50
 TWO_AWAY,0.25,backend/recommendations/ranking.py:51
 FURTHER,0.1,backend/recommendations/ranking.py:52
-RECOMMENDATIONS_PER_BATCH,5,backend/recommendations/generation.py:50
-MAX_PINNED,2,backend/recommendations/generation.py:51
-SHORT_DESCRIPTION_LENGTH,160,backend/recommendations/generation.py:52
+RECOMMENDATIONS_PER_BATCH,5,backend/recommendations/generation.py:64
+MAX_PINNED,2,backend/recommendations/generation.py:65
+SHORT_DESCRIPTION_LENGTH,160,backend/recommendations/generation.py:66
+PLAN_DAYS,7,backend/recommendations/generation.py:67
+KEEP_UNTRIED,2,backend/recommendations/generation.py:69
+SUNDAY,6,backend/recommendations/generation.py:177
 EXPLANATION_VERSION,"""2""",backend/recommendations/explanations.py:46
 MAX_SENTENCES,4,backend/recommendations/explanations.py:47
 MAX_NAMED_MILESTONES,3,backend/recommendations/explanations.py:48
@@ -30,7 +33,7 @@ NOT_YET,"""due-milestone-not-yet""",backend/recommendations/explanations.py:61
 EMERGING,"""due-milestone-emerging""",backend/recommendations/explanations.py:62
 UPCOMING,"""upcoming-milestone""",backend/recommendations/explanations.py:63
 MILESTONE_RULES,"(NOT_YET, EMERGING, UPCOMING)",backend/recommendations/explanations.py:64
-MODEL_NAME,"""all-MiniLM-L6-v2""",backend/recommendations/embeddings.py:14
+MODEL_NAME,"""all-MiniLM-L6-v2""",backend/recommendations/embeddings.py:16
 SIMILARITY_FLOOR,0.5,backend/recommendations/personalisation.py:31
 BOOST,0.25,backend/recommendations/personalisation.py:32
 PENALTY,0.25,backend/recommendations/personalisation.py:33
@@ -46,13 +49,13 @@ DEFAULT_LIMIT,30,backend/recommendations/browse.py:33
 MAX_LIMIT,100,backend/recommendations/browse.py:34
 ENV_FLAG,"""NURTURA_MODEL_WARMUP""",backend/recommendations/warmup.py:30
 DISABLED_VALUES,"{""0"", ""false"", ""no"", ""off""}",backend/recommendations/warmup.py:31
-RANKING_ALPHA,0.7,backend/nurtura_backend/settings.py:265 (env RANKING_ALPHA)
-SBERT_MODEL_PATH,all-MiniLM-L6-v2,backend/nurtura_backend/settings.py:250
-DEFAULT_THROTTLE_RATES,"{'login': '5/minute', 'two_factor': '10/minute', 'password_reset': '5/minute', 'account_delete': '5/minute'}",backend/nurtura_backend/settings.py:229
-TOKEN_LIFETIME,"30 days, 0:00:00",backend/nurtura_backend/settings.py:213
-ranking_version(),da4d8bcfc4b96aa8275ddf6d450433ff66df8c6786952221e19cad800840de31,backend/recommendations/generation.py:68
+RANKING_ALPHA,0.7,backend/nurtura_backend/settings.py:312 (env RANKING_ALPHA)
+SBERT_MODEL_PATH,all-MiniLM-L6-v2,backend/nurtura_backend/settings.py:263
+DEFAULT_THROTTLE_RATES,"{'login': '5/minute', 'two_factor': '10/minute', 'password_reset': '5/minute', 'account_delete': '5/minute'}",backend/nurtura_backend/settings.py:242
+TOKEN_LIFETIME,"30 days, 0:00:00",backend/nurtura_backend/settings.py:226
+ranking_version(),1bebb5441fd039526e63ec57f62d5d513a017a4bd839773fdfe00ff8b5d928c4,backend/recommendations/generation.py:92
 RuleEngine baseline,1.0,backend/profiles/rules/engine.py:99
 Priority normalisation,"max(0, raw) / top raw score (top area = 1.0)",backend/profiles/rules/engine.py:122
 Similarity normalisation,min-max over the child's pool,backend/recommendations/ranking.py:122
-Query template,'Activities for <age phrase> to support <focus areas>. Still working on: ... Enjoys ...',backend/recommendations/retrieval.py:73
+Query template,'Activities for <age phrase> to support <focus areas>. Still working on: ... Enjoys ...',backend/recommendations/retrieval.py:83
 Embedding model size on disk,91.6 MB; 384 dimensions,backend\models\all-MiniLM-L6-v2

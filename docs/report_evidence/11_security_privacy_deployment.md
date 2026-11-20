@@ -1,6 +1,6 @@
 # Security, privacy and deployment
 
-> Generated 2026-11-16T11:47:38+03:00 at commit `87b0f45` by `backend\venv\Scripts\python.exe scripts\report_evidence\security_privacy.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T00:54:28+03:00 at commit `82ba4a5` by `backend\venv\Scripts\python.exe scripts\report_evidence\security_privacy.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 4a. Negative tests
 
@@ -33,12 +33,12 @@
 
 | Item | Value | Where |
 |---|---|---|
-| Authentication | ExpiringTokenAuthentication, SessionAuthentication | backend/nurtura_backend/settings.py:219 |
-| Token lifecycle | expires after 30 days, 0:00:00; two-step email code at login | backend/nurtura_backend/settings.py:213; backend/profiles/authentication.py:36; backend/profiles/two_factor.py |
-| Default permission | IsAuthenticated | backend/nurtura_backend/settings.py:225 |
+| Authentication | ExpiringTokenAuthentication, SessionAuthentication | backend/nurtura_backend/settings.py:232 |
+| Token lifecycle | expires after 30 days, 0:00:00; two-step email code at login | backend/nurtura_backend/settings.py:226; backend/profiles/authentication.py:36; backend/profiles/two_factor.py |
+| Default permission | IsAuthenticated | backend/nurtura_backend/settings.py:238 |
 | Roles | IsCaregiver, IsAdministrator, HasPrivacyConsent | backend/profiles/permissions.py:6 |
-| Throttling | {'login': '5/minute', 'two_factor': '10/minute', 'password_reset': '5/minute', 'account_delete': '5/minute'} | backend/nurtura_backend/settings.py:229 |
-| Password validators | UserAttributeSimilarityValidator, MinimumLengthValidator, CommonPasswordValidator, NumericPasswordValidator | backend/nurtura_backend/settings.py:135 |
+| Throttling | {'login': '5/minute', 'two_factor': '10/minute', 'password_reset': '5/minute', 'account_delete': '5/minute'} | backend/nurtura_backend/settings.py:242 |
+| Password validators | UserAttributeSimilarityValidator, MinimumLengthValidator, CommonPasswordValidator, NumericPasswordValidator | backend/nurtura_backend/settings.py:148 |
 | Admin restriction | is_staff follows the Administrator role; admin site needs an active staff user | backend/profiles/models.py:71 |
 | Deletion rules | account deletion confirms with password (or email for Google accounts); child data cascades | backend/profiles/views.py:363; see 4d |
 | DEBUG | default False unless DEBUG env is 1/true/yes (this run: True) | backend/nurtura_backend/settings.py:33 |
@@ -51,7 +51,7 @@
 
 ## 4c. Dependency audit and secret scan
 
-- **Python dependency audit:** pip-audit 2.10.1, `pip-audit --path backend/venv/Lib/site-packages -s osv` (OSV database; nothing installed into the backend): 75 packages, 39 known vulnerabilities in 7 packages. `raw/pip_audit.json`, `raw/pip_audit_findings.csv`. No upgrades were made: this pack changes no dependencies.
+- **Python dependency audit:** pip-audit 2.10.1, `pip-audit --path backend/venv/Lib/site-packages -s osv` (OSV database; nothing installed into the backend): 78 packages, 40 known vulnerabilities in 7 packages. `raw/pip_audit.json`, `raw/pip_audit_findings.csv`. No upgrades were made: this pack changes no dependencies.
 
 | Package | Version | Known vulnerabilities | Fixed in | Required by |
 |---|---|---|---|---|
@@ -61,7 +61,7 @@
 | filelock | 4.0.4 | 14 | 4.0.9, 4.2.1 | requirements.txt (server) |
 | pyasn1 | 0.6.4 | 4 | 0.6.5 | requirements.txt (server) |
 | setuptools | 84.0.0 | 1 | 84.1.0 | requirements.txt (server) |
-| virtualenv | 21.13.0 | 15 | 21.14.2, 21.14.4, 21.14.7, 21.14.9 | requirements-dev.txt (development only) |
+| virtualenv | 21.13.0 | 16 | 21.14.10, 21.14.2, 21.14.4, 21.14.7, 21.14.9 | requirements-dev.txt (development only) |
 
 - **Flutter:** 19 packages have a newer version available (`flutter pub outdated` lists only those; direct and transitive). `raw/flutter_pub_outdated.json`.
 - **Git history secret scan** (every added line in every commit on every branch, `git log --all -p`; counts and paths only, no values):
@@ -91,14 +91,14 @@
 ## 4e. Deployment
 
 - **Deployment files in the repository:** none.
-- **Hosting:** No deployment files in the repository; docs/known_limitations.md:43 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).
-- **Measured** (one development laptop, `05_latency.md`): peak working set 612.0 MB; start-up 21.0 s.
+- **Hosting:** No deployment files in the repository; docs/known_limitations.md:49 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).
+- **Measured** (one development laptop, `05_latency.md`): peak working set 604.0 MB; start-up 15.8 s.
 
 | Disk | Size |
 |---|---|
-| backend code + model (no venv) | 184.6 MB |
+| backend code + model (no venv) | 184.7 MB |
 | SBERT model folder | 91.6 MB |
-| backend venv | 1181.3 MB |
+| backend venv | 1190.7 MB |
 | database (pg_database_size) | 13 MB |
 | debug APKs built locally | app-debug.apk 214.6 MB |
 

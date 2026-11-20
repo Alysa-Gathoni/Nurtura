@@ -1,6 +1,406 @@
 [
   {
     "conclusion": "success",
+    "createdAt": "2026-11-20T21:27:57Z",
+    "databaseId": 44820541525,
+    "displayTitle": "Merge pull request #255 from <redacted>/feature/253-monday-plans",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-20T21:19:49Z",
+    "databaseId": 44819342952,
+    "displayTitle": "feat: weekly plans run Monday to Sunday (#253)",
+    "event": "pull_request",
+    "headBranch": "feature/253-monday-plans",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-20T21:01:13Z",
+    "databaseId": 44816544257,
+    "displayTitle": "Merge pull request #254 from <redacted>/feature/250-beta-mix",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-20T20:52:56Z",
+    "databaseId": 44815325125,
+    "displayTitle": "feat: retrieval mixes SBERT and TF-IDF at β = 0.25 (#250)",
+    "event": "pull_request",
+    "headBranch": "feature/250-beta-mix",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-20T20:28:17Z",
+    "databaseId": 44811646736,
+    "displayTitle": "Merge pull request #249 from <redacted>/feature/248-tfidf-hybrid",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-20T17:40:13Z",
+    "databaseId": 44785496708,
+    "displayTitle": "feat: TF-IDF + cosine similarity alongside SBERT, with an evaluated weight (#248)",
+    "event": "pull_request",
+    "headBranch": "feature/248-tfidf-hybrid",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-20T17:31:37Z",
+    "databaseId": 44784132204,
+    "displayTitle": "Merge pull request #252 from <redacted>/fix/251-weekly-plan-test-d…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-20T17:26:26Z",
+    "databaseId": 44783310297,
+    "displayTitle": "fix: weekly plan tests no longer depend on the real date (#251)",
+    "event": "pull_request",
+    "headBranch": "fix/251-weekly-plan-test-dates",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "failure",
+    "createdAt": "2026-11-20T17:15:20Z",
+    "databaseId": 44781509034,
+    "displayTitle": "Merge pull request #247 from <redacted>/feature/246-weekly-rotation",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "failure",
+    "createdAt": "2026-11-20T16:54:13Z",
+    "databaseId": 44777984892,
+    "displayTitle": "feat: TF-IDF + cosine similarity alongside SBERT, with an evaluated weight (#248)",
+    "event": "pull_request",
+    "headBranch": "feature/248-tfidf-hybrid",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-19T13:17:12Z",
+    "databaseId": 44531949494,
+    "displayTitle": "feat: TF-IDF + cosine similarity alongside SBERT, with an evaluated weight (#248)",
+    "event": "pull_request",
+    "headBranch": "feature/248-tfidf-hybrid",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-19T13:05:41Z",
+    "databaseId": 44530055557,
+    "displayTitle": "feat: rotate ideas when a new week starts (#246)",
+    "event": "pull_request",
+    "headBranch": "feature/246-weekly-rotation",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-19T12:45:57Z",
+    "databaseId": 44526929281,
+    "displayTitle": "Merge pull request #245 from <redacted>/feature/244-weekly-plan",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-19T12:33:50Z",
+    "databaseId": 44525039649,
+    "displayTitle": "feat: activities as a weekly plan instead of daily (#244)",
+    "event": "pull_request",
+    "headBranch": "feature/244-weekly-plan",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-18T18:11:04Z",
+    "databaseId": 44366889829,
+    "displayTitle": "Merge pull request #243 from <redacted>/fix/242-explore-card-overflow",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-18T18:01:25Z",
+    "databaseId": 44365095939,
+    "displayTitle": "fix: stop the Explore interests cards overflowing (#242)",
+    "event": "pull_request",
+    "headBranch": "fix/242-explore-card-overflow",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-18T15:50:14Z",
+    "databaseId": 44340202893,
+    "displayTitle": "Merge pull request #241 from <redacted>/test/230-device-tests",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-18T15:37:03Z",
+    "databaseId": 44337701627,
+    "displayTitle": "test: end-to-end test on four emulated devices (#230)",
+    "event": "pull_request",
+    "headBranch": "test/230-device-tests",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-18T15:18:49Z",
+    "databaseId": 44334173065,
+    "displayTitle": "Merge pull request #240 from <redacted>/fix/237-small-phone-picker",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-18T15:08:12Z",
+    "databaseId": 44332089218,
+    "displayTitle": "fix: milestone picker scrolls as one on small phones (#237)",
+    "event": "pull_request",
+    "headBranch": "fix/237-small-phone-picker",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-18T14:53:56Z",
+    "databaseId": 44329366279,
+    "displayTitle": "Merge pull request #239 from <redacted>/feature/238-short-privacy-…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-18T14:52:10Z",
+    "databaseId": 44329028977,
+    "displayTitle": "Merge pull request #236 from <redacted>/docs/235-verify-milestones",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-18T14:49:39Z",
+    "databaseId": 44328553253,
+    "displayTitle": "feat: a short privacy notice first, with the agreement always in view (#238)",
+    "event": "pull_request",
+    "headBranch": "feature/238-short-privacy-notice",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-17T19:51:29Z",
+    "databaseId": 44163076914,
+    "displayTitle": "data: verify the remaining 108 CDC milestones against the 2022 checklists (#235)",
+    "event": "pull_request",
+    "headBranch": "docs/235-verify-milestones",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-17T11:07:00Z",
+    "databaseId": 44071050246,
+    "displayTitle": "Merge pull request #234 from <redacted>/docs/233-database-backup",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-17T09:21:54Z",
+    "databaseId": 44054893394,
+    "displayTitle": "docs: how to back up and restore the database (#233)",
+    "event": "pull_request",
+    "headBranch": "docs/233-database-backup",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T17:32:12Z",
+    "databaseId": 43919389554,
+    "displayTitle": "Merge pull request #232 from <redacted>/fix/231-phone-findings",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T15:21:33Z",
+    "databaseId": 43895462912,
+    "displayTitle": "fix: feedback edit keeps the outcome, picker fits the keyboard, Progress counts activities done (#231)",
+    "event": "pull_request",
+    "headBranch": "fix/231-phone-findings",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T15:06:48Z",
+    "databaseId": 43892875237,
+    "displayTitle": "Merge pull request #229 from <redacted>/docs/228-cognitive-walkthr…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T15:06:30Z",
+    "databaseId": 43892823786,
+    "displayTitle": "Merge pull request #227 from <redacted>/fix/226-load-performance",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T11:37:40Z",
+    "databaseId": 43859409445,
+    "displayTitle": "docs: rewrite the pre-test as a persona-based cognitive walkthrough (#228)",
+    "event": "pull_request",
+    "headBranch": "docs/228-cognitive-walkthrough",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T11:31:03Z",
+    "databaseId": 43858449018,
+    "displayTitle": "fix: connection pool, SBERT threads, query cache and error logging (#226)",
+    "event": "pull_request",
+    "headBranch": "fix/226-load-performance",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T11:28:21Z",
+    "databaseId": 43858042922,
+    "displayTitle": "Merge pull request #225 from <redacted>/test/224-load-test",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T11:28:03Z",
+    "databaseId": 43857998175,
+    "displayTitle": "Merge pull request #223 from <redacted>/docs/222-simulated-evaluation",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T11:19:09Z",
+    "databaseId": 43856673131,
+    "displayTitle": "test: load test the backend under concurrent caregivers (#224)",
+    "event": "pull_request",
+    "headBranch": "test/224-load-test",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T11:18:21Z",
+    "databaseId": 43856564433,
+    "displayTitle": "fix: connection pool, SBERT threads, query cache and error logging (#226)",
+    "event": "pull_request",
+    "headBranch": "fix/226-load-performance",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T10:36:46Z",
+    "databaseId": 43850420847,
+    "displayTitle": "test: load test the backend under concurrent caregivers (#224)",
+    "event": "pull_request",
+    "headBranch": "test/224-load-test",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T10:05:29Z",
+    "databaseId": 43845663393,
+    "displayTitle": "docs: simulated-participant pre-test of the evaluation protocol (#222)",
+    "event": "pull_request",
+    "headBranch": "docs/222-simulated-evaluation",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T09:54:21Z",
+    "databaseId": 43843970503,
+    "displayTitle": "Merge pull request #221 from <redacted>/docs/220-evidence-second-r…",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-16T09:31:58Z",
+    "databaseId": 43840593130,
+    "displayTitle": "docs: evidence pack: second rater's agreement results (#220)",
+    "event": "pull_request",
+    "headBranch": "docs/220-evidence-second-rater",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
     "createdAt": "2026-11-16T08:19:48Z",
     "databaseId": 43830335867,
     "displayTitle": "Merge pull request #219 from <redacted>/test/218-second-rater",
@@ -1596,406 +1996,6 @@
     "displayTitle": "feat: recommendations screen for the selected child (#82)",
     "event": "pull_request",
     "headBranch": "feature/82-recommendations-screen",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T18:29:19Z",
-    "databaseId": 38075969797,
-    "displayTitle": "docs: Google Form, hand-build guide and scorer for the reader test (#80)",
-    "event": "pull_request",
-    "headBranch": "docs/80-reader-test-form",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T18:12:26Z",
-    "databaseId": 38074840523,
-    "displayTitle": "Merge pull request #79 from <redacted>/docs/78-reader-test-cards",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T18:05:42Z",
-    "databaseId": 38074392740,
-    "displayTitle": "docs: printable reader-test cards and session sheet (#78)",
-    "event": "pull_request",
-    "headBranch": "docs/78-reader-test-cards",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T17:59:43Z",
-    "databaseId": 38073979517,
-    "displayTitle": "Merge pull request #77 from <redacted>/feature/76-load-plain-aims",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T17:59:27Z",
-    "databaseId": 38073962408,
-    "displayTitle": "Merge pull request #75 from <redacted>/docs/71-explanation-reader-…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T17:59:13Z",
-    "databaseId": 38073946083,
-    "displayTitle": "Merge pull request #74 from <redacted>/data/70-plain-aim-drafts",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T17:58:57Z",
-    "databaseId": 38073929629,
-    "displayTitle": "Merge pull request #73 from <redacted>/feature/69-explanations",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T17:58:40Z",
-    "databaseId": 38073912600,
-    "displayTitle": "Merge pull request #72 from <redacted>/feature/68-plain-aim-proven…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T16:57:39Z",
-    "databaseId": 38069771675,
-    "displayTitle": "docs: explanation reader test (#71)",
-    "event": "pull_request",
-    "headBranch": "docs/71-explanation-reader-test",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T16:46:43Z",
-    "databaseId": 38069033927,
-    "displayTitle": "data: plain_aim drafts for review (#70)",
-    "event": "pull_request",
-    "headBranch": "data/70-plain-aim-drafts",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T16:06:31Z",
-    "databaseId": 38066310905,
-    "displayTitle": "feat: load_plain_aims, which never touches content status (#76)",
-    "event": "pull_request",
-    "headBranch": "feature/76-load-plain-aims",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T15:57:17Z",
-    "databaseId": 38065687636,
-    "displayTitle": "data: plain_aim drafts for review (#70)",
-    "event": "pull_request",
-    "headBranch": "data/70-plain-aim-drafts",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T15:55:57Z",
-    "databaseId": 38065601624,
-    "displayTitle": "feat: caregiver-readable recommendation explanations (#69)",
-    "event": "pull_request",
-    "headBranch": "feature/69-explanations",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T15:07:11Z",
-    "databaseId": 38062318024,
-    "displayTitle": "docs: explanation reader test (#71)",
-    "event": "pull_request",
-    "headBranch": "docs/71-explanation-reader-test",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T15:01:33Z",
-    "databaseId": 38061944522,
-    "displayTitle": "data: plain_aim drafts for review (#70)",
-    "event": "pull_request",
-    "headBranch": "data/70-plain-aim-drafts",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T14:59:18Z",
-    "databaseId": 38061784508,
-    "displayTitle": "feat: caregiver-readable recommendation explanations (#69)",
-    "event": "pull_request",
-    "headBranch": "feature/69-explanations",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T14:52:00Z",
-    "databaseId": 38061307806,
-    "displayTitle": "feat: add plain_aim and narrow the provenance hash (#68)",
-    "event": "pull_request",
-    "headBranch": "feature/68-plain-aim-provenance",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T14:42:55Z",
-    "databaseId": 38060710484,
-    "displayTitle": "Merge pull request #67 from <redacted>/fix/66-warmup-default-off",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T14:22:09Z",
-    "databaseId": 38059327226,
-    "displayTitle": "fix: model warm-up off by default in development (#66)",
-    "event": "pull_request",
-    "headBranch": "fix/66-warmup-default-off",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T14:12:05Z",
-    "databaseId": 38058667195,
-    "displayTitle": "Merge pull request #65 from <redacted>/docs/61-performance-note",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T14:11:55Z",
-    "databaseId": 38058656338,
-    "displayTitle": "Merge pull request #64 from <redacted>/feature/58-model-warmup",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T14:11:41Z",
-    "databaseId": 38058641793,
-    "displayTitle": "Merge pull request #63 from <redacted>/ci/59-postgres-service",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T14:11:26Z",
-    "databaseId": 38058625101,
-    "displayTitle": "Merge pull request #62 from <redacted>/fix/60-fingerprint-query",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T14:11:15Z",
-    "databaseId": 38058612579,
-    "displayTitle": "Merge pull request #57 from <redacted>/feature/52-ranked-recommend…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T14:10:59Z",
-    "databaseId": 38058597302,
-    "displayTitle": "Merge pull request #56 from <redacted>/docs/55-project-overview",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T14:10:39Z",
-    "databaseId": 38058576114,
-    "displayTitle": "Merge pull request #54 from <redacted>/docs/53-ranking-scope-note",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T10:38:56Z",
-    "databaseId": 38045630116,
-    "displayTitle": "docs: latency note for the recommendations endpoint (#61)",
-    "event": "pull_request",
-    "headBranch": "docs/61-performance-note",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T10:28:02Z",
-    "databaseId": 38044992017,
-    "displayTitle": "feat: warm up the SBERT model at server start (#58)",
-    "event": "pull_request",
-    "headBranch": "feature/58-model-warmup",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "failure",
-    "createdAt": "2026-10-10T10:23:35Z",
-    "databaseId": 38044735204,
-    "displayTitle": "feat: warm up the SBERT model at server start (#58)",
-    "event": "pull_request",
-    "headBranch": "feature/58-model-warmup",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "failure",
-    "createdAt": "2026-10-10T10:20:24Z",
-    "databaseId": 38044554220,
-    "displayTitle": "feat: warm up the SBERT model at server start (#58)",
-    "event": "pull_request",
-    "headBranch": "feature/58-model-warmup",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T10:07:50Z",
-    "databaseId": 38043828978,
-    "displayTitle": "ci: run backend tests on PostgreSQL as well as SQLite (#59)",
-    "event": "pull_request",
-    "headBranch": "ci/59-postgres-service",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T10:06:52Z",
-    "databaseId": 38043772675,
-    "displayTitle": "fix: include the retrieval query in profile_fingerprint (#60)",
-    "event": "pull_request",
-    "headBranch": "fix/60-fingerprint-query",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T09:58:54Z",
-    "databaseId": 38043298576,
-    "displayTitle": "feat: generate and store ranked recommendations end to end (#52)",
-    "event": "pull_request",
-    "headBranch": "feature/52-ranked-recommendations-endpoint",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T09:29:26Z",
-    "databaseId": 38041563814,
-    "displayTitle": "docs: refresh and add the project overview (#55)",
-    "event": "pull_request",
-    "headBranch": "docs/55-project-overview",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T09:26:29Z",
-    "databaseId": 38041392573,
-    "displayTitle": "docs: record preference and contextual weighting as out of scope (#53)",
-    "event": "pull_request",
-    "headBranch": "docs/53-ranking-scope-note",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T09:17:48Z",
-    "databaseId": 38040884144,
-    "displayTitle": "Merge pull request #51 from <redacted>/docs/50-sprint5-alpha-results",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T08:56:18Z",
-    "databaseId": 38039614883,
-    "displayTitle": "docs: Sprint 5 wrap-up, alpha = 0.7 and results (#50)",
-    "event": "pull_request",
-    "headBranch": "docs/50-sprint5-alpha-results",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T08:46:28Z",
-    "databaseId": 38039048492,
-    "displayTitle": "Merge pull request #49 from <redacted>/chore/48-heldout-relevance-…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T08:24:01Z",
-    "databaseId": 38037739494,
-    "displayTitle": "chore: add held-out relevance labels (#48)",
-    "event": "pull_request",
-    "headBranch": "chore/48-heldout-relevance-labels",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T07:46:28Z",
-    "databaseId": 38035576804,
-    "displayTitle": "Merge pull request #47 from <redacted>/feature/46-heldout-labellin…",
-    "event": "push",
-    "headBranch": "main",
     "status": "completed",
     "workflowName": "CI"
   }

@@ -2,21 +2,22 @@
   "url": "https://github.com/Alysa-Gathoni/Nurtura",
   "default_branch": "main",
   "tags": [
+    "pre-weekly-plan 2026-11-20",
     "sprint5-eval-v1 2026-10-10",
     "sprint6-explanations-v1 2026-10-10",
     "sprint9-eval-v2 2026-11-02"
   ],
-  "merged_prs": 109,
-  "closed_issues": 109,
-  "commits_on_main": "277",
+  "merged_prs": 127,
+  "closed_issues": 127,
+  "commits_on_main": "318",
   "ci_conclusions": {
-    "success": 251,
-    "failure": 3
+    "success": 289,
+    "failure": 5
   },
   "contributors": [
     {
       "login": "<redacted>",
-      "contributions": 277
+      "contributions": 318
     }
   ]
 }

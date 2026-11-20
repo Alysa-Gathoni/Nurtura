@@ -71,6 +71,9 @@ backend,FeedbackAPITests.test_submit_read_back_and_show_on_the_card,backend/feed
 backend,FeedbackAPITests.test_invalid_input_is_a_400_with_field_messages,backend/feedback/test_api.py:243,"assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)",integration,logic
 backend,FeedbackAPITests.test_missing_recommendation_is_404,backend/feedback/test_api.py:256,"assertEqual(self.put(pk=999999).status_code, status.HTTP_404_NOT_FOUND)",integration,logic
 backend,FeedbackAPITests.test_only_the_childs_caregiver_may_submit_or_read,backend/feedback/test_api.py:259,"assertEqual(Feedback.objects.get().rating, 5)",integration,api
+backend,ActivitiesDoneAPITests.test_counts_done_partly_and_last_seven_days,backend/feedback/test_api.py:295,assertEqual(,integration,api
+backend,ActivitiesDoneAPITests.test_the_same_activity_in_two_batches_counts_once,backend/feedback/test_api.py:309,"assertEqual(self.client.get(self.url()).json()[""completed""], 1)",integration,api
+backend,ActivitiesDoneAPITests.test_only_the_childs_caregiver_may_read,backend/feedback/test_api.py:320,,integration,api
 backend,ObservableTests.test_offers_due_and_coming_milestones_of_the_activitys_area,backend/feedback/test_observations.py:68,"assertEqual(self.keys(), [""CDC-09M-LA-01"", ""CDC-12M-LA-01""])",integration,logic
 backend,ObservableTests.test_achieved_milestones_are_not_offered,backend/feedback/test_observations.py:71,"assertEqual(self.keys(), [""CDC-12M-LA-01""])",integration,logic
 backend,ObservableTests.test_nothing_before_birth,backend/feedback/test_observations.py:75,"assertEqual(self.keys(), [])",integration,logic
@@ -271,17 +274,18 @@ backend,TwoStepResetTests.test_a_forged_pass_is_refused,backend/profiles/test_pa
 backend,TwoStepResetTests.test_needs_a_pass_or_a_code,backend/profiles/test_password_reset_two_step.py:109,"assertIn(""reset_token"", response.data)",integration,api
 backend,TwoStepResetTests.test_an_account_without_a_password_can_set_one,backend/profiles/test_password_reset_two_step.py:118,"assertEqual(response.status_code, status.HTTP_200_OK)",integration,logic
 backend,NoticeTests.test_public_and_complete,backend/profiles/test_privacy.py:25,"assertEqual(response.status_code, status.HTTP_200_OK)",integration,api
-backend,NoticeTests.test_doc_mirrors_the_notice_word_for_word,backend/profiles/test_privacy.py:39,"assertIn(f""**Version:** {privacy.NOTICE_VERSION}"", doc)",integration,logic
-backend,ConsentTests.test_a_new_caregiver_must_agree,backend/profiles/test_privacy.py:63,"assertTrue(self.me()[""privacy_consent_required""])",integration,logic
-backend,ConsentTests.test_registration_asks_for_agreement_next,backend/profiles/test_privacy.py:67,"assertEqual(response.status_code, status.HTTP_201_CREATED)",integration,api
-backend,ConsentTests.test_agreeing_records_the_version_and_time,backend/profiles/test_privacy.py:81,"assertEqual(response.status_code, status.HTTP_200_OK)",integration,logic
-backend,ConsentTests.test_an_old_or_missing_version_is_refused,backend/profiles/test_privacy.py:90,"assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)",integration,logic
-backend,ConsentTests.test_a_new_notice_version_asks_again,backend/profiles/test_privacy.py:99,"assertTrue(self.me()[""privacy_consent_required""])",integration,logic
-backend,ConsentTests.test_administrators_are_not_asked,backend/profiles/test_privacy.py:104,"assertFalse(self.me()[""privacy_consent_required""])",integration,api
-backend,ConsentTests.test_agreeing_needs_sign_in,backend/profiles/test_privacy.py:111,"assertEqual(self.agree().status_code, status.HTTP_401_UNAUTHORIZED)",integration,api
-backend,ChildDataGateTests.test_writes_are_refused_until_agreed,backend/profiles/test_privacy.py:157,"assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)",integration,logic
-backend,ChildDataGateTests.test_reading_and_deleting_are_always_allowed,backend/profiles/test_privacy.py:170,assertEqual(,integration,api
-backend,ChildDataGateTests.test_writes_work_once_agreed,backend/profiles/test_privacy.py:178,"assertIn(response.status_code, (200, 201))",integration,logic
+backend,NoticeTests.test_doc_mirrors_the_notice_word_for_word,backend/profiles/test_privacy.py:44,"assertIn(f""**Version:** {privacy.NOTICE_VERSION}"", doc)",integration,logic
+backend,NoticeTests.test_the_summary_promises_nothing_the_notice_does_not,backend/profiles/test_privacy.py:55,"assertIn(fact, full)",integration,logic
+backend,ConsentTests.test_a_new_caregiver_must_agree,backend/profiles/test_privacy.py:89,"assertTrue(self.me()[""privacy_consent_required""])",integration,logic
+backend,ConsentTests.test_registration_asks_for_agreement_next,backend/profiles/test_privacy.py:93,"assertEqual(response.status_code, status.HTTP_201_CREATED)",integration,api
+backend,ConsentTests.test_agreeing_records_the_version_and_time,backend/profiles/test_privacy.py:107,"assertEqual(response.status_code, status.HTTP_200_OK)",integration,logic
+backend,ConsentTests.test_an_old_or_missing_version_is_refused,backend/profiles/test_privacy.py:116,"assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)",integration,logic
+backend,ConsentTests.test_a_new_notice_version_asks_again,backend/profiles/test_privacy.py:125,"assertTrue(self.me()[""privacy_consent_required""])",integration,logic
+backend,ConsentTests.test_administrators_are_not_asked,backend/profiles/test_privacy.py:130,"assertFalse(self.me()[""privacy_consent_required""])",integration,api
+backend,ConsentTests.test_agreeing_needs_sign_in,backend/profiles/test_privacy.py:137,"assertEqual(self.agree().status_code, status.HTTP_401_UNAUTHORIZED)",integration,api
+backend,ChildDataGateTests.test_writes_are_refused_until_agreed,backend/profiles/test_privacy.py:183,"assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)",integration,logic
+backend,ChildDataGateTests.test_reading_and_deleting_are_always_allowed,backend/profiles/test_privacy.py:196,assertEqual(,integration,api
+backend,ChildDataGateTests.test_writes_work_once_agreed,backend/profiles/test_privacy.py:204,"assertIn(response.status_code, (200, 201))",integration,logic
 backend,ProfileScenarioTests.test_delayed_language_milestone_weights_language_highest,backend/profiles/test_profile_scenarios.py:57,"assertEqual(profile.top_domain, ""Language"")",integration,logic
 backend,ProfileScenarioTests.test_on_track_child_has_equal_priority,backend/profiles/test_profile_scenarios.py:73,"assertEqual(profile.scores, {d: 1.0 for d in DOMAINS})",integration,logic
 backend,ProfileScenarioTests.test_more_delays_in_a_domain_rank_it_higher,backend/profiles/test_profile_scenarios.py:80,"assertRanked(profile, [""Language"", ""Motor""])",integration,logic
@@ -418,7 +422,14 @@ backend,EmbedActivitiesCommandTests.test_dry_run_saves_nothing_and_skips_encodin
 backend,EmbedActivitiesCommandTests.test_embedded_text_excludes_domain_label,backend/recommendations/test_embeddings.py:132,assertEqual(,integration,logic
 backend,EmbeddingHelperTests.test_vector_round_trip,backend/recommendations/test_embeddings.py:143,assertTrue(,unit,logic
 backend,EmbeddingHelperTests.test_text_hash_depends_on_model_and_text,backend/recommendations/test_embeddings.py:149,"assertEqual(base, embeddings.text_hash(""model-a"", ""text""))",unit,logic
-backend,RealSbertModelTests.test_real_model_ranks_paraphrases_above_unrelated_text,backend/recommendations/test_embeddings.py:167,"assertEqual(encoder.name, ""all-MiniLM-L6-v2"")",unit,logic
+backend,QueryCacheTests.test_a_repeated_query_is_encoded_once,backend/recommendations/test_embeddings.py:177,"assertEqual(len(self.model.calls), 1)",unit,logic
+backend,QueryCacheTests.test_cached_vectors_are_copies,backend/recommendations/test_embeddings.py:185,"assertEqual(encoder.encode([""text""])[0, 0], 4)",unit,logic
+backend,QueryCacheTests.test_least_recently_used_is_dropped,backend/recommendations/test_embeddings.py:190,assertEqual(,unit,logic
+backend,QueryCacheTests.test_batches_are_not_cached,backend/recommendations/test_embeddings.py:199,"assertEqual(len(self.model.calls), 3)",unit,logic
+backend,QueryCacheTests.test_size_zero_turns_the_cache_off,backend/recommendations/test_embeddings.py:206,"assertEqual(len(self.model.calls), 2)",unit,logic
+backend,LoadSettingsTests.test_postgres_uses_a_bounded_pool,backend/recommendations/test_embeddings.py:216,"assertLessEqual(pool[""min_size""], pool[""max_size""])",unit,logic
+backend,LoadSettingsTests.test_server_errors_are_logged,backend/recommendations/test_embeddings.py:224,"assertEqual(logger[""level""], ""ERROR"")",unit,logic
+backend,RealSbertModelTests.test_real_model_ranks_paraphrases_above_unrelated_text,backend/recommendations/test_embeddings.py:241,"assertEqual(encoder.name, ""all-MiniLM-L6-v2"")",unit,logic
 backend,MetricTests.test_precision_counts_relevance_of_one_or_more,backend/recommendations/test_evaluation.py:28,"assertEqual(precision_at_k([""a"", ""c"", ""b"", ""x""], relevance, 4), 0.5)",unit,logic
 backend,MetricTests.test_ndcg_hand_computed,backend/recommendations/test_evaluation.py:34,"assertAlmostEqual(ndcg_at_k([""b"", ""a"", ""c""], relevance, 3), expected)",unit,logic
 backend,MetricTests.test_ndcg_perfect_and_worst,backend/recommendations/test_evaluation.py:42,"assertAlmostEqual(ndcg_at_k([""a"", ""b"", ""c""], relevance, 3), 1.0)",unit,logic
@@ -495,6 +506,26 @@ backend,EvaluateAlphaGridTests.test_alpha_is_chosen_on_tune_only,backend/recomme
 backend,LearnedRankerUnitTests.test_ranks_by_expected_gain,backend/recommendations/test_learned_ranker.py:17,"assertEqual(learned_ranker.rank(model, child), [""high"", ""mid"", ""low""])",unit,logic
 backend,EvaluateLearnedRankerTests.test_withholds_results_until_every_top_5_is_labelled,backend/recommendations/test_learned_ranker.py:65,"assertNotIn(""Test set (8 children)"", first)",integration,logic
 backend,EvaluateLearnedRankerTests.test_conflicting_grades_are_refused,backend/recommendations/test_learned_ranker.py:93,"assertRaisesMessage(CommandError, ""graded 2 in one sheet and 0""):",integration,logic
+backend,TfidfIndexTests.test_word_overlap_scores_highest,backend/recommendations/test_lexical.py:43,"assertEqual(int(scores.argmax()), 1)",unit,logic
+backend,TfidfIndexTests.test_scores_are_cosines_between_0_and_1,backend/recommendations/test_lexical.py:49,assertTrue(all(0.0 <= s <= 1.0 for s in scores)),unit,logic
+backend,TfidfIndexTests.test_stop_words_alone_match_nothing,backend/recommendations/test_lexical.py:53,"assertEqual(list(scores), [0.0, 0.0, 0.0])",unit,logic
+backend,TfidfIndexTests.test_an_activity_missing_from_the_index_scores_0,backend/recommendations/test_lexical.py:57,"assertEqual(list(self.index.similarities(""water"", [99])), [0.0])",unit,logic
+backend,ChooseBetaTests.test_a_large_enough_gain_switches,backend/recommendations/test_lexical.py:64,"assertEqual(choose_beta({0.5: 0.80, 1.0: 0.77}), 0.5)",unit,logic
+backend,ChooseBetaTests.test_a_small_gain_keeps_sbert,backend/recommendations/test_lexical.py:67,"assertEqual(choose_beta({0.5: 0.785, 1.0: 0.77}), 1.0)",unit,logic
+backend,ChooseBetaTests.test_sbert_best_keeps_sbert,backend/recommendations/test_lexical.py:70,"assertEqual(choose_beta({0.0: 0.60, 0.5: 0.70, 1.0: 0.77}), 1.0)",unit,logic
+backend,ChooseBetaTests.test_exactly_the_minimum_gain_switches,backend/recommendations/test_lexical.py:73,"assertEqual(choose_beta({0.25: 0.79, 1.0: 0.77}), 0.25)",unit,logic
+backend,ChooseBetaTests.test_no_sbert_mean_keeps_sbert,backend/recommendations/test_lexical.py:76,"assertEqual(choose_beta({0.5: 0.9, 1.0: None}), 1.0)",unit,logic
+backend,HybridRetrievalTests.test_beta_1_is_sbert_only_and_never_runs_tfidf,backend/recommendations/test_lexical.py:98,assertTrue(result.candidates),integration,logic
+backend,HybridRetrievalTests.test_beta_0_ranks_by_tfidf,backend/recommendations/test_lexical.py:105,assertEqual(,integration,logic
+backend,HybridRetrievalTests.test_a_hybrid_mixes_both,backend/recommendations/test_lexical.py:119,assertAlmostEqual(,integration,logic
+backend,HybridRetrievalTests.test_beta_outside_0_to_1_is_refused,backend/recommendations/test_lexical.py:134,assertRaises(ValueError):,integration,logic
+backend,HybridRetrievalTests.test_the_index_follows_changes_to_the_library,backend/recommendations/test_lexical.py:139,"assertIs(lexical.get_index(), first)  # unchanged: reused",integration,logic
+backend,ProvenanceTests.test_the_default_is_the_chosen_mix,backend/recommendations/test_lexical.py:151,"assertEqual(retrieval.retrieval_beta(), 0.25)",unit,logic
+backend,ProvenanceTests.test_beta_1_keeps_the_evaluated_fingerprint,backend/recommendations/test_lexical.py:156,"assertNotIn(""retrieval"", provenance.ranking_settings())",unit,logic
+backend,ProvenanceTests.test_a_hybrid_changes_the_fingerprint,backend/recommendations/test_lexical.py:163,"assertEqual(settings_[""retrieval""][""beta""], 0.5)",unit,logic
+backend,CompareTfidfCommandTests.test_reports_every_beta_and_the_rules_decision,backend/recommendations/test_lexical.py:185,"assertIn(name, output)",integration,logic
+backend,CompareTfidfCommandTests.test_nothing_is_stored,backend/recommendations/test_lexical.py:196,"assertEqual((Recommendation.objects.count(), User.objects.count()), before)",integration,logic
+backend,CompareTfidfCommandTests.test_unlabelled_pairs_can_be_exported_blind,backend/recommendations/test_lexical.py:203,"assertIn(""unlabelled pair(s)"", output)",integration,logic
 backend,OptionsForTests.test_no_feedback_or_no_outcome_gives_nothing,backend/recommendations/test_options.py:157,"assertEqual(options_for(rec, None), [])",integration,logic
 backend,OptionsForTests.test_too_hard_offers_an_easier_one_in_the_same_band,backend/recommendations/test_options.py:162,"assertEqual(first.reason, ""too_hard"")",integration,logic
 backend,OptionsForTests.test_too_hard_falls_back_to_the_band_below,backend/recommendations/test_options.py:170,"assertEqual(first.activity.activity_id, ""ACT-0904"")",integration,logic
@@ -571,35 +602,54 @@ backend,FormDocTests.test_hand_build_doc_matches_the_script,backend/recommendati
 backend,ScorerTests.test_answer_key_has_ten_cards_and_each_reason_counts_as_understood,backend/recommendations/test_reader_test_scripts.py:177,"assertEqual(sorted(self.key), list(range(1, 11)))",unit,logic
 backend,ScorerTests.test_scoring_exclusion_pass_rule_and_quotes,backend/recommendations/test_reader_test_scripts.py:183,"assertEqual(len(result[""valid""]), 11)",unit,logic
 backend,ScorerTests.test_too_few_respondents_or_cards_fails,backend/recommendations/test_reader_test_scripts.py:214,"assertEqual(result[""cards_passing""], 10)",unit,logic
-backend,RankingScoreBoundTests.test_extreme_inputs_stay_in_bounds,backend/recommendations/test_recommendations_api.py:133,"assertGreaterEqual(r.score, 0.0)",unit,logic
-backend,RankingScoreBoundTests.test_maximum_is_exactly_one_and_minimum_exactly_zero,backend/recommendations/test_recommendations_api.py:156,"assertEqual(top.score, 1.0)",unit,logic
-backend,RankingScoreBoundTests.test_single_candidate_and_far_age,backend/recommendations/test_recommendations_api.py:167,"assertEqual(ranked[0].similarity_norm, 1.0)",unit,logic
-backend,RecommendationConstraintTests.test_ranking_score_bounds,backend/recommendations/test_recommendations_api.py:197,assertRaises(IntegrityError):,integration,logic
-backend,RecommendationConstraintTests.test_other_bounds,backend/recommendations/test_recommendations_api.py:204,assertRaises(IntegrityError):,integration,logic
-backend,RecommendationConstraintTests.test_unique_position_and_activity_per_batch,backend/recommendations/test_recommendations_api.py:216,assertRaises(IntegrityError):,integration,logic
-backend,HelperTests.test_ranking_version_matches_sprint5_eval_v1,backend/recommendations/test_recommendations_api.py:233,assertEqual(,unit,logic
-backend,HelperTests.test_ranking_version_changes_with_alpha,backend/recommendations/test_recommendations_api.py:243,assertNotEqual(,unit,logic
-backend,HelperTests.test_short_description,backend/recommendations/test_recommendations_api.py:248,"assertEqual(generation.short_description(""Short  text\n""), ""Short text"")",unit,logic
-backend,AccessTests.test_anonymous_gets_401,backend/recommendations/test_recommendations_api.py:281,"assertEqual(self.get().status_code, status.HTTP_401_UNAUTHORIZED)",integration,api
-backend,AccessTests.test_administrator_gets_403,backend/recommendations/test_recommendations_api.py:286,"assertEqual(self.get().status_code, status.HTTP_403_FORBIDDEN)",integration,api
-backend,AccessTests.test_another_caregivers_child_is_404,backend/recommendations/test_recommendations_api.py:295,"assertEqual(self.get().status_code, status.HTTP_404_NOT_FOUND)",integration,api
-backend,AccessTests.test_missing_child_is_404,backend/recommendations/test_recommendations_api.py:302,"assertEqual(self.post(missing).status_code, status.HTTP_404_NOT_FOUND)",integration,logic
-backend,GenerateTests.test_post_stores_top_5_and_returns_cards,backend/recommendations/test_recommendations_api.py:308,"assertEqual(response.status_code, status.HTTP_201_CREATED)",integration,logic
-backend,GenerateTests.test_cards_carry_the_full_activity,backend/recommendations/test_recommendations_api.py:323,"assertEqual(card[""description""], activity.description)",integration,logic
-backend,GenerateTests.test_stored_scores_match_the_ranking,backend/recommendations/test_recommendations_api.py:337,"assertEqual(row.activity, r.activity)",integration,logic
-backend,GenerateTests.test_order_equals_the_evaluation_harness,backend/recommendations/test_recommendations_api.py:353,"assertEqual([c[""activity_id""] for c in cards], expected)",integration,logic
-backend,GenerateTests.test_get_reads_only,backend/recommendations/test_recommendations_api.py:365,assertEqual(,integration,logic
-backend,GenerateTests.test_repeat_post_returns_the_same_batch,backend/recommendations/test_recommendations_api.py:376,"assertEqual(again.status_code, status.HTTP_200_OK)",integration,logic
-backend,GenerateTests.test_changed_profile_stores_a_new_batch_and_keeps_the_old,backend/recommendations/test_recommendations_api.py:383,"assertEqual(second.status_code, status.HTTP_201_CREATED)",integration,logic
-backend,GenerateTests.test_every_field_of_the_duplicate_check_matters,backend/recommendations/test_recommendations_api.py:395,"assertEqual(response.status_code, status.HTTP_201_CREATED)",integration,logic
-backend,GenerateTests.test_completed_activities_are_excluded_partial_stay,backend/recommendations/test_recommendations_api.py:413,"assertEqual(response.status_code, status.HTTP_201_CREATED)",integration,logic
-backend,GenerateTests.test_fewer_eligible_activities_than_5,backend/recommendations/test_recommendations_api.py:432,"assertEqual(len(cards), 1)  # one prenatal activity in the catalogue",integration,logic
-backend,GenerateTests.test_nothing_eligible_stores_nothing,backend/recommendations/test_recommendations_api.py:439,"assertEqual(response.status_code, status.HTTP_200_OK)",integration,logic
-backend,ReferralAPITests.test_due_not_yet_gives_referral_on_get_and_post,backend/recommendations/test_recommendations_api.py:450,"assertIn(""next clinic visit"", referral[""message""])",integration,logic
-backend,ReferralAPITests.test_no_due_not_yet_gives_null,backend/recommendations/test_recommendations_api.py:459,"assertIsNone(self.get().json()[""referral""])",integration,logic
-backend,ConcurrentPostTests.test_simultaneous_posts_store_one_batch,backend/recommendations/test_recommendations_api.py:478,assertEqual(,integration,api
-backend,FingerprintQueryTests.test_fingerprint_changes_with_the_query_only,backend/recommendations/test_recommendations_api.py:517,assertEqual(,integration,logic
-backend,FingerprintQueryTests.test_non_sensory_interest_change_stores_a_new_batch,backend/recommendations/test_recommendations_api.py:528,"assertEqual(after.evaluation.scores, before.evaluation.scores)",integration,logic
+backend,RotateTests.test_nothing_rested_gives_the_top_in_order,backend/recommendations/test_recommendations_api.py:136,"assertEqual(self.pks(chosen), [1, 2, 3, 4, 5])",unit,logic
+backend,RotateTests.test_keeps_the_2_best_rested_and_fills_with_fresh,backend/recommendations/test_recommendations_api.py:140,"assertEqual(self.pks(chosen), [1, 2, 6, 7, 8])",unit,logic
+backend,RotateTests.test_the_chosen_keep_their_ranked_order,backend/recommendations/test_recommendations_api.py:146,"assertEqual(self.pks(chosen), [6, 1, 7, 2, 8])",unit,logic
+backend,RotateTests.test_too_few_fresh_ideas_are_topped_up_with_rested_ones,backend/recommendations/test_recommendations_api.py:150,"assertEqual(self.pks(chosen), [1, 2, 3, 4, 6])",unit,logic
+backend,RotateTests.test_never_more_than_the_candidates,backend/recommendations/test_recommendations_api.py:154,"assertEqual(self.pks(chosen), [1, 2])",unit,logic
+backend,RankingScoreBoundTests.test_extreme_inputs_stay_in_bounds,backend/recommendations/test_recommendations_api.py:168,"assertGreaterEqual(r.score, 0.0)",unit,logic
+backend,RankingScoreBoundTests.test_maximum_is_exactly_one_and_minimum_exactly_zero,backend/recommendations/test_recommendations_api.py:191,"assertEqual(top.score, 1.0)",unit,logic
+backend,RankingScoreBoundTests.test_single_candidate_and_far_age,backend/recommendations/test_recommendations_api.py:202,"assertEqual(ranked[0].similarity_norm, 1.0)",unit,logic
+backend,RecommendationConstraintTests.test_ranking_score_bounds,backend/recommendations/test_recommendations_api.py:232,assertRaises(IntegrityError):,integration,logic
+backend,RecommendationConstraintTests.test_other_bounds,backend/recommendations/test_recommendations_api.py:239,assertRaises(IntegrityError):,integration,logic
+backend,RecommendationConstraintTests.test_unique_position_and_activity_per_batch,backend/recommendations/test_recommendations_api.py:251,assertRaises(IntegrityError):,integration,logic
+backend,HelperTests.test_ranking_version_matches_the_chosen_configuration,backend/recommendations/test_recommendations_api.py:268,assertEqual(,unit,logic
+backend,HelperTests.test_sbert_only_still_matches_sprint5_eval_v1,backend/recommendations/test_recommendations_api.py:280,assertEqual(,unit,logic
+backend,HelperTests.test_ranking_version_changes_with_alpha,backend/recommendations/test_recommendations_api.py:287,assertNotEqual(,unit,logic
+backend,HelperTests.test_short_description,backend/recommendations/test_recommendations_api.py:292,"assertEqual(generation.short_description(""Short  text\n""), ""Short text"")",unit,logic
+backend,AccessTests.test_anonymous_gets_401,backend/recommendations/test_recommendations_api.py:325,"assertEqual(self.get().status_code, status.HTTP_401_UNAUTHORIZED)",integration,api
+backend,AccessTests.test_administrator_gets_403,backend/recommendations/test_recommendations_api.py:330,"assertEqual(self.get().status_code, status.HTTP_403_FORBIDDEN)",integration,api
+backend,AccessTests.test_another_caregivers_child_is_404,backend/recommendations/test_recommendations_api.py:339,"assertEqual(self.get().status_code, status.HTTP_404_NOT_FOUND)",integration,api
+backend,AccessTests.test_missing_child_is_404,backend/recommendations/test_recommendations_api.py:346,"assertEqual(self.post(missing).status_code, status.HTTP_404_NOT_FOUND)",integration,logic
+backend,GenerateTests.test_post_stores_top_5_and_returns_cards,backend/recommendations/test_recommendations_api.py:352,"assertEqual(response.status_code, status.HTTP_201_CREATED)",integration,logic
+backend,GenerateTests.test_cards_carry_the_full_activity,backend/recommendations/test_recommendations_api.py:367,"assertEqual(card[""description""], activity.description)",integration,logic
+backend,GenerateTests.test_stored_scores_match_the_ranking,backend/recommendations/test_recommendations_api.py:381,"assertEqual(row.activity, r.activity)",integration,logic
+backend,GenerateTests.test_order_equals_the_evaluation_harness,backend/recommendations/test_recommendations_api.py:395,"assertEqual([c[""activity_id""] for c in cards], expected)",integration,logic
+backend,GenerateTests.test_get_reads_only,backend/recommendations/test_recommendations_api.py:407,assertEqual(,integration,logic
+backend,GenerateTests.test_repeat_post_returns_the_same_batch,backend/recommendations/test_recommendations_api.py:418,"assertEqual(again.status_code, status.HTTP_200_OK)",integration,logic
+backend,GenerateTests.test_changed_profile_stores_a_new_batch_and_keeps_the_old,backend/recommendations/test_recommendations_api.py:425,"assertEqual(second.status_code, status.HTTP_201_CREATED)",integration,logic
+backend,GenerateTests.test_every_field_of_the_duplicate_check_matters,backend/recommendations/test_recommendations_api.py:437,"assertEqual(response.status_code, status.HTTP_201_CREATED)",integration,logic
+backend,GenerateTests.test_completed_activities_are_excluded_partial_stay,backend/recommendations/test_recommendations_api.py:455,"assertEqual(response.status_code, status.HTTP_201_CREATED)",integration,logic
+backend,GenerateTests.test_fewer_eligible_activities_than_5,backend/recommendations/test_recommendations_api.py:474,"assertEqual(len(cards), 1)  # one prenatal activity in the catalogue",integration,logic
+backend,GenerateTests.test_nothing_eligible_stores_nothing,backend/recommendations/test_recommendations_api.py:481,"assertEqual(response.status_code, status.HTTP_200_OK)",integration,logic
+backend,WeeklyPlanTests.test_a_new_plan_runs_monday_to_sunday,backend/recommendations/test_recommendations_api.py:510,assertEqual(,integration,logic
+backend,WeeklyPlanTests.test_a_plan_made_mid_week_starts_on_that_weeks_monday,backend/recommendations/test_recommendations_api.py:526,assertEqual(,integration,logic
+backend,WeeklyPlanTests.test_a_plan_made_on_a_sunday_runs_to_the_following_sunday,backend/recommendations/test_recommendations_api.py:536,assertEqual(,integration,logic
+backend,WeeklyPlanTests.test_a_plan_started_mid_week_before_253_keeps_its_seven_days,backend/recommendations/test_recommendations_api.py:548,assertEqual(,integration,logic
+backend,WeeklyPlanTests.test_repeat_post_in_the_same_week_returns_the_same_plan,backend/recommendations/test_recommendations_api.py:565,"assertEqual(again.status_code, status.HTTP_200_OK)",integration,logic
+backend,WeeklyPlanTests.test_a_mid_week_change_refreshes_the_ideas_but_keeps_the_week,backend/recommendations/test_recommendations_api.py:573,"assertEqual(second.status_code, status.HTTP_201_CREATED)",integration,logic
+backend,WeeklyPlanTests.test_after_the_week_a_new_plan_starts,backend/recommendations/test_recommendations_api.py:596,"assertEqual(second.status_code, status.HTTP_201_CREATED)",integration,logic
+backend,WeeklyPlanTests.test_the_first_week_is_the_evaluated_top_5,backend/recommendations/test_recommendations_api.py:609,"assertEqual(self.ids(first), self.evaluated()[:5])",integration,logic
+backend,WeeklyPlanTests.test_a_new_week_keeps_2_untried_ideas_and_brings_3_new,backend/recommendations/test_recommendations_api.py:614,"assertEqual(self.ids(week2), e[0:2] + e[5:8])",integration,logic
+backend,WeeklyPlanTests.test_tried_ideas_dont_count_as_untried,backend/recommendations/test_recommendations_api.py:623,"assertEqual(self.ids(week2), [e[1], e[2], e[3], e[5], e[6]])",integration,logic
+backend,WeeklyPlanTests.test_a_mid_week_refresh_keeps_the_weeks_mix,backend/recommendations/test_recommendations_api.py:639,"assertEqual(refreshed.status_code, status.HTTP_201_CREATED)",integration,logic
+backend,WeeklyPlanTests.test_week_3_rotates_against_week_2,backend/recommendations/test_recommendations_api.py:653,"assertEqual(self.ids(week3), e[0:5])",integration,logic
+backend,WeeklyPlanTests.test_older_batches_start_on_the_day_they_were_generated,backend/recommendations/test_recommendations_api.py:664,assertEqual(,integration,logic
+backend,ReferralAPITests.test_due_not_yet_gives_referral_on_get_and_post,backend/recommendations/test_recommendations_api.py:679,"assertIn(""next clinic visit"", referral[""message""])",integration,logic
+backend,ReferralAPITests.test_no_due_not_yet_gives_null,backend/recommendations/test_recommendations_api.py:688,"assertIsNone(self.get().json()[""referral""])",integration,logic
+backend,ConcurrentPostTests.test_simultaneous_posts_store_one_batch,backend/recommendations/test_recommendations_api.py:707,assertEqual(,integration,api
+backend,FingerprintQueryTests.test_fingerprint_changes_with_the_query_only,backend/recommendations/test_recommendations_api.py:746,assertEqual(,integration,logic
+backend,FingerprintQueryTests.test_non_sensory_interest_change_stores_a_new_batch,backend/recommendations/test_recommendations_api.py:757,"assertEqual(after.evaluation.scores, before.evaluation.scores)",integration,logic
 backend,ProfileQueryTests.test_query_describes_priority_domain_milestone_and_interests,backend/recommendations/test_retrieval.py:99,"assertIn(""a 6-month-old baby"", query)",integration,logic
 backend,ProfileQueryTests.test_no_evidence_gives_a_general_query,backend/recommendations/test_retrieval.py:112,"assertIn(description, query)",integration,logic
 backend,ProfileQueryTests.test_prenatal_query,backend/recommendations/test_retrieval.py:119,"assertIn(""an expecting parent during pregnancy"", query)",integration,logic
@@ -731,10 +781,11 @@ flutter,a Google account (no password) confirms with its email,mobile/nurtura_ap
 flutter,a caregiver with no children can delete the account too,mobile/nurtura_app/test/edit_and_delete_test.dart:373,"expect(find.text('Add your first child'), findsOneWidget);",widget,ui
 flutter,a 503 with a reason shows the reason,mobile/nurtura_app/test/email_failure_test.dart:14,"expect(find.text(notSent), findsOneWidget);",widget,ui
 flutter,other server errors stay generic,mobile/nurtura_app/test/email_failure_test.dart:31,expect(,widget,ui
-flutter,"shows interests, saved and all ideas (#194)",mobile/nurtura_app/test/explore_screen_test.dart:96,"expect(find.text(""Based on Amani's interests""), findsOneWidget);",widget,ui
-flutter,searching asks the server and shows results,mobile/nurtura_app/test/explore_screen_test.dart:104,expect(,widget,ui
-flutter,saving and unsaving call the server,mobile/nurtura_app/test/explore_screen_test.dart:121,"expect(backend.requests.last.url.path, '/api/children/3/saved/ACT-0004/');",widget,ui
-flutter,"""Try this",mobile/nurtura_app/test/explore_screen_test.dart:132,"expect(find.byKey(const Key('exploreSheet')), findsOneWidget);",widget,ui
+flutter,"shows interests, saved and all ideas (#194)",mobile/nurtura_app/test/explore_screen_test.dart:106,"expect(find.text(""Based on Amani's interests""), findsOneWidget);",widget,ui
+flutter,the interests cards fit when their chips wrap (#242),mobile/nurtura_app/test/explore_screen_test.dart:114,"expect(find.text('Dance Party'), findsWidgets);",widget,ui
+flutter,searching asks the server and shows results,mobile/nurtura_app/test/explore_screen_test.dart:138,expect(,widget,ui
+flutter,saving and unsaving call the server,mobile/nurtura_app/test/explore_screen_test.dart:155,"expect(backend.requests.last.url.path, '/api/children/3/saved/ACT-0004/');",widget,ui
+flutter,"""Try this",mobile/nurtura_app/test/explore_screen_test.dart:166,"expect(find.byKey(const Key('exploreSheet')), findsOneWidget);",widget,ui
 flutter,"after feedback, options are offered and one can be added",mobile/nurtura_app/test/feedback_options_test.dart:75,"expect(find.byKey(const Key('feedbackOptions')), findsNothing);",widget,ui
 flutter,saved feedback with an outcome shows its options on opening,mobile/nurtura_app/test/feedback_options_test.dart:117,"expect(find.byKey(const Key('option_ACT-0903')), findsOneWidget);",widget,ui
 flutter,saved feedback without an outcome asks for no options,mobile/nurtura_app/test/feedback_options_test.dart:139,"expect(backend.to(optionsPath), isEmpty);",widget,ui
@@ -776,11 +827,13 @@ flutter,no ,mobile/nurtura_app/test/logout_test.dart:14,"expect(find.byKey(const
 flutter,lists catalogue milestones closest to the child\,mobile/nurtura_app/test/milestone_screen_test.dart:175,"expect(find.text('13 months'), findsOneWidget);",widget,ui
 flutter,"searches as you type, after a short pause",mobile/nurtura_app/test/milestone_screen_test.dart:192,"expect(backend.to('/api/reference-milestones/'), hasLength(before));",widget,ui
 flutter,filters by domain; there is no Sensory filter,mobile/nurtura_app/test/milestone_screen_test.dart:210,"expect(find.byKey(const Key('domain_Sensory')), findsNothing);",widget,ui
-flutter,records a Not yet milestone and confirms the profile update,mobile/nurtura_app/test/milestone_screen_test.dart:232,"expect(find.text('How is Amani doing with this?'), findsOneWidget);",widget,ui
-flutter,"after recording, ",mobile/nurtura_app/test/milestone_screen_test.dart:262,expect(,widget,ui
-flutter,the app opens on Today with the recommendations,mobile/nurtura_app/test/milestone_screen_test.dart:281,expect(,widget,ui
-flutter,shows why a milestone could not be recorded,mobile/nurtura_app/test/milestone_screen_test.dart:294,"expect(find.byKey(const Key('recordError')), findsOneWidget);",widget,ui
-flutter,a failed search can be retried; empty results say so,mobile/nurtura_app/test/milestone_screen_test.dart:312,expect(,widget,ui
+flutter,the picker fits a small phone (360 x 640) and milestones can ,mobile/nurtura_app/test/milestone_screen_test.dart:232,"expect(tester.takeException(), isNull);",widget,ui
+flutter,choosing a milestone with the keyboard open does not overflow ,mobile/nurtura_app/test/milestone_screen_test.dart:248,"expect(find.text(panel), findsOneWidget);",widget,ui
+flutter,records a Not yet milestone and confirms the profile update,mobile/nurtura_app/test/milestone_screen_test.dart:274,"expect(find.text('How is Amani doing with this?'), findsOneWidget);",widget,ui
+flutter,"after recording, ",mobile/nurtura_app/test/milestone_screen_test.dart:304,expect(,widget,ui
+flutter,the app opens on Today with the recommendations,mobile/nurtura_app/test/milestone_screen_test.dart:323,expect(,widget,ui
+flutter,shows why a milestone could not be recorded,mobile/nurtura_app/test/milestone_screen_test.dart:336,"expect(find.byKey(const Key('recordError')), findsOneWidget);",widget,ui
+flutter,a failed search can be retried; empty results say so,mobile/nurtura_app/test/milestone_screen_test.dart:354,expect(,widget,ui
 flutter,opens on the tracker with the observation (#192),mobile/nurtura_app/test/milestone_tracker_test.dart:97,"expect(find.byKey(const Key('observationCard')), findsOneWidget);",widget,ui
 flutter,switching area shows its milestones and status,mobile/nurtura_app/test/milestone_tracker_test.dart:110,"expect(find.text('Waves ""bye-bye""'), findsOneWidget);",widget,ui
 flutter,tapping a milestone records a new status,mobile/nurtura_app/test/milestone_tracker_test.dart:122,"expect(jsonDecode(post.body), {'reference': 1, 'status': 'emerging'});",widget,ui
@@ -802,37 +855,43 @@ flutter,length matters more than symbols,mobile/nurtura_app/test/password_streng
 flutter,no composition rules: a long lowercase phrase is strong,mobile/nurtura_app/test/password_strength_test.dart:39,"expect(s.meetsRules, isTrue);",unit,logic
 flutter,greets per mode,mobile/nurtura_app/test/password_strength_test.dart:48,"expect(find.text('Welcome back'), findsOneWidget);",widget,ui
 flutter,"the meter appears when registering, not when logging in",mobile/nurtura_app/test/password_strength_test.dart:58,"expect(find.byKey(const Key('passwordStrength')), findsNothing);",widget,ui
-flutter,a caregiver who has not agreed sees the notice first,mobile/nurtura_app/test/privacy_consent_test.dart:52,"expect(find.text('Before you start'), findsOneWidget);",widget,ui
-flutter,"agreeing needs the box ticked, then opens the app",mobile/nurtura_app/test/privacy_consent_test.dart:66,"expect(backend.to('/api/auth/privacy-consent/'), isEmpty);",widget,ui
-flutter,"""Not now",mobile/nurtura_app/test/privacy_consent_test.dart:84,"expect(backend.to('/api/auth/logout/'), hasLength(1));",widget,ui
-flutter,"if the notice changed meanwhile, the new one is shown",mobile/nurtura_app/test/privacy_consent_test.dart:95,expect(,widget,ui
-flutter,a notice that fails to load can be retried,mobile/nurtura_app/test/privacy_consent_test.dart:134,"expect(find.byKey(const Key('privacyLoadError')), findsOneWidget);",widget,ui
-flutter,the Family tab opens the notice to read,mobile/nurtura_app/test/privacy_consent_test.dart:149,"expect(find.text('Privacy notice'), findsOneWidget);",widget,ui
+flutter,on a small phone the agreement works without scrolling,mobile/nurtura_app/test/privacy_consent_test.dart:64,"expect(find.text(""It's kept until you delete it.""), findsOneWidget);",widget,ui
+flutter,the full notice is one tap away,mobile/nurtura_app/test/privacy_consent_test.dart:86,"expect(find.text('How long we keep it'), findsOneWidget);",widget,ui
+flutter,a caregiver who has not agreed sees the notice first,mobile/nurtura_app/test/privacy_consent_test.dart:95,"expect(find.text('Before you start'), findsOneWidget);",widget,ui
+flutter,"agreeing needs the box ticked, then opens the app",mobile/nurtura_app/test/privacy_consent_test.dart:109,"expect(backend.to('/api/auth/privacy-consent/'), isEmpty);",widget,ui
+flutter,"""Not now",mobile/nurtura_app/test/privacy_consent_test.dart:127,"expect(backend.to('/api/auth/logout/'), hasLength(1));",widget,ui
+flutter,"if the notice changed meanwhile, the new one is shown",mobile/nurtura_app/test/privacy_consent_test.dart:138,expect(,widget,ui
+flutter,a notice that fails to load can be retried,mobile/nurtura_app/test/privacy_consent_test.dart:177,"expect(find.byKey(const Key('privacyLoadError')), findsOneWidget);",widget,ui
+flutter,the Family tab opens the notice to read,mobile/nurtura_app/test/privacy_consent_test.dart:192,"expect(find.text('Privacy notice'), findsOneWidget);",widget,ui
 flutter,shows the newest batch without generating one,mobile/nurtura_app/test/recommendations_screen_test.dart:96,"expect(find.text('Naming Everyday Objects'), findsOneWidget);",widget,ui
 flutter,hides the explanation box when the explanation is empty,mobile/nurtura_app/test/recommendations_screen_test.dart:123,expect(,widget,ui
 flutter,generates when there is no batch yet (POST $status),mobile/nurtura_app/test/recommendations_screen_test.dart:163,"expect(backend.to(path).map((r) => r.method), ['GET', 'POST']);",widget,ui
-flutter,shows ,mobile/nurtura_app/test/recommendations_screen_test.dart:182,"expect(find.byKey(const Key('preparingRecommendations')), findsOneWidget);",widget,ui
-flutter,allows at least 30 seconds for generating,mobile/nurtura_app/test/recommendations_screen_test.dart:205,expect(,widget,ui
-flutter,a network error can be retried,mobile/nurtura_app/test/recommendations_screen_test.dart:212,expect(,widget,ui
-flutter,403 and 404 get plain messages,mobile/nurtura_app/test/recommendations_screen_test.dart:231,"expect(find.text(message), findsOneWidget, reason: 'status $status');",widget,ui
-flutter,no activities to suggest,mobile/nurtura_app/test/recommendations_screen_test.dart:244,"expect(find.byKey(const Key('noRecommendations')), findsOneWidget);",widget,ui
-flutter,"shown above the ideas, with its milestones",mobile/nurtura_app/test/recommendations_screen_test.dart:267,"expect(find.byKey(const Key('referralNotice')), findsOneWidget);",widget,ui
-flutter,shown even when there are no ideas,mobile/nurtura_app/test/recommendations_screen_test.dart:287,"expect(find.byKey(const Key('referralNotice')), findsOneWidget);",widget,ui
-flutter,absent when the server sends null,mobile/nurtura_app/test/recommendations_screen_test.dart:297,"expect(find.byKey(const Key('referralNotice')), findsNothing);",widget,ui
-flutter,"kept in the offline copy, and survives an update",mobile/nurtura_app/test/recommendations_screen_test.dart:309,"expect(again.referral!.milestones, ['Waves “bye-bye”']);",unit,logic
-flutter,refresh asks for a fresh batch,mobile/nurtura_app/test/recommendations_screen_test.dart:328,"expect(backend.to(path).map((r) => r.method), ['GET', 'POST']);",widget,ui
-flutter,"opened right after recording a milestone, it regenerates",mobile/nurtura_app/test/recommendations_screen_test.dart:342,"expect(backend.to(path).map((r) => r.method), ['POST']);",widget,ui
-flutter,401 returns to the login screen,mobile/nurtura_app/test/recommendations_screen_test.dart:353,"expect(find.text('Log in'), findsWidgets);",widget,ui
-flutter,"counts each milestone once, by its latest observation",mobile/nurtura_app/test/redesign_test.dart:46,"expect(language.celebrated, 1);",unit,logic
-flutter,badges unlock from the caregiver’s own records and streak,mobile/nurtura_app/test/redesign_test.dart:63,"expect(unlocked(s(0)), isEmpty);",unit,logic
-flutter,nothing compares the child with norms or other children,mobile/nurtura_app/test/redesign_test.dart:87,"expect(words, isNot(contains(banned)));",unit,logic
-flutter,"counts consecutive days, keeping yesterday’s streak alive",mobile/nurtura_app/test/redesign_test.dart:110,"expect(e.streak, 1);",unit,logic
-flutter,theme mode is remembered on the device,mobile/nurtura_app/test/redesign_test.dart:137,"expect(theme.mode, ThemeMode.system);",unit,logic
-flutter,opens on Today and checking ideas starts the streak,mobile/nurtura_app/test/redesign_test.dart:168,"expect(find.text('From the village'), findsOneWidget);",widget,ui
-flutter,the child switcher changes whose ideas are shown,mobile/nurtura_app/test/redesign_test.dart:181,"expect(find.text('Peekaboo'), findsOneWidget);",widget,ui
-flutter,"Progress shows celebrated milestones, areas and badges",mobile/nurtura_app/test/redesign_test.dart:192,"expect(find.text('1 milestone celebrated'), findsOneWidget);",widget,ui
-flutter,the theme picker switches the whole app to dark mode,mobile/nurtura_app/test/redesign_test.dart:222,expect(,widget,ui
-flutter,every tab renders in dark mode,mobile/nurtura_app/test/redesign_test.dart:246,"expect(tester.takeException(), isNull, reason: tab);",widget,ui
+flutter,"shows the week, how many were tried and when new ideas come",mobile/nurtura_app/test/recommendations_screen_test.dart:197,"expect(backend.to(path).map((r) => r.method), ['GET']);",widget,ui
+flutter,a plan whose week has ended is replaced by a new one,mobile/nurtura_app/test/recommendations_screen_test.dart:209,"expect(backend.to(path).map((r) => r.method), ['GET', 'POST']);",widget,ui
+flutter,a saved plan counts as ended once its last day has passed,mobile/nurtura_app/test/recommendations_screen_test.dart:232,"expect(plan.endedOn(DateTime(2026, 11, 25, 23, 59)), isFalse);",unit,logic
+flutter,shows ,mobile/nurtura_app/test/recommendations_screen_test.dart:242,"expect(find.byKey(const Key('preparingRecommendations')), findsOneWidget);",widget,ui
+flutter,allows at least 30 seconds for generating,mobile/nurtura_app/test/recommendations_screen_test.dart:265,expect(,widget,ui
+flutter,a network error can be retried,mobile/nurtura_app/test/recommendations_screen_test.dart:272,expect(,widget,ui
+flutter,403 and 404 get plain messages,mobile/nurtura_app/test/recommendations_screen_test.dart:291,"expect(find.text(message), findsOneWidget, reason: 'status $status');",widget,ui
+flutter,no activities to suggest,mobile/nurtura_app/test/recommendations_screen_test.dart:304,"expect(find.byKey(const Key('noRecommendations')), findsOneWidget);",widget,ui
+flutter,"shown above the ideas, with its milestones",mobile/nurtura_app/test/recommendations_screen_test.dart:327,"expect(find.byKey(const Key('referralNotice')), findsOneWidget);",widget,ui
+flutter,shown even when there are no ideas,mobile/nurtura_app/test/recommendations_screen_test.dart:347,"expect(find.byKey(const Key('referralNotice')), findsOneWidget);",widget,ui
+flutter,absent when the server sends null,mobile/nurtura_app/test/recommendations_screen_test.dart:357,"expect(find.byKey(const Key('referralNotice')), findsNothing);",widget,ui
+flutter,"kept in the offline copy, and survives an update",mobile/nurtura_app/test/recommendations_screen_test.dart:369,"expect(again.referral!.milestones, ['Waves “bye-bye”']);",unit,logic
+flutter,refresh asks for a fresh batch,mobile/nurtura_app/test/recommendations_screen_test.dart:388,"expect(backend.to(path).map((r) => r.method), ['GET', 'POST']);",widget,ui
+flutter,"opened right after recording a milestone, it regenerates",mobile/nurtura_app/test/recommendations_screen_test.dart:402,"expect(backend.to(path).map((r) => r.method), ['POST']);",widget,ui
+flutter,401 returns to the login screen,mobile/nurtura_app/test/recommendations_screen_test.dart:413,"expect(find.text('Log in'), findsWidgets);",widget,ui
+flutter,"counts each milestone once, by its latest observation",mobile/nurtura_app/test/redesign_test.dart:47,"expect(language.celebrated, 1);",unit,logic
+flutter,badges unlock from the caregiver’s own records and streak,mobile/nurtura_app/test/redesign_test.dart:64,"expect(unlocked(s(0)), isEmpty);",unit,logic
+flutter,nothing compares the child with norms or other children,mobile/nurtura_app/test/redesign_test.dart:88,"expect(words, isNot(contains(banned)));",unit,logic
+flutter,"counts consecutive weeks, keeping last week’s streak alive",mobile/nurtura_app/test/redesign_test.dart:111,"expect(e.streak, 1);",unit,logic
+flutter,theme mode is remembered on the device,mobile/nurtura_app/test/redesign_test.dart:145,"expect(theme.mode, ThemeMode.system);",unit,logic
+flutter,opens on Today and checking ideas starts the streak,mobile/nurtura_app/test/redesign_test.dart:183,"expect(find.text('From the village'), findsOneWidget);",widget,ui
+flutter,the child switcher changes whose ideas are shown,mobile/nurtura_app/test/redesign_test.dart:196,"expect(find.text('Peekaboo'), findsOneWidget);",widget,ui
+flutter,Progress still shows if the activities count fails (#231),mobile/nurtura_app/test/redesign_test.dart:207,"expect(find.byKey(const Key('activitiesDoneCard')), findsNothing);",widget,ui
+flutter,"Progress shows celebrated milestones, areas and badges",mobile/nurtura_app/test/redesign_test.dart:216,"expect(find.text('1 milestone celebrated'), findsOneWidget);",widget,ui
+flutter,the theme picker switches the whole app to dark mode,mobile/nurtura_app/test/redesign_test.dart:257,expect(,widget,ui
+flutter,every tab renders in dark mode,mobile/nurtura_app/test/redesign_test.dart:281,"expect(tester.takeException(), isNull, reason: tab);",widget,ui
 flutter,"a new phone is asked for the emailed code, then signs in",mobile/nurtura_app/test/verify_code_screen_test.dart:52,"expect(find.text('Check your email'), findsOneWidget);",widget,ui
 flutter,registering also goes through the code step,mobile/nurtura_app/test/verify_code_screen_test.dart:74,expect(,widget,ui
 flutter,a wrong code shows the server message and clears the boxes,mobile/nurtura_app/test/verify_code_screen_test.dart:90,"expect(find.text('That code is not right. 4 tries left.'), findsOneWidget);",widget,ui
@@ -841,7 +900,8 @@ flutter,the phone is only trusted when the caregiver chooses,mobile/nurtura_app/
 flutter,a new code can be sent once the countdown ends,mobile/nurtura_app/test/verify_code_screen_test.dart:135,"expect(tester.widget<TextButton>(resend).onPressed, isNull);",widget,ui
 flutter,"""Use a different account",mobile/nurtura_app/test/verify_code_screen_test.dart:161,"expect(find.byKey(const Key('emailField')), findsOneWidget);",widget,ui
 flutter,the code screen works in dark mode,mobile/nurtura_app/test/verify_code_screen_test.dart:172,"expect(Theme.of(context).brightness, Brightness.dark);",widget,ui
-flutter,long milestone names wrap instead of being clipped (#214),mobile/nurtura_app/test/well_done_sheet_test.dart:63,"expect(label.didExceedMaxLines, isFalse);",widget,ui
-flutter,"the sheet saves interest, outcome and skills seen (#185)",mobile/nurtura_app/test/well_done_sheet_test.dart:75,"expect(find.text('Well done!'), findsOneWidget);",widget,ui
-flutter,didn,mobile/nurtura_app/test/well_done_sheet_test.dart:117,"expect(sent['issues'], ['too_hard']);",widget,ui
-flutter,the Sprint 8 round trip on the real backend,mobile/nurtura_app/integration_test/app_flow_test.dart:141,"expect(email, isNotEmpty, reason: 'pass --dart-define=E2E_EMAIL=...');",end-to-end,ui
+flutter,long milestone names wrap instead of being clipped (#214),mobile/nurtura_app/test/well_done_sheet_test.dart:64,"expect(label.didExceedMaxLines, isFalse);",widget,ui
+flutter,"the sheet saves interest, outcome and skills seen (#185)",mobile/nurtura_app/test/well_done_sheet_test.dart:76,"expect(find.text('Well done!'), findsOneWidget);",widget,ui
+flutter,Edit starts from what the sheet saved (#231),mobile/nurtura_app/test/well_done_sheet_test.dart:118,"expect(chip('outcome_went_well').selected, isTrue);",widget,ui
+flutter,didn,mobile/nurtura_app/test/well_done_sheet_test.dart:140,"expect(sent['issues'], ['too_hard']);",widget,ui
+flutter,the Sprint 8 round trip on the real backend,mobile/nurtura_app/integration_test/app_flow_test.dart:166,"expect(email, isNotEmpty, reason: 'pass --dart-define=E2E_EMAIL=...');",end-to-end,ui

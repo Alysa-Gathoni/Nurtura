@@ -4,9 +4,15 @@ Runs evaluate_alpha_grid --markdown --report-alpha 0.7 (saved verbatim),
 then recomputes every table from the same rankings and the v2 labels so the
 figure data match the command. Rankings come from the 20 constructed
 held-out children, created inside a transaction that is rolled back.
+
+The v2 record is the frozen sprint9-eval-v2 state, which ranked with SBERT
+only, so it runs with RETRIEVAL_BETA=1 (the app uses 0.25 since #250). The
+TF-IDF comparison (#248), which chose the app's beta, is run separately with
+compare_tfidf --markdown --extra-labels and summarised on the same page.
 """
 
 import csv
+import os
 import re
 from collections import Counter, defaultdict
 
@@ -31,7 +37,25 @@ def fmt(x):
     return "n/a" if x is None else f"{x:.3f}"
 
 
+TFIDF_EXTRA = "data/evaluation/tfidf_extra.csv"
+
+
+def tfidf_rows(text, heading):
+    """{(ranking, beta label): nDCG@5} from one compare_tfidf table."""
+    rows, inside = {}, False
+    for line in text.splitlines():
+        if line.startswith("## "):
+            inside = line.startswith("## " + heading)
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if inside and len(cells) == 8 and cells[0] in ("similarity-only", "alpha 0.7"):
+            rows[(cells[0], cells[1])] = float(cells[7])
+    return rows
+
+
 def main():
+    # The frozen v2 record ranked with SBERT only (see the module docstring).
+    os.environ["RETRIEVAL_BETA"] = "1"
     django_setup()
     from io import StringIO
 
@@ -367,6 +391,36 @@ Test set on the second rater's labels: α = 0.7 {fmt(second.mean_a)} against SBE
 Grade-0 results in the top 5 (all 20 children), by area and by age band relative to the child:
 
 {table(['Ranking', 'Grade-0 slots', 'By area', 'By age band'], [[m, sum(1 for s in sources if s['ranking'] == m), dict(Counter(s['domain'] for s in sources if s['ranking'] == m)), dict(Counter(s['age_band_vs_child'] for s in sources if s['ranking'] == m))] for m in (label_of(REPORTED_ALPHA), 'SBERT-only')])}
+"""
+    tfidf_out = StringIO()
+    call_command(
+        "compare_tfidf",
+        "--markdown",
+        "--extra-labels",
+        str(ROOT / TFIDF_EXTRA),
+        stdout=tfidf_out,
+    )
+    tfidf_text = tfidf_out.getvalue()
+    write_text("tfidf_comparison_markdown.txt", tfidf_text)
+    tune_t = tfidf_rows(tfidf_text, "Tune set")
+    test_t = tfidf_rows(tfidf_text, "Test set (for the record)")
+    betas = sorted({b for _, b in tune_t})
+    chosen = re.search(r"^Chosen: (.+)\.$", tfidf_text, re.M)
+    from django.conf import settings as dj_settings
+
+    # The app's default, read from settings.py (this process runs at beta 1).
+    settings_py = (BACKEND / "nurtura_backend" / "settings.py").read_text("utf-8")
+    app_beta = float(
+        re.search(r'getenv\("RETRIEVAL_BETA", "([0-9.]+)"\)', settings_py).group(1)
+    )
+    body += f"""
+## TF-IDF alongside SBERT (#248) and the app's retrieval (#250)
+
+The tables above are the frozen v2 record, ranked with SBERT only (β = 1, run here with `RETRIEVAL_BETA={dj_settings.RETRIEVAL_BETA:g}`). Since #250 the app's retrieval is `similarity = β × SBERT + (1 − β) × TF-IDF` with β = {app_beta:g} (`backend/nurtura_backend/settings.py:{line_of('backend/nurtura_backend/settings.py', '^RETRIEVAL_BETA')}`, `backend/recommendations/retrieval.py:{line_of('backend/recommendations/retrieval.py', '^def retrieval_beta')}`). The comparison below grades every top-5 pair: the v2 labels plus `{TFIDF_EXTRA}` (123 extra pairs, graded by the researcher; the nurse's grades are in `relevance_rater2`). Raw output: `raw/tfidf_comparison_markdown.txt` (`manage.py compare_tfidf --markdown --extra-labels {TFIDF_EXTRA}`). Mean nDCG@5:
+
+{table(['β', 'Tune, similarity-only', 'Tune, α = 0.7', 'Test, similarity-only', 'Test, α = 0.7'], [[b, fmt(tune_t.get(('similarity-only', b))), fmt(tune_t.get(('alpha 0.7', b))), fmt(test_t.get(('similarity-only', b))), fmt(test_t.get(('alpha 0.7', b)))] for b in betas])}
+
+The pre-registered rule's choice on these labels: {chosen.group(1) if chosen else 'UNKNOWN'}. The app uses β = {app_beta:g}, chosen deliberately: it is the rule's choice on the nurse's grades and within 0.004 of β = 0 on test under both raters (`docs/tfidf_comparison.md:{line_of('docs/tfidf_comparison.md', '^## Adopted')}`).
 """
     write_md("04_evaluation.md", body, "Held-out evaluation (v2)", COMMAND)
     print("ok", len(sources), "grade-0 slots")

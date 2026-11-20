@@ -20,4 +20,5 @@ Report wording: NFR-01,"a measurable threshold, for example ""95% of requests wi
 Report wording: NFR-08,Android only.,docs/requirements_traceability.md:143
 Report wording: NFR-12,"relevance judged by graded human labels with precision@k and nDCG@k, not similarity scores.",docs/requirements_traceability.md:144
 Report wording: DR-09 and Section 3.2.2,"vectors stored in PostgreSQL, not FAISS.",docs/requirements_traceability.md:145
-Report wording: Additions,"state the SOFIA additions above, with their own IDs if the chapter is renumbered.",docs/requirements_traceability.md:146
+"Report wording: FR-09, IR-06","retrieval combines SBERT with TF-IDF word matching, `0.25 × SBERT + 0.75 × TF-IDF`, both compared by cosine similarity (#248, #250).",docs/requirements_traceability.md:146
+Report wording: Additions,"state the SOFIA additions above, with their own IDs if the chapter is renumbered.",docs/requirements_traceability.md:147

@@ -16,7 +16,7 @@
       "expires_in": 600,
       "resend_after": 30,
       "user": {
-        "id": 158,
+        "id": 196,
         "username": "<redacted>",
         "email": "<redacted>",
         "first_name": "",
@@ -40,7 +40,7 @@
     "response": {
       "token": "<redacted>",
       "user": {
-        "id": 158,
+        "id": 196,
         "username": "<redacted>",
         "email": "<redacted>",
         "first_name": "",
@@ -50,7 +50,7 @@
         "privacy_agreed_at": null,
         "has_password": true
       },
-      "device_trusted_until": "2026-12-16T08:42:55.611890+00:00"
+      "device_trusted_until": "2026-12-20T21:49:07.184396+00:00"
     }
   },
   {
@@ -72,7 +72,7 @@
     "response": {
       "token": "<redacted>",
       "user": {
-        "id": 158,
+        "id": 196,
         "username": "<redacted>",
         "email": "<redacted>",
         "first_name": "",
@@ -91,8 +91,16 @@
     "body": null,
     "status": 200,
     "response": {
-      "version": "2026-10-26",
+      "version": "2026-11-18",
       "title": "How Nurtura uses your information",
+      "summary": [
+        "Nurtura is a student project at Strathmore University. It gives activity ideas, not medical advice.",
+        "We keep your email and, for each child, a name (a nickname is fine), their date of birth or due date, their interests, the milestones you record and how activities went.",
+        "We use it only to suggest activities and explain why. We don't sell it or show adverts.",
+        "Administrators see ratings and comments, never your child's name or your email.",
+        "It's kept until you delete it. You can delete a child or your whole account at any time from the Family tab.",
+        "Under Kenya's Data Protection Act, 2019, you can ask what we hold, correct it or have it deleted. Questions: <redacted>."
+      ],
       "sections": [
         {
           "heading": "About Nurtura",
@@ -137,18 +145,18 @@
     "step": "Agree to the privacy notice",
     "request": "POST /api/auth/privacy-consent/",
     "body": {
-      "version": "2026-10-26"
+      "version": "2026-11-18"
     },
     "status": 200,
     "response": {
-      "id": 158,
+      "id": 196,
       "username": "<redacted>",
       "email": "<redacted>",
       "first_name": "",
       "last_name": "",
       "role": "caregiver",
       "privacy_consent_required": false,
-      "privacy_agreed_at": "2026-11-16T08:42:56.556631Z",
+      "privacy_agreed_at": "2026-11-20T21:49:08.326322Z",
       "has_password": true
     }
   },
@@ -157,7 +165,7 @@
     "request": "POST /api/children/",
     "body": {
       "name": "Fictional Child",
-      "date_of_birth": "2025-10-16",
+      "date_of_birth": "2025-10-21",
       "interests": [
         "water"
       ],
@@ -167,9 +175,9 @@
     },
     "status": 201,
     "response": {
-      "id": 1321,
+      "id": 1599,
       "name": "Fictional Child",
-      "date_of_birth": "2025-10-16",
+      "date_of_birth": "2025-10-21",
       "gender": "unspecified",
       "interests": [
         "water"
@@ -178,13 +186,13 @@
       "concerns": [
         "Language"
       ],
-      "created_at": "2026-11-16T08:42:56.570479Z",
-      "updated_at": "2026-11-16T08:42:56.570491Z"
+      "created_at": "2026-11-20T21:49:08.344310Z",
+      "updated_at": "2026-11-20T21:49:08.344326Z"
     }
   },
   {
     "step": "Record \"Waves bye-bye\" as Not yet",
-    "request": "POST /api/children/1321/milestones/",
+    "request": "POST /api/children/1599/milestones/",
     "body": {
       "reference": 184,
       "status": "not_yet"
@@ -192,14 +200,14 @@
     "status": 201,
     "response": {
       "milestone": {
-        "id": 1369,
+        "id": 1650,
         "reference": 184,
         "reference_key": "CDC-12M-LA-01",
         "domain": "Language",
         "description": "Waves \"bye-bye\"",
         "status": "not_yet",
-        "observation_date": "2026-11-16",
-        "created_at": "2026-11-16T08:42:56.638766Z"
+        "observation_date": "2026-11-20",
+        "created_at": "2026-11-20T21:49:08.400604Z"
       },
       "profile": {
         "age_months": 13.0,
@@ -243,44 +251,29 @@
             "reason": "Enjoys “water”, which sensory activities build on."
           }
         ],
-        "generated_at": "2026-11-16T08:42:56.645793Z"
+        "generated_at": "2026-11-20T21:49:08.405414Z"
       }
     }
   },
   {
     "step": "Generate recommendations",
-    "request": "POST /api/children/1321/recommendations/",
+    "request": "POST /api/children/1599/recommendations/",
     "body": {},
     "status": 201,
     "response": {
-      "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
-      "generated_at": "2026-11-16T08:43:23.033146+00:00",
+      "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
+      "generated_at": "2026-11-20T21:49:23.069220+00:00",
+      "plan": {
+        "starts": "2026-11-16",
+        "ends": "2026-11-22",
+        "ended": false
+      },
       "recommendations": [
         {
-          "id": 1462,
-          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
+          "id": 1747,
+          "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
           "position": 1,
-          "generated_at": "2026-11-16T08:43:23.033146+00:00",
-          "activity_id": "ACT-0176",
-          "activity_name": "Building on Baby's Words",
-          "developmental_domain": "Language",
-          "age_range": "12-18 months",
-          "short_description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and…",
-          "description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and smile to show you understood them.",
-          "materials": "None",
-          "cultural_relevance": "Works in any language spoken at home.",
-          "source": "CDC",
-          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
-          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn new words by building on the ones they say.",
-          "pinned": false,
-          "completion": null,
-          "feedback": null
-        },
-        {
-          "id": 1463,
-          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
-          "position": 2,
-          "generated_at": "2026-11-16T08:43:23.033146+00:00",
+          "generated_at": "2026-11-20T21:49:23.069220+00:00",
           "activity_id": "ACT-0179",
           "activity_name": "Songs About Daily Routines",
           "developmental_domain": "Language",
@@ -297,10 +290,30 @@
           "feedback": null
         },
         {
-          "id": 1464,
-          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
+          "id": 1748,
+          "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
+          "position": 2,
+          "generated_at": "2026-11-20T21:49:23.069220+00:00",
+          "activity_id": "ACT-0176",
+          "activity_name": "Building on Baby's Words",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and…",
+          "description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and smile to show you understood them.",
+          "materials": "None",
+          "cultural_relevance": "Works in any language spoken at home.",
+          "source": "CDC",
+          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn new words by building on the ones they say.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1749,
+          "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
           "position": 3,
-          "generated_at": "2026-11-16T08:43:23.033146+00:00",
+          "generated_at": "2026-11-20T21:49:23.069220+00:00",
           "activity_id": "ACT-0180",
           "activity_name": "Talking Through a Soft Toy",
           "developmental_domain": "Language",
@@ -317,10 +330,30 @@
           "feedback": null
         },
         {
-          "id": 1465,
-          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
+          "id": 1750,
+          "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
           "position": 4,
-          "generated_at": "2026-11-16T08:43:23.033146+00:00",
+          "generated_at": "2026-11-20T21:49:23.069220+00:00",
+          "activity_id": "ACT-0376",
+          "activity_name": "Floating Flowers Colour Talk",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "Float flowers in a shallow container of water. Point to each one and say its colour, then ask the child to point to and pick up a flower.",
+          "description": "Float flowers in a shallow container of water. Point to each one and say its colour, then ask the child to point to and pick up a flower.",
+          "materials": "Wide shallow container; water; flowers or leaves",
+          "cultural_relevance": "Bougainvillea and other garden flowers work well.",
+          "source": "Pathways.org",
+          "source_url": "https://www.pathways.org/activities/flower-float",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn colour words while playing with water.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1751,
+          "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
+          "position": 5,
+          "generated_at": "2026-11-20T21:49:23.069220+00:00",
           "activity_id": "ACT-0375",
           "activity_name": "Real Words, Simple Directions",
           "developmental_domain": "Language",
@@ -332,26 +365,6 @@
           "source": "Pathways.org",
           "source_url": "https://www.pathways.org/activities/simple-directions",
           "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child understand short, simple instructions.",
-          "pinned": false,
-          "completion": null,
-          "feedback": null
-        },
-        {
-          "id": 1466,
-          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
-          "position": 5,
-          "generated_at": "2026-11-16T08:43:23.033146+00:00",
-          "activity_id": "ACT-0177",
-          "activity_name": "Pointing, Naming and Waiting",
-          "developmental_domain": "Language",
-          "age_range": "12-18 months",
-          "short_description": "When the child points to something, name it, then wait a few seconds to see if they make a sound. Whatever sound they make, respond warmly and say the name…",
-          "description": "When the child points to something, name it, then wait a few seconds to see if they make a sound. Whatever sound they make, respond warmly and say the name again.",
-          "materials": "None",
-          "cultural_relevance": "A good habit for every carer, from parents to grandparents.",
-          "source": "CDC",
-          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
-          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child try to say the names of things they point to.",
           "pinned": false,
           "completion": null,
           "feedback": null
@@ -373,38 +386,23 @@
   },
   {
     "step": "Read the stored batch",
-    "request": "GET /api/children/1321/recommendations/",
+    "request": "GET /api/children/1599/recommendations/",
     "body": null,
     "status": 200,
     "response": {
-      "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
-      "generated_at": "2026-11-16T08:43:23.033146+00:00",
+      "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
+      "generated_at": "2026-11-20T21:49:23.069220+00:00",
+      "plan": {
+        "starts": "2026-11-16",
+        "ends": "2026-11-22",
+        "ended": false
+      },
       "recommendations": [
         {
-          "id": 1462,
-          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
+          "id": 1747,
+          "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
           "position": 1,
-          "generated_at": "2026-11-16T08:43:23.033146+00:00",
-          "activity_id": "ACT-0176",
-          "activity_name": "Building on Baby's Words",
-          "developmental_domain": "Language",
-          "age_range": "12-18 months",
-          "short_description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and…",
-          "description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and smile to show you understood them.",
-          "materials": "None",
-          "cultural_relevance": "Works in any language spoken at home.",
-          "source": "CDC",
-          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
-          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn new words by building on the ones they say.",
-          "pinned": false,
-          "completion": null,
-          "feedback": null
-        },
-        {
-          "id": 1463,
-          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
-          "position": 2,
-          "generated_at": "2026-11-16T08:43:23.033146+00:00",
+          "generated_at": "2026-11-20T21:49:23.069220+00:00",
           "activity_id": "ACT-0179",
           "activity_name": "Songs About Daily Routines",
           "developmental_domain": "Language",
@@ -421,10 +419,30 @@
           "feedback": null
         },
         {
-          "id": 1464,
-          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
+          "id": 1748,
+          "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
+          "position": 2,
+          "generated_at": "2026-11-20T21:49:23.069220+00:00",
+          "activity_id": "ACT-0176",
+          "activity_name": "Building on Baby's Words",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and…",
+          "description": "When the child says a word or part of a word, repeat it clearly and add a little more. If they say 'ba', say 'Ball! A red ball!' Keep your words simple, and smile to show you understood them.",
+          "materials": "None",
+          "cultural_relevance": "Works in any language spoken at home.",
+          "source": "CDC",
+          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn new words by building on the ones they say.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1749,
+          "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
           "position": 3,
-          "generated_at": "2026-11-16T08:43:23.033146+00:00",
+          "generated_at": "2026-11-20T21:49:23.069220+00:00",
           "activity_id": "ACT-0180",
           "activity_name": "Talking Through a Soft Toy",
           "developmental_domain": "Language",
@@ -441,10 +459,30 @@
           "feedback": null
         },
         {
-          "id": 1465,
-          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
+          "id": 1750,
+          "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
           "position": 4,
-          "generated_at": "2026-11-16T08:43:23.033146+00:00",
+          "generated_at": "2026-11-20T21:49:23.069220+00:00",
+          "activity_id": "ACT-0376",
+          "activity_name": "Floating Flowers Colour Talk",
+          "developmental_domain": "Language",
+          "age_range": "12-18 months",
+          "short_description": "Float flowers in a shallow container of water. Point to each one and say its colour, then ask the child to point to and pick up a flower.",
+          "description": "Float flowers in a shallow container of water. Point to each one and say its colour, then ask the child to point to and pick up a flower.",
+          "materials": "Wide shallow container; water; flowers or leaves",
+          "cultural_relevance": "Bougainvillea and other garden flowers work well.",
+          "source": "Pathways.org",
+          "source_url": "https://www.pathways.org/activities/flower-float",
+          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn colour words while playing with water.",
+          "pinned": false,
+          "completion": null,
+          "feedback": null
+        },
+        {
+          "id": 1751,
+          "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
+          "position": 5,
+          "generated_at": "2026-11-20T21:49:23.069220+00:00",
           "activity_id": "ACT-0375",
           "activity_name": "Real Words, Simple Directions",
           "developmental_domain": "Language",
@@ -456,26 +494,6 @@
           "source": "Pathways.org",
           "source_url": "https://www.pathways.org/activities/simple-directions",
           "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child understand short, simple instructions.",
-          "pinned": false,
-          "completion": null,
-          "feedback": null
-        },
-        {
-          "id": 1466,
-          "batch": "ca9ad399-b6a1-4dd2-b5be-41e38754f082",
-          "position": 5,
-          "generated_at": "2026-11-16T08:43:23.033146+00:00",
-          "activity_id": "ACT-0177",
-          "activity_name": "Pointing, Naming and Waiting",
-          "developmental_domain": "Language",
-          "age_range": "12-18 months",
-          "short_description": "When the child points to something, name it, then wait a few seconds to see if they make a sound. Whatever sound they make, respond warmly and say the name…",
-          "description": "When the child points to something, name it, then wait a few seconds to see if they make a sound. Whatever sound they make, respond warmly and say the name again.",
-          "materials": "None",
-          "cultural_relevance": "A good habit for every carer, from parents to grandparents.",
-          "source": "CDC",
-          "source_url": "https://www.cdc.gov/act-early/milestones/15-months.html",
-          "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child try to say the names of things they point to.",
           "pinned": false,
           "completion": null,
           "feedback": null
@@ -497,19 +515,19 @@
   },
   {
     "step": "Mark the first idea done",
-    "request": "PUT /api/recommendations/1462/completion/",
+    "request": "PUT /api/recommendations/1747/completion/",
     "body": {
       "status": "completed"
     },
     "status": 201,
     "response": {
       "status": "completed",
-      "completion_date": "2026-11-16"
+      "completion_date": "2026-11-20"
     }
   },
   {
     "step": "Give feedback",
-    "request": "PUT /api/recommendations/1462/feedback/",
+    "request": "PUT /api/recommendations/1747/feedback/",
     "body": {
       "outcome": "went_well",
       "interest": "loved_it",
@@ -523,7 +541,7 @@
       "outcome": "went_well",
       "issues": [],
       "interest": "loved_it",
-      "date_submitted": "2026-11-16T08:43:23.081428+00:00",
+      "date_submitted": "2026-11-20T21:49:23.113188+00:00",
       "recorded": []
     }
   }

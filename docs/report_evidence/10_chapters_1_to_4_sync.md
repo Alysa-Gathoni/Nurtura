@@ -1,10 +1,10 @@
 # Chapters 1-4 against the build
 
-> Generated 2026-11-16T11:46:08+03:00 at commit `87b0f45` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T00:52:26+03:00 at commit `82ba4a5` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 3a. Data model
 
-`makemigrations --check --dry-run`: "No changes detected" (the models match the migrations, so this describes the migrated schema). 14 models, 129 fields. Every field with type, null, blank, default, choices, unique, index, foreign key and on_delete: `raw/model_fields.csv`. Constraints and indexes per table: `raw/model_tables.csv`. Mermaid: `raw/er_diagram.mmd`, `raw/class_diagram.mmd`.
+`makemigrations --check --dry-run`: "No changes detected" (the models match the migrations, so this describes the migrated schema). 14 models, 130 fields. Every field with type, null, blank, default, choices, unique, index, foreign key and on_delete: `raw/model_fields.csv`. Constraints and indexes per table: `raw/model_tables.csv`. Mermaid: `raw/er_diagram.mmd`, `raw/class_diagram.mmd`.
 
 | Model | Table | Constraints | Indexes |
 |---|---|---|---|
@@ -47,7 +47,7 @@ erDiagram
 
 ## 3b. API
 
-Every endpoint under `/api/` from the URL resolver, with its view, methods, permission and throttle classes (`raw/api_endpoints.csv`). Authentication everywhere is the project default (`REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES` in `backend/nurtura_backend/settings.py:219`) unless a view sets its own. Fictional request and response examples for the main flow: `raw/workflow_transcript.json` (12 calls, see `07_workflow_transcript.md`).
+Every endpoint under `/api/` from the URL resolver, with its view, methods, permission and throttle classes (`raw/api_endpoints.csv`). Authentication everywhere is the project default (`REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES` in `backend/nurtura_backend/settings.py:232`) unless a view sets its own. Fictional request and response examples for the main flow: `raw/workflow_transcript.json` (12 calls, see `07_workflow_transcript.md`).
 
 | Endpoint | Methods | View | Permissions | Throttle | Source |
 |---|---|---|---|---|---|
@@ -77,14 +77,15 @@ Every endpoint under `/api/` from the URL resolver, with its view, methods, perm
 | `/api/reference-milestones/<pk>/` | GET | ReferenceMilestoneViewSet | IsAuthenticated | — | backend/profiles/views.py:587 |
 | `/api/` | GET | APIRootView | IsAuthenticated | — | backend/venv/Lib/site-packages/rest_framework/routers.py:314 |
 | `/api/children/<int:child_id>/candidates/` | GET | ChildCandidatesView | IsCaregiver | — | backend/recommendations/views.py:24 |
-| `/api/children/<int:child_id>/recommendations/` | GET, POST | ChildRecommendationsView | IsCaregiver | — | backend/recommendations/views.py:107 |
-| `/api/children/<int:child_id>/activities/` | GET | ChildActivitiesView | IsCaregiver | — | backend/recommendations/views.py:214 |
-| `/api/children/<int:child_id>/activities/<str:activity_id>/try/` | POST | TryActivityView | IsCaregiver | — | backend/recommendations/views.py:286 |
-| `/api/children/<int:child_id>/saved/<str:activity_id>/` | DELETE, PUT | SavedActivityView | IsCaregiver | — | backend/recommendations/views.py:260 |
-| `/api/recommendations/<int:recommendation_id>/options/` | GET, POST | RecommendationOptionsView | IsCaregiver | — | backend/recommendations/views.py:161 |
-| `/api/recommendations/<int:recommendation_id>/completion/` | DELETE, PUT | RecommendationCompletionView | IsCaregiver | — | backend/feedback/views.py:55 |
-| `/api/recommendations/<int:recommendation_id>/feedback/` | GET, PUT | RecommendationFeedbackView | IsCaregiver | — | backend/feedback/views.py:101 |
-| `/api/recommendations/<int:recommendation_id>/observable/` | GET | ObservableSkillsView | IsCaregiver | — | backend/feedback/views.py:138 |
+| `/api/children/<int:child_id>/recommendations/` | GET, POST | ChildRecommendationsView | IsCaregiver | — | backend/recommendations/views.py:118 |
+| `/api/children/<int:child_id>/activities/` | GET | ChildActivitiesView | IsCaregiver | — | backend/recommendations/views.py:226 |
+| `/api/children/<int:child_id>/activities/<str:activity_id>/try/` | POST | TryActivityView | IsCaregiver | — | backend/recommendations/views.py:298 |
+| `/api/children/<int:child_id>/saved/<str:activity_id>/` | DELETE, PUT | SavedActivityView | IsCaregiver | — | backend/recommendations/views.py:272 |
+| `/api/recommendations/<int:recommendation_id>/options/` | GET, POST | RecommendationOptionsView | IsCaregiver | — | backend/recommendations/views.py:173 |
+| `/api/children/<int:child_id>/activities-done/` | GET | ActivitiesDoneView | IsCaregiver | — | backend/feedback/views.py:48 |
+| `/api/recommendations/<int:recommendation_id>/completion/` | DELETE, PUT | RecommendationCompletionView | IsCaregiver | — | backend/feedback/views.py:90 |
+| `/api/recommendations/<int:recommendation_id>/feedback/` | GET, PUT | RecommendationFeedbackView | IsCaregiver | — | backend/feedback/views.py:136 |
+| `/api/recommendations/<int:recommendation_id>/observable/` | GET | ObservableSkillsView | IsCaregiver | — | backend/feedback/views.py:173 |
 | `/api/admin/overview/` | GET | AdminOverviewView | IsAdministrator | — | backend/insights/views.py:14 |
 | `/api/admin/search-index/` | POST | AdminSearchIndexView | IsAdministrator | — | backend/insights/views.py:25 |
 | `/api/admin/activities/` | GET, POST | AdminActivityListView | IsAdministrator | — | backend/activities/api.py:152 |
@@ -141,6 +142,7 @@ Each endpoint and method was called with an empty JSON body as four users: anony
 | `/api/children/<int:child_id>/saved/<str:activity_id>/` | PUT | 401 | 201 | 404 | 403 |
 | `/api/recommendations/<int:recommendation_id>/options/` | GET | 401 | 200 | 404 | 403 |
 | `/api/recommendations/<int:recommendation_id>/options/` | POST | 401 | 400 (allowed; bad body) | 404 | 403 |
+| `/api/children/<int:child_id>/activities-done/` | GET | 401 | 200 | 404 | 403 |
 | `/api/recommendations/<int:recommendation_id>/completion/` | DELETE | 401 | 204 | 404 | 403 |
 | `/api/recommendations/<int:recommendation_id>/completion/` | PUT | 401 | 201 | 404 | 403 |
 | `/api/recommendations/<int:recommendation_id>/feedback/` | GET | 401 | 404 | 404 | 403 |
@@ -185,6 +187,7 @@ Who can enter: Django's `AdminSite.has_permission` requires an active staff user
 | Command | Purpose | Writes DB | Writes files | --dry-run |
 |---|---|---|---|---|
 | `compare_embedding_model` | Compare a candidate embedding model on the held-out labels. | yes | yes | no |
+| `compare_tfidf` | Compare SBERT, TF-IDF and their hybrid on the held-out labels. | yes | yes | no |
 | `embed_activities` | Embed Published activities with SBERT for semantic retrieval. | yes | no | yes |
 | `evaluate_alpha_grid` | Grid-search alpha on the held-out tune set and report on the test set. | no | no | no |
 | `evaluate_beyond_accuracy` | Diversity, novelty, coverage and personalisation of the top 5. | no | no | no |
@@ -224,7 +227,7 @@ The app has no named routes: screens are pushed with `MaterialPageRoute` or open
 | screens/milestone_tracker_screen.dart | MilestoneTrackerScreen _MilestoneCard _ObservationCard | ApiClient ApiException MilestoneService | yes | no | yes |
 | screens/milestones_tab.dart | MilestonesTab | — | no | no | no |
 | screens/privacy_notice_screen.dart | PrivacyNoticeScreen | ApiException | yes | no | yes |
-| screens/progress_screen.dart | ProgressScreen _SectionTitle _Hero | ApiClient ApiException MilestoneService | yes | no | yes |
+| screens/progress_screen.dart | ProgressScreen _SectionTitle _Hero | ApiClient ApiException MilestoneService RecommendationService | yes | no | yes |
 | screens/recommendations_screen.dart | RecommendationsScreen RecommendationCard ReferralNotice | ApiClient ApiException RecommendationService | yes | yes | yes |
 | screens/verify_code_screen.dart | VerifyCodeScreen CodeBoxes | ApiException | no | no | yes |
 | widgets/well_done_sheet.dart | WellDoneSheet _InterestButton | ApiException RecommendationService | no | yes | yes |
@@ -247,7 +250,7 @@ API calls by service class:
 | LocalAuthBiometrics | — |
 | MilestoneService | GET `/api/children/$childId/milestones/`<br>GET `/api/children/$childId/observation/`<br>GET `/api/children/$childId/tracker/`<br>GET `/api/reference-milestones/`<br>POST `/api/children/$childId/milestones/` |
 | NoBiometrics | — |
-| RecommendationService | DELETE `/api/recommendations/$recommendationId/completion/`<br>GET `/api/recommendations/$recommendationId/observable/`<br>GET `/api/recommendations/$recommendationId/options/`<br>POST `/api/recommendations/$recommendationId/options/`<br>PUT `/api/recommendations/$recommendationId/completion/`<br>PUT `/api/recommendations/$recommendationId/feedback/` |
+| RecommendationService | DELETE `/api/recommendations/$recommendationId/completion/`<br>GET `/api/children/$childId/activities-done/`<br>GET `/api/recommendations/$recommendationId/observable/`<br>GET `/api/recommendations/$recommendationId/options/`<br>POST `/api/recommendations/$recommendationId/options/`<br>PUT `/api/recommendations/$recommendationId/completion/`<br>PUT `/api/recommendations/$recommendationId/feedback/` |
 | SignedIn | DELETE `/api/auth/fingerprint/`<br>DELETE `/api/auth/me/`<br>GET `/api/auth/me/`<br>GET `/api/privacy-notice/`<br>POST `/api/auth/fingerprint/`<br>POST `/api/auth/fingerprint/login/`<br>POST `/api/auth/google/`<br>POST `/api/auth/login/`<br>POST `/api/auth/login/resend/`<br>POST `/api/auth/login/verify/`<br>POST `/api/auth/logout/`<br>POST `/api/auth/password-reset/`<br>POST `/api/auth/password-reset/confirm/`<br>POST `/api/auth/password-reset/resend/`<br>POST `/api/auth/password-reset/verify/`<br>POST `/api/auth/password/`<br>POST `/api/auth/privacy-consent/`<br>POST `/api/auth/register/` |
 
 ```mermaid
@@ -270,21 +273,21 @@ flowchart LR
 
 | # | Step | Where |
 |---|---|---|
-| 1 | App sends POST /api/children/<id>/recommendations/ | mobile/nurtura_app/lib/services/recommendation_service.dart:4 |
-| 2 | View checks the caregiver and calls generate() | backend/recommendations/views.py:126 |
-| 3 | Lock the child row so concurrent requests store one batch | backend/recommendations/generation.py:162 |
-| 4 | Rank: rule engine + retrieval + scoring | backend/recommendations/generation.py:165 |
+| 1 | App sends POST /api/children/<id>/recommendations/ | mobile/nurtura_app/lib/services/recommendation_service.dart:5 |
+| 2 | View checks the caregiver and calls generate() | backend/recommendations/views.py:138 |
+| 3 | Lock the child row so concurrent requests store one batch | backend/recommendations/generation.py:275 |
+| 4 | Rank: rule engine + retrieval + scoring | backend/recommendations/generation.py:278 |
 | 5 | Build the developmental profile from milestones, concerns and interests | backend/profiles/rules/__init__.py:38 |
 | 6 | Rule engine: baseline + rule adjustments, normalised to 0-1 | backend/profiles/rules/engine.py:109 |
-| 7 | Write the plain-language query | backend/recommendations/retrieval.py:73 |
-| 8 | Encode the query with SBERT; dot product with stored vectors | backend/recommendations/retrieval.py:131 |
+| 7 | Write the plain-language query | backend/recommendations/retrieval.py:83 |
+| 8 | Encode the query with SBERT; dot product with stored vectors | backend/recommendations/retrieval.py:141 |
 | 9 | Score every eligible activity: age weight x ((1-alpha) sim + alpha priority) | backend/recommendations/ranking.py:127 |
-| 10 | Personalise from feedback (boost liked, demote not working) | backend/recommendations/generation.py:166 |
-| 11 | Leave out completed activities; keep pinned ones first | backend/recommendations/generation.py:176 |
-| 12 | Take the top 5 | backend/recommendations/generation.py:179 |
-| 13 | Explain each one | backend/recommendations/generation.py:192 |
-| 14 | Store a new batch, or return the identical newest one | backend/recommendations/generation.py:200 |
-| 15 | Response: cards + clinic-visit referral (201 new, 200 same) | backend/recommendations/views.py:132 |
+| 10 | Personalise from feedback (boost liked, demote not working) | backend/recommendations/generation.py:279 |
+| 11 | Leave out completed activities; keep pinned ones first | backend/recommendations/generation.py:289 |
+| 12 | Take the top 5 | backend/recommendations/generation.py:297 |
+| 13 | Explain each one | backend/recommendations/generation.py:311 |
+| 14 | Store a new batch, or return the identical newest one | backend/recommendations/generation.py:319 |
+| 15 | Response: cards + clinic-visit referral (201 new, 200 same) | backend/recommendations/views.py:144 |
 
 ## 3h. Where the build differs from the requirement text or the report
 
@@ -313,11 +316,12 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 | Report wording: NFR-08 | Android only. | docs/requirements_traceability.md:143 |
 | Report wording: NFR-12 | relevance judged by graded human labels with precision@k and nDCG@k, not similarity scores. | docs/requirements_traceability.md:144 |
 | Report wording: DR-09 and Section 3.2.2 | vectors stored in PostgreSQL, not FAISS. | docs/requirements_traceability.md:145 |
-| Report wording: Additions | state the SOFIA additions above, with their own IDs if the chapter is renumbered. | docs/requirements_traceability.md:146 |
+| Report wording: FR-09, IR-06 | retrieval combines SBERT with TF-IDF word matching, `0.25 × SBERT + 0.75 × TF-IDF`, both compared by cosine similarity (#248, #250). | docs/requirements_traceability.md:146 |
+| Report wording: Additions | state the SOFIA additions above, with their own IDs if the chapter is renumbered. | docs/requirements_traceability.md:147 |
 
 ## 3i. Merged since tag `sprint6-explanations-v1` (2026-10-10)
 
-67 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
+85 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
 
 | PR | Merged | Title |
 |---|---|---|
@@ -388,3 +392,21 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 | #215 | 2026-11-12 | fix: phone test findings (#214) |
 | #217 | 2026-11-16 | docs: report evidence pack for Chapter 5 (#216) |
 | #219 | 2026-11-16 | test: second rater's grades and weighted kappa (#218) |
+| #221 | 2026-11-16 | docs: evidence pack: second rater's agreement results (#220) |
+| #223 | 2026-11-16 | docs: simulated-participant pre-test of the evaluation protocol (#222) |
+| #225 | 2026-11-16 | test: load test the backend under concurrent caregivers (#224) |
+| #227 | 2026-11-16 | fix: connection pool, SBERT threads, query cache and error logging (#226) |
+| #229 | 2026-11-16 | docs: rewrite the pre-test as a persona-based cognitive walkthrough (#228) |
+| #232 | 2026-11-16 | fix: feedback edit keeps the outcome, picker fits the keyboard, Progress counts activities done (#231) |
+| #234 | 2026-11-17 | docs: how to back up and restore the database (#233) |
+| #236 | 2026-11-18 | data: verify the remaining 108 CDC milestones against the 2022 checklists (#235) |
+| #239 | 2026-11-18 | feat: a short privacy notice first, with the agreement always in view (#238) |
+| #240 | 2026-11-18 | fix: milestone picker scrolls as one on small phones (#237) |
+| #241 | 2026-11-18 | test: end-to-end test on four emulated devices (#230) |
+| #243 | 2026-11-18 | fix: stop the Explore interests cards overflowing (#242) |
+| #245 | 2026-11-19 | feat: activities as a weekly plan instead of daily (#244) |
+| #247 | 2026-11-20 | feat: rotate ideas when a new week starts (#246) |
+| #252 | 2026-11-20 | fix: weekly plan tests no longer depend on the real date (#251) |
+| #249 | 2026-11-20 | feat: TF-IDF + cosine similarity alongside SBERT, with an evaluated weight (#248) |
+| #254 | 2026-11-20 | feat: retrieval mixes SBERT and TF-IDF at β = 0.25 (#250) |
+| #255 | 2026-11-20 | feat: weekly plans run Monday to Sunday (#253) |

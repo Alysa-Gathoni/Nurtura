@@ -1,12 +1,12 @@
 {
   "deploy_files": [],
-  "hosted": "No deployment files in the repository; docs/known_limitations.md:43 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).",
-  "peak_ram_mb": 612.0,
-  "startup_s": 21.0,
+  "hosted": "No deployment files in the repository; docs/known_limitations.md:49 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).",
+  "peak_ram_mb": 604.0,
+  "startup_s": 15.8,
   "disk": {
-    "backend code + model (no venv)": "184.6 MB",
+    "backend code + model (no venv)": "184.7 MB",
     "SBERT model folder": "91.6 MB",
-    "backend venv": "1181.3 MB",
+    "backend venv": "1190.7 MB",
     "database (pg_database_size)": "13 MB",
     "debug APKs built locally": "app-debug.apk 214.6 MB"
   },

@@ -18,7 +18,7 @@ mobile/nurtura_app/lib/screens/milestone_screen.dart,MilestoneScreen _MilestoneT
 mobile/nurtura_app/lib/screens/milestone_tracker_screen.dart,MilestoneTrackerScreen _MilestoneCard _ObservationCard,"The child's milestones by area, with the weekly Nurtura observation",ApiClient ApiException MilestoneService,yes,no,yes
 mobile/nurtura_app/lib/screens/milestones_tab.dart,MilestonesTab,The Milestones tab: the tracker (#192) or the catalogue picker.,,no,no,no
 mobile/nurtura_app/lib/screens/privacy_notice_screen.dart,PrivacyNoticeScreen,The privacy notice (#136).,ApiException,yes,no,yes
-mobile/nurtura_app/lib/screens/progress_screen.dart,ProgressScreen _SectionTitle _Hero,The child's own milestone record and the caregiver's badges and streak.,ApiClient ApiException MilestoneService,yes,no,yes
+mobile/nurtura_app/lib/screens/progress_screen.dart,ProgressScreen _SectionTitle _Hero,The child's own milestone record and the caregiver's badges and streak.,ApiClient ApiException MilestoneService RecommendationService,yes,no,yes
 mobile/nurtura_app/lib/screens/recommendations_screen.dart,RecommendationsScreen RecommendationCard ReferralNotice,The selected child's recommended activities.,ApiClient ApiException RecommendationService,yes,yes,yes
 mobile/nurtura_app/lib/screens/verify_code_screen.dart,VerifyCodeScreen CodeBoxes,The second sign-in step: the six-digit code emailed to the caregiver,ApiException,no,no,yes
 mobile/nurtura_app/lib/widgets/well_done_sheet.dart,WellDoneSheet _InterestButton,"The ""Well done!"" sheet shown after an activity is marked done (#185).",ApiException RecommendationService,no,yes,yes

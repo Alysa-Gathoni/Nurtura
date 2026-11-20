@@ -24,7 +24,7 @@
     "description": "Watches you as you move",
     "source_reference": "CDC Learn the Signs. Act Early. milestone checklist, 2022 revision (Zubler et al., Pediatrics 2022;149(3):e2021052138)",
     "notes": "CDC checklist age 2 months: most children (75% or more) reach this by this age.",
-    "verified": false
+    "verified": true
   },
   "fictional_child": {
     "child_id": "H01",
@@ -39,23 +39,24 @@
     "defined_in": "backend/recommendations/heldout.py:59"
   },
   "recommendation_row (rolled back)": {
-    "id": 1357,
-    "child": 1257,
+    "id": 1642,
+    "child": 1515,
     "activity": 42,
-    "batch": "2a7760a3-9d42-4cd6-baba-007b526f2d02",
+    "batch": "b497588f-4b52-439d-81bc-40c603bd22a5",
     "position": 1,
-    "similarity_score": 0.7798755168914795,
+    "similarity_score": 0.3717355212749981,
     "ranking_score": 1.0,
     "rule_priority": 1.0,
     "age_weight": 1.0,
     "alpha": 0.7,
     "profile_fingerprint": "d32e8ffbab25b3ce9b2c8394d4e106c3fabfe8cef6108ea17738c16629feaaac",
-    "ranking_version": "da4d8bcfc4b96aa8275ddf6d450433ff66df8c6786952221e19cad800840de31",
+    "ranking_version": "1bebb5441fd039526e63ec57f62d5d513a017a4bd839773fdfe00ff8b5d928c4",
     "explanation": "You said you'd like support with language and communication. It's an activity for parents during pregnancy. Its aim is to help your baby start getting to know your voice and the rhythm of your home language.",
     "pinned": false,
     "pin_note": "",
     "explanation_version": "2",
-    "date_generated": "2026-11-16 08:41:22.390524+00:00",
+    "date_generated": "2026-11-20 21:47:49.224709+00:00",
+    "plan_start": "2026-11-16",
     "activity_id": "ACT-0002"
   }
 }

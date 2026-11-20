@@ -40,6 +40,7 @@ endpoint,method,anonymous,owner caregiver,other caregiver,administrator
 /api/children/<int:child_id>/saved/<str:activity_id>/,PUT,401,201,404,403
 /api/recommendations/<int:recommendation_id>/options/,GET,401,200,404,403
 /api/recommendations/<int:recommendation_id>/options/,POST,401,400,404,403
+/api/children/<int:child_id>/activities-done/,GET,401,200,404,403
 /api/recommendations/<int:recommendation_id>/completion/,DELETE,401,204,404,403
 /api/recommendations/<int:recommendation_id>/completion/,PUT,401,201,404,403
 /api/recommendations/<int:recommendation_id>/feedback/,GET,401,404,404,403
