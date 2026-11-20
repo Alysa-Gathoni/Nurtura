@@ -1,17 +1,17 @@
 {
   "requests": 100,
-  "p50_ms": 57.3,
-  "p95_ms": 88.9,
-  "max_ms": 321.8,
+  "p50_ms": 39.0,
+  "p95_ms": 100.2,
+  "max_ms": 231.4,
   "new_batch": {
     "n": 20,
-    "p50_ms": 60.8
+    "p50_ms": 90.6
   },
   "identical_batch": {
     "n": 80,
-    "p50_ms": 53.5
+    "p50_ms": 37.3
   },
-  "startup_s": 21.0,
-  "peak_working_set_mb_after_model_load": 559.0,
-  "peak_working_set_mb_end": 612.0
+  "startup_s": 15.8,
+  "peak_working_set_mb_after_model_load": 565.0,
+  "peak_working_set_mb_end": 604.0
 }

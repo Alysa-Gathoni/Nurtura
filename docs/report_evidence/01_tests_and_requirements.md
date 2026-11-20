@@ -1,13 +1,13 @@
 # Tests, CI and requirement coverage
 
-> Generated 2026-11-16T11:39:02+03:00 at commit `87b0f45` by `backend\venv\Scripts\python.exe scripts\report_evidence\tests_and_ci.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T00:58:32+03:00 at commit `82ba4a5` by `backend\venv\Scripts\python.exe scripts\report_evidence\tests_and_ci.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1a. Test totals
 
 | Suite | Tests run | Result | Skipped | Time |
 |---|---|---|---|---|
-| Backend (`manage.py test -v 2`) | 657 | OK | 0 | 477.253 s |
-| Flutter (`flutter test --reporter json`) | 190 | {'success': 190} | 0 | |
+| Backend (`manage.py test -v 2`) | 707 | OK | 0 | 511.297 s |
+| Flutter (`flutter test --reporter json`) | 200 | {'success': 200} | 0 | |
 
 Skipped backend tests and the reason each gives:
 
@@ -17,14 +17,14 @@ Skipped backend tests and the reason each gives:
 
 Skipped Flutter tests: none.
 
-**Latest completed CI run on `main`:** CI, success, 2026-11-16T08:19:48Z (run 43830335867: Merge pull request #219 from <redacted>/test/218-second-rater).
+**Latest completed CI run on `main`:** CI, success, 2026-11-20T21:27:57Z (run 44820541525: Merge pull request #255 from <redacted>/feature/253-monday-plans).
 
-**Skipped in that CI run (from its log):** Backend (Django, postgresql): 3, Backend (Django, sqlite): 4. CI runs without `-v`, so the log has counts only; the conditions in the code explain them:
+**Skipped in that CI run (from its log):** Backend (Django, sqlite): 5, Backend (Django, postgresql): 3. CI runs without `-v`, so the log has counts only; the conditions in the code explain them:
 
 | Test class | File | Runs only if | Reason given |
 |---|---|---|---|
-| RealSbertModelTests | backend/recommendations/test_embeddings.py:156 | `settings.SBERT_MODEL_PATH.exists()` | SBERT model not downloaded (run setup_sbert.py); skipped in CI |
-| ConcurrentPostTests | backend/recommendations/test_recommendations_api.py:465 | `connection.vendor == "postgresql"` | Row locking needs PostgreSQL; SQLite serialises writes differently |
+| RealSbertModelTests | backend/recommendations/test_embeddings.py:230 | `settings.SBERT_MODEL_PATH.exists()` | SBERT model not downloaded (run setup_sbert.py); skipped in CI |
+| ConcurrentPostTests | backend/recommendations/test_recommendations_api.py:694 | `connection.vendor == "postgresql"` | Row locking needs PostgreSQL; SQLite serialises writes differently |
 | RealModelRetrievalTests | backend/recommendations/test_retrieval.py:274 | `settings.SBERT_MODEL_PATH.exists()` | SBERT model not downloaded (run setup_sbert.py); skipped in CI |
 | RealModelSpotCheckTests | backend/recommendations/test_spot_check.py:169 | `settings.SBERT_MODEL_PATH.exists()` | SBERT model not downloaded (run setup_sbert.py); skipped in CI |
 
@@ -34,15 +34,15 @@ Raw: `raw/tests_backend_log.txt`, `raw/tests_flutter_log.jsonl`, `raw/ci_runs.js
 
 ## 2e. Test inventory
 
-846 tests in `raw/test_inventory.csv` (suite, test, file:line, first assertion, level, type):
+906 tests in `raw/test_inventory.csv` (suite, test, file:line, first assertion, level, type):
 
 | Suite | Level | Tests |
 |---|---|---|
-| backend | integration | 538 |
-| backend | unit | 119 |
+| backend | integration | 563 |
+| backend | unit | 144 |
 | flutter | end-to-end | 1 |
-| flutter | unit | 14 |
-| flutter | widget | 174 |
+| flutter | unit | 15 |
+| flutter | widget | 183 |
 
 - Level: backend `unit` = `SimpleTestCase` (no database); `integration` = `TestCase`/`APITestCase` (test database, often through the REST API). Flutter `widget` = `testWidgets`; `unit` = `test`; `end-to-end` = `integration_test/`.
 - Type: `api` uses the REST client; `command` calls a management command; `ui` is a widget test; `logic` is the rest.
@@ -50,7 +50,7 @@ Raw: `raw/tests_backend_log.txt`, `raw/tests_flutter_log.jsonl`, `raw/ci_runs.js
 
 ## Requirement coverage
 
-From `docs/requirements_traceability.md` (statuses mapped: Met → Done; Met, with a deviation → Done with a stated deviation; Partly met → Partial; Evidence pending → Done (built), evidence pending). Each cited test file was checked to exist. Full table: `raw/requirement_coverage.csv`.
+From `docs/requirements_traceability.md` (statuses mapped: Met → Done; Met, with a deviation → Done with a stated deviation; Met, with an addition → Done with a stated addition; Partly met → Partial; Evidence pending → Done (built), evidence pending). Each cited test file was checked to exist. Full table: `raw/requirement_coverage.csv`.
 
 | ID | Requirement | Status | Cited test files |
 |---|---|---|---|
@@ -62,7 +62,7 @@ From `docs/requirements_traceability.md` (statuses mapped: Met → Done; Met, wi
 | FR-06 | Activity repository management | Done | activities/tests.py (found); test_seed.py (found); admin_test.dart (found) |
 | FR-07 | Activity information management | Done | activities/tests.py (found); test_load_plain_aims.py (found) |
 | FR-08 | Personalised recommendation | Done | recommendations/generation.py (found); recommendations/test_recommendations_api.py (found) |
-| FR-09 | Semantic retrieval | Done | recommendations/retrieval.py (found); recommendations/test_retrieval.py (found); test_embeddings.py (found) |
+| FR-09 | Semantic retrieval | Done (with a stated addition) | recommendations/retrieval.py (found); lexical.py (found); recommendations/test_retrieval.py (found); test_embeddings.py (found); test_lexical.py (found) |
 | FR-10 | Ranking and scoring | Done (with a stated deviation) | recommendations/ranking.py (found); recommendations/test_ranking.py (found) |
 | FR-11 | Recommendation explanation | Done | recommendations/explanations.py (found); recommendations/test_explanations.py (found) |
 | FR-12 | View recommendations | Done | recommendations_screen_test.dart (found); test_recommendations_api.py (found) |

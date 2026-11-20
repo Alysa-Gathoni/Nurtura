@@ -1,6 +1,6 @@
 # Held-out evaluation (v2)
 
-> Generated 2026-11-16T11:41:56+03:00 at commit `87b0f45` by `backend\venv\Scripts\python.exe scripts\report_evidence\evaluation.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T00:48:16+03:00 at commit `82ba4a5` by `backend\venv\Scripts\python.exe scripts\report_evidence\evaluation.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 Labels: `data/evaluation/heldout_labels_v2.csv`. Raw command output: `raw/alpha_grid_markdown.txt` (`manage.py evaluate_alpha_grid --markdown --report-alpha 0.7`). The tables below are recomputed from the same rankings and labels.
 
@@ -145,3 +145,17 @@ Grade-0 results in the top 5 (all 20 children), by area and by age band relative
 |---|---|---|---|
 | alpha 0.7 | 4 | {'Motor': 2, 'Socio-Emotional': 1, 'Cognitive': 1} | {'same band': 4} |
 | SBERT-only | 16 | {'Motor': 8, 'Socio-Emotional': 2, 'Cognitive': 3, 'Language': 2, 'Sensory': 1} | {'+1 band(s)': 3, '+2 band(s)': 4, '+4 band(s)': 1, '+3 band(s)': 2, 'same band': 1, '-2 band(s)': 3, '-3 band(s)': 2} |
+
+## TF-IDF alongside SBERT (#248) and the app's retrieval (#250)
+
+The tables above are the frozen v2 record, ranked with SBERT only (β = 1, run here with `RETRIEVAL_BETA=1`). Since #250 the app's retrieval is `similarity = β × SBERT + (1 − β) × TF-IDF` with β = 0.25 (`backend/nurtura_backend/settings.py:318`, `backend/recommendations/retrieval.py:49`). The comparison below grades every top-5 pair: the v2 labels plus `data/evaluation/tfidf_extra.csv` (123 extra pairs, graded by the researcher; the nurse's grades are in `relevance_rater2`). Raw output: `raw/tfidf_comparison_markdown.txt` (`manage.py compare_tfidf --markdown --extra-labels data/evaluation/tfidf_extra.csv`). Mean nDCG@5:
+
+| β | Tune, similarity-only | Tune, α = 0.7 | Test, similarity-only | Test, α = 0.7 |
+|---|---|---|---|---|
+| beta 0.00 (TF-IDF only) | 0.417 | 0.872 | 0.543 | 0.886 |
+| beta 0.25 | 0.474 | 0.822 | 0.604 | 0.882 |
+| beta 0.50 | 0.499 | 0.782 | 0.612 | 0.881 |
+| beta 0.75 | 0.537 | 0.741 | 0.607 | 0.852 |
+| beta 1.00 (SBERT only) | 0.535 | 0.720 | 0.577 | 0.823 |
+
+The pre-registered rule's choice on these labels: beta 0.00 (TF-IDF only). The app uses β = 0.25, chosen deliberately: it is the rule's choice on the nurse's grades and within 0.004 of β = 0 on test under both raters (`docs/tfidf_comparison.md:108`).

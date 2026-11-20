@@ -181,6 +181,7 @@ def app_inventory():
 STATUS = {
     "Met": "Done",
     "Met, with a deviation": "Done (with a stated deviation)",
+    "Met, with an addition": "Done (with a stated addition)",
     "Partly met": "Partial",
     "Evidence pending": "Done (built); evidence pending",
     "Not met": "Not built",
@@ -341,7 +342,7 @@ Raw: `raw/tests_backend_log.txt`, `raw/tests_flutter_log.jsonl`, `raw/ci_runs.js
 
 ## Requirement coverage
 
-From `docs/requirements_traceability.md` (statuses mapped: Met → Done; Met, with a deviation → Done with a stated deviation; Partly met → Partial; Evidence pending → Done (built), evidence pending). Each cited test file was checked to exist. Full table: `raw/requirement_coverage.csv`.
+From `docs/requirements_traceability.md` (statuses mapped: Met → Done; Met, with a deviation → Done with a stated deviation; Met, with an addition → Done with a stated addition; Partly met → Partial; Evidence pending → Done (built), evidence pending). Each cited test file was checked to exist. Full table: `raw/requirement_coverage.csv`.
 
 {table(['ID', 'Requirement', 'Status', 'Cited test files'], [[r['id'], r['requirement'], r['status'], r['cited_test_files'] or '—'] for r in reqs])}
 """

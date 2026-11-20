@@ -1,16 +1,16 @@
 step,what,where
-1,App sends POST /api/children/<id>/recommendations/,mobile/nurtura_app/lib/services/recommendation_service.dart:4
-2,View checks the caregiver and calls generate(),backend/recommendations/views.py:126
-3,Lock the child row so concurrent requests store one batch,backend/recommendations/generation.py:162
-4,Rank: rule engine + retrieval + scoring,backend/recommendations/generation.py:165
+1,App sends POST /api/children/<id>/recommendations/,mobile/nurtura_app/lib/services/recommendation_service.dart:5
+2,View checks the caregiver and calls generate(),backend/recommendations/views.py:138
+3,Lock the child row so concurrent requests store one batch,backend/recommendations/generation.py:275
+4,Rank: rule engine + retrieval + scoring,backend/recommendations/generation.py:278
 5,"Build the developmental profile from milestones, concerns and interests",backend/profiles/rules/__init__.py:38
 6,"Rule engine: baseline + rule adjustments, normalised to 0-1",backend/profiles/rules/engine.py:109
-7,Write the plain-language query,backend/recommendations/retrieval.py:73
-8,Encode the query with SBERT; dot product with stored vectors,backend/recommendations/retrieval.py:131
+7,Write the plain-language query,backend/recommendations/retrieval.py:83
+8,Encode the query with SBERT; dot product with stored vectors,backend/recommendations/retrieval.py:141
 9,Score every eligible activity: age weight x ((1-alpha) sim + alpha priority),backend/recommendations/ranking.py:127
-10,"Personalise from feedback (boost liked, demote not working)",backend/recommendations/generation.py:166
-11,Leave out completed activities; keep pinned ones first,backend/recommendations/generation.py:176
-12,Take the top 5,backend/recommendations/generation.py:179
-13,Explain each one,backend/recommendations/generation.py:192
-14,"Store a new batch, or return the identical newest one",backend/recommendations/generation.py:200
-15,"Response: cards + clinic-visit referral (201 new, 200 same)",backend/recommendations/views.py:132
+10,"Personalise from feedback (boost liked, demote not working)",backend/recommendations/generation.py:279
+11,Leave out completed activities; keep pinned ones first,backend/recommendations/generation.py:289
+12,Take the top 5,backend/recommendations/generation.py:297
+13,Explain each one,backend/recommendations/generation.py:311
+14,"Store a new batch, or return the identical newest one",backend/recommendations/generation.py:319
+15,"Response: cards + clinic-visit referral (201 new, 200 same)",backend/recommendations/views.py:144

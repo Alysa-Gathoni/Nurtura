@@ -25,14 +25,15 @@ endpoint,name,view,methods,authentication,permissions,throttle,serializer,source
 /api/reference-milestones/<pk>/,reference-milestone-detail,ReferenceMilestoneViewSet,GET,"ExpiringTokenAuthentication, SessionAuthentication",IsAuthenticated,,ReferenceMilestoneSerializer,backend/profiles/views.py:587
 /api/,api-root,APIRootView,GET,"ExpiringTokenAuthentication, SessionAuthentication",IsAuthenticated,,,backend/venv/Lib/site-packages/rest_framework/routers.py:314
 /api/children/<int:child_id>/candidates/,child-candidates,ChildCandidatesView,GET,"ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/recommendations/views.py:24
-/api/children/<int:child_id>/recommendations/,child-recommendations,ChildRecommendationsView,"GET, POST","ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/recommendations/views.py:107
-/api/children/<int:child_id>/activities/,child-activities,ChildActivitiesView,GET,"ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/recommendations/views.py:214
-/api/children/<int:child_id>/activities/<str:activity_id>/try/,child-activity-try,TryActivityView,POST,"ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/recommendations/views.py:286
-/api/children/<int:child_id>/saved/<str:activity_id>/,child-saved-activity,SavedActivityView,"DELETE, PUT","ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/recommendations/views.py:260
-/api/recommendations/<int:recommendation_id>/options/,recommendation-options,RecommendationOptionsView,"GET, POST","ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/recommendations/views.py:161
-/api/recommendations/<int:recommendation_id>/completion/,recommendation-completion,RecommendationCompletionView,"DELETE, PUT","ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/feedback/views.py:55
-/api/recommendations/<int:recommendation_id>/feedback/,recommendation-feedback,RecommendationFeedbackView,"GET, PUT","ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/feedback/views.py:101
-/api/recommendations/<int:recommendation_id>/observable/,recommendation-observable,ObservableSkillsView,GET,"ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/feedback/views.py:138
+/api/children/<int:child_id>/recommendations/,child-recommendations,ChildRecommendationsView,"GET, POST","ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/recommendations/views.py:118
+/api/children/<int:child_id>/activities/,child-activities,ChildActivitiesView,GET,"ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/recommendations/views.py:226
+/api/children/<int:child_id>/activities/<str:activity_id>/try/,child-activity-try,TryActivityView,POST,"ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/recommendations/views.py:298
+/api/children/<int:child_id>/saved/<str:activity_id>/,child-saved-activity,SavedActivityView,"DELETE, PUT","ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/recommendations/views.py:272
+/api/recommendations/<int:recommendation_id>/options/,recommendation-options,RecommendationOptionsView,"GET, POST","ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/recommendations/views.py:173
+/api/children/<int:child_id>/activities-done/,child-activities-done,ActivitiesDoneView,GET,"ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/feedback/views.py:48
+/api/recommendations/<int:recommendation_id>/completion/,recommendation-completion,RecommendationCompletionView,"DELETE, PUT","ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/feedback/views.py:90
+/api/recommendations/<int:recommendation_id>/feedback/,recommendation-feedback,RecommendationFeedbackView,"GET, PUT","ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/feedback/views.py:136
+/api/recommendations/<int:recommendation_id>/observable/,recommendation-observable,ObservableSkillsView,GET,"ExpiringTokenAuthentication, SessionAuthentication",IsCaregiver,,,backend/feedback/views.py:173
 /api/admin/overview/,admin-api-overview,AdminOverviewView,GET,"ExpiringTokenAuthentication, SessionAuthentication",IsAdministrator,,,backend/insights/views.py:14
 /api/admin/search-index/,admin-api-search-index,AdminSearchIndexView,POST,"ExpiringTokenAuthentication, SessionAuthentication",IsAdministrator,,,backend/insights/views.py:25
 /api/admin/activities/,admin-api-activities,AdminActivityListView,"GET, POST","ExpiringTokenAuthentication, SessionAuthentication",IsAdministrator,,AdminActivitySerializer,backend/activities/api.py:152

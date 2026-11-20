@@ -482,6 +482,10 @@
     ],
     [
       "get",
+      "/api/children/$childId/activities-done/"
+    ],
+    [
+      "get",
       "/api/recommendations/$recommendationId/observable/"
     ],
     [

@@ -105,6 +105,7 @@ recommendations.Recommendation,pinned,BooleanField,False,False,False,,False,Fals
 recommendations.Recommendation,pin_note,CharField,False,True,,,False,False,300,,
 recommendations.Recommendation,explanation_version,CharField,False,True,,,False,False,20,,
 recommendations.Recommendation,date_generated,DateTimeField,False,False,now,,False,False,,,
+recommendations.Recommendation,plan_start,DateField,True,True,,,False,False,,,
 recommendations.ActivityEmbedding,id,BigAutoField,False,True,,,True,False,,,
 recommendations.ActivityEmbedding,activity,OneToOneField,False,False,,,True,True,,DevelopmentalActivity,CASCADE
 recommendations.ActivityEmbedding,model_name,CharField,False,False,,,False,False,100,,
