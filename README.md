@@ -105,6 +105,7 @@ The app can then register caregivers, record milestones and generate recommendat
 | `NURTURA_MODEL_WARMUP` | `1` loads the SBERT model when the server starts so the first recommendation is fast; unset means off in development, on otherwise |
 | `RANKING_ALPHA` | Weight of rule priority in the ranking. Leave unset to use the evaluated value, 0.7 |
 | `RETRIEVAL_BETA` | Weight of SBERT against TF-IDF in the similarity (#248): 1 = SBERT only, 0 = TF-IDF only. Default 0.25 (#250), chosen from the comparison in [docs/tfidf_comparison.md](docs/tfidf_comparison.md). Set it to 1 to reproduce the frozen `sprint9-eval-v2` evaluation |
+| `TIME_ZONE` | The time zone for "today": weekly plans, milestone and completion dates (#258). Default `Africa/Nairobi`; times are stored in UTC either way |
 | `SBERT_MODEL_PATH` | Where the SBERT model is stored. Leave unset for `backend/models/` |
 | `SBERT_TORCH_THREADS` | PyTorch threads per encode (#226). Default 2: as fast as 6 for one query, and fairer when requests overlap. `0` keeps PyTorch's default |
 | `SBERT_QUERY_CACHE_SIZE` | How many query embeddings (profile queries, Explore searches) are kept in memory (#226). Default 2048; `0` turns the cache off |

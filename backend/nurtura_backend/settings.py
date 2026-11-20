@@ -166,7 +166,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+# Kenyan time (#258): "today" for weekly plans, milestone and completion
+# dates and the streak is the caregiver's day, not UTC's (3 hours behind).
+# Times are still stored in UTC (USE_TZ). Set TIME_ZONE in .env to serve
+# another country.
+TIME_ZONE = os.getenv("TIME_ZONE", "Africa/Nairobi")
 
 USE_I18N = True
 
