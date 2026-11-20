@@ -313,6 +313,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/eval_v2_statistics.md](docs/eval_v2_statistics.md) | Confidence intervals, Wilcoxon tests and age-weight sensitivity for v2 |
 | [docs/experiment_embedding_model.md](docs/experiment_embedding_model.md) | Experiment: a search-trained embedding model, with its decision rule |
 | [docs/tfidf_comparison.md](docs/tfidf_comparison.md) | TF-IDF alongside SBERT: the hybrid weight β, its decision rule and the results |
+| [docs/alpha_sensitivity_tfidf.md](docs/alpha_sensitivity_tfidf.md) | α at the SBERT/TF-IDF mix: a sensitivity check (`manage.py alpha_sensitivity`) |
 | [docs/activity_classifier_results.md](docs/activity_classifier_results.md) | The activity classifier: cross-validated accuracy, precision, recall, F1 and confusion matrices for area and age band (#181) |
 | [docs/experiment_learned_ranker.md](docs/experiment_learned_ranker.md) | Experiment: a ranker learned from the tune children's labels, against the α = 0.7 formula, with its decision rule (#183) |
 | [docs/explanation_reader_test.md](docs/explanation_reader_test.md) | The explanation reader test (Sprint 6) |
