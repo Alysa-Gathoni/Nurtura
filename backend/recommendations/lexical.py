@@ -10,8 +10,9 @@ retrieval.retrieve combines them as
 
     similarity = beta * SBERT cosine + (1 - beta) * TF-IDF cosine
 
-with beta = settings.RETRIEVAL_BETA. At beta = 1 (the default) TF-IDF isn't
-computed at all, so the app is exactly the evaluated SBERT configuration.
+with beta = settings.RETRIEVAL_BETA, 0.25 by default since #250. At beta = 1
+TF-IDF isn't computed at all, which reproduces the frozen sprint9-eval-v2
+SBERT configuration.
 
 The vectoriser is fitted on every Published activity (so a word's rarity
 doesn't depend on the child's age band) and kept in memory until the

@@ -73,6 +73,13 @@ SPRINT5_EVAL_V1_RANKING_VERSION = (
     "da4d8bcfc4b96aa8275ddf6d450433ff66df8c6786952221e19cad800840de31"
 )
 
+# ranking_version() since #250: the same configuration with retrieval mixing
+# SBERT and TF-IDF at beta = 0.25 (docs/tfidf_comparison.md). With
+# RETRIEVAL_BETA = 1 the version is SPRINT5_EVAL_V1_RANKING_VERSION again.
+TFIDF_MIX_RANKING_VERSION = (
+    "1bebb5441fd039526e63ec57f62d5d513a017a4bd839773fdfe00ff8b5d928c4"
+)
+
 
 def _sha256(value):
     data = json.dumps(value, sort_keys=True, ensure_ascii=False)

@@ -311,7 +311,8 @@ ACTIVITY_CLASSIFIER_PATH = Path(
 # docs/sprint5_alpha_results.md for the evidence and its limits.
 RANKING_ALPHA = float(os.getenv("RANKING_ALPHA", "0.7"))
 
-# Weight of SBERT against TF-IDF in the similarity (#248): 1 = SBERT only, the
-# evaluated configuration; 0 = TF-IDF only. Left at 1 until
-# compare_tfidf's pre-registered rule says otherwise (docs/tfidf_comparison.md).
-RETRIEVAL_BETA = float(os.getenv("RETRIEVAL_BETA", "1.0"))
+# Weight of SBERT against TF-IDF in the similarity (#248): 1 = SBERT only, 0 =
+# TF-IDF only. 0.25 since #250, chosen from compare_tfidf with every top-5 pair
+# graded (docs/tfidf_comparison.md). Set it to 1 to reproduce the frozen
+# sprint9-eval-v2 evaluation.
+RETRIEVAL_BETA = float(os.getenv("RETRIEVAL_BETA", "0.25"))

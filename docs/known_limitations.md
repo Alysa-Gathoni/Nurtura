@@ -20,11 +20,11 @@ None known. Every defect found so far has been fixed and is recorded with its co
 - **v2 kept α = 0.7 against the rule's choice** (#170). On 449 activities the rule fixed before labelling chose α = 1.0, but at α = 1.0 ties are broken by activity ID, which puts the first-written activities first. α = 0.7 was kept and reported (test nDCG@5 0.836 against 0.582); the rule's choice scored 0.876. See [eval_v2_results.md](eval_v2_results.md).
 - **Recommendations concentrate on the priority area** (#199). At α = 0.7 a top 5 covers about 1.4 of the five areas on average, by design. A child flagged in one area sees few ideas from the others in Today; Explore lets caregivers browse every area. See [eval_v2_beyond_accuracy.md](eval_v2_beyond_accuracy.md).
 - **The age weights were never tuned** (1 / 0.7 / 0.5 / 0.25 / 0.1). The v2 sensitivity check (#196) found that softer, harsher, symmetric and reversed weights give the same top 5 for every test child, so the exact values don't drive the results. Rule priority on top of the age weight isn't shown to help on the test children (+0.029, 95% CI [−0.007, +0.095]). See [eval_v2_statistics.md](eval_v2_statistics.md).
-- **TF-IDF was evaluated but isn't switched on yet** (#248).
-  - **The result:** once the 123 extra top-5 pairs were graded, every mix with TF-IDF beat SBERT only in the full ranking (α = 0.7). By the rule fixed in advance, β = 0 is chosen: tune nDCG@5 0.872 against 0.720, and test 0.886 against 0.823.
-  - **The nurse's grades:** used for the extra pairs, they lead the rule to β = 0.25 instead, and the two raters agree with κ 0.685.
-  - **TF-IDF alone is a weaker search** (similarity-only).
-  - **The app still runs SBERT only** (`RETRIEVAL_BETA` = 1) until a separate issue switches it with a provenance note and a new frozen evaluation ([tfidf_comparison.md](tfidf_comparison.md)).
+- **Retrieval mixes SBERT with TF-IDF at β = 0.25** (#248, #250).
+  - **Why:** once the 123 extra top-5 pairs were graded, every mix with TF-IDF beat SBERT only in the full ranking (α = 0.7). On the researcher's grades the rule fixed in advance chose β = 0 (tune nDCG@5 0.872 against 0.720); on the nurse's grades it chose β = 0.25 (κ 0.685 between them). β = 0.25 scores within 0.004 of β = 0 on test under both (0.882 with the researcher's grades) and keeps SBERT's matching by meaning, so it was chosen deliberately rather than by the rule alone.
+  - **TF-IDF alone is a weaker search** (similarity-only); it helps alongside the rule priority and age weight.
+  - **α wasn't re-tuned** for the mix; it stays 0.7.
+  - **The provenance check** against `sprint9-eval-v2` now reports one expected difference, "ranking settings changed: retrieval". With `RETRIEVAL_BETA=1` it matches, and the v2 figures reproduce ([tfidf_comparison.md](tfidf_comparison.md)).
 - **α is a reasonable default, not an optimum.** The test set preferred the α = 0 ablation (nDCG@5 0.873 against 0.814 for α = 0.7), and the tune curve is flat from 0.4 to 1.0.
 - **Only the top 5 were labelled,** so the metrics can't be extended beyond k = 5.
 

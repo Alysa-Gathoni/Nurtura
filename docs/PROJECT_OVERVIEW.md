@@ -136,7 +136,7 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
 | 2. Core data layer | Data models, login with roles, content review workflow, activity data | ✅ Complete |
 | 3. Rule engine | Developmental profiling from CDC/WHO/ASQ guidelines | ✅ Complete |
 | 3.5 Mobile shell | First app screens connected to the real backend, run on an Android phone | ✅ Complete |
-| 4. Semantic search | SBERT embeddings and similarity search | ✅ Built; relevance graded by hand in the held-out evaluation (the #31 spot-check was superseded) |
+| 4. Semantic search | SBERT embeddings and similarity search; TF-IDF word matching mixed in at β = 0.25 since #250 | ✅ Built; relevance graded by hand in the held-out evaluation (the #31 spot-check was superseded) |
 | 5. Weighted ranking | Combine the signals, choose α on a held-out set | ✅ Complete (tag `sprint5-eval-v1`) |
 | 6. Explainability | Plain-language reasons for each recommendation | ✅ Built (tag `sprint6-explanations-v1`); reader test with 5 readers still to run |
 | 7. Feedback & history | Mark activities done, rate them, administrator review | ✅ Complete |
