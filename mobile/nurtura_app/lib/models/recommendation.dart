@@ -368,8 +368,9 @@ class Referral {
 }
 
 /// The newest batch of recommendations for a child (possibly empty).
-/// The week a batch of ideas is for (#244): a plan lasts 7 days, then the
-/// app asks for the next one.
+/// The week a batch of ideas is for (#244): Monday to Sunday (#253; a plan
+/// made on a Sunday runs to the following Sunday). The server sets the dates;
+/// when the plan ends the app asks for the next one.
 class WeekPlan {
   const WeekPlan({
     required this.starts,

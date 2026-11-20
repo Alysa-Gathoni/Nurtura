@@ -487,9 +487,10 @@ class GenerateTests(RecommendationAPITestCase):
 
 
 class WeeklyPlanTests(RecommendationAPITestCase):
-    """Ideas come as a weekly plan (#244); which ideas is unchanged."""
+    """Ideas come as a weekly plan (#244), Monday to Sunday (#253); which
+    ideas is unchanged."""
 
-    START = datetime.date(2026, 11, 19)
+    START = datetime.date(2026, 11, 16)  # a Monday
 
     def setUp(self):
         super().setUp()
@@ -506,12 +507,12 @@ class WeeklyPlanTests(RecommendationAPITestCase):
         day = self.START + datetime.timedelta(days=days)
         return mock.patch("django.utils.timezone.localdate", return_value=day)
 
-    def test_a_new_plan_runs_for_seven_days(self):
+    def test_a_new_plan_runs_monday_to_sunday(self):
         with self.on(0):
             body = self.post().json()
         self.assertEqual(
             body["plan"],
-            {"starts": "2026-11-19", "ends": "2026-11-25", "ended": False},
+            {"starts": "2026-11-16", "ends": "2026-11-22", "ended": False},
         )
         self.assertEqual(
             set(Recommendation.objects.values_list("plan_start", flat=True)),
@@ -521,6 +522,45 @@ class WeeklyPlanTests(RecommendationAPITestCase):
             self.assertFalse(self.get().json()["plan"]["ended"])
         with self.on(7):
             self.assertTrue(self.get().json()["plan"]["ended"])
+
+    def test_a_plan_made_mid_week_starts_on_that_weeks_monday(self):
+        with self.on(3):  # Thursday
+            body = self.post().json()
+        self.assertEqual(
+            body["plan"],
+            {"starts": "2026-11-16", "ends": "2026-11-22", "ended": False},
+        )
+        with self.on(7):
+            self.assertTrue(self.get().json()["plan"]["ended"])
+
+    def test_a_plan_made_on_a_sunday_runs_to_the_following_sunday(self):
+        with self.on(6):  # Sunday
+            body = self.post().json()
+        self.assertEqual(
+            body["plan"],
+            {"starts": "2026-11-22", "ends": "2026-11-29", "ended": False},
+        )
+        with self.on(13):
+            self.assertFalse(self.get().json()["plan"]["ended"])
+        with self.on(14):
+            self.assertTrue(self.get().json()["plan"]["ended"])
+
+    def test_a_plan_started_mid_week_before_253_keeps_its_seven_days(self):
+        with self.on(0):
+            self.post()
+        thursday = datetime.date(2026, 11, 19)
+        Recommendation.objects.update(plan_start=thursday)
+        with self.on(9):  # Wednesday 25 Nov: still that plan
+            self.assertEqual(
+                self.get().json()["plan"],
+                {"starts": "2026-11-19", "ends": "2026-11-25", "ended": False},
+            )
+        with self.on(10):  # Thursday 26 Nov: a new plan, from that Monday
+            body = self.post().json()
+        self.assertEqual(
+            body["plan"],
+            {"starts": "2026-11-23", "ends": "2026-11-29", "ended": False},
+        )
 
     def test_repeat_post_in_the_same_week_returns_the_same_plan(self):
         with self.on(0):
@@ -545,7 +585,8 @@ class WeeklyPlanTests(RecommendationAPITestCase):
 
     def evaluated(self):
         """The child's ideas in ranked order (no feedback, nothing done)."""
-        ids = [r.activity.activity_id for r in rank(self.child).ranked]
+        with self.on(0):  # the child's age on START, as in the posts
+            ids = [r.activity.activity_id for r in rank(self.child).ranked]
         self.assertGreaterEqual(len(ids), 9)  # enough for a full rotation
         return ids
 
@@ -562,7 +603,7 @@ class WeeklyPlanTests(RecommendationAPITestCase):
         self.assertNotEqual(body["batch"], first["batch"])
         self.assertEqual(
             body["plan"],
-            {"starts": "2026-11-26", "ends": "2026-12-02", "ended": False},
+            {"starts": "2026-11-23", "ends": "2026-11-29", "ended": False},
         )
 
     def test_the_first_week_is_the_evaluated_top_5(self):
@@ -625,7 +666,7 @@ class WeeklyPlanTests(RecommendationAPITestCase):
             self.post()
         generated = datetime.datetime(2026, 11, 10, 9, 0, tzinfo=datetime.UTC)
         Recommendation.objects.update(plan_start=None, date_generated=generated)
-        with self.on(0):
+        with self.on(1):  # the day after that plan's seventh day
             plan = self.get().json()["plan"]
         self.assertEqual(
             plan, {"starts": "2026-11-10", "ends": "2026-11-16", "ended": True}
