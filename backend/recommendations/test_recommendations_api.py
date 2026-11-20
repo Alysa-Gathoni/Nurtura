@@ -122,6 +122,40 @@ def _candidate(activity_id, domain, age_range, similarity):
     return Candidate(activity=activity, similarity=similarity)
 
 
+class RotateTests(SimpleTestCase):
+    """generation.rotate (#246), on plain ranked candidates."""
+
+    @staticmethod
+    def ranked(*pks):
+        return [SimpleNamespace(activity=SimpleNamespace(pk=pk)) for pk in pks]
+
+    @staticmethod
+    def pks(chosen):
+        return [c.activity.pk for c in chosen]
+
+    def test_nothing_rested_gives_the_top_in_order(self):
+        chosen = generation.rotate(self.ranked(1, 2, 3, 4, 5, 6), set(), 5)
+        self.assertEqual(self.pks(chosen), [1, 2, 3, 4, 5])
+
+    def test_keeps_the_2_best_rested_and_fills_with_fresh(self):
+        chosen = generation.rotate(
+            self.ranked(1, 2, 3, 4, 5, 6, 7, 8), {1, 2, 3, 4, 5}, 5
+        )
+        self.assertEqual(self.pks(chosen), [1, 2, 6, 7, 8])
+
+    def test_the_chosen_keep_their_ranked_order(self):
+        chosen = generation.rotate(self.ranked(6, 1, 7, 2, 8, 3), {1, 2, 3}, 5)
+        self.assertEqual(self.pks(chosen), [6, 1, 7, 2, 8])
+
+    def test_too_few_fresh_ideas_are_topped_up_with_rested_ones(self):
+        chosen = generation.rotate(self.ranked(1, 2, 3, 4, 5, 6), {1, 2, 3, 4, 5}, 5)
+        self.assertEqual(self.pks(chosen), [1, 2, 3, 4, 6])
+
+    def test_never_more_than_the_candidates(self):
+        chosen = generation.rotate(self.ranked(1, 2), {1, 2}, 5)
+        self.assertEqual(self.pks(chosen), [1, 2])
+
+
 class RankingScoreBoundTests(SimpleTestCase):
     """ranking_score = age_weight x ((1 - a) x sim_norm + a x priority) is in [0, 1]."""
 
@@ -492,7 +526,16 @@ class WeeklyPlanTests(RecommendationAPITestCase):
         self.assertNotEqual(second.json()["batch"], first["batch"])
         self.assertEqual(second.json()["plan"], first["plan"])
 
-    def test_after_the_week_a_new_plan_starts_even_with_the_same_ideas(self):
+    def evaluated(self):
+        """The child's ideas in ranked order (no feedback, nothing done)."""
+        ids = [r.activity.activity_id for r in rank(self.child).ranked]
+        self.assertGreaterEqual(len(ids), 9)  # enough for a full rotation
+        return ids
+
+    def ids(self, body):
+        return [c["activity_id"] for c in body["recommendations"]]
+
+    def test_after_the_week_a_new_plan_starts(self):
         with self.on(0):
             first = self.post().json()
         with self.on(7):
@@ -504,11 +547,61 @@ class WeeklyPlanTests(RecommendationAPITestCase):
             body["plan"],
             {"starts": "2026-11-26", "ends": "2026-12-02", "ended": False},
         )
-        # Which ideas: unchanged, still the evaluated order.
-        self.assertEqual(
-            [c["activity_id"] for c in body["recommendations"]],
-            [c["activity_id"] for c in first["recommendations"]],
+
+    def test_the_first_week_is_the_evaluated_top_5(self):
+        with self.on(0):
+            first = self.post().json()
+        self.assertEqual(self.ids(first), self.evaluated()[:5])
+
+    def test_a_new_week_keeps_2_untried_ideas_and_brings_3_new(self):
+        # #246, option B: the 2 best untried stay, the rest rotate.
+        e = self.evaluated()
+        with self.on(0):
+            self.post()
+        with self.on(7):
+            week2 = self.post().json()
+        self.assertEqual(self.ids(week2), e[0:2] + e[5:8])
+
+    def test_tried_ideas_dont_count_as_untried(self):
+        e = self.evaluated()
+        with self.on(0):
+            self.post()
+        rows = {r.activity.activity_id: r for r in Recommendation.objects.all()}
+        CompletedActivity.objects.create(recommendation=rows[e[0]])  # done
+        CompletedActivity.objects.create(
+            recommendation=rows[e[1]],
+            status=CompletedActivity.Status.PARTIALLY_COMPLETED,
         )
+        with self.on(7):
+            week2 = self.post().json()
+        # Done: gone. Partly done: eligible like a new idea, so it stays.
+        # Untried: e[2], e[3] kept; e[4] rests; then new ideas.
+        self.assertEqual(self.ids(week2), [e[1], e[2], e[3], e[5], e[6]])
+
+    def test_a_mid_week_refresh_keeps_the_weeks_mix(self):
+        e = self.evaluated()
+        with self.on(0):
+            self.post()
+        with self.on(7):
+            week2 = self.post().json()
+        with self.on(9), mock.patch.object(
+            generation, "profile_fingerprint", return_value="f" * 64
+        ):
+            refreshed = self.post()
+        self.assertEqual(refreshed.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(refreshed.json()["plan"], week2["plan"])
+        self.assertEqual(self.ids(refreshed.json()), e[0:2] + e[5:8])
+
+    def test_week_3_rotates_against_week_2(self):
+        e = self.evaluated()
+        with self.on(0):
+            self.post()
+        with self.on(7):
+            self.post()  # e0, e1 + e5, e6, e7
+        with self.on(14):
+            week3 = self.post().json()
+        # Rested from week 2: e0, e1, e5, e6, e7; keep e0, e1; new: e2, e3, e4.
+        self.assertEqual(self.ids(week3), e[0:5])
 
     def test_older_batches_start_on_the_day_they_were_generated(self):
         with self.on(0):
