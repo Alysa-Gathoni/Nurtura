@@ -104,6 +104,7 @@ The app can then register caregivers, record milestones and generate recommendat
 | `DB_POOL_MIN_SIZE`, `DB_POOL_MAX_SIZE`, `DB_POOL_TIMEOUT` | PostgreSQL connection pool per server process (#226): 2, 20 and 30 s by default. A request waits for a free connection rather than failing; keep `DB_POOL_MAX_SIZE` × processes below PostgreSQL's `max_connections` |
 | `NURTURA_MODEL_WARMUP` | `1` loads the SBERT model when the server starts so the first recommendation is fast; unset means off in development, on otherwise |
 | `RANKING_ALPHA` | Weight of rule priority in the ranking. Leave unset to use the evaluated value, 0.7 |
+| `RETRIEVAL_BETA` | Weight of SBERT against TF-IDF in the similarity (#248): 1 = SBERT only, 0 = TF-IDF only. Leave unset to keep the frozen evaluated configuration, 1. The comparison favours a TF-IDF mix, but switching is a separate step ([docs/tfidf_comparison.md](docs/tfidf_comparison.md)) |
 | `SBERT_MODEL_PATH` | Where the SBERT model is stored. Leave unset for `backend/models/` |
 | `SBERT_TORCH_THREADS` | PyTorch threads per encode (#226). Default 2: as fast as 6 for one query, and fairer when requests overlap. `0` keeps PyTorch's default |
 | `SBERT_QUERY_CACHE_SIZE` | How many query embeddings (profile queries, Explore searches) are kept in memory (#226). Default 2048; `0` turns the cache off |
@@ -311,6 +312,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/eval_v2_beyond_accuracy.md](docs/eval_v2_beyond_accuracy.md) | Diversity, novelty, coverage and personalisation of the rankings (proposal 3.2.4) |
 | [docs/eval_v2_statistics.md](docs/eval_v2_statistics.md) | Confidence intervals, Wilcoxon tests and age-weight sensitivity for v2 |
 | [docs/experiment_embedding_model.md](docs/experiment_embedding_model.md) | Experiment: a search-trained embedding model, with its decision rule |
+| [docs/tfidf_comparison.md](docs/tfidf_comparison.md) | TF-IDF alongside SBERT: the hybrid weight β, its decision rule and the results |
 | [docs/activity_classifier_results.md](docs/activity_classifier_results.md) | The activity classifier: cross-validated accuracy, precision, recall, F1 and confusion matrices for area and age band (#181) |
 | [docs/experiment_learned_ranker.md](docs/experiment_learned_ranker.md) | Experiment: a ranker learned from the tune children's labels, against the α = 0.7 formula, with its decision rule (#183) |
 | [docs/explanation_reader_test.md](docs/explanation_reader_test.md) | The explanation reader test (Sprint 6) |

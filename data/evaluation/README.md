@@ -6,6 +6,7 @@
 |---|---|
 | **The current evaluation labels** (v2, frozen at `sprint9-eval-v2`) | `heldout_labels_v2.csv` |
 | The extra labels for the learned-ranker experiment | `learned_ranker_extra.csv` |
+| The pairs to grade for the TF-IDF comparison (#248) | `tfidf_extra.csv` |
 | To grade a sheet | `label_heldout.html` (open it in Chrome or Edge, then choose the CSV) |
 | The v1 record (`sprint5-eval-v1`, 54 activities) and the old development-set template | `archive/` |
 
@@ -109,6 +110,8 @@ chooses α on the tune children by the same rule fixed in advance and reports th
 H17 stays the content-gap child and is reported separately, as in v1, although Sensory 18–24 months now has Published activities.
 
 **Results** (2 Nov 2026): [docs/eval_v2_results.md](../../docs/eval_v2_results.md), produced with `evaluate_alpha_grid --markdown --report-alpha 0.7`. `--report-alpha` reports the test children at a fixed α while still printing the tune curve and the rule's choice.
+
+**TF-IDF comparison** (#248): `tfidf_extra.csv` holds the 123 pairs that SBERT/TF-IDF hybrids put in a top 5 that the v2 sheet doesn't grade, exported blind and shuffled by `compare_tfidf --export-unlabelled`. Graded on 20 Nov 2026 by the researcher (`relevance`) and the nurse (`relevance_rater2`): quadratic-weighted κ 0.685. See [docs/tfidf_comparison.md](../../docs/tfidf_comparison.md).
 
 **Learned-ranker experiment** (#183): `learned_ranker_extra.csv` holds the 13 pairs the learned ranker put in a top 5 that the v2 sheet doesn't grade, all graded. Result: α = 0.7 stays (test nDCG@5 0.836 against 0.737). See [docs/experiment_learned_ranker.md](../../docs/experiment_learned_ranker.md).
 

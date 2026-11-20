@@ -310,3 +310,8 @@ ACTIVITY_CLASSIFIER_PATH = Path(
 # on the held-out tune set (Sprint 5, #50); see
 # docs/sprint5_alpha_results.md for the evidence and its limits.
 RANKING_ALPHA = float(os.getenv("RANKING_ALPHA", "0.7"))
+
+# Weight of SBERT against TF-IDF in the similarity (#248): 1 = SBERT only, the
+# evaluated configuration; 0 = TF-IDF only. Left at 1 until
+# compare_tfidf's pre-registered rule says otherwise (docs/tfidf_comparison.md).
+RETRIEVAL_BETA = float(os.getenv("RETRIEVAL_BETA", "1.0"))
