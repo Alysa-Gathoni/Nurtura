@@ -104,7 +104,7 @@ The app can then register caregivers, record milestones and generate recommendat
 | `DB_POOL_MIN_SIZE`, `DB_POOL_MAX_SIZE`, `DB_POOL_TIMEOUT` | PostgreSQL connection pool per server process (#226): 2, 20 and 30 s by default. A request waits for a free connection rather than failing; keep `DB_POOL_MAX_SIZE` × processes below PostgreSQL's `max_connections` |
 | `NURTURA_MODEL_WARMUP` | `1` loads the SBERT model when the server starts so the first recommendation is fast; unset means off in development, on otherwise |
 | `RANKING_ALPHA` | Weight of rule priority in the ranking. Leave unset to use the evaluated value, 0.7 |
-| `RETRIEVAL_BETA` | Weight of SBERT against TF-IDF in the similarity (#248): 1 = SBERT only, 0 = TF-IDF only. Leave unset to keep the frozen evaluated configuration, 1. The comparison favours a TF-IDF mix, but switching is a separate step ([docs/tfidf_comparison.md](docs/tfidf_comparison.md)) |
+| `RETRIEVAL_BETA` | Weight of SBERT against TF-IDF in the similarity (#248): 1 = SBERT only, 0 = TF-IDF only. Default 0.25 (#250), chosen from the comparison in [docs/tfidf_comparison.md](docs/tfidf_comparison.md). Set it to 1 to reproduce the frozen `sprint9-eval-v2` evaluation |
 | `SBERT_MODEL_PATH` | Where the SBERT model is stored. Leave unset for `backend/models/` |
 | `SBERT_TORCH_THREADS` | PyTorch threads per encode (#226). Default 2: as fast as 6 for one query, and fairer when requests overlap. `0` keeps PyTorch's default |
 | `SBERT_QUERY_CACHE_SIZE` | How many query embeddings (profile queries, Explore searches) are kept in memory (#226). Default 2048; `0` turns the cache off |
@@ -282,7 +282,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | Re-run the ranking evaluation | | `cd backend && python manage.py evaluate_alpha_grid` (see [docs/eval_v2_results.md](docs/eval_v2_results.md)) |
 | Diversity, novelty, coverage and personalisation | | `cd backend && python manage.py evaluate_beyond_accuracy` (see [docs/eval_v2_beyond_accuracy.md](docs/eval_v2_beyond_accuracy.md)) |
 | Confidence intervals and age-weight sensitivity | | `cd backend && python manage.py evaluate_statistics` (see [docs/eval_v2_statistics.md](docs/eval_v2_statistics.md)) |
-| Check nothing evaluated has changed | | `cd backend && python manage.py evaluate_alpha_grid --check-provenance` (run before any change to `backend/` during the explanation reader test) |
+| Check nothing evaluated has changed | | `cd backend && python manage.py evaluate_alpha_grid --check-provenance` (run before any change to `backend/` during the explanation reader test). Since #250 it reports one expected difference, "ranking settings changed: retrieval"; with `RETRIEVAL_BETA=1` it matches |
 | Spot-check retrieval relevance (Sprint 4) | | `cd backend && python manage.py spot_check_retrieval` (`--markdown` for the report; nothing is saved) |
 | Write the relevance-labelling template (Sprint 5) | | `cd backend && python manage.py export_relevance_template` (see [data/evaluation/README.md](data/evaluation/README.md)) |
 

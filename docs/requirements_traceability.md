@@ -1,6 +1,6 @@
 # Requirements traceability
 
-> **Last updated: 2026-11-10.** Traces every requirement in Chapter 4 (Section 4.2) of the June 2026 proposal to where it is built, how it is tested and its status. Figures come from real runs. The proposal text hasn't been updated yet; where the built system differs from the wording, the row says so and [Wording to update in Chapter 4](#wording-to-update-in-chapter-4) lists the change.
+> **Last updated: 2026-11-20.** Traces every requirement in Chapter 4 (Section 4.2) of the June 2026 proposal to where it is built, how it is tested and its status. Figures come from real runs. The proposal text hasn't been updated yet; where the built system differs from the wording, the row says so and [Wording to update in Chapter 4](#wording-to-update-in-chapter-4) lists the change.
 
 Status key:
 
@@ -51,7 +51,7 @@ All other IDs in the repo (FR-01, FR-02, FR-05, FR-11, FR-14 to FR-16, NFR-02, N
 | FR-06 | Activity repository management | In-app administrator screens (#122, #123) and the Django admin; Draft → Under Review → Published, with history | `activities/tests.py`, `test_seed.py`; app `admin_test.dart` | **Met.** Content status is a SOFIA addition beyond the wording. |
 | FR-07 | Activity information management | `DevelopmentalActivity`: every Table 3.1 attribute, plus source, source URL and a plain-language aim | `activities/tests.py`, `test_load_plain_aims.py` | **Met** |
 | FR-08 | Personalised recommendation | `recommendations/generation.py`: rule engine → retrieval → ranking → top 5 stored as a batch | `recommendations/test_recommendations_api.py` | **Met** |
-| FR-09 | Semantic retrieval | `recommendations/retrieval.py`: `all-MiniLM-L6-v2` query from the profile, cosine similarity against stored vectors | `recommendations/test_retrieval.py`, `test_embeddings.py`; spot check ([sprint4_retrieval_spot_check.md](sprint4_retrieval_spot_check.md)) | **Met** |
+| FR-09 | Semantic retrieval | `recommendations/retrieval.py`: `all-MiniLM-L6-v2` query from the profile, cosine similarity against stored vectors, mixed with TF-IDF cosine similarity (`lexical.py`) at β = 0.25 since #250 | `recommendations/test_retrieval.py`, `test_embeddings.py`, `test_lexical.py`; spot check ([sprint4_retrieval_spot_check.md](sprint4_retrieval_spot_check.md)); TF-IDF comparison ([tfidf_comparison.md](tfidf_comparison.md)) | **Met, with an addition:** semantic matching (SBERT) is combined with word matching (TF-IDF). |
 | FR-10 | Ranking and scoring | `recommendations/ranking.py`: `age_weight × ((1 − α)·similarity + α·priority)`, α = 0.7 | `recommendations/test_ranking.py`; held-out evaluation ([eval_v2_results.md](eval_v2_results.md), [eval_v2_statistics.md](eval_v2_statistics.md)) | **Met, with a deviation:** ranks by developmental need, similarity and age fit. Caregiver preferences and context aren't weighted. Interests enter only through the retrieval query and the explanation. Feedback changes later suggestions only through the options and personalisation steps (#175 to #180). |
 | FR-11 | Recommendation explanation | `recommendations/explanations.py`: the area, the milestones or concerns behind it, the age fit and any matched interest | `recommendations/test_explanations.py` (explanations read back against stored profiles; no diagnostic words) | **Met.** Scores are deliberately not shown to caregivers; they are stored with each recommendation (DR-05). |
 | FR-12 | View recommendations | Today tab; `GET`/`POST /api/children/<id>/recommendations/` | app `recommendations_screen_test.dart`; `test_recommendations_api.py` | **Met** |
@@ -77,7 +77,7 @@ All other IDs in the repo (FR-01, FR-02, FR-05, FR-11, FR-14 to FR-16, NFR-02, N
 | NFR-09 | Maintainability | Separate Django apps: `profiles`, `activities`, `recommendations`, `feedback`, `insights` | Code inspection | **Met** |
 | NFR-10 | Explainability | Explanations traced to the profile (FR-11); the explanation reader test checks caregivers understand them ([explanation_reader_test.md](explanation_reader_test.md)) | **Evidence pending:** the automated trace is done; the reader test hasn't run. |
 | NFR-11 | Human oversight | Wording is guidance, never diagnosis; the clinic-visit referral is gentle and outside the ranking (#161) | `test_explanations.py` (no diagnostic words), `test_referral.py`, `test_tracker.py` | **Met** |
-| NFR-12 | Recommendation quality | Relevance: graded human labels on 20 held-out children, nDCG@5 0.836 against 0.582 for SBERT alone (95% CI of the difference +0.136 to +0.379). Personalisation: at α = 0.7, personalisation 0.996, 96 distinct activities in 100 top-5 slots, novelty 4.24 of 4.32 bits, intra-list diversity 0.442 ([eval_v2_beyond_accuracy.md](eval_v2_beyond_accuracy.md)). Explainability: every explanation traced to the stored profile (FR-11). | **Met, with a deviation:** relevance is judged by graded human labels, not similarity scores. Area diversity is low (about 1.4 areas per top 5) because the priority area comes first. |
+| NFR-12 | Recommendation quality | Relevance: graded human labels on 20 held-out children, nDCG@5 0.836 against 0.582 for SBERT alone (95% CI of the difference +0.136 to +0.379) at `sprint9-eval-v2`. With the SBERT/TF-IDF mix the app uses since #250 (β = 0.25) and every top-5 pair graded, test nDCG@5 is 0.882, against 0.823 for the v2 configuration on the same labels ([tfidf_comparison.md](tfidf_comparison.md)). Personalisation: at α = 0.7, personalisation 0.996, 96 distinct activities in 100 top-5 slots, novelty 4.24 of 4.32 bits, intra-list diversity 0.442 ([eval_v2_beyond_accuracy.md](eval_v2_beyond_accuracy.md)). Explainability: every explanation traced to the stored profile (FR-11). | **Met, with a deviation:** relevance is judged by graded human labels, not similarity scores. Area diversity is low (about 1.4 areas per top 5) because the priority area comes first. |
 | NFR-13 | Caregiver satisfaction | Post-use questionnaire in the caregiver sessions | **Evidence pending:** sessions not yet run. |
 
 ## Data requirements
@@ -105,7 +105,7 @@ All other IDs in the repo (FR-01, FR-02, FR-05, FR-11, FR-14 to FR-16, NFR-02, N
 | IR-03 | REST API | `/api/…` endpoints (README API table) | **Met** |
 | IR-04 | JSON format | DRF JSON requests and responses | **Met** |
 | IR-05 | Recommendation engine interface | `generation.generate()` called by the view | **Met** |
-| IR-06 | Processing stages | Rule engine → SBERT retrieval → cosine similarity → weighted ranking | **Met** |
+| IR-06 | Processing stages | Rule engine → SBERT and TF-IDF retrieval → cosine similarity → weighted ranking | **Met** |
 | IR-07 | Database interface | Django ORM on PostgreSQL | **Met** |
 | IR-08 | Error handling | DRF error responses without internal detail; the app shows plain messages | **Met** (`profiles/test_api.py`, app `email_failure_test.dart`) |
 | IR-09 | Secure communication | Token authentication on every call | **Partly met:** HTTPS depends on deployment, which is on hold. Development runs over local HTTP (`adb reverse` or the hotspot). |
@@ -143,4 +143,5 @@ Where the system differs from the wording, Chapter 4 (or Chapter 5, as a recorde
 - **NFR-08:** Android only.
 - **NFR-12:** relevance judged by graded human labels with precision@k and nDCG@k, not similarity scores.
 - **DR-09 and Section 3.2.2:** vectors stored in PostgreSQL, not FAISS.
+- **FR-09, IR-06:** retrieval combines SBERT with TF-IDF word matching, `0.25 × SBERT + 0.75 × TF-IDF`, both compared by cosine similarity (#248, #250).
 - **Additions:** state the SOFIA additions above, with their own IDs if the chapter is renumbered.

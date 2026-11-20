@@ -265,14 +265,23 @@ class RecommendationConstraintTests(TestCase):
 
 
 class HelperTests(SimpleTestCase):
-    def test_ranking_version_matches_sprint5_eval_v1(self):
+    def test_ranking_version_matches_the_chosen_configuration(self):
+        self.assertEqual(
+            generation.ranking_version(),
+            generation.TFIDF_MIX_RANKING_VERSION,
+            "The ranking configuration differs from the one chosen in #250 "
+            "(sprint5-eval-v1 plus the TF-IDF mix at beta 0.25). Re-evaluate "
+            "before changing it deliberately.",
+        )
+        self.assertEqual(settings.RANKING_ALPHA, 0.7)
+        self.assertEqual(settings.RETRIEVAL_BETA, 0.25)
+
+    @override_settings(RETRIEVAL_BETA=1.0)
+    def test_sbert_only_still_matches_sprint5_eval_v1(self):
         self.assertEqual(
             generation.ranking_version(),
             generation.SPRINT5_EVAL_V1_RANKING_VERSION,
-            "The ranking configuration differs from the one evaluated at "
-            "sprint5-eval-v1. Re-evaluate before changing it deliberately.",
         )
-        self.assertEqual(settings.RANKING_ALPHA, 0.7)
 
     @override_settings(RANKING_ALPHA=0.5)
     def test_ranking_version_changes_with_alpha(self):
@@ -380,9 +389,7 @@ class GenerateTests(RecommendationAPITestCase):
             self.assertEqual(row.rule_priority, r.priority)
             self.assertEqual(row.age_weight, r.age_weight)
             self.assertEqual(row.alpha, 0.7)
-            self.assertEqual(
-                row.ranking_version, generation.SPRINT5_EVAL_V1_RANKING_VERSION
-            )
+            self.assertEqual(row.ranking_version, generation.TFIDF_MIX_RANKING_VERSION)
             self.assertEqual(len(row.profile_fingerprint), 64)
 
     def test_order_equals_the_evaluation_harness(self):

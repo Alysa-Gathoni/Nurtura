@@ -148,6 +148,11 @@ class HybridRetrievalTests(TestCase):
 
 
 class ProvenanceTests(SimpleTestCase):
+    def test_the_default_is_the_chosen_mix(self):
+        self.assertEqual(retrieval.retrieval_beta(), 0.25)
+        self.assertEqual(provenance.ranking_settings()["retrieval"]["beta"], 0.25)
+
+    @override_settings(RETRIEVAL_BETA=1.0)
     def test_beta_1_keeps_the_evaluated_fingerprint(self):
         self.assertNotIn("retrieval", provenance.ranking_settings())
         self.assertEqual(

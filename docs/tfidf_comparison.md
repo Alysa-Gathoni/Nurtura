@@ -1,6 +1,6 @@
 # TF-IDF alongside SBERT: comparison (#248)
 
-> **Last updated: 2026-11-20.** The plan and the decision rule were written (in issue #248 and in `compare_tfidf`) before the comparison was run. Every figure below is from the final run on 20 Nov 2026, after the 123 extra top-5 pairs were graded.
+> **Last updated: 2026-11-20 (β = 0.25 adopted, #250).** The plan and the decision rule were written (in issue #248 and in `compare_tfidf`) before the comparison was run. Every figure below is from the final run on 20 Nov 2026, after the 123 extra top-5 pairs were graded.
 
 ## Question
 
@@ -14,7 +14,8 @@ Does adding TF-IDF (word matching) to SBERT (meaning matching) rank activities b
 
 `similarity = β × SBERT cosine + (1 − β) × TF-IDF cosine`
 
-- **β = 1** is SBERT only: the evaluated configuration and the app's setting (`RETRIEVAL_BETA`). At β = 1, TF-IDF isn't computed, and the provenance fingerprint is unchanged.
+- **β = 1** is SBERT only: the configuration evaluated at `sprint9-eval-v2`. At β = 1, TF-IDF isn't computed, and the provenance fingerprint is unchanged.
+- **β = 0.25** is the app's setting since #250 (`RETRIEVAL_BETA`; see [Adopted](#adopted-β--025-250)).
 - **β = 0** is TF-IDF only.
 - **The rest of the ranking is unchanged:** `age_weight × ((1 − α) × similarity + α × priority)`, with α = 0.7.
 - **TF-IDF settings:** fixed, not tuned. scikit-learn `TfidfVectorizer` with English stop words, sublinear term frequency, single words and L2 normalisation. It's fitted on every Published activity.
@@ -58,7 +59,7 @@ Every activity in every top 5 is now graded: the v2 sheet, plus the 123 extra pa
 
 - **Best on tune at α = 0.7:** β = 0 (TF-IDF only), 0.872, against 0.720 for SBERT only: a gain of **0.152**, well over the 0.02 needed.
 - **So, by the rule fixed in advance, β = 0 is chosen.**
-- **The app doesn't change in this PR.** It stays on `RETRIEVAL_BETA` = 1. Switching changes the evaluated ranking, so it needs its own issue, a documented provenance note and a new frozen evaluation state (see [What's still to do](#whats-still-to-do)).
+- **The app adopted β = 0.25, not β = 0** (#250; see [Adopted](#adopted-β--025-250)).
 
 ### Test set (8 children), mean nDCG@5, for the record
 
@@ -104,13 +105,20 @@ With 8 children, no significance claims are made.
 - **The search on its own is mixed.** Similarity-only, TF-IDF alone is below SBERT on tune (0.417 against 0.535) and on test (0.543 against 0.577). The light mixes (β = 0.5 to 0.75) are roughly level with SBERT or slightly above it. So TF-IDF helps most in combination with the rule priority and age weight, not as a better search by itself.
 - **Why that happens isn't tested.** One possibility: the query is a generated sentence whose fixed wording (focus areas, milestone names) TF-IDF matches literally, which may line up with the rule engine's priorities.
 
-## What's still to do
+## Adopted: β = 0.25 (#250)
 
-1. **Switching the app** to β = 0 (or a mix) is a separate issue. It needs:
-   - `RETRIEVAL_BETA` set in settings;
-   - a documented provenance note (the fingerprint changes when β < 1);
-   - a new frozen evaluation state.
-2. **Choosing between β = 0 and a mix** is for that issue. The rule picks β = 0 on the researcher's grades. β = 0.25 is chosen under the nurse's grades and scores almost the same on test under both. A mix also keeps SBERT's meaning matching for queries with no shared words.
+- **Setting:** `RETRIEVAL_BETA` defaults to 0.25, so `similarity = 0.25 × SBERT cosine + 0.75 × TF-IDF cosine`. α stays 0.7 and isn't re-tuned.
+- **Why not β = 0, the rule's choice on the researcher's grades:**
+  - β = 0.25 is the rule's choice on the nurse's grades.
+  - On test it scores within 0.004 of β = 0 under both sets of grades (0.882 against 0.886 with the researcher's grades, 0.870 against 0.866 with the nurse's).
+  - It keeps SBERT's matching by meaning, which helps when a profile and an activity share no words. With β = 0, SBERT would drop out of recommendations entirely.
+  - So the choice is deliberate and recorded as such, not the pre-registered rule applied alone.
+- **The figures for the app's configuration** (researcher's grades, every top-5 pair graded): tune nDCG@5 0.822 and test 0.882, against 0.720 and 0.823 for SBERT only on the same labels.
+- **Provenance:**
+  - The ranking fingerprint now includes the retrieval settings, recorded as `TFIDF_MIX_RANKING_VERSION` in `generation.py`.
+  - `evaluate_alpha_grid --check-provenance` against the `sprint9-eval-v2` sidecar reports one expected difference: "ranking settings changed: retrieval".
+  - Run with `RETRIEVAL_BETA=1`, it matches, and the v2 figures reproduce.
+- **Still to do:** tag a new frozen evaluation state before the caregiver sessions.
 
 ## Limits
 
