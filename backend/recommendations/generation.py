@@ -27,10 +27,13 @@ are stored as one batch of Recommendation rows.
   #179): activities similar to ones that went well move up, ones similar to
   ones that didn't work move down, and an activity that didn't work isn't
   suggested again. A child with no feedback gets the evaluated order.
-- Ideas come as a weekly plan (#244). A plan starts on the day its first
-  batch is stored and lasts PLAN_DAYS days. Batches stored during it (a new
-  milestone, an edited profile, a pinned option) keep its start date; the
-  first request after it ends starts a new plan.
+- Ideas come as a weekly plan (#244), Monday to Sunday (#253), the same
+  weeks as the app's week streak. A new plan starts on the Monday of the
+  current week; one made on a Sunday runs to the following Sunday, so it
+  isn't a one-day plan. Batches stored during a plan (a new milestone, an
+  edited profile, a pinned option) keep its start date; the first request
+  after it ends starts a new plan. Plans started mid-week before #253 keep
+  their PLAN_DAYS days.
 - Ideas rotate between weeks (#246). Of last week's ideas that weren't tried
   (done or partly done), only the KEEP_UNTRIED best-ranked come back; the
   rest of the week is ideas that weren't in last week's plan, in ranked
@@ -167,15 +170,36 @@ def plan_for(recommendations, today=None):
         return None
     today = today or timezone.localdate()
     start = _plan_start_of(recommendations[0])
-    ends = start + datetime.timedelta(days=PLAN_DAYS - 1)
+    ends = plan_end(start)
     return {"starts": start, "ends": ends, "ended": today > ends}
 
 
+SUNDAY = 6  # date.weekday()
+
+
+def new_plan_start(today):
+    """Where a plan made today starts: the Monday of this week, or today
+    if it's a Sunday (that plan then runs to the following Sunday)."""
+    if today.weekday() == SUNDAY:
+        return today
+    return today - datetime.timedelta(days=today.weekday())
+
+
+def plan_end(start):
+    """A plan's last day: the following Sunday for a plan that starts on a
+    Sunday, else PLAN_DAYS days on (Monday to Sunday; plans started mid-week
+    before #253 keep their seven days)."""
+    if start.weekday() == SUNDAY:
+        return start + datetime.timedelta(days=PLAN_DAYS)
+    return start + datetime.timedelta(days=PLAN_DAYS - 1)
+
+
 def current_plan_start(newest, today):
-    """The newest batch's plan start while that plan runs, else today."""
+    """The newest batch's plan start while that plan runs, else where a new
+    plan made today starts."""
     plan = plan_for(newest, today)
     if plan is None or plan["ended"]:
-        return today
+        return new_plan_start(today)
     return plan["starts"]
 
 
