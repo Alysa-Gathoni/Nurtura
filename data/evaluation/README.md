@@ -111,7 +111,7 @@ H17 stays the content-gap child and is reported separately, as in v1, although S
 
 **Results** (2 Nov 2026): [docs/eval_v2_results.md](../../docs/eval_v2_results.md), produced with `evaluate_alpha_grid --markdown --report-alpha 0.7`. `--report-alpha` reports the test children at a fixed α while still printing the tune curve and the rule's choice.
 
-**TF-IDF comparison** (#248): `tfidf_extra.csv` holds the 123 pairs that SBERT/TF-IDF hybrids put in a top 5 that the v2 sheet doesn't grade, exported blind and shuffled by `compare_tfidf --export-unlabelled`. **Not graded yet**, so the comparison is provisional. See [docs/tfidf_comparison.md](../../docs/tfidf_comparison.md).
+**TF-IDF comparison** (#248): `tfidf_extra.csv` holds the 123 pairs that SBERT/TF-IDF hybrids put in a top 5 that the v2 sheet doesn't grade, exported blind and shuffled by `compare_tfidf --export-unlabelled`. Graded on 20 Nov 2026 by the researcher (`relevance`) and the nurse (`relevance_rater2`): quadratic-weighted κ 0.685. See [docs/tfidf_comparison.md](../../docs/tfidf_comparison.md).
 
 **Learned-ranker experiment** (#183): `learned_ranker_extra.csv` holds the 13 pairs the learned ranker put in a top 5 that the v2 sheet doesn't grade, all graded. Result: α = 0.7 stays (test nDCG@5 0.836 against 0.737). See [docs/experiment_learned_ranker.md](../../docs/experiment_learned_ranker.md).
 
