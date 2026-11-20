@@ -484,6 +484,16 @@ class WeeklyPlanTests(RecommendationAPITestCase):
 
     START = datetime.date(2026, 11, 19)
 
+    def setUp(self):
+        super().setUp()
+        # Born relative to START, not the real date, so the child's age on
+        # the patched days (and so the ranking) is the same whenever the
+        # suite runs (#251).
+        self.child.delete()
+        self.child = heldout.create_child(
+            heldout.HELDOUT_BY_ID["H03"], self.caregiver, today=self.START
+        )
+
     def on(self, days):
         """Patch 'today' to START + days."""
         day = self.START + datetime.timedelta(days=days)
