@@ -1,6 +1,6 @@
 # Catalogue, dataset and configuration
 
-> Generated 2026-11-21T00:47:49+03:00 at commit `82ba4a5` by `backend\venv\Scripts\python.exe scripts\report_evidence\catalogue_and_config.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T22:27:53+03:00 at commit `48210e2` by `backend\venv\Scripts\python.exe scripts\report_evidence\catalogue_and_config.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1c. Milestone catalogue
 
@@ -32,7 +32,7 @@
 
 ## Published activities by area and age band
 
-449 Published activities ({'published': 449, 'draft': 2, 'under_review': 2} by status). `raw/published_by_domain_age.csv`; heatmap in `figures/published_heatmap.png`.
+449 Published activities ({'published': 449} by status). `raw/published_by_domain_age.csv`; heatmap in `figures/published_heatmap.png`.
 
 | Area | Prenatal | 0-3 months | 3-6 months | 6-12 months | 12-18 months | 18-24 months | 24-36 months | Total |
 |---|---|---|---|---|---|---|---|---|
@@ -127,10 +127,10 @@ Every module constant in the recommendation path, plus the settings that affect 
 | MAX_LIMIT | 100 | backend/recommendations/browse.py:34 |
 | ENV_FLAG | "NURTURA_MODEL_WARMUP" | backend/recommendations/warmup.py:30 |
 | DISABLED_VALUES | {"0", "false", "no", "off"} | backend/recommendations/warmup.py:31 |
-| RANKING_ALPHA | 0.7 | backend/nurtura_backend/settings.py:312 (env RANKING_ALPHA) |
-| SBERT_MODEL_PATH | all-MiniLM-L6-v2 | backend/nurtura_backend/settings.py:263 |
-| DEFAULT_THROTTLE_RATES | {'login': '5/minute', 'two_factor': '10/minute', 'password_reset': '5/minute', 'account_delete': '5/minute'} | backend/nurtura_backend/settings.py:242 |
-| TOKEN_LIFETIME | 30 days, 0:00:00 | backend/nurtura_backend/settings.py:226 |
+| RANKING_ALPHA | 0.7 | backend/nurtura_backend/settings.py:316 (env RANKING_ALPHA) |
+| SBERT_MODEL_PATH | all-MiniLM-L6-v2 | backend/nurtura_backend/settings.py:267 |
+| DEFAULT_THROTTLE_RATES | {'login': '5/minute', 'two_factor': '10/minute', 'password_reset': '5/minute', 'account_delete': '5/minute'} | backend/nurtura_backend/settings.py:246 |
+| TOKEN_LIFETIME | 30 days, 0:00:00 | backend/nurtura_backend/settings.py:230 |
 | ranking_version() | 1bebb5441fd039526e63ec57f62d5d513a017a4bd839773fdfe00ff8b5d928c4 | backend/recommendations/generation.py:92 |
 | RuleEngine baseline | 1.0 | backend/profiles/rules/engine.py:99 |
 | Priority normalisation | max(0, raw) / top raw score (top area = 1.0) | backend/profiles/rules/engine.py:122 |

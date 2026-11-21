@@ -40,8 +40,9 @@ docs/known_limitations.md:63,"**Load tested on the laptop only** (#224, #226). T
 docs/known_limitations.md:64,**The end-to-end test needs a person** to type the emailed code. It can't run unattended in CI.
 docs/known_limitations.md:65,"**The admin's fonts come from Google Fonts.** Offline, the admin falls back to system fonts."
 README.md:7,"**Where things stand:** see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) for the project in plain language, [docs/sprint_ii_review.md](docs/sprint_ii_review.md) for the current sprint status, and [docs/known_limitations.md](docs/known_limitations.md) f"
-README.md:304,| [docs/known_limitations.md](docs/known_limitations.md) | Known limitations and outstanding defects |
+README.md:305,| [docs/known_limitations.md](docs/known_limitations.md) | Known limitations and outstanding defects |
 docs/activity_classifier_results.md:102,## Limitations
+docs/alpha_sensitivity_tfidf.md:14,"- **Reading:** apply the v2 α rule (every α within 0.02 of the best tune mean qualifies; the middle of that range wins). If 0.7 is within 0.02 of the best, the check supports it; otherwise it's a limitation for Chapter 5."
 docs/cognitive_walkthrough.md:104,"| 3 | The clinic message appears after a single ""Not yet"" | B3 | 3 | Keep (it follows CDC), and watch reactions in the sessions; have the wording reviewed by a health worker (already a known limitation). |"
 docs/cognitive_walkthrough.md:110,| 9 | Search and all text are English only | B2 | 2 | Known limitation (English only). |
 docs/cognitive_walkthrough.md:117,## Limitations
@@ -56,3 +57,4 @@ docs/sprint5_alpha_results.md:156,## Limitations
 docs/sprint_ii_review.md:31,| Known limitations and outstanding defects documented honestly | Met | [known_limitations.md](known_limitations.md) |
 docs/sprint_ii_review.md:79,| Language toggle (NFR-16) or English-only as a limitation | Decision needed |
 docs/testing_and_evaluation_record.md:176,"**Limitations:** small numbers, one rater who also designed the system, and constructed (not real) children. The test set preferred the α = 0 ablation (nDCG@5 0.873), so 0.7 is a reasonable default rather than an optimum. Caregiver feedback in Sprint 9 is the "
+backend/recommendations/management/commands/alpha_sensitivity.py:127,"f""{TOLERANCE}: record it as a limitation."""

@@ -5,19 +5,21 @@
     "pre-weekly-plan 2026-11-20",
     "sprint5-eval-v1 2026-10-10",
     "sprint6-explanations-v1 2026-10-10",
-    "sprint9-eval-v2 2026-11-02"
+    "sprint9-eval-v2 2026-11-02",
+    "sprint9-eval-v3 2026-11-21",
+    "sprint9-eval-v3.1 2026-11-21"
   ],
-  "merged_prs": 127,
-  "closed_issues": 127,
-  "commits_on_main": "318",
+  "merged_prs": 130,
+  "closed_issues": 130,
+  "commits_on_main": "324",
   "ci_conclusions": {
-    "success": 289,
+    "success": 296,
     "failure": 5
   },
   "contributors": [
     {
       "login": "<redacted>",
-      "contributions": 318
+      "contributions": 324
     }
   ]
 }

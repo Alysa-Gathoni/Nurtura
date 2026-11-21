@@ -84,3 +84,6 @@ pr,merged,title,summary
 249,2026-11-20,"feat: TF-IDF + cosine similarity alongside SBERT, with an evaluated weight (#248)","Adds **TF-IDF + cosine similarity** alongside SBERT, with a weight β. The app keeps β = 1 (SBERT only) until the evaluation says otherwise."
 254,2026-11-20,feat: retrieval mixes SBERT and TF-IDF at β = 0.25 (#250),Retrieval** now uses `similarity = 0.25 × SBERT cosine + 0.75 × TF-IDF cosine`.
 255,2026-11-20,feat: weekly plans run Monday to Sunday (#253),Weekly plans now use the same Monday-to-Sunday weeks as the week streak.
+257,2026-11-20,docs: refresh the report evidence pack after the weekly plan and TF-IDF (#256),"The pack:** regenerated `docs/report_evidence/` with `scripts/report_evidence/run_all.ps1` at `82ba4a5`, on 21 Nov. The last build was 16 Nov at `87b0f45`."
+259,2026-11-21,fix: use Kenyan time (Africa/Nairobi) for dates (#258),"The setting:** `TIME_ZONE` now defaults to **`Africa/Nairobi`**, not UTC. It can be set in `.env` to serve another country."
+261,2026-11-21,test: check alpha at the SBERT/TF-IDF mix (#260),"A new command, `manage.py alpha_sensitivity`,** checks α at the app's retrieval mix (β = 0.25):"

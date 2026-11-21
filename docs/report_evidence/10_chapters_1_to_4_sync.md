@@ -1,6 +1,6 @@
 # Chapters 1-4 against the build
 
-> Generated 2026-11-21T00:52:26+03:00 at commit `82ba4a5` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T22:31:41+03:00 at commit `48210e2` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 3a. Data model
 
@@ -47,7 +47,7 @@ erDiagram
 
 ## 3b. API
 
-Every endpoint under `/api/` from the URL resolver, with its view, methods, permission and throttle classes (`raw/api_endpoints.csv`). Authentication everywhere is the project default (`REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES` in `backend/nurtura_backend/settings.py:232`) unless a view sets its own. Fictional request and response examples for the main flow: `raw/workflow_transcript.json` (12 calls, see `07_workflow_transcript.md`).
+Every endpoint under `/api/` from the URL resolver, with its view, methods, permission and throttle classes (`raw/api_endpoints.csv`). Authentication everywhere is the project default (`REST_FRAMEWORK.DEFAULT_AUTHENTICATION_CLASSES` in `backend/nurtura_backend/settings.py:236`) unless a view sets its own. Fictional request and response examples for the main flow: `raw/workflow_transcript.json` (12 calls, see `07_workflow_transcript.md`).
 
 | Endpoint | Methods | View | Permissions | Throttle | Source |
 |---|---|---|---|---|---|
@@ -186,6 +186,7 @@ Who can enter: Django's `AdminSite.has_permission` requires an active staff user
 
 | Command | Purpose | Writes DB | Writes files | --dry-run |
 |---|---|---|---|---|
+| `alpha_sensitivity` | Score every alpha at the app's retrieval beta (sensitivity check). | no | no | no |
 | `compare_embedding_model` | Compare a candidate embedding model on the held-out labels. | yes | yes | no |
 | `compare_tfidf` | Compare SBERT, TF-IDF and their hybrid on the held-out labels. | yes | yes | no |
 | `embed_activities` | Embed Published activities with SBERT for semantic retrieval. | yes | no | yes |
@@ -321,7 +322,7 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 
 ## 3i. Merged since tag `sprint6-explanations-v1` (2026-10-10)
 
-85 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
+88 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
 
 | PR | Merged | Title |
 |---|---|---|
@@ -410,3 +411,6 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 | #249 | 2026-11-20 | feat: TF-IDF + cosine similarity alongside SBERT, with an evaluated weight (#248) |
 | #254 | 2026-11-20 | feat: retrieval mixes SBERT and TF-IDF at β = 0.25 (#250) |
 | #255 | 2026-11-20 | feat: weekly plans run Monday to Sunday (#253) |
+| #257 | 2026-11-20 | docs: refresh the report evidence pack after the weekly plan and TF-IDF (#256) |
+| #259 | 2026-11-21 | fix: use Kenyan time (Africa/Nairobi) for dates (#258) |
+| #261 | 2026-11-21 | test: check alpha at the SBERT/TF-IDF mix (#260) |

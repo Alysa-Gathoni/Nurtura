@@ -1,6 +1,6 @@
 # Security, privacy and deployment
 
-> Generated 2026-11-21T00:54:28+03:00 at commit `82ba4a5` by `backend\venv\Scripts\python.exe scripts\report_evidence\security_privacy.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T22:32:59+03:00 at commit `48210e2` by `backend\venv\Scripts\python.exe scripts\report_evidence\security_privacy.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 4a. Negative tests
 
@@ -33,11 +33,11 @@
 
 | Item | Value | Where |
 |---|---|---|
-| Authentication | ExpiringTokenAuthentication, SessionAuthentication | backend/nurtura_backend/settings.py:232 |
-| Token lifecycle | expires after 30 days, 0:00:00; two-step email code at login | backend/nurtura_backend/settings.py:226; backend/profiles/authentication.py:36; backend/profiles/two_factor.py |
-| Default permission | IsAuthenticated | backend/nurtura_backend/settings.py:238 |
+| Authentication | ExpiringTokenAuthentication, SessionAuthentication | backend/nurtura_backend/settings.py:236 |
+| Token lifecycle | expires after 30 days, 0:00:00; two-step email code at login | backend/nurtura_backend/settings.py:230; backend/profiles/authentication.py:36; backend/profiles/two_factor.py |
+| Default permission | IsAuthenticated | backend/nurtura_backend/settings.py:242 |
 | Roles | IsCaregiver, IsAdministrator, HasPrivacyConsent | backend/profiles/permissions.py:6 |
-| Throttling | {'login': '5/minute', 'two_factor': '10/minute', 'password_reset': '5/minute', 'account_delete': '5/minute'} | backend/nurtura_backend/settings.py:242 |
+| Throttling | {'login': '5/minute', 'two_factor': '10/minute', 'password_reset': '5/minute', 'account_delete': '5/minute'} | backend/nurtura_backend/settings.py:246 |
 | Password validators | UserAttributeSimilarityValidator, MinimumLengthValidator, CommonPasswordValidator, NumericPasswordValidator | backend/nurtura_backend/settings.py:148 |
 | Admin restriction | is_staff follows the Administrator role; admin site needs an active staff user | backend/profiles/models.py:71 |
 | Deletion rules | account deletion confirms with password (or email for Google accounts); child data cascades | backend/profiles/views.py:363; see 4d |
@@ -92,7 +92,7 @@
 
 - **Deployment files in the repository:** none.
 - **Hosting:** No deployment files in the repository; docs/known_limitations.md:49 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).
-- **Measured** (one development laptop, `05_latency.md`): peak working set 604.0 MB; start-up 15.8 s.
+- **Measured** (one development laptop, `05_latency.md`): peak working set 603.0 MB; start-up 13.7 s.
 
 | Disk | Size |
 |---|---|

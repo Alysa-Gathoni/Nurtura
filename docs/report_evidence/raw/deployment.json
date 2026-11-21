@@ -1,8 +1,8 @@
 {
   "deploy_files": [],
   "hosted": "No deployment files in the repository; docs/known_limitations.md:49 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).",
-  "peak_ram_mb": 604.0,
-  "startup_s": 15.8,
+  "peak_ram_mb": 603.0,
+  "startup_s": 13.7,
   "disk": {
     "backend code + model (no venv)": "184.7 MB",
     "SBERT model folder": "91.6 MB",
