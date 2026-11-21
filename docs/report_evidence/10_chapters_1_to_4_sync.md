@@ -1,6 +1,6 @@
 # Chapters 1-4 against the build
 
-> Generated 2026-11-21T22:31:41+03:00 at commit `48210e2` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T23:26:47+03:00 at commit `45ea972` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 3a. Data model
 
@@ -322,7 +322,7 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 
 ## 3i. Merged since tag `sprint6-explanations-v1` (2026-10-10)
 
-88 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
+90 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
 
 | PR | Merged | Title |
 |---|---|---|
@@ -414,3 +414,5 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 | #257 | 2026-11-20 | docs: refresh the report evidence pack after the weekly plan and TF-IDF (#256) |
 | #259 | 2026-11-21 | fix: use Kenyan time (Africa/Nairobi) for dates (#258) |
 | #261 | 2026-11-21 | test: check alpha at the SBERT/TF-IDF mix (#260) |
+| #263 | 2026-11-21 | docs: record activity difficulty levels as future work (#262) |
+| #265 | 2026-11-21 | docs: refresh the report evidence pack after Kenyan time and the α check (#264) |

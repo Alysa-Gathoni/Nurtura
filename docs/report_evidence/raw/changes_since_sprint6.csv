@@ -87,3 +87,5 @@ pr,merged,title,summary
 257,2026-11-20,docs: refresh the report evidence pack after the weekly plan and TF-IDF (#256),"The pack:** regenerated `docs/report_evidence/` with `scripts/report_evidence/run_all.ps1` at `82ba4a5`, on 21 Nov. The last build was 16 Nov at `87b0f45`."
 259,2026-11-21,fix: use Kenyan time (Africa/Nairobi) for dates (#258),"The setting:** `TIME_ZONE` now defaults to **`Africa/Nairobi`**, not UTC. It can be set in `.env` to serve another country."
 261,2026-11-21,test: check alpha at the SBERT/TF-IDF mix (#260),"A new command, `manage.py alpha_sensitivity`,** checks α at the app's retrieval mix (β = 0.25):"
+263,2026-11-21,docs: record activity difficulty levels as future work (#262),"Adds a known limitation recording difficulty levels, the lecturer's suggestion, as future work."
+265,2026-11-21,docs: refresh the report evidence pack after Kenyan time and the α check (#264),"Regenerates `docs/report_evidence/` with `scripts/report_evidence/run_all.ps1` on `main` at 48210e2, after #259 (Kenyan time), #261 (α check) and #263 (difficulty levels)."

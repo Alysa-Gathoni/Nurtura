@@ -1,6 +1,6 @@
 # Environment and versions
 
-> Generated 2026-11-21T22:27:15+03:00 at commit `48210e2` by `backend\venv\Scripts\python.exe scripts\report_evidence\environment.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T23:19:22+03:00 at commit `45ea972` by `backend\venv\Scripts\python.exe scripts\report_evidence\environment.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1b. Machine
 
@@ -10,7 +10,7 @@
 | CPU | AMD Ryzen 5 5625U with Radeon Graphics | `Get-CimInstance Win32_Processor` |
 | Logical cores | 12 | `os.cpu_count()` |
 | RAM | 7.4 GB | `Get-CimInstance Win32_ComputerSystem` |
-| Disk C: | 475.9 GB total, 205.3 GB free | `shutil.disk_usage` |
+| Disk C: | 475.9 GB total, 208.0 GB free | `shutil.disk_usage` |
 | Python | 3.13.15 | backend venv |
 | PostgreSQL | PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit | `SELECT version()` |
 | Flutter | 3.47.4 | `flutter --version --machine` |
