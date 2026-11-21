@@ -107,7 +107,7 @@ With 8 children, no significance claims are made.
 
 ## Adopted: β = 0.25 (#250)
 
-- **Setting:** `RETRIEVAL_BETA` defaults to 0.25, so `similarity = 0.25 × SBERT cosine + 0.75 × TF-IDF cosine`. α stays 0.7 and isn't re-tuned.
+- **Setting:** `RETRIEVAL_BETA` defaults to 0.25, so `similarity = 0.25 × SBERT cosine + 0.75 × TF-IDF cosine`. α stays 0.7 and isn't re-tuned; a later check (#260) found it tied for the best at β = 0.25 ([alpha_sensitivity_tfidf.md](alpha_sensitivity_tfidf.md)).
 - **Why not β = 0, the rule's choice on the researcher's grades:**
   - β = 0.25 is the rule's choice on the nurse's grades.
   - On test it scores within 0.004 of β = 0 under both sets of grades (0.882 against 0.886 with the researcher's grades, 0.870 against 0.866 with the nurse's).

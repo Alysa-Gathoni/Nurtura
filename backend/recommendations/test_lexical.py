@@ -13,6 +13,7 @@ from django.test.utils import override_settings
 from activities.models import DevelopmentalActivity
 
 from . import embeddings, generation, heldout, lexical, provenance, retrieval
+from .management.commands.alpha_sensitivity import describe
 from .management.commands.compare_tfidf import choose_beta
 from .models import Recommendation
 from .test_embeddings import FakeEncoder
@@ -209,3 +210,47 @@ class CompareTfidfCommandTests(HeldOutCommandTestCase):
         with open(target, newline="", encoding="utf-8") as f:
             rows = list(csv.DictReader(f))
         self.assertTrue(all(row["relevance"] == "" for row in rows))
+
+
+class AlphaSensitivityTests(SimpleTestCase):
+    """The alpha check at the app's beta (#260)."""
+
+    def test_a_flat_curve_supports_the_current_alpha(self):
+        curve = {0.5: 0.80, 0.6: 0.82, 0.7: 0.82, 0.8: 0.81}
+        chosen, qualifying, best, gap = describe(curve, 0.7)
+        self.assertEqual(best, 0.82)
+        self.assertAlmostEqual(gap, 0.0)
+        self.assertIn(0.7, qualifying)
+        self.assertIn(chosen, qualifying)
+
+    def test_a_gap_over_the_tolerance_is_reported(self):
+        _, qualifying, _, gap = describe({0.3: 0.90, 0.7: 0.85}, 0.7)
+        self.assertAlmostEqual(gap, 0.05)
+        self.assertNotIn(0.7, qualifying)
+
+
+class AlphaSensitivityCommandTests(HeldOutCommandTestCase):
+    def run_check(self):
+        out = StringIO()
+        call_command(
+            "alpha_sensitivity",
+            "--labels",
+            str(self.path),
+            "--extra-labels",
+            str(self.path.with_name("none.csv")),
+            stdout=out,
+            stderr=StringIO(),
+        )
+        return out.getvalue()
+
+    def test_reports_every_alpha_and_the_rule_and_stores_nothing(self):
+        self.publish()
+        self.export()
+        before = Recommendation.objects.count(), User.objects.count()
+        output = self.run_check()
+        self.assertEqual((Recommendation.objects.count(), User.objects.count()), before)
+        for name in ("similarity-only", "0.0", "1.0", "0.7 (app)"):
+            self.assertIn(name, output)
+        self.assertIn("What the v2 alpha rule would say", output)
+        self.assertIn("isn't changed", output)
+        self.assertIn("No graded tune pairs", output)  # the fixture is ungraded

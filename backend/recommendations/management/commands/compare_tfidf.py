@@ -72,6 +72,32 @@ def choose_beta(tune_means, current=CURRENT, min_gain=MIN_GAIN):
     return best if known[best] >= known[current] + min_gain else current
 
 
+def load_merged_labels(paths):
+    """({child_id: {activity_id: grade}}, {child_id: set of sheet rows}) from
+    several held-out sheets; a pair graded differently in two sheets is an
+    error."""
+    relevance, sheet_rows = {}, {}
+    for path in paths:
+        try:
+            labels = load_heldout_labels(path)
+        except LabelError as exc:
+            raise CommandError(
+                f"Can't use {path}:\n  " + "\n  ".join(exc.problems)
+            ) from exc
+        for child_id, grades in labels.relevance.items():
+            for activity_id, grade in grades.items():
+                known = relevance.get(child_id, {}).get(activity_id)
+                if known is not None and known != grade:
+                    raise CommandError(
+                        f"{child_id} / {activity_id} is graded {known} in one "
+                        f"sheet and {grade} in another."
+                    )
+                relevance.setdefault(child_id, {})[activity_id] = grade
+        for child_id, ids in labels.rows.items():
+            sheet_rows.setdefault(child_id, set()).update(ids)
+    return relevance, sheet_rows
+
+
 class Command(BaseCommand):
     help = "Compare SBERT, TF-IDF and their hybrid on the held-out labels."
 
@@ -128,26 +154,7 @@ class Command(BaseCommand):
         paths = [options["labels"]]
         if options["extra_labels"]:
             paths.append(options["extra_labels"])
-        relevance, sheet_rows = {}, {}
-        for path in paths:
-            try:
-                labels = load_heldout_labels(path)
-            except LabelError as exc:
-                raise CommandError(
-                    f"Can't use {path}:\n  " + "\n  ".join(exc.problems)
-                ) from exc
-            for child_id, grades in labels.relevance.items():
-                for activity_id, grade in grades.items():
-                    known = relevance.get(child_id, {}).get(activity_id)
-                    if known is not None and known != grade:
-                        raise CommandError(
-                            f"{child_id} / {activity_id} is graded {known} in one "
-                            f"sheet and {grade} in another."
-                        )
-                    relevance.setdefault(child_id, {})[activity_id] = grade
-            for child_id, ids in labels.rows.items():
-                sheet_rows.setdefault(child_id, set()).update(ids)
-        return relevance, sheet_rows
+        return load_merged_labels(paths)
 
     # Rankings
 
