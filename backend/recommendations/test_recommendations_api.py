@@ -576,6 +576,8 @@ class WeeklyPlanTests(RecommendationAPITestCase):
         self.child.record_milestone(
             reference=ReferenceMilestone.objects.get(milestone_key="CDC-02M-SE-04"),
             status="not_yet",
+            # Dated on the tests' calendar, not the real date (#258).
+            observation_date=self.START + datetime.timedelta(days=2),
         )
         with self.on(4):
             second = self.post()
@@ -671,6 +673,47 @@ class WeeklyPlanTests(RecommendationAPITestCase):
         self.assertEqual(
             plan, {"starts": "2026-11-10", "ends": "2026-11-16", "ended": True}
         )
+
+
+class KenyanTimeTests(RecommendationAPITestCase):
+    """Dates follow Kenyan time, not UTC (#258)."""
+
+    # Sunday 22 Nov 2026, 22:30 UTC = Monday 23 Nov, 1:30 a.m. in Kenya.
+    LATE_SUNDAY_UTC = datetime.datetime(2026, 11, 22, 22, 30, tzinfo=datetime.UTC)
+    MONDAY = datetime.date(2026, 11, 23)
+
+    def setUp(self):
+        super().setUp()
+        self.child.delete()
+        self.child = heldout.create_child(
+            heldout.HELDOUT_BY_ID["H03"], self.caregiver, today=self.MONDAY
+        )
+
+    def at(self, moment):
+        return mock.patch("django.utils.timezone.now", return_value=moment)
+
+    def test_the_default_time_zone_is_kenya(self):
+        self.assertEqual(settings.TIME_ZONE, "Africa/Nairobi")
+
+    def test_after_midnight_in_kenya_is_the_next_day(self):
+        from django.utils import timezone
+
+        with self.at(self.LATE_SUNDAY_UTC):
+            self.assertEqual(timezone.localdate(), self.MONDAY)
+
+    def test_a_plan_made_after_midnight_on_monday_starts_that_monday(self):
+        with self.at(self.LATE_SUNDAY_UTC):
+            body = self.post().json()
+        self.assertEqual(
+            body["plan"],
+            {"starts": "2026-11-23", "ends": "2026-11-29", "ended": False},
+        )
+
+    def test_a_milestone_recorded_after_midnight_is_dated_that_day(self):
+        reference = ReferenceMilestone.objects.get(milestone_key="CDC-02M-SE-04")
+        with self.at(self.LATE_SUNDAY_UTC):
+            record = self.child.record_milestone(reference=reference, status="not_yet")
+        self.assertEqual(record.observation_date, self.MONDAY)
 
 
 class ReferralAPITests(RecommendationAPITestCase):
