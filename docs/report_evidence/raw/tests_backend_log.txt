@@ -1,6 +1,6 @@
 Creating test database for alias 'default' ('test_nurtura_db')...
 
-Found 707 test(s).
+Found 714 test(s).
 Operations to perform:
   Synchronize unmigrated apps: corsheaders, insights, messages, rest_framework, staticfiles
   Apply all migrations: activities, admin, auth, authtoken, contenttypes, feedback, profiles, recommendations, sessions
@@ -53,7 +53,7 @@ Running migrations:
   Applying profiles.0009_fingerprint_key... OK
   Applying recommendations.0007_saved_activity... OK
   Applying recommendations.0008_recommendation_plan_start... OK
-  Applying sessions.0001_initial...test_503_until_trained (activities.test_classifier.SuggestAPITests.test_503_until_trained) ... 2026-11-21 00:33:47,320 ERROR django.request: Service Unavailable: /api/admin/activities/suggest/
+  Applying sessions.0001_initial...test_503_until_trained (activities.test_classifier.SuggestAPITests.test_503_until_trained) ... 2026-11-21 22:16:35,967 ERROR django.request: Service Unavailable: /api/admin/activities/suggest/
 ok
 test_administrators_only (activities.test_classifier.SuggestAPITests.test_administrators_only) ... ok
 test_needs_some_text (activities.test_classifier.SuggestAPITests.test_needs_some_text) ... ok
@@ -244,7 +244,7 @@ test_turning_off_revokes (profiles.test_fingerprint.FingerprintTests.test_turnin
 test_turning_on_again_replaces_the_key (profiles.test_fingerprint.FingerprintTests.test_turning_on_again_replaces_the_key) ... ok
 test_turning_on_needs_sign_in_and_a_device_id (profiles.test_fingerprint.FingerprintTests.test_turning_on_needs_sign_in_and_a_device_id) ... ok
 test_turning_on_then_logging_in_after_log_out (profiles.test_fingerprint.FingerprintTests.test_turning_on_then_logging_in_after_log_out) ... ok
-test_off_until_a_client_id_is_set (profiles.test_google_sign_in.GoogleSignInOffTests.test_off_until_a_client_id_is_set) ... 2026-11-21 00:37:49,965 ERROR django.request: Service Unavailable: /api/auth/google/
+test_off_until_a_client_id_is_set (profiles.test_google_sign_in.GoogleSignInOffTests.test_off_until_a_client_id_is_set) ... 2026-11-21 22:19:31,715 ERROR django.request: Service Unavailable: /api/auth/google/
 ok
 test_a_google_account_can_set_a_password_with_forgot_password (profiles.test_google_sign_in.GoogleSignInTests.test_a_google_account_can_set_a_password_with_forgot_password) ... ok
 test_a_missing_token_is_refused_without_asking_google (profiles.test_google_sign_in.GoogleSignInTests.test_a_missing_token_is_refused_without_asking_google) ... ok
@@ -254,7 +254,7 @@ test_a_token_google_rejects_is_refused (profiles.test_google_sign_in.GoogleSignI
 test_administrators_must_use_email_and_password (profiles.test_google_sign_in.GoogleSignInTests.test_administrators_must_use_email_and_password) ... ok
 test_an_email_used_as_another_username_is_refused (profiles.test_google_sign_in.GoogleSignInTests.test_an_email_used_as_another_username_is_refused) ... ok
 test_an_unverified_google_email_is_refused (profiles.test_google_sign_in.GoogleSignInTests.test_an_unverified_google_email_is_refused) ... ok
-test_google_unreachable_is_a_503 (profiles.test_google_sign_in.GoogleSignInTests.test_google_unreachable_is_a_503) ... 2026-11-21 00:37:59,860 ERROR django.request: Service Unavailable: /api/auth/google/
+test_google_unreachable_is_a_503 (profiles.test_google_sign_in.GoogleSignInTests.test_google_unreachable_is_a_503) ... 2026-11-21 22:19:40,191 ERROR django.request: Service Unavailable: /api/auth/google/
 ok
 test_signs_in_the_account_with_that_email_without_a_code (profiles.test_google_sign_in.GoogleSignInTests.test_signs_in_the_account_with_that_email_without_a_code) ... ok
 test_the_email_is_matched_ignoring_case (profiles.test_google_sign_in.GoogleSignInTests.test_the_email_is_matched_ignoring_case) ... ok
@@ -388,13 +388,13 @@ test_pregnancy (profiles.test_tracker.ObservationTests.test_pregnancy) ... ok
 test_nothing_to_track_before_birth (profiles.test_tracker.TrackerTests.test_nothing_to_track_before_birth) ... ok
 test_recorded_milestones_show_whatever_their_age (profiles.test_tracker.TrackerTests.test_recorded_milestones_show_whatever_their_age) ... ok
 test_shows_recent_and_coming_milestones_by_area (profiles.test_tracker.TrackerTests.test_shows_recent_and_coming_milestones_by_area) ... ok
-test_a_failed_resend_keeps_the_code_already_sent (profiles.test_two_factor.EmailFailureTests.test_a_failed_resend_keeps_the_code_already_sent) ... 2026-11-21 00:39:52,946 ERROR django.request: Service Unavailable: /api/auth/login/resend/
+test_a_failed_resend_keeps_the_code_already_sent (profiles.test_two_factor.EmailFailureTests.test_a_failed_resend_keeps_the_code_already_sent) ... 2026-11-21 22:21:26,237 ERROR django.request: Service Unavailable: /api/auth/login/resend/
 ok
-test_login_says_the_email_failed (profiles.test_two_factor.EmailFailureTests.test_login_says_the_email_failed) ... 2026-11-21 00:39:54,554 ERROR django.request: Service Unavailable: /api/auth/login/
-2026-11-21 00:39:55,329 ERROR django.request: Service Unavailable: /api/auth/login/
-2026-11-21 00:39:56,120 ERROR django.request: Service Unavailable: /api/auth/login/
+test_login_says_the_email_failed (profiles.test_two_factor.EmailFailureTests.test_login_says_the_email_failed) ... 2026-11-21 22:21:27,767 ERROR django.request: Service Unavailable: /api/auth/login/
+2026-11-21 22:21:28,546 ERROR django.request: Service Unavailable: /api/auth/login/
+2026-11-21 22:21:29,366 ERROR django.request: Service Unavailable: /api/auth/login/
 ok
-test_password_reset_says_the_email_failed (profiles.test_two_factor.EmailFailureTests.test_password_reset_says_the_email_failed) ... 2026-11-21 00:39:56,898 ERROR django.request: Service Unavailable: /api/auth/password-reset/
+test_password_reset_says_the_email_failed (profiles.test_two_factor.EmailFailureTests.test_password_reset_says_the_email_failed) ... 2026-11-21 22:21:30,150 ERROR django.request: Service Unavailable: /api/auth/password-reset/
 ok
 test_codes_are_six_digits (profiles.test_two_factor.HelperTests.test_codes_are_six_digits) ... ok
 test_mask_email (profiles.test_two_factor.HelperTests.test_mask_email) ... ok
@@ -412,8 +412,8 @@ test_trusted_device_skips_the_code_for_30_days (profiles.test_two_factor.LoginCh
 test_unknown_or_malformed_challenge (profiles.test_two_factor.LoginChallengeTests.test_unknown_or_malformed_challenge) ... ok
 test_wrong_codes_count_down_then_lock (profiles.test_two_factor.LoginChallengeTests.test_wrong_codes_count_down_then_lock) ... ok
 test_wrong_password_sends_nothing (profiles.test_two_factor.LoginChallengeTests.test_wrong_password_sends_nothing) ... ok
-test_a_failed_email_creates_no_account (profiles.test_two_factor.RegistrationTests.test_a_failed_email_creates_no_account) ... 2026-11-21 00:40:24,421 ERROR profiles.two_factor: Couldn't email a register code to user 427: OSError('smtp down')
-2026-11-21 00:40:24,422 ERROR django.request: Service Unavailable: /api/auth/register/
+test_a_failed_email_creates_no_account (profiles.test_two_factor.RegistrationTests.test_a_failed_email_creates_no_account) ... 2026-11-21 22:21:58,084 ERROR profiles.two_factor: Couldn't email a register code to user 427: OSError('smtp down')
+2026-11-21 22:21:58,085 ERROR django.request: Service Unavailable: /api/auth/register/
 ok
 test_registration_needs_the_emailed_code_before_a_token (profiles.test_two_factor.RegistrationTests.test_registration_needs_the_emailed_code_before_a_token) ... ok
 test_at_most_three_resends (profiles.test_two_factor.ResendTests.test_at_most_three_resends) ... ok
@@ -500,6 +500,7 @@ test_milestones_exist_and_are_due (recommendations.test_heldout.HeldOutProfileTe
 test_profiles_put_the_intended_domains_on_top (recommendations.test_heldout.HeldOutProfileTests.test_profiles_put_the_intended_domains_on_top) ... ok
 test_conflicting_grades_are_refused (recommendations.test_learned_ranker.EvaluateLearnedRankerTests.test_conflicting_grades_are_refused) ... ok
 test_withholds_results_until_every_top_5_is_labelled (recommendations.test_learned_ranker.EvaluateLearnedRankerTests.test_withholds_results_until_every_top_5_is_labelled) ... ok
+test_reports_every_alpha_and_the_rule_and_stores_nothing (recommendations.test_lexical.AlphaSensitivityCommandTests.test_reports_every_alpha_and_the_rule_and_stores_nothing) ... ok
 test_nothing_is_stored (recommendations.test_lexical.CompareTfidfCommandTests.test_nothing_is_stored) ... ok
 test_reports_every_beta_and_the_rules_decision (recommendations.test_lexical.CompareTfidfCommandTests.test_reports_every_beta_and_the_rules_decision) ... ok
 test_unlabelled_pairs_can_be_exported_blind (recommendations.test_lexical.CompareTfidfCommandTests.test_unlabelled_pairs_can_be_exported_blind) ... ok
@@ -577,6 +578,10 @@ Same rank() and settings as sprint5-eval-v1, for fixed children. ... ok
 test_post_stores_top_5_and_returns_cards (recommendations.test_recommendations_api.GenerateTests.test_post_stores_top_5_and_returns_cards) ... ok
 test_repeat_post_returns_the_same_batch (recommendations.test_recommendations_api.GenerateTests.test_repeat_post_returns_the_same_batch) ... ok
 test_stored_scores_match_the_ranking (recommendations.test_recommendations_api.GenerateTests.test_stored_scores_match_the_ranking) ... ok
+test_a_milestone_recorded_after_midnight_is_dated_that_day (recommendations.test_recommendations_api.KenyanTimeTests.test_a_milestone_recorded_after_midnight_is_dated_that_day) ... ok
+test_a_plan_made_after_midnight_on_monday_starts_that_monday (recommendations.test_recommendations_api.KenyanTimeTests.test_a_plan_made_after_midnight_on_monday_starts_that_monday) ... ok
+test_after_midnight_in_kenya_is_the_next_day (recommendations.test_recommendations_api.KenyanTimeTests.test_after_midnight_in_kenya_is_the_next_day) ... ok
+test_the_default_time_zone_is_kenya (recommendations.test_recommendations_api.KenyanTimeTests.test_the_default_time_zone_is_kenya) ... ok
 test_other_bounds (recommendations.test_recommendations_api.RecommendationConstraintTests.test_other_bounds) ... ok
 test_ranking_score_bounds (recommendations.test_recommendations_api.RecommendationConstraintTests.test_ranking_score_bounds) ... ok
 test_unique_position_and_activity_per_batch (recommendations.test_recommendations_api.RecommendationConstraintTests.test_unique_position_and_activity_per_batch) ... ok
@@ -606,7 +611,7 @@ test_real_model_matches_profiles_to_their_domain (recommendations.test_retrieval
 System check identified no issues (0 silenced).
 
 Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]
-Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1598.56it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 2156.36it/s]
 ok
 test_embeddings_from_another_model_are_ignored (recommendations.test_retrieval.RetrieveTests.test_embeddings_from_another_model_are_ignored) ... ok
 test_language_delay_retrieves_language_activity_first (recommendations.test_retrieval.RetrieveTests.test_language_delay_retrieves_language_activity_first) ... ok
@@ -617,7 +622,7 @@ test_pregnancy_activities_only_for_expecting_parents (recommendations.test_retri
 test_unpublished_activities_are_never_candidates (recommendations.test_retrieval.RetrieveTests.test_unpublished_activities_are_never_candidates) ... ok
 test_each_sample_retrieves_its_domain_first (recommendations.test_spot_check.RealModelSpotCheckTests.test_each_sample_retrieves_its_domain_first) ... 
 Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]
-Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1575.00it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1863.56it/s]
 ok
 test_each_sample_profile_puts_an_expected_domain_on_top (recommendations.test_spot_check.SampleProfileTests.test_each_sample_profile_puts_an_expected_domain_on_top) ... ok
 test_samples_use_real_catalogue_milestones (recommendations.test_spot_check.SampleProfileTests.test_samples_use_real_catalogue_milestones) ... ok
@@ -677,7 +682,7 @@ test_least_recently_used_is_dropped (recommendations.test_embeddings.QueryCacheT
 test_size_zero_turns_the_cache_off (recommendations.test_embeddings.QueryCacheTests.test_size_zero_turns_the_cache_off) ... ok
 test_real_model_ranks_paraphrases_above_unrelated_text (recommendations.test_embeddings.RealSbertModelTests.test_real_model_ranks_paraphrases_above_unrelated_text) ... 
 Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]
-Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1498.28it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 1707.68it/s]
 ok
 test_k_must_be_positive (recommendations.test_evaluation.EvaluateTests.test_k_must_be_positive) ... ok
 test_means_and_unlabelled_counts (recommendations.test_evaluation.EvaluateTests.test_means_and_unlabelled_counts) ... ok
@@ -711,6 +716,8 @@ test_single_best (recommendations.test_heldout.SelectAlphaTests.test_single_best
 test_tie_goes_to_the_lower_alpha (recommendations.test_heldout.SelectAlphaTests.test_tie_goes_to_the_lower_alpha) ... ok
 test_tolerance_boundary_is_inclusive (recommendations.test_heldout.SelectAlphaTests.test_tolerance_boundary_is_inclusive) ... ok
 test_ranks_by_expected_gain (recommendations.test_learned_ranker.LearnedRankerUnitTests.test_ranks_by_expected_gain) ... ok
+test_a_flat_curve_supports_the_current_alpha (recommendations.test_lexical.AlphaSensitivityTests.test_a_flat_curve_supports_the_current_alpha) ... ok
+test_a_gap_over_the_tolerance_is_reported (recommendations.test_lexical.AlphaSensitivityTests.test_a_gap_over_the_tolerance_is_reported) ... ok
 test_a_large_enough_gain_switches (recommendations.test_lexical.ChooseBetaTests.test_a_large_enough_gain_switches) ... ok
 test_a_small_gain_keeps_sbert (recommendations.test_lexical.ChooseBetaTests.test_a_small_gain_keeps_sbert) ... ok
 test_exactly_the_minimum_gain_switches (recommendations.test_lexical.ChooseBetaTests.test_exactly_the_minimum_gain_switches) ... ok
@@ -786,7 +793,7 @@ test_missing_model_is_skipped_not_fatal (recommendations.test_warmup.WarmUpTests
 test_the_test_runner_never_imports_the_server_entry_points (recommendations.test_warmup.WarmUpTests.test_the_test_runner_never_imports_the_server_entry_points) ... ok
 
 ----------------------------------------------------------------------
-Ran 707 tests in 511.297s
+Ran 714 tests in 408.655s
 
 OK
 Destroying test database for alias 'default' ('test_nurtura_db')...

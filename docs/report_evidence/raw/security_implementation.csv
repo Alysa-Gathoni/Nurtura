@@ -1,9 +1,9 @@
 item,value,where
-Authentication,"ExpiringTokenAuthentication, SessionAuthentication",backend/nurtura_backend/settings.py:232
-Token lifecycle,"expires after 30 days, 0:00:00; two-step email code at login",backend/nurtura_backend/settings.py:226; backend/profiles/authentication.py:36; backend/profiles/two_factor.py
-Default permission,IsAuthenticated,backend/nurtura_backend/settings.py:238
+Authentication,"ExpiringTokenAuthentication, SessionAuthentication",backend/nurtura_backend/settings.py:236
+Token lifecycle,"expires after 30 days, 0:00:00; two-step email code at login",backend/nurtura_backend/settings.py:230; backend/profiles/authentication.py:36; backend/profiles/two_factor.py
+Default permission,IsAuthenticated,backend/nurtura_backend/settings.py:242
 Roles,"IsCaregiver, IsAdministrator, HasPrivacyConsent",backend/profiles/permissions.py:6
-Throttling,"{'login': '5/minute', 'two_factor': '10/minute', 'password_reset': '5/minute', 'account_delete': '5/minute'}",backend/nurtura_backend/settings.py:242
+Throttling,"{'login': '5/minute', 'two_factor': '10/minute', 'password_reset': '5/minute', 'account_delete': '5/minute'}",backend/nurtura_backend/settings.py:246
 Password validators,"UserAttributeSimilarityValidator, MinimumLengthValidator, CommonPasswordValidator, NumericPasswordValidator",backend/nurtura_backend/settings.py:148
 Admin restriction,is_staff follows the Administrator role; admin site needs an active staff user,backend/profiles/models.py:71
 Deletion rules,account deletion confirms with password (or email for Google accounts); child data cascades,backend/profiles/views.py:363; see 4d

@@ -1,12 +1,12 @@
 # Tests, CI and requirement coverage
 
-> Generated 2026-11-21T00:58:32+03:00 at commit `82ba4a5` by `backend\venv\Scripts\python.exe scripts\report_evidence\tests_and_ci.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T22:26:01+03:00 at commit `48210e2` by `backend\venv\Scripts\python.exe scripts\report_evidence\tests_and_ci.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1a. Test totals
 
 | Suite | Tests run | Result | Skipped | Time |
 |---|---|---|---|---|
-| Backend (`manage.py test -v 2`) | 707 | OK | 0 | 511.297 s |
+| Backend (`manage.py test -v 2`) | 714 | OK | 0 | 408.655 s |
 | Flutter (`flutter test --reporter json`) | 200 | {'success': 200} | 0 | |
 
 Skipped backend tests and the reason each gives:
@@ -17,14 +17,14 @@ Skipped backend tests and the reason each gives:
 
 Skipped Flutter tests: none.
 
-**Latest completed CI run on `main`:** CI, success, 2026-11-20T21:27:57Z (run 44820541525: Merge pull request #255 from <redacted>/feature/253-monday-plans).
+**Latest completed CI run on `main`:** CI, success, 2026-11-21T06:05:28Z (run 44873887273: Merge pull request #261 from <redacted>/test/260-alpha-check).
 
-**Skipped in that CI run (from its log):** Backend (Django, sqlite): 5, Backend (Django, postgresql): 3. CI runs without `-v`, so the log has counts only; the conditions in the code explain them:
+**Skipped in that CI run (from its log):** Backend (Django, postgresql): 3, Backend (Django, sqlite): 5. CI runs without `-v`, so the log has counts only; the conditions in the code explain them:
 
 | Test class | File | Runs only if | Reason given |
 |---|---|---|---|
 | RealSbertModelTests | backend/recommendations/test_embeddings.py:230 | `settings.SBERT_MODEL_PATH.exists()` | SBERT model not downloaded (run setup_sbert.py); skipped in CI |
-| ConcurrentPostTests | backend/recommendations/test_recommendations_api.py:694 | `connection.vendor == "postgresql"` | Row locking needs PostgreSQL; SQLite serialises writes differently |
+| ConcurrentPostTests | backend/recommendations/test_recommendations_api.py:737 | `connection.vendor == "postgresql"` | Row locking needs PostgreSQL; SQLite serialises writes differently |
 | RealModelRetrievalTests | backend/recommendations/test_retrieval.py:274 | `settings.SBERT_MODEL_PATH.exists()` | SBERT model not downloaded (run setup_sbert.py); skipped in CI |
 | RealModelSpotCheckTests | backend/recommendations/test_spot_check.py:169 | `settings.SBERT_MODEL_PATH.exists()` | SBERT model not downloaded (run setup_sbert.py); skipped in CI |
 
@@ -34,12 +34,12 @@ Raw: `raw/tests_backend_log.txt`, `raw/tests_flutter_log.jsonl`, `raw/ci_runs.js
 
 ## 2e. Test inventory
 
-906 tests in `raw/test_inventory.csv` (suite, test, file:line, first assertion, level, type):
+913 tests in `raw/test_inventory.csv` (suite, test, file:line, first assertion, level, type):
 
 | Suite | Level | Tests |
 |---|---|---|
-| backend | integration | 563 |
-| backend | unit | 144 |
+| backend | integration | 568 |
+| backend | unit | 146 |
 | flutter | end-to-end | 1 |
 | flutter | unit | 15 |
 | flutter | widget | 183 |

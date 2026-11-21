@@ -1,6 +1,6 @@
 # Workflow transcript (fictional caregiver)
 
-> Generated 2026-11-21T00:49:23+03:00 at commit `82ba4a5` by `backend\venv\Scripts\python.exe scripts\report_evidence\workflow_transcript.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T22:29:12+03:00 at commit `48210e2` by `backend\venv\Scripts\python.exe scripts\report_evidence\workflow_transcript.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 One fictional caregiver through the REST API, in one transaction that was rolled back (nothing saved). Emails were captured from the console backend; tokens, codes, challenges, device IDs and email addresses are `<redacted>`. Raw: `raw/workflow_transcript.json` (every request and response), `raw/workflow_rows.json` (rows read back before the rollback).
 
@@ -13,11 +13,11 @@ One fictional caregiver through the REST API, in one transaction that was rolled
 | 5 | Read the privacy notice | `GET /api/privacy-notice/` | 200 |
 | 6 | Agree to the privacy notice | `POST /api/auth/privacy-consent/` | 200 |
 | 7 | Create a child (about 13 months) | `POST /api/children/` | 201 |
-| 8 | Record "Waves bye-bye" as Not yet | `POST /api/children/1599/milestones/` | 201 |
-| 9 | Generate recommendations | `POST /api/children/1599/recommendations/` | 201 |
-| 10 | Read the stored batch | `GET /api/children/1599/recommendations/` | 200 |
-| 11 | Mark the first idea done | `PUT /api/recommendations/1747/completion/` | 201 |
-| 12 | Give feedback | `PUT /api/recommendations/1747/feedback/` | 201 |
+| 8 | Record "Waves bye-bye" as Not yet | `POST /api/children/1706/milestones/` | 201 |
+| 9 | Generate recommendations | `POST /api/children/1706/recommendations/` | 201 |
+| 10 | Read the stored batch | `GET /api/children/1706/recommendations/` | 200 |
+| 11 | Mark the first idea done | `PUT /api/recommendations/1862/completion/` | 201 |
+| 12 | Give feedback | `PUT /api/recommendations/1862/feedback/` | 201 |
 
 ## Rows created
 
@@ -33,22 +33,22 @@ First stored recommendation (fields as saved):
 
 ```json
 {
-  "id": 1747,
-  "child": 1599,
+  "id": 1862,
+  "child": 1706,
   "activity": 1235,
-  "batch": "7f9f0566-8e2e-4144-bdc8-b353c39afdb7",
+  "batch": "932831d4-fb56-48fb-aca2-ec5bb7acf0d9",
   "position": 1,
-  "similarity_score": 0.2193284521815665,
-  "ranking_score": 0.8635903336953925,
+  "similarity_score": 0.21811268134092165,
+  "ranking_score": 0.8638383816616524,
   "rule_priority": 1.0,
   "age_weight": 1.0,
   "alpha": 0.7,
-  "profile_fingerprint": "ae0113e1fec2825d58efbe7393059d9a68428eb4147ba18683adc99ac8e02d61",
+  "profile_fingerprint": "a7b0de375ad1c0bd72722fb2256c6561fb6a6f1d8becbf316ebf092b1721eee1",
   "ranking_version": "1bebb5441fd039526e63ec57f62d5d513a017a4bd839773fdfe00ff8b5d928c4",
   "pinned": false,
   "pin_note": "",
   "explanation_version": "2",
-  "date_generated": "2026-11-20 21:49:23.069220+00:00",
+  "date_generated": "2026-11-21 19:29:12.276135+00:00",
   "plan_start": "2026-11-16",
   "activity_id": "ACT-0179",
   "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn words for the things you do every day."

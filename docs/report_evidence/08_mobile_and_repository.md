@@ -1,6 +1,6 @@
 # Mobile app, repository and reader test
 
-> Generated 2026-11-21T00:51:40+03:00 at commit `82ba4a5` by `python scripts\report_evidence\mobile_and_repo.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T22:31:17+03:00 at commit `48210e2` by `python scripts\report_evidence\mobile_and_repo.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1h. Mobile app
 
@@ -91,12 +91,12 @@ Screens in `mobile/nurtura_app/lib/screens/` on `main` (every file on `main` is 
 |---|---|---|
 | URL | https://github.com/Alysa-Gathoni/Nurtura | `gh repo view` |
 | Default branch | main | `gh repo view` |
-| Tags | pre-weekly-plan 2026-11-20, sprint5-eval-v1 2026-10-10, sprint6-explanations-v1 2026-10-10, sprint9-eval-v2 2026-11-02 | `git tag` |
-| Merged pull requests | 127 | `gh pr list --state merged` |
-| Closed issues | 127 | `gh issue list --state closed` |
-| Commits on main | 318 | `git rev-list --count origin/main` |
-| CI runs (completed, last 294) | {'success': 289, 'failure': 5}; pass rate 98.3% | `gh run list` |
-| Contributors (GitHub) | 1 (logins redacted; contributions: [318]) | `gh api repos/.../contributors` |
+| Tags | pre-weekly-plan 2026-11-20, sprint5-eval-v1 2026-10-10, sprint6-explanations-v1 2026-10-10, sprint9-eval-v2 2026-11-02, sprint9-eval-v3 2026-11-21, sprint9-eval-v3.1 2026-11-21 | `git tag` |
+| Merged pull requests | 130 | `gh pr list --state merged` |
+| Closed issues | 130 | `gh issue list --state closed` |
+| Commits on main | 324 | `git rev-list --count origin/main` |
+| CI runs (completed, last 301) | {'success': 296, 'failure': 5}; pass rate 98.3% | `gh run list` |
+| Contributors (GitHub) | 1 (logins redacted; contributions: [324]) | `gh api repos/.../contributors` |
 
 Milestones (`raw/milestones_github.csv`). Milestones are set on issues; a merged PR counts towards its own milestone or, if it has none, the milestone of the issue it closes. Commits are those in those PRs. No milestone has been closed on GitHub, so there are no close dates.
 
@@ -109,7 +109,7 @@ Milestones (`raw/milestones_github.csv`). Milestones are set on issues; a merged
 | Sprint 6: Explainability | open | 2026-09-29 | open | 14 | 14 | 26 |
 | Sprint 7: Feedback & History | open | 2026-09-29 | open | 3 | 3 | 3 |
 | Sprint 8: Mobile App | open | 2026-09-29 | open | 27 | 27 | 37 |
-| Sprint 9: Evaluation | open | 2026-09-29 | open | 52 | 51 | 72 |
+| Sprint 9: Evaluation | open | 2026-09-29 | open | 55 | 54 | 75 |
 | Sprint 10: Documentation | open | 2026-09-29 | open | 5 | 5 | 7 |
 | Sprint 3.5: Minimal Mobile Shell | open | 2026-10-01 | open | 3 | 3 | 6 |
 | (no milestone) |  |  |  | 1 | 1 | 1 |

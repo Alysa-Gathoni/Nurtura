@@ -1,7 +1,7 @@
 {
   "per_job": {
-    "Backend (Django, sqlite)": 5,
-    "Backend (Django, postgresql)": 3
+    "Backend (Django, postgresql)": 3,
+    "Backend (Django, sqlite)": 5
   },
   "conditions": [
     {
@@ -12,7 +12,7 @@
     },
     {
       "class": "ConcurrentPostTests",
-      "file": "backend/recommendations/test_recommendations_api.py:694",
+      "file": "backend/recommendations/test_recommendations_api.py:737",
       "runs_only_if": "connection.vendor == \"postgresql\"",
       "reason": "Row locking needs PostgreSQL; SQLite serialises writes differently"
     },

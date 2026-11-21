@@ -1,6 +1,76 @@
 [
   {
     "conclusion": "success",
+    "createdAt": "2026-11-21T17:30:04Z",
+    "databaseId": 44930370274,
+    "displayTitle": "docs: record activity difficulty levels as future work (#262)",
+    "event": "pull_request",
+    "headBranch": "docs/262-difficulty-levels",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-21T06:05:28Z",
+    "databaseId": 44873887273,
+    "displayTitle": "Merge pull request #261 from <redacted>/test/260-alpha-check",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-21T06:04:56Z",
+    "databaseId": 44873840518,
+    "displayTitle": "Merge pull request #259 from <redacted>/fix/258-kenyan-time",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-20T23:09:08Z",
+    "databaseId": 44834629443,
+    "displayTitle": "test: check alpha at the SBERT/TF-IDF mix (#260)",
+    "event": "pull_request",
+    "headBranch": "test/260-alpha-check",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-20T22:56:46Z",
+    "databaseId": 44833018191,
+    "displayTitle": "fix: use Kenyan time (Africa/Nairobi) for dates (#258)",
+    "event": "pull_request",
+    "headBranch": "fix/258-kenyan-time",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-20T22:07:49Z",
+    "databaseId": 44826316065,
+    "displayTitle": "Merge pull request #257 from <redacted>/docs/256-evidence-refresh",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-20T21:59:11Z",
+    "databaseId": 44825061164,
+    "displayTitle": "docs: refresh the report evidence pack after the weekly plan and TF-IDF (#256)",
+    "event": "pull_request",
+    "headBranch": "docs/256-evidence-refresh",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
     "createdAt": "2026-11-20T21:27:57Z",
     "databaseId": 44820541525,
     "displayTitle": "Merge pull request #255 from <redacted>/feature/253-monday-plans",
@@ -1926,76 +1996,6 @@
     "displayTitle": "feat: two-step verification code screen in the app (#91)",
     "event": "pull_request",
     "headBranch": "feature/91-two-step-mobile",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-11T07:44:01Z",
-    "databaseId": 38122362477,
-    "displayTitle": "feat: modern, playful redesign with light and dark mode and a tabbed home (#90)",
-    "event": "pull_request",
-    "headBranch": "feature/90-redesign",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-11T07:23:08Z",
-    "databaseId": 38121184249,
-    "displayTitle": "feat: show the last recommendations offline (#85)",
-    "event": "pull_request",
-    "headBranch": "feature/85-offline-recommendations",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-11T07:23:03Z",
-    "databaseId": 38121179398,
-    "displayTitle": "feat: activity detail screen from a recommendation card (#84)",
-    "event": "pull_request",
-    "headBranch": "feature/84-activity-detail",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T20:37:28Z",
-    "databaseId": 38084469468,
-    "displayTitle": "feat: two-step verification by emailed code for app login (#86)",
-    "event": "pull_request",
-    "headBranch": "feature/86-two-step-verification",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T20:23:11Z",
-    "databaseId": 38083539337,
-    "displayTitle": "Merge pull request #83 from <redacted>/feature/82-recommendations-…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T20:22:57Z",
-    "databaseId": 38083522995,
-    "displayTitle": "Merge pull request #81 from <redacted>/docs/80-reader-test-form",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-10T18:37:06Z",
-    "databaseId": 38076501400,
-    "displayTitle": "feat: recommendations screen for the selected child (#82)",
-    "event": "pull_request",
-    "headBranch": "feature/82-recommendations-screen",
     "status": "completed",
     "workflowName": "CI"
   }

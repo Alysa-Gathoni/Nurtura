@@ -1,14 +1,15 @@
 # Chapter 6 inputs
 
-> Generated 2026-11-21T00:54:56+03:00 at commit `82ba4a5` by `backend\venv\Scripts\python.exe scripts\report_evidence\chapter6.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T22:33:22+03:00 at commit `48210e2` by `backend\venv\Scripts\python.exe scripts\report_evidence\chapter6.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 5a. Open issues, TODO/FIXME and known defects
 
-**Open issues** (`gh issue list --state open`; `raw/open_issues.csv`): 1.
+**Open issues** (`gh issue list --state open`; `raw/open_issues.csv`): 2.
 
 | # | Title | Labels | Milestone | Opened |
 |---|---|---|---|---|
-| 256 | Refresh the report evidence pack after the weekly plan and TF-IDF changes | docs | Sprint 9: Evaluation | 2026-11-20 |
+| 264 | docs: refresh the report evidence pack after Kenyan time and the α check | docs | Sprint 9: Evaluation | 2026-11-21 |
+| 262 | docs: record activity difficulty levels as future work | docs | Sprint 9: Evaluation | 2026-11-21 |
 
 **TODO / FIXME / XXX / HACK comments** in backend, app and scripts code (`raw/todo_fixme.csv`): 0.
 
@@ -20,7 +21,7 @@ None found.
 
 ## 5b. Stated limitations
 
-57 statements (`raw/limitations.csv`): every item in `docs/known_limitations.md`, lines that say "limitation" elsewhere in the README and docs, and code comments that state a limitation.
+59 statements (`raw/limitations.csv`): every item in `docs/known_limitations.md`, lines that say "limitation" elsewhere in the README and docs, and code comments that state a limitation.
 
 | Source | Statement |
 |---|---|
@@ -65,8 +66,9 @@ None found.
 | docs/known_limitations.md:64 | **The end-to-end test needs a person** to type the emailed code. It can't run unattended in CI. |
 | docs/known_limitations.md:65 | **The admin's fonts come from Google Fonts.** Offline, the admin falls back to system fonts. |
 | README.md:7 | **Where things stand:** see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) for the project in plain language, [docs/sprint_ii_review.md](docs/sprint_ii_review.md) for the current sprint status, and [docs/known_limitations.md](docs/known_limitations.md) f |
-| README.md:304 | / [docs/known_limitations.md](docs/known_limitations.md) / Known limitations and outstanding defects / |
+| README.md:305 | / [docs/known_limitations.md](docs/known_limitations.md) / Known limitations and outstanding defects / |
 | docs/activity_classifier_results.md:102 | ## Limitations |
+| docs/alpha_sensitivity_tfidf.md:14 | - **Reading:** apply the v2 α rule (every α within 0.02 of the best tune mean qualifies; the middle of that range wins). If 0.7 is within 0.02 of the best, the check supports it; otherwise it's a limitation for Chapter 5. |
 | docs/cognitive_walkthrough.md:104 | / 3 / The clinic message appears after a single "Not yet" / B3 / 3 / Keep (it follows CDC), and watch reactions in the sessions; have the wording reviewed by a health worker (already a known limitation). / |
 | docs/cognitive_walkthrough.md:110 | / 9 / Search and all text are English only / B2 / 2 / Known limitation (English only). / |
 | docs/cognitive_walkthrough.md:117 | ## Limitations |
@@ -81,6 +83,7 @@ None found.
 | docs/sprint_ii_review.md:31 | / Known limitations and outstanding defects documented honestly / Met / [known_limitations.md](known_limitations.md) / |
 | docs/sprint_ii_review.md:79 | / Language toggle (NFR-16) or English-only as a limitation / Decision needed / |
 | docs/testing_and_evaluation_record.md:176 | **Limitations:** small numbers, one rater who also designed the system, and constructed (not real) children. The test set preferred the α = 0 ablation (nDCG@5 0.873), so 0.7 is a reasonable default rather than an optimum. Caregiver feedback in Sprint 9 is the  |
+| backend/recommendations/management/commands/alpha_sensitivity.py:127 | f"{TOLERANCE}: record it as a limitation." |
 
 ## 5c. Decision log
 
@@ -153,7 +156,7 @@ From the "decisions" sections of merged pull requests (8 PRs, 32 decisions), gro
 | Add an activity | In the app as an administrator: Activities → add; or the web admin. New activities start as Draft | backend/activities/api.py:62; backend/activities/models.py:26 |
 | Publish it | Draft → Under Review → Published (skipping review is refused); then `python manage.py embed_activities` if the app didn't embed it | backend/activities/models.py:26; backend/recommendations/management/commands/embed_activities.py |
 | Bulk-load activities | `python manage.py seed_activities` (validates every row; new rows are Draft) | backend/activities/management/commands/seed_activities.py |
-| Change α | Set `RANKING_ALPHA` in `backend/.env` and restart; stored batches record the α they used | backend/nurtura_backend/settings.py:312 |
+| Change α | Set `RANKING_ALPHA` in `backend/.env` and restart; stored batches record the α they used | backend/nurtura_backend/settings.py:316 |
 | Change a rule or its weight | Edit the constants or `Rule` objects, then run the tests; the ranking version changes | backend/profiles/rules/guidelines.py:29 |
 | Rerun the evaluation | `python manage.py evaluate_alpha_grid --check-provenance`, then `evaluate_alpha_grid --markdown --report-alpha 0.7`, `evaluate_statistics`, `evaluate_beyond_accuracy`. A changed rule, α, activity or embedding makes the provenance check fail: label the new pool first | data/evaluation/README.md:13 |
 | Regenerate this evidence pack | `powershell -File scripts\report_evidence\run_all.ps1` | scripts/report_evidence/run_all.ps1 |

@@ -506,26 +506,29 @@ backend,EvaluateAlphaGridTests.test_alpha_is_chosen_on_tune_only,backend/recomme
 backend,LearnedRankerUnitTests.test_ranks_by_expected_gain,backend/recommendations/test_learned_ranker.py:17,"assertEqual(learned_ranker.rank(model, child), [""high"", ""mid"", ""low""])",unit,logic
 backend,EvaluateLearnedRankerTests.test_withholds_results_until_every_top_5_is_labelled,backend/recommendations/test_learned_ranker.py:65,"assertNotIn(""Test set (8 children)"", first)",integration,logic
 backend,EvaluateLearnedRankerTests.test_conflicting_grades_are_refused,backend/recommendations/test_learned_ranker.py:93,"assertRaisesMessage(CommandError, ""graded 2 in one sheet and 0""):",integration,logic
-backend,TfidfIndexTests.test_word_overlap_scores_highest,backend/recommendations/test_lexical.py:43,"assertEqual(int(scores.argmax()), 1)",unit,logic
-backend,TfidfIndexTests.test_scores_are_cosines_between_0_and_1,backend/recommendations/test_lexical.py:49,assertTrue(all(0.0 <= s <= 1.0 for s in scores)),unit,logic
-backend,TfidfIndexTests.test_stop_words_alone_match_nothing,backend/recommendations/test_lexical.py:53,"assertEqual(list(scores), [0.0, 0.0, 0.0])",unit,logic
-backend,TfidfIndexTests.test_an_activity_missing_from_the_index_scores_0,backend/recommendations/test_lexical.py:57,"assertEqual(list(self.index.similarities(""water"", [99])), [0.0])",unit,logic
-backend,ChooseBetaTests.test_a_large_enough_gain_switches,backend/recommendations/test_lexical.py:64,"assertEqual(choose_beta({0.5: 0.80, 1.0: 0.77}), 0.5)",unit,logic
-backend,ChooseBetaTests.test_a_small_gain_keeps_sbert,backend/recommendations/test_lexical.py:67,"assertEqual(choose_beta({0.5: 0.785, 1.0: 0.77}), 1.0)",unit,logic
-backend,ChooseBetaTests.test_sbert_best_keeps_sbert,backend/recommendations/test_lexical.py:70,"assertEqual(choose_beta({0.0: 0.60, 0.5: 0.70, 1.0: 0.77}), 1.0)",unit,logic
-backend,ChooseBetaTests.test_exactly_the_minimum_gain_switches,backend/recommendations/test_lexical.py:73,"assertEqual(choose_beta({0.25: 0.79, 1.0: 0.77}), 0.25)",unit,logic
-backend,ChooseBetaTests.test_no_sbert_mean_keeps_sbert,backend/recommendations/test_lexical.py:76,"assertEqual(choose_beta({0.5: 0.9, 1.0: None}), 1.0)",unit,logic
-backend,HybridRetrievalTests.test_beta_1_is_sbert_only_and_never_runs_tfidf,backend/recommendations/test_lexical.py:98,assertTrue(result.candidates),integration,logic
-backend,HybridRetrievalTests.test_beta_0_ranks_by_tfidf,backend/recommendations/test_lexical.py:105,assertEqual(,integration,logic
-backend,HybridRetrievalTests.test_a_hybrid_mixes_both,backend/recommendations/test_lexical.py:119,assertAlmostEqual(,integration,logic
-backend,HybridRetrievalTests.test_beta_outside_0_to_1_is_refused,backend/recommendations/test_lexical.py:134,assertRaises(ValueError):,integration,logic
-backend,HybridRetrievalTests.test_the_index_follows_changes_to_the_library,backend/recommendations/test_lexical.py:139,"assertIs(lexical.get_index(), first)  # unchanged: reused",integration,logic
-backend,ProvenanceTests.test_the_default_is_the_chosen_mix,backend/recommendations/test_lexical.py:151,"assertEqual(retrieval.retrieval_beta(), 0.25)",unit,logic
-backend,ProvenanceTests.test_beta_1_keeps_the_evaluated_fingerprint,backend/recommendations/test_lexical.py:156,"assertNotIn(""retrieval"", provenance.ranking_settings())",unit,logic
-backend,ProvenanceTests.test_a_hybrid_changes_the_fingerprint,backend/recommendations/test_lexical.py:163,"assertEqual(settings_[""retrieval""][""beta""], 0.5)",unit,logic
-backend,CompareTfidfCommandTests.test_reports_every_beta_and_the_rules_decision,backend/recommendations/test_lexical.py:185,"assertIn(name, output)",integration,logic
-backend,CompareTfidfCommandTests.test_nothing_is_stored,backend/recommendations/test_lexical.py:196,"assertEqual((Recommendation.objects.count(), User.objects.count()), before)",integration,logic
-backend,CompareTfidfCommandTests.test_unlabelled_pairs_can_be_exported_blind,backend/recommendations/test_lexical.py:203,"assertIn(""unlabelled pair(s)"", output)",integration,logic
+backend,TfidfIndexTests.test_word_overlap_scores_highest,backend/recommendations/test_lexical.py:44,"assertEqual(int(scores.argmax()), 1)",unit,logic
+backend,TfidfIndexTests.test_scores_are_cosines_between_0_and_1,backend/recommendations/test_lexical.py:50,assertTrue(all(0.0 <= s <= 1.0 for s in scores)),unit,logic
+backend,TfidfIndexTests.test_stop_words_alone_match_nothing,backend/recommendations/test_lexical.py:54,"assertEqual(list(scores), [0.0, 0.0, 0.0])",unit,logic
+backend,TfidfIndexTests.test_an_activity_missing_from_the_index_scores_0,backend/recommendations/test_lexical.py:58,"assertEqual(list(self.index.similarities(""water"", [99])), [0.0])",unit,logic
+backend,ChooseBetaTests.test_a_large_enough_gain_switches,backend/recommendations/test_lexical.py:65,"assertEqual(choose_beta({0.5: 0.80, 1.0: 0.77}), 0.5)",unit,logic
+backend,ChooseBetaTests.test_a_small_gain_keeps_sbert,backend/recommendations/test_lexical.py:68,"assertEqual(choose_beta({0.5: 0.785, 1.0: 0.77}), 1.0)",unit,logic
+backend,ChooseBetaTests.test_sbert_best_keeps_sbert,backend/recommendations/test_lexical.py:71,"assertEqual(choose_beta({0.0: 0.60, 0.5: 0.70, 1.0: 0.77}), 1.0)",unit,logic
+backend,ChooseBetaTests.test_exactly_the_minimum_gain_switches,backend/recommendations/test_lexical.py:74,"assertEqual(choose_beta({0.25: 0.79, 1.0: 0.77}), 0.25)",unit,logic
+backend,ChooseBetaTests.test_no_sbert_mean_keeps_sbert,backend/recommendations/test_lexical.py:77,"assertEqual(choose_beta({0.5: 0.9, 1.0: None}), 1.0)",unit,logic
+backend,HybridRetrievalTests.test_beta_1_is_sbert_only_and_never_runs_tfidf,backend/recommendations/test_lexical.py:99,assertTrue(result.candidates),integration,logic
+backend,HybridRetrievalTests.test_beta_0_ranks_by_tfidf,backend/recommendations/test_lexical.py:106,assertEqual(,integration,logic
+backend,HybridRetrievalTests.test_a_hybrid_mixes_both,backend/recommendations/test_lexical.py:120,assertAlmostEqual(,integration,logic
+backend,HybridRetrievalTests.test_beta_outside_0_to_1_is_refused,backend/recommendations/test_lexical.py:135,assertRaises(ValueError):,integration,logic
+backend,HybridRetrievalTests.test_the_index_follows_changes_to_the_library,backend/recommendations/test_lexical.py:140,"assertIs(lexical.get_index(), first)  # unchanged: reused",integration,logic
+backend,ProvenanceTests.test_the_default_is_the_chosen_mix,backend/recommendations/test_lexical.py:152,"assertEqual(retrieval.retrieval_beta(), 0.25)",unit,logic
+backend,ProvenanceTests.test_beta_1_keeps_the_evaluated_fingerprint,backend/recommendations/test_lexical.py:157,"assertNotIn(""retrieval"", provenance.ranking_settings())",unit,logic
+backend,ProvenanceTests.test_a_hybrid_changes_the_fingerprint,backend/recommendations/test_lexical.py:164,"assertEqual(settings_[""retrieval""][""beta""], 0.5)",unit,logic
+backend,CompareTfidfCommandTests.test_reports_every_beta_and_the_rules_decision,backend/recommendations/test_lexical.py:186,"assertIn(name, output)",integration,logic
+backend,CompareTfidfCommandTests.test_nothing_is_stored,backend/recommendations/test_lexical.py:197,"assertEqual((Recommendation.objects.count(), User.objects.count()), before)",integration,logic
+backend,CompareTfidfCommandTests.test_unlabelled_pairs_can_be_exported_blind,backend/recommendations/test_lexical.py:204,"assertIn(""unlabelled pair(s)"", output)",integration,logic
+backend,AlphaSensitivityTests.test_a_flat_curve_supports_the_current_alpha,backend/recommendations/test_lexical.py:218,"assertEqual(best, 0.82)",unit,logic
+backend,AlphaSensitivityTests.test_a_gap_over_the_tolerance_is_reported,backend/recommendations/test_lexical.py:226,"assertAlmostEqual(gap, 0.05)",unit,logic
+backend,AlphaSensitivityCommandTests.test_reports_every_alpha_and_the_rule_and_stores_nothing,backend/recommendations/test_lexical.py:246,"assertEqual((Recommendation.objects.count(), User.objects.count()), before)",integration,logic
 backend,OptionsForTests.test_no_feedback_or_no_outcome_gives_nothing,backend/recommendations/test_options.py:157,"assertEqual(options_for(rec, None), [])",integration,logic
 backend,OptionsForTests.test_too_hard_offers_an_easier_one_in_the_same_band,backend/recommendations/test_options.py:162,"assertEqual(first.reason, ""too_hard"")",integration,logic
 backend,OptionsForTests.test_too_hard_falls_back_to_the_band_below,backend/recommendations/test_options.py:170,"assertEqual(first.activity.activity_id, ""ACT-0904"")",integration,logic
@@ -638,18 +641,22 @@ backend,WeeklyPlanTests.test_a_plan_made_on_a_sunday_runs_to_the_following_sunda
 backend,WeeklyPlanTests.test_a_plan_started_mid_week_before_253_keeps_its_seven_days,backend/recommendations/test_recommendations_api.py:548,assertEqual(,integration,logic
 backend,WeeklyPlanTests.test_repeat_post_in_the_same_week_returns_the_same_plan,backend/recommendations/test_recommendations_api.py:565,"assertEqual(again.status_code, status.HTTP_200_OK)",integration,logic
 backend,WeeklyPlanTests.test_a_mid_week_change_refreshes_the_ideas_but_keeps_the_week,backend/recommendations/test_recommendations_api.py:573,"assertEqual(second.status_code, status.HTTP_201_CREATED)",integration,logic
-backend,WeeklyPlanTests.test_after_the_week_a_new_plan_starts,backend/recommendations/test_recommendations_api.py:596,"assertEqual(second.status_code, status.HTTP_201_CREATED)",integration,logic
-backend,WeeklyPlanTests.test_the_first_week_is_the_evaluated_top_5,backend/recommendations/test_recommendations_api.py:609,"assertEqual(self.ids(first), self.evaluated()[:5])",integration,logic
-backend,WeeklyPlanTests.test_a_new_week_keeps_2_untried_ideas_and_brings_3_new,backend/recommendations/test_recommendations_api.py:614,"assertEqual(self.ids(week2), e[0:2] + e[5:8])",integration,logic
-backend,WeeklyPlanTests.test_tried_ideas_dont_count_as_untried,backend/recommendations/test_recommendations_api.py:623,"assertEqual(self.ids(week2), [e[1], e[2], e[3], e[5], e[6]])",integration,logic
-backend,WeeklyPlanTests.test_a_mid_week_refresh_keeps_the_weeks_mix,backend/recommendations/test_recommendations_api.py:639,"assertEqual(refreshed.status_code, status.HTTP_201_CREATED)",integration,logic
-backend,WeeklyPlanTests.test_week_3_rotates_against_week_2,backend/recommendations/test_recommendations_api.py:653,"assertEqual(self.ids(week3), e[0:5])",integration,logic
-backend,WeeklyPlanTests.test_older_batches_start_on_the_day_they_were_generated,backend/recommendations/test_recommendations_api.py:664,assertEqual(,integration,logic
-backend,ReferralAPITests.test_due_not_yet_gives_referral_on_get_and_post,backend/recommendations/test_recommendations_api.py:679,"assertIn(""next clinic visit"", referral[""message""])",integration,logic
-backend,ReferralAPITests.test_no_due_not_yet_gives_null,backend/recommendations/test_recommendations_api.py:688,"assertIsNone(self.get().json()[""referral""])",integration,logic
-backend,ConcurrentPostTests.test_simultaneous_posts_store_one_batch,backend/recommendations/test_recommendations_api.py:707,assertEqual(,integration,api
-backend,FingerprintQueryTests.test_fingerprint_changes_with_the_query_only,backend/recommendations/test_recommendations_api.py:746,assertEqual(,integration,logic
-backend,FingerprintQueryTests.test_non_sensory_interest_change_stores_a_new_batch,backend/recommendations/test_recommendations_api.py:757,"assertEqual(after.evaluation.scores, before.evaluation.scores)",integration,logic
+backend,WeeklyPlanTests.test_after_the_week_a_new_plan_starts,backend/recommendations/test_recommendations_api.py:598,"assertEqual(second.status_code, status.HTTP_201_CREATED)",integration,logic
+backend,WeeklyPlanTests.test_the_first_week_is_the_evaluated_top_5,backend/recommendations/test_recommendations_api.py:611,"assertEqual(self.ids(first), self.evaluated()[:5])",integration,logic
+backend,WeeklyPlanTests.test_a_new_week_keeps_2_untried_ideas_and_brings_3_new,backend/recommendations/test_recommendations_api.py:616,"assertEqual(self.ids(week2), e[0:2] + e[5:8])",integration,logic
+backend,WeeklyPlanTests.test_tried_ideas_dont_count_as_untried,backend/recommendations/test_recommendations_api.py:625,"assertEqual(self.ids(week2), [e[1], e[2], e[3], e[5], e[6]])",integration,logic
+backend,WeeklyPlanTests.test_a_mid_week_refresh_keeps_the_weeks_mix,backend/recommendations/test_recommendations_api.py:641,"assertEqual(refreshed.status_code, status.HTTP_201_CREATED)",integration,logic
+backend,WeeklyPlanTests.test_week_3_rotates_against_week_2,backend/recommendations/test_recommendations_api.py:655,"assertEqual(self.ids(week3), e[0:5])",integration,logic
+backend,WeeklyPlanTests.test_older_batches_start_on_the_day_they_were_generated,backend/recommendations/test_recommendations_api.py:666,assertEqual(,integration,logic
+backend,KenyanTimeTests.test_the_default_time_zone_is_kenya,backend/recommendations/test_recommendations_api.py:695,"assertEqual(settings.TIME_ZONE, ""Africa/Nairobi"")",integration,logic
+backend,KenyanTimeTests.test_after_midnight_in_kenya_is_the_next_day,backend/recommendations/test_recommendations_api.py:698,"assertEqual(timezone.localdate(), self.MONDAY)",integration,logic
+backend,KenyanTimeTests.test_a_plan_made_after_midnight_on_monday_starts_that_monday,backend/recommendations/test_recommendations_api.py:704,assertEqual(,integration,logic
+backend,KenyanTimeTests.test_a_milestone_recorded_after_midnight_is_dated_that_day,backend/recommendations/test_recommendations_api.py:712,"assertEqual(record.observation_date, self.MONDAY)",integration,logic
+backend,ReferralAPITests.test_due_not_yet_gives_referral_on_get_and_post,backend/recommendations/test_recommendations_api.py:722,"assertIn(""next clinic visit"", referral[""message""])",integration,logic
+backend,ReferralAPITests.test_no_due_not_yet_gives_null,backend/recommendations/test_recommendations_api.py:731,"assertIsNone(self.get().json()[""referral""])",integration,logic
+backend,ConcurrentPostTests.test_simultaneous_posts_store_one_batch,backend/recommendations/test_recommendations_api.py:750,assertEqual(,integration,api
+backend,FingerprintQueryTests.test_fingerprint_changes_with_the_query_only,backend/recommendations/test_recommendations_api.py:789,assertEqual(,integration,logic
+backend,FingerprintQueryTests.test_non_sensory_interest_change_stores_a_new_batch,backend/recommendations/test_recommendations_api.py:800,"assertEqual(after.evaluation.scores, before.evaluation.scores)",integration,logic
 backend,ProfileQueryTests.test_query_describes_priority_domain_milestone_and_interests,backend/recommendations/test_retrieval.py:99,"assertIn(""a 6-month-old baby"", query)",integration,logic
 backend,ProfileQueryTests.test_no_evidence_gives_a_general_query,backend/recommendations/test_retrieval.py:112,"assertIn(description, query)",integration,logic
 backend,ProfileQueryTests.test_prenatal_query,backend/recommendations/test_retrieval.py:119,"assertIn(""an expecting parent during pregnancy"", query)",integration,logic

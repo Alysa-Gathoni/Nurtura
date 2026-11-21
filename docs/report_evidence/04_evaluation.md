@@ -1,6 +1,6 @@
 # Held-out evaluation (v2)
 
-> Generated 2026-11-21T00:48:16+03:00 at commit `82ba4a5` by `backend\venv\Scripts\python.exe scripts\report_evidence\evaluation.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T22:28:19+03:00 at commit `48210e2` by `backend\venv\Scripts\python.exe scripts\report_evidence\evaluation.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 Labels: `data/evaluation/heldout_labels_v2.csv`. Raw command output: `raw/alpha_grid_markdown.txt` (`manage.py evaluate_alpha_grid --markdown --report-alpha 0.7`). The tables below are recomputed from the same rankings and labels.
 
@@ -148,7 +148,7 @@ Grade-0 results in the top 5 (all 20 children), by area and by age band relative
 
 ## TF-IDF alongside SBERT (#248) and the app's retrieval (#250)
 
-The tables above are the frozen v2 record, ranked with SBERT only (β = 1, run here with `RETRIEVAL_BETA=1`). Since #250 the app's retrieval is `similarity = β × SBERT + (1 − β) × TF-IDF` with β = 0.25 (`backend/nurtura_backend/settings.py:318`, `backend/recommendations/retrieval.py:49`). The comparison below grades every top-5 pair: the v2 labels plus `data/evaluation/tfidf_extra.csv` (123 extra pairs, graded by the researcher; the nurse's grades are in `relevance_rater2`). Raw output: `raw/tfidf_comparison_markdown.txt` (`manage.py compare_tfidf --markdown --extra-labels data/evaluation/tfidf_extra.csv`). Mean nDCG@5:
+The tables above are the frozen v2 record, ranked with SBERT only (β = 1, run here with `RETRIEVAL_BETA=1`). Since #250 the app's retrieval is `similarity = β × SBERT + (1 − β) × TF-IDF` with β = 0.25 (`backend/nurtura_backend/settings.py:322`, `backend/recommendations/retrieval.py:49`). The comparison below grades every top-5 pair: the v2 labels plus `data/evaluation/tfidf_extra.csv` (123 extra pairs, graded by the researcher; the nurse's grades are in `relevance_rater2`). Raw output: `raw/tfidf_comparison_markdown.txt` (`manage.py compare_tfidf --markdown --extra-labels data/evaluation/tfidf_extra.csv`). Mean nDCG@5:
 
 | β | Tune, similarity-only | Tune, α = 0.7 | Test, similarity-only | Test, α = 0.7 |
 |---|---|---|---|---|
