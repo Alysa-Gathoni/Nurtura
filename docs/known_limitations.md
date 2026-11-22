@@ -1,6 +1,6 @@
 # Known limitations and outstanding defects
 
-> **Last updated: 2026-11-21 (#262).** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
+> **Last updated: 2026-11-22 (#268).** Each item is something the project knows about and says plainly. Where it's planned, the sprint is named; where it isn't, it's a limitation of this version.
 
 ## Outstanding defects
 
@@ -23,6 +23,7 @@ None known. Every defect found so far has been fixed and is recorded with its co
 - **Retrieval mixes SBERT with TF-IDF at β = 0.25** (#248, #250).
   - **Why:** once the 123 extra top-5 pairs were graded, every mix with TF-IDF beat SBERT only in the full ranking (α = 0.7). On the researcher's grades the rule fixed in advance chose β = 0 (tune nDCG@5 0.872 against 0.720); on the nurse's grades it chose β = 0.25 (κ 0.685 between them). β = 0.25 scores within 0.004 of β = 0 on test under both (0.882 with the researcher's grades) and keeps SBERT's matching by meaning, so it was chosen deliberately rather than by the rule alone.
   - **TF-IDF alone is a weaker search** (similarity-only); it helps alongside the rule priority and age weight.
+  - **Significance** (#268): on the 8 test children, v3 beats SBERT only (+0.305 nDCG@5, 95% CI [+0.164, +0.455], p = 0.008; nurse's grades p = 0.016), but its gain over the v2 system (+0.059, CI [−0.005, +0.127], p = 0.156) isn't significant. β was chosen on the tune children, so the tune figures aren't independent evidence ([eval_v3_statistics.md](eval_v3_statistics.md)).
   - **α wasn't re-tuned** for the mix; it stays 0.7. A sensitivity check (#260) found the curve flat from α 0.2 to 0.9 at β = 0.25, with 0.7 tied for the best on tune (0.822) ([alpha_sensitivity_tfidf.md](alpha_sensitivity_tfidf.md)).
   - **The provenance check** against `sprint9-eval-v2` now reports one expected difference, "ranking settings changed: retrieval". With `RETRIEVAL_BETA=1` it matches, and the v2 figures reproduce ([tfidf_comparison.md](tfidf_comparison.md)).
 - **α is a reasonable default, not an optimum.** The test set preferred the α = 0 ablation (nDCG@5 0.873 against 0.814 for α = 0.7), and the tune curve is flat from 0.4 to 1.0.

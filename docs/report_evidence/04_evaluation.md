@@ -1,6 +1,6 @@
 # Held-out evaluation (v2)
 
-> Generated 2026-11-21T23:21:52+03:00 at commit `45ea972` by `backend\venv\Scripts\python.exe scripts\report_evidence\evaluation.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-22T18:57:00+03:00 at commit `ed61532` by `backend\venv\Scripts\python.exe scripts\report_evidence\evaluation.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 Labels: `data/evaluation/heldout_labels_v2.csv`. Raw command output: `raw/alpha_grid_markdown.txt` (`manage.py evaluate_alpha_grid --markdown --report-alpha 0.7`). The tables below are recomputed from the same rankings and labels.
 
@@ -159,3 +159,27 @@ The tables above are the frozen v2 record, ranked with SBERT only (β = 1, run h
 | beta 1.00 (SBERT only) | 0.535 | 0.720 | 0.577 | 0.823 |
 
 The pre-registered rule's choice on these labels: beta 0.00 (TF-IDF only). The app uses β = 0.25, chosen deliberately: it is the rule's choice on the nurse's grades and within 0.004 of β = 0 on test under both raters (`docs/tfidf_comparison.md:108`).
+
+## Significance tests for v3 (#268)
+
+The app's configuration (β = 0.25, α = 0.7) against SBERT only and against the v2 system (β = 1, α = 0.7), on the same labels (v2 sheet plus `data/evaluation/tfidf_extra.csv`). Per-child nDCG@5 differences, bootstrap 95% CI (10,000 resamples of children, seed 2026), two-sided Wilcoxon signed-rank test; the 8 test children are primary. The plan was fixed in issue #268 before the run (`docs/eval_v3_statistics.md:9`). β was chosen on the tune children, so tune figures against the v2 system aren't independent evidence. Raw output: `raw/v3_statistics_markdown.txt` (`manage.py evaluate_v3_statistics --markdown`).
+
+### Paired nDCG@5, researcher's grades
+| Against | Children | n | v3 | Other | Difference | 95% CI | Better/tied/worse | Non-zero | W | p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| SBERT only (beta 1, similarity only) | Test (primary) | 8 | 0.882 | 0.577 | +0.305 | [+0.164, +0.455] | 8/0/0 | 8 | 0 | 0.008 |
+| SBERT only (beta 1, similarity only) | Tune | 11 | 0.822 | 0.535 | +0.287 | [+0.168, +0.400] | 9/1/1 | 10 | 1 | 0.004 |
+| SBERT only (beta 1, similarity only) | Tune + test | 19 | 0.847 | 0.553 | +0.295 | [+0.204, +0.385] | 17/1/1 | 18 | 2 | < 0.001 |
+| v2 system (beta 1, alpha 0.7) | Test (primary) | 8 | 0.882 | 0.823 | +0.059 | [-0.005, +0.127] | 5/2/1 | 6 | 3 | 0.156 |
+| v2 system (beta 1, alpha 0.7) | Tune | 11 | 0.822 | 0.720 | +0.103 | [+0.027, +0.189] | 8/2/1 | 9 | 4.5 | 0.031 |
+| v2 system (beta 1, alpha 0.7) | Tune + test | 19 | 0.847 | 0.763 | +0.084 | [+0.032, +0.143] | 13/4/2 | 15 | 13.5 | 0.008 |
+
+### Paired nDCG@5, nurse's grades
+| Against | Children | n | v3 | Other | Difference | 95% CI | Better/tied/worse | Non-zero | W | p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| SBERT only (beta 1, similarity only) | Test (primary) | 8 | 0.788 | 0.382 | +0.406 | [+0.225, +0.561] | 7/0/1 | 8 | 1 | 0.016 |
+| SBERT only (beta 1, similarity only) | Tune | 11 | 0.802 | 0.400 | +0.402 | [+0.305, +0.492] | 11/0/0 | 11 | 0 | < 0.001 |
+| SBERT only (beta 1, similarity only) | Tune + test | 19 | 0.796 | 0.393 | +0.404 | [+0.307, +0.489] | 18/0/1 | 19 | 2 | < 0.001 |
+| v2 system (beta 1, alpha 0.7) | Test (primary) | 8 | 0.788 | 0.700 | +0.089 | [-0.020, +0.213] | 3/2/3 | 6 | 6 | 0.438 |
+| v2 system (beta 1, alpha 0.7) | Tune | 11 | 0.802 | 0.683 | +0.119 | [+0.037, +0.210] | 7/4/0 | 7 | 0 | 0.016 |
+| v2 system (beta 1, alpha 0.7) | Tune + test | 19 | 0.796 | 0.690 | +0.106 | [+0.039, +0.181] | 10/6/3 | 13 | 12 | 0.017 |

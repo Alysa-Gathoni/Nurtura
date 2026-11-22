@@ -422,6 +422,27 @@ The tables above are the frozen v2 record, ranked with SBERT only (β = 1, run h
 
 The pre-registered rule's choice on these labels: {chosen.group(1) if chosen else 'UNKNOWN'}. The app uses β = {app_beta:g}, chosen deliberately: it is the rule's choice on the nurse's grades and within 0.004 of β = 0 on test under both raters (`docs/tfidf_comparison.md:{line_of('docs/tfidf_comparison.md', '^## Adopted')}`).
 """
+    # v3 significance tests (#268), at the app's beta (this process runs at 1).
+    from django.test.utils import override_settings
+
+    v3_out = StringIO()
+    with override_settings(RETRIEVAL_BETA=app_beta):
+        call_command(
+            "evaluate_v3_statistics",
+            "--markdown",
+            "--extra-labels",
+            str(ROOT / TFIDF_EXTRA),
+            stdout=v3_out,
+        )
+    v3_text = v3_out.getvalue()
+    write_text("v3_statistics_markdown.txt", v3_text)
+    v3_tables = re.sub(r"^## ", "### ", v3_text.split("## Paired", 1)[1], flags=re.M)
+    body += f"""
+## Significance tests for v3 (#268)
+
+The app's configuration (β = {app_beta:g}, α = {REPORTED_ALPHA:g}) against SBERT only and against the v2 system (β = 1, α = {REPORTED_ALPHA:g}), on the same labels (v2 sheet plus `{TFIDF_EXTRA}`). Per-child nDCG@5 differences, bootstrap 95% CI (10,000 resamples of children, seed 2026), two-sided Wilcoxon signed-rank test; the 8 test children are primary. The plan was fixed in issue #268 before the run (`docs/eval_v3_statistics.md:{line_of('docs/eval_v3_statistics.md', '^## Plan')}`). β was chosen on the tune children, so tune figures against the v2 system aren't independent evidence. Raw output: `raw/v3_statistics_markdown.txt` (`manage.py evaluate_v3_statistics --markdown`).
+
+### Paired{v3_tables}"""
     write_md("04_evaluation.md", body, "Held-out evaluation (v2)", COMMAND)
     print("ok", len(sources), "grade-0 slots")
 
