@@ -1,0 +1,9 @@
+{
+  "profiles": 20,
+  "explanations": 100,
+  "max_sentences_per_explanation": 3,
+  "items_named": 122,
+  "items_not_in_stored_profile": 0,
+  "explanations_showing_a_score": 0,
+  "examples_not_in_profile": []
+}

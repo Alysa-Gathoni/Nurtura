@@ -1,12 +1,12 @@
 # Tests, CI and requirement coverage
 
-> Generated 2026-11-21T23:32:44+03:00 at commit `45ea972` by `backend\venv\Scripts\python.exe scripts\report_evidence\tests_and_ci.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T00:19:21+03:00 at commit `3966c02` by `backend\venv\Scripts\python.exe scripts\report_evidence\tests_and_ci.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1a. Test totals
 
 | Suite | Tests run | Result | Skipped | Time |
 |---|---|---|---|---|
-| Backend (`manage.py test -v 2`) | 714 | OK | 0 | 769.961 s |
+| Backend (`manage.py test -v 2`) | 728 | OK | 0 | 473.092 s |
 | Flutter (`flutter test --reporter json`) | 200 | {'success': 200} | 0 | |
 
 Skipped backend tests and the reason each gives:
@@ -17,7 +17,7 @@ Skipped backend tests and the reason each gives:
 
 Skipped Flutter tests: none.
 
-**Latest completed CI run on `main`:** CI, success, 2026-11-21T19:38:16Z (run 44941993266: Merge pull request #265 from <redacted>/docs/264-evidence-refresh).
+**Latest completed CI run on `main`:** CI, success, 2026-11-22T16:44:00Z (run 45045467383: Merge pull request #269 from <redacted>/test/268-v3-statistics).
 
 **Skipped in that CI run (from its log):** Backend (Django, sqlite): 5, Backend (Django, postgresql): 3. CI runs without `-v`, so the log has counts only; the conditions in the code explain them:
 
@@ -34,12 +34,12 @@ Raw: `raw/tests_backend_log.txt`, `raw/tests_flutter_log.jsonl`, `raw/ci_runs.js
 
 ## 2e. Test inventory
 
-913 tests in `raw/test_inventory.csv` (suite, test, file:line, first assertion, level, type):
+927 tests in `raw/test_inventory.csv` (suite, test, file:line, first assertion, level, type):
 
 | Suite | Level | Tests |
 |---|---|---|
-| backend | integration | 568 |
-| backend | unit | 146 |
+| backend | integration | 575 |
+| backend | unit | 153 |
 | flutter | end-to-end | 1 |
 | flutter | unit | 15 |
 | flutter | widget | 183 |

@@ -1,6 +1,56 @@
 [
   {
     "conclusion": "success",
+    "createdAt": "2026-11-22T16:44:00Z",
+    "databaseId": 45045467383,
+    "displayTitle": "Merge pull request #269 from <redacted>/test/268-v3-statistics",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-22T15:57:17Z",
+    "databaseId": 45041106632,
+    "displayTitle": "test: significance tests for the v3 configuration (#268)",
+    "event": "pull_request",
+    "headBranch": "test/268-v3-statistics",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-22T15:55:33Z",
+    "databaseId": 45040958636,
+    "displayTitle": "Merge pull request #267 from <redacted>/docs/266-final-evidence",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-22T15:46:23Z",
+    "databaseId": 45040144994,
+    "displayTitle": "test: significance tests for the v3 configuration (#268)",
+    "event": "pull_request",
+    "headBranch": "test/268-v3-statistics",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-21T20:33:13Z",
+    "databaseId": 44946880769,
+    "displayTitle": "docs: final refresh of the report evidence pack before submission (#266)",
+    "event": "pull_request",
+    "headBranch": "docs/266-final-evidence",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
     "createdAt": "2026-11-21T19:38:16Z",
     "databaseId": 44941993266,
     "displayTitle": "Merge pull request #265 from <redacted>/docs/264-evidence-refresh",
@@ -1946,56 +1996,6 @@
     "displayTitle": "feat: administrator feedback review (#96)",
     "event": "pull_request",
     "headBranch": "feature/96-admin-feedback-review",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-14T16:54:03Z",
-    "databaseId": 38602005391,
-    "displayTitle": "feat: submit feedback on a recommendation via FeedbackManager (#95)",
-    "event": "pull_request",
-    "headBranch": "feature/95-feedback-manager",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-14T16:48:18Z",
-    "databaseId": 38601180834,
-    "displayTitle": "feat: mark a recommendation as completed (#94)",
-    "event": "pull_request",
-    "headBranch": "feature/94-mark-completed",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-14T10:23:27Z",
-    "databaseId": 38549230648,
-    "displayTitle": "Merge pull request #93 from <redacted>/feature/91-two-step-mobile",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-14T10:22:43Z",
-    "databaseId": 38549144606,
-    "displayTitle": "Merge pull request #87 from <redacted>/feature/86-two-step-verific…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-14T10:22:27Z",
-    "databaseId": 38549113313,
-    "displayTitle": "Merge pull request #92 from <redacted>/feature/90-redesign",
-    "event": "push",
-    "headBranch": "main",
     "status": "completed",
     "workflowName": "CI"
   }

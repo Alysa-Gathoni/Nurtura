@@ -1,0 +1,85 @@
+setting,set,rater,top5_pairs,graded,ungraded
+SBERT only,tune,researcher,55,55,0
+SBERT only,tune,nurse,55,55,0
+SBERT only,test,researcher,40,40,0
+SBERT only,test,nurse,40,40,0
+SBERT only,gap,researcher,5,5,0
+SBERT only,gap,nurse,5,5,0
+Hybrid retrieval only,tune,researcher,55,55,0
+Hybrid retrieval only,tune,nurse,55,55,0
+Hybrid retrieval only,test,researcher,40,40,0
+Hybrid retrieval only,test,nurse,40,40,0
+Hybrid retrieval only,gap,researcher,5,5,0
+Hybrid retrieval only,gap,nurse,5,5,0
+alpha 0.0,tune,researcher,55,50,5
+alpha 0.0,tune,nurse,55,50,5
+alpha 0.0,test,researcher,40,35,5
+alpha 0.0,test,nurse,40,35,5
+alpha 0.0,gap,researcher,5,3,2
+alpha 0.0,gap,nurse,5,3,2
+alpha 0.1,tune,researcher,55,53,2
+alpha 0.1,tune,nurse,55,53,2
+alpha 0.1,test,researcher,40,39,1
+alpha 0.1,test,nurse,40,39,1
+alpha 0.1,gap,researcher,5,4,1
+alpha 0.1,gap,nurse,5,4,1
+alpha 0.2,tune,researcher,55,55,0
+alpha 0.2,tune,nurse,55,55,0
+alpha 0.2,test,researcher,40,40,0
+alpha 0.2,test,nurse,40,40,0
+alpha 0.2,gap,researcher,5,4,1
+alpha 0.2,gap,nurse,5,4,1
+alpha 0.3,tune,researcher,55,55,0
+alpha 0.3,tune,nurse,55,55,0
+alpha 0.3,test,researcher,40,40,0
+alpha 0.3,test,nurse,40,40,0
+alpha 0.3,gap,researcher,5,4,1
+alpha 0.3,gap,nurse,5,4,1
+alpha 0.4,tune,researcher,55,55,0
+alpha 0.4,tune,nurse,55,55,0
+alpha 0.4,test,researcher,40,40,0
+alpha 0.4,test,nurse,40,40,0
+alpha 0.4,gap,researcher,5,5,0
+alpha 0.4,gap,nurse,5,5,0
+alpha 0.5,tune,researcher,55,55,0
+alpha 0.5,tune,nurse,55,55,0
+alpha 0.5,test,researcher,40,40,0
+alpha 0.5,test,nurse,40,40,0
+alpha 0.5,gap,researcher,5,5,0
+alpha 0.5,gap,nurse,5,5,0
+alpha 0.6,tune,researcher,55,55,0
+alpha 0.6,tune,nurse,55,55,0
+alpha 0.6,test,researcher,40,40,0
+alpha 0.6,test,nurse,40,40,0
+alpha 0.6,gap,researcher,5,5,0
+alpha 0.6,gap,nurse,5,5,0
+alpha 0.7,tune,researcher,55,55,0
+alpha 0.7,tune,nurse,55,55,0
+alpha 0.7,test,researcher,40,40,0
+alpha 0.7,test,nurse,40,40,0
+alpha 0.7,gap,researcher,5,5,0
+alpha 0.7,gap,nurse,5,5,0
+alpha 0.8,tune,researcher,55,55,0
+alpha 0.8,tune,nurse,55,55,0
+alpha 0.8,test,researcher,40,40,0
+alpha 0.8,test,nurse,40,40,0
+alpha 0.8,gap,researcher,5,5,0
+alpha 0.8,gap,nurse,5,5,0
+alpha 0.9,tune,researcher,55,55,0
+alpha 0.9,tune,nurse,55,55,0
+alpha 0.9,test,researcher,40,40,0
+alpha 0.9,test,nurse,40,40,0
+alpha 0.9,gap,researcher,5,5,0
+alpha 0.9,gap,nurse,5,5,0
+alpha 1.0,tune,researcher,55,55,0
+alpha 1.0,tune,nurse,55,55,0
+alpha 1.0,test,researcher,40,40,0
+alpha 1.0,test,nurse,40,40,0
+alpha 1.0,gap,researcher,5,5,0
+alpha 1.0,gap,nurse,5,5,0
+No age weight,tune,researcher,55,53,2
+No age weight,tune,nurse,55,53,2
+No age weight,test,researcher,40,39,1
+No age weight,test,nurse,40,39,1
+No age weight,gap,researcher,5,5,0
+No age weight,gap,nurse,5,5,0

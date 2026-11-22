@@ -1,0 +1,5 @@
+setting,test_ndcg5,test_ungraded,full_minus_this,ci_low,ci_high,better_tied_worse,wilcoxon_w,p
+Full system,0.8819060845557395,0,,,,,,
+No age weight,,1,,,,,,
+No rule priority (age weight + similarity),,5,,,,,,
+Similarity only (hybrid retrieval),0.6043378981516302,0,0.27756818640410924,0.141352506284856,0.4217071994347179,8/0/0,0.0,0.0078125

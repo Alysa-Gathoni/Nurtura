@@ -17,6 +17,7 @@ from activities.tests import activity_fields
 from profiles.models import ChildProfile, ReferenceMilestone
 
 from . import embeddings, heldout
+from .explanation_check import named_in
 from .explanations import (
     AREA,
     EXPLANATION_VERSION,
@@ -40,30 +41,12 @@ BANNED = re.compile(
     r"lagging|slow|score|priority|similarity|rank\w*)\b",
     re.I,
 )
-SUPPORT_TO_DOMAIN = {phrase: domain for domain, phrase in SUPPORT.items()}
 
 
 def months_old(months):
     return timezone.localdate() - datetime.timedelta(
         days=round(months * 365.25 / 12) + 1
     )
-
-
-def named_in(text):
-    """What an explanation names, read back from its text alone."""
-    milestones = [
-        m.replace("‘", '"').replace("’", '"') for m in re.findall(r"“(.*?)”", text)
-    ]
-    concerns = [
-        SUPPORT_TO_DOMAIN[m]
-        for m in re.findall(r"like support with (.+?)(?: and that|\.|,)", text)
-    ]
-    interests = []
-    for phrase in re.findall(
-        r"(?:enjoys|activity uses|It uses) (.+?)(?:, which|;|\.|,)", text
-    ):
-        interests.extend(p.strip() for p in phrase.split(" and "))
-    return milestones, concerns, interests
 
 
 class ExplanationTestCase(APITestCase):

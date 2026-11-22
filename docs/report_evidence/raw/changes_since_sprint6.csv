@@ -89,3 +89,5 @@ pr,merged,title,summary
 261,2026-11-21,test: check alpha at the SBERT/TF-IDF mix (#260),"A new command, `manage.py alpha_sensitivity`,** checks α at the app's retrieval mix (β = 0.25):"
 263,2026-11-21,docs: record activity difficulty levels as future work (#262),"Adds a known limitation recording difficulty levels, the lecturer's suggestion, as future work."
 265,2026-11-21,docs: refresh the report evidence pack after Kenyan time and the α check (#264),"Regenerates `docs/report_evidence/` with `scripts/report_evidence/run_all.ps1` on `main` at 48210e2, after #259 (Kenyan time), #261 (α check) and #263 (difficulty levels)."
+267,2026-11-22,docs: final refresh of the report evidence pack before submission (#266),"Regenerates `docs/report_evidence/` with `scripts/report_evidence/run_all.ps1` on `main` at 45ea972, as the final state for submission."
+269,2026-11-22,test: significance tests for the v3 configuration (#268),"Adds `manage.py evaluate_v3_statistics`: paired significance tests for the configuration the app uses since #250 (SBERT + TF-IDF at β = 0.25, α = 0.7), with the same method as the v2 tests (#196). The plan was fixed in #"
