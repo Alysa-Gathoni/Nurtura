@@ -443,7 +443,29 @@ The pre-registered rule's choice on these labels: {chosen.group(1) if chosen els
 The app's configuration (β = {app_beta:g}, α = {REPORTED_ALPHA:g}) against SBERT only and against the v2 system (β = 1, α = {REPORTED_ALPHA:g}), on the same labels (v2 sheet plus `{TFIDF_EXTRA}`). Per-child nDCG@5 differences, bootstrap 95% CI (10,000 resamples of children, seed 2026), two-sided Wilcoxon signed-rank test; the 8 test children are primary. The plan was fixed in issue #268 before the run (`docs/eval_v3_statistics.md:{line_of('docs/eval_v3_statistics.md', '^## Plan')}`). β was chosen on the tune children, so tune figures against the v2 system aren't independent evidence. Raw output: `raw/v3_statistics_markdown.txt` (`manage.py evaluate_v3_statistics --markdown`).
 
 ### Paired{v3_tables}"""
-    write_md("04_evaluation.md", body, "Held-out evaluation (v2)", COMMAND)
+    # Full evaluation of the current system (#270), at the app's beta.
+    from _common import RAW
+
+    full_out = StringIO()
+    with override_settings(RETRIEVAL_BETA=app_beta):
+        call_command(
+            "evaluate_v3_full",
+            "--markdown",
+            "--extra-labels",
+            str(ROOT / TFIDF_EXTRA),
+            "--raw-dir",
+            str(RAW),
+            stdout=full_out,
+        )
+    full_text = full_out.getvalue()
+    write_text("v3_full_markdown.txt", full_text)
+    full_sections = re.sub(r"^## ", "### ", full_text, flags=re.M)
+    body += f"""
+## Full evaluation of the current system (v3)
+
+The configuration the app uses (β = {app_beta:g}, α = {REPORTED_ALPHA:g}), evaluated in full with the v2 method, so Chapter 5 can report the current system (#270). The plan was committed before the run (`docs/eval_v3_full_plan.md:{line_of('docs/eval_v3_full_plan.md', '^## What is computed')}`). Labels: the v2 sheet plus `{TFIDF_EXTRA}`; researcher's grades unless stated. No grade is imputed and no ungraded pair counts as 0: figures that need one are UNKNOWN, and every ungraded pair is in `raw/v3_ungraded_pairs.csv` with empty grade columns. Command: `manage.py evaluate_v3_full --markdown --raw-dir docs/report_evidence/raw` (raw output `raw/v3_full_markdown.txt`). Raw tables: `raw/v3_alpha_grid.csv`, `raw/v3_test_results.csv`, `raw/v3_per_profile_by_rater.csv`, `raw/v3_rater_agreement.json`, `raw/v3_confusion.csv`, `raw/v3_beyond_accuracy.csv`, `raw/v3_rank_grade_matrix.csv`, `raw/v3_ablation.csv`, `raw/v3_explanation_check.json`, `raw/v3_label_coverage.csv`. Figures: `figures/v3_alpha_curve.png`, `figures/v3_per_profile.png`, `figures/v3_grade_by_rank.png` (see `09_figures.md`).
+{full_sections}"""
+    write_md("04_evaluation.md", body, "Held-out evaluation (v2 and v3)", COMMAND)
     print("ok", len(sources), "grade-0 slots")
 
 

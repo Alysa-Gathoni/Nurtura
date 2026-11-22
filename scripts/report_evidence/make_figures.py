@@ -200,6 +200,178 @@ def heatmap():
     return f"{sum(flat)} Published activities; every area × age cell has between {min(flat)} and {max(flat)}."
 
 
+# v3 figures (#270): white background, black and grey only, print-sized text.
+GREY = {
+    "full": "#000000",
+    "hybrid": "#7A7A7A",
+    "sbert": "#BDBDBD",
+    0: "#000000",
+    1: "#8C8C8C",
+    2: "#D9D9D9",
+    "ungraded": "#FFFFFF",
+}
+PRINT = {
+    "font.size": 11,
+    "axes.labelsize": 11,
+    "xtick.labelsize": 10,
+    "ytick.labelsize": 10,
+    "legend.fontsize": 9,
+    "text.color": "black",
+    "axes.labelcolor": "black",
+    "axes.edgecolor": "black",
+    "xtick.color": "black",
+    "ytick.color": "black",
+    "figure.facecolor": "white",
+    "axes.facecolor": "white",
+    "savefig.facecolor": "white",
+}
+
+
+def number(text):
+    return float(text) if text not in ("", None) else None
+
+
+def v3_alpha_curve():
+    data = rows("v3_alpha_grid.csv")
+    pts = [r for r in data if r["alpha"]]
+    base = {r["setting"]: r for r in data if not r["alpha"]}
+    with plt.rc_context(PRINT):
+        fig, ax = plt.subplots(figsize=(6.5, 4))
+        for split, style, marker in (("tune", "-", "o"), ("test", "--", "s")):
+            known = [
+                (float(r["alpha"]), number(r[f"{split}_ndcg5"]))
+                for r in pts
+                if number(r[f"{split}_ndcg5"]) is not None
+            ]
+            ax.plot(
+                [a for a, _ in known],
+                [v for _, v in known],
+                ls=style,
+                marker=marker,
+                color="black",
+                mfc="white" if split == "test" else "black",
+                label=f"v3 ranking, {split}",
+            )
+        for name, ls in (("SBERT only", ":"), ("Hybrid retrieval only", "-.")):
+            ax.axhline(
+                number(base[name]["test_ndcg5"]),
+                color="#555555",
+                ls=ls,
+                lw=1,
+                label=f"{name}, test",
+            )
+        ax.axvline(0.7, color="#999999", lw=0.8)
+        ax.text(0.71, 0.96, "α = 0.7 (app)", color="black", fontsize=9, va="top")
+        ax.set_xlabel("α (weight of rule priority)")
+        ax.set_ylabel("Mean nDCG@5")
+        ax.set_xlim(-0.03, 1.03)
+        ax.set_ylim(0, 1)
+        ax.legend(frameon=False, loc="lower left")
+        save(fig, "v3_alpha_curve.png")
+    missing = [r["alpha"] for r in pts if number(r["tune_ndcg5"]) is None]
+    at07 = next(r for r in pts if r["alpha"] == "0.7")
+    return (
+        f"At β = 0.25, α = 0.7 gives tune {float(at07['tune_ndcg5']):.3f} and test "
+        f"{float(at07['test_ndcg5']):.3f}; SBERT only gives test "
+        f"{float(base['SBERT only']['test_ndcg5']):.3f}. Not plotted (ungraded pairs, "
+        f"UNKNOWN): α {', '.join(missing) or 'none'}."
+    )
+
+
+def v3_per_profile():
+    data = rows("v3_per_profile_by_rater.csv")
+    kids = list(dict.fromkeys(r["child"] for r in data))
+    get = {(r["child"], r["rater"]): r for r in data}
+    with plt.rc_context(PRINT):
+        fig, axes = plt.subplots(2, 1, figsize=(7, 5.6), sharex=True)
+        for ax, rater in zip(axes, ("researcher", "nurse")):
+            x = range(len(kids))
+            for offset, key, label in (
+                (-0.27, "sbert_only", "SBERT only"),
+                (0, "hybrid_only", "Hybrid retrieval only"),
+                (0.27, "full", "v3, α = 0.7"),
+            ):
+                ax.bar(
+                    [i + offset for i in x],
+                    [number(get[(k, rater)][key]) or 0 for k in kids],
+                    0.27,
+                    color=GREY[
+                        {
+                            "sbert_only": "sbert",
+                            "hybrid_only": "hybrid",
+                            "full": "full",
+                        }[key]
+                    ],
+                    edgecolor="black",
+                    linewidth=0.5,
+                    label=label,
+                )
+            ax.set_ylabel(f"nDCG@5\n({rater})")
+            ax.set_ylim(0, 1.05)
+        axes[1].set_xticks(
+            list(range(len(kids))), [k + (" (gap)" if k == "H17" else "") for k in kids]
+        )
+        axes[0].legend(
+            frameon=False, ncol=3, loc="upper center", bbox_to_anchor=(0.5, 1.22)
+        )
+        save(fig, "v3_per_profile.png")
+    test = [k for k in kids if k != "H17"]
+    better = {
+        rater: sum(
+            float(get[(k, rater)]["full"]) > float(get[(k, rater)]["sbert_only"]) + 1e-9
+            for k in test
+        )
+        for rater in ("researcher", "nurse")
+    }
+    return (
+        f"v3 (α = 0.7) beats SBERT only for {better['researcher']} of {len(test)} test "
+        f"children on the researcher's grades and {better['nurse']} of {len(test)} on "
+        "the nurse's; H17 (content gap) is shown separately."
+    )
+
+
+def v3_grade_by_rank():
+    data = [r for r in rows("v3_rank_grade_matrix.csv") if r["children"] == "all 20"]
+    settings_ = list(dict.fromkeys(r["setting"] for r in data))
+    with plt.rc_context(PRINT):
+        fig, axes = plt.subplots(1, 2, figsize=(8, 3.6), sharey=True)
+        for ax, setting in zip(axes, settings_):
+            part = [r for r in data if r["setting"] == setting]
+            bottom = [0] * len(part)
+            for g, key in (
+                ("grade_2", 2),
+                ("grade_1", 1),
+                ("grade_0", 0),
+                ("ungraded", "ungraded"),
+            ):
+                vals = [int(r[g]) for r in part]
+                ax.bar(
+                    [int(r["rank"]) for r in part],
+                    vals,
+                    bottom=bottom,
+                    color=GREY[key],
+                    edgecolor="black",
+                    linewidth=0.5,
+                    label=g.replace("_", " "),
+                )
+                bottom = [b + v for b, v in zip(bottom, vals)]
+            ax.set_title(
+                "v3, α = 0.7" if setting.startswith("alpha") else setting, fontsize=11
+            )
+            ax.set_xlabel("Rank position")
+        axes[0].set_ylabel("Profiles (all 20)")
+        axes[1].legend(frameon=False, loc="upper left", bbox_to_anchor=(1.0, 1.0))
+        save(fig, "v3_grade_by_rank.png")
+    zero = {
+        s: sum(int(r["grade_0"]) for r in data if r["setting"] == s) for s in settings_
+    }
+    return (
+        "Grade-0 slots in the top 5 across all 20 profiles: "
+        + ", ".join(f"{s}: {n}" for s, n in zero.items())
+        + "."
+    )
+
+
 def main():
     commit = subprocess.run(
         ["git", "rev-parse", "--short", "HEAD"],
@@ -237,6 +409,24 @@ def main():
             "Published activities by area × age band",
             "raw/published_by_domain_age.csv",
             heatmap(),
+        ),
+        (
+            "v3_alpha_curve.png",
+            "v3 (β = 0.25): nDCG@5 against α, tune and test, with both similarity-only baselines",
+            "raw/v3_alpha_grid.csv",
+            v3_alpha_curve(),
+        ),
+        (
+            "v3_per_profile.png",
+            "v3: per-profile nDCG@5 (8 test children and H17), both raters",
+            "raw/v3_per_profile_by_rater.csv",
+            v3_per_profile(),
+        ),
+        (
+            "v3_grade_by_rank.png",
+            "v3: grade by rank position, all 20 profiles, α = 0.7 and SBERT only",
+            "raw/v3_rank_grade_matrix.csv",
+            v3_grade_by_rank(),
         ),
     ]
     lines = [
