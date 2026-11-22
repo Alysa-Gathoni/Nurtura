@@ -1,6 +1,6 @@
 # Report evidence pack: index
 
-> Built 2026-11-21T22:33:26+03:00 at commit `48210e2`. Regenerate everything with `powershell -File scripts\report_evidence\run_all.ps1` from the repository root. Each page states the command, date and commit behind it.
+> Built 2026-11-22T18:45:52+03:00 at commit `45ea972`. Regenerate everything with `powershell -File scripts\report_evidence\run_all.ps1` from the repository root. Each page states the command, date and commit behind it.
 
 Rules followed: facts come from a command, file and line, or query named on the page; anything that couldn't be verified says UNKNOWN. The database was only read: every row the scripts needed (fictional children, recommendations, the request transcript) was created inside a transaction that was rolled back. No secrets, real emails or names: they are `<redacted>`. Data is fictional.
 
@@ -50,7 +50,7 @@ Rules followed: facts come from a command, file and line, or query named on the 
 | `01_tests_and_requirements.md` | 1a, 2e, requirement coverage | `scripts/report_evidence/tests_and_ci.py` | 2026-11-21T22:26:01+03:00 | 48210e2 |
 | `02_environment.md` | 1b | `scripts/report_evidence/environment.py` | 2026-11-21T22:27:15+03:00 | 48210e2 |
 | `03_catalogue_dataset_config.md` | 1c, 1d, 1e, 2a, 2b | `scripts/report_evidence/catalogue_and_config.py` | 2026-11-21T22:27:53+03:00 | 48210e2 |
-| `04_evaluation.md` | 1f, 1g (coverage, areas per top 5), 2d data | `scripts/report_evidence/evaluation.py` | 2026-11-21T22:28:19+03:00 | 48210e2 |
+| `04_evaluation.md` | 1f, 1g (coverage, areas per top 5), 2d data | `scripts/report_evidence/evaluation.py` | 2026-11-22T18:45:50+03:00 | 45ea972 |
 | `05_latency.md` | 1g (latency, memory, start-up) | `scripts/report_evidence/latency.py` | 2026-11-21T22:28:38+03:00 | 48210e2 |
 | `06_explanation_examples.md` | 2c | `scripts/report_evidence/explanation_examples.py` | 2026-11-21T22:28:54+03:00 | 48210e2 |
 | `07_workflow_transcript.md` | 2f | `scripts/report_evidence/workflow_transcript.py` | 2026-11-21T22:29:12+03:00 | 48210e2 |
@@ -124,6 +124,7 @@ The commit is the one checked out when the page was generated; the scripts thems
 - `raw/tests_summary.json`
 - `raw/tfidf_comparison_markdown.txt`
 - `raw/todo_fixme.csv`
+- `raw/v3_statistics_markdown.txt`
 - `raw/workflow_rows.json`
 - `raw/workflow_transcript.json`
 

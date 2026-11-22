@@ -75,7 +75,7 @@ Every activity in every top 5 is now graded: the v2 sheet, plus the 123 extra pa
 - similarity-only: 3 / 0 / 5;
 - α = 0.7: 4 / 2 / 2.
 
-With 8 children, no significance claims are made.
+With 8 children, no significance claims are made here. Paired significance tests for the adopted configuration (β = 0.25) are in [eval_v3_statistics.md](eval_v3_statistics.md) (#268).
 
 ### Second rater
 
@@ -122,7 +122,7 @@ With 8 children, no significance claims are made.
 
 ## Limits
 
-- **Same limits as v2:** 20 constructed children and one main rater; no significance claims.
+- **Same limits as v2:** 20 constructed children and one main rater. For β = 0.25, the gain over SBERT only is significant on test (p = 0.008) but the gain over the v2 system isn't (p = 0.156) ([eval_v3_statistics.md](eval_v3_statistics.md)).
 - **The extra pairs were graded in a later session than the v2 sheet,** by the same two raters, blind to which ranking each pair came from. They weren't mixed in with the v2 pairs, so grading drift between the two sessions can't be ruled out.
 - **The decision is far over the 0.02 line under both raters,** but the choice of β itself differs between them (0 against 0.25).
 - **The query is a generated sentence** (age, focus areas, milestones not yet seen, interests). Much of its wording is fixed text, which TF-IDF matches literally, so TF-IDF may do better with free-text queries such as Explore searches. That isn't tested here.

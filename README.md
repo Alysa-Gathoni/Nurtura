@@ -283,6 +283,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | Re-run the ranking evaluation | | `cd backend && python manage.py evaluate_alpha_grid` (see [docs/eval_v2_results.md](docs/eval_v2_results.md)) |
 | Diversity, novelty, coverage and personalisation | | `cd backend && python manage.py evaluate_beyond_accuracy` (see [docs/eval_v2_beyond_accuracy.md](docs/eval_v2_beyond_accuracy.md)) |
 | Confidence intervals and age-weight sensitivity | | `cd backend && python manage.py evaluate_statistics` (see [docs/eval_v2_statistics.md](docs/eval_v2_statistics.md)) |
+| Significance tests for v3 (SBERT + TF-IDF) | | `cd backend && python manage.py evaluate_v3_statistics` (see [docs/eval_v3_statistics.md](docs/eval_v3_statistics.md)) |
 | Check nothing evaluated has changed | | `cd backend && python manage.py evaluate_alpha_grid --check-provenance` (run before any change to `backend/` during the explanation reader test). Since #250 it reports one expected difference, "ranking settings changed: retrieval"; with `RETRIEVAL_BETA=1` it matches |
 | Spot-check retrieval relevance (Sprint 4) | | `cd backend && python manage.py spot_check_retrieval` (`--markdown` for the report; nothing is saved) |
 | Write the relevance-labelling template (Sprint 5) | | `cd backend && python manage.py export_relevance_template` (see [data/evaluation/README.md](data/evaluation/README.md)) |
@@ -315,6 +316,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/experiment_embedding_model.md](docs/experiment_embedding_model.md) | Experiment: a search-trained embedding model, with its decision rule |
 | [docs/tfidf_comparison.md](docs/tfidf_comparison.md) | TF-IDF alongside SBERT: the hybrid weight β, its decision rule and the results |
 | [docs/alpha_sensitivity_tfidf.md](docs/alpha_sensitivity_tfidf.md) | α at the SBERT/TF-IDF mix: a sensitivity check (`manage.py alpha_sensitivity`) |
+| [docs/eval_v3_statistics.md](docs/eval_v3_statistics.md) | Confidence intervals and Wilcoxon tests for v3, against SBERT only and the v2 system (#268) |
 | [docs/activity_classifier_results.md](docs/activity_classifier_results.md) | The activity classifier: cross-validated accuracy, precision, recall, F1 and confusion matrices for area and age band (#181) |
 | [docs/experiment_learned_ranker.md](docs/experiment_learned_ranker.md) | Experiment: a ranker learned from the tune children's labels, against the α = 0.7 formula, with its decision rule (#183) |
 | [docs/explanation_reader_test.md](docs/explanation_reader_test.md) | The explanation reader test (Sprint 6) |

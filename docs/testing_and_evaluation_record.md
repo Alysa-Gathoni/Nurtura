@@ -1,6 +1,6 @@
 # Testing and evaluation record
 
-> **Last updated: 2026-11-12** (v2 statistics, beyond-accuracy measures and accessibility added; #31 hand check superseded). The phone run (section 1) is from 2026-10-15; the automated test counts and results are from `main` at commit `cddefe5`, run on 2026-10-16; defects D10–D12 were added on 2026-10-29. Every result below comes from a real run, log or pull request; nothing is estimated.
+> **Last updated: 2026-11-22** (v3 statistics added, #268). Earlier: 2026-11-12 (v2 statistics, beyond-accuracy measures and accessibility added; #31 hand check superseded). The phone run (section 1) is from 2026-10-15; the automated test counts and results are from `main` at commit `cddefe5`, run on 2026-10-16; defects D10–D12 were added on 2026-10-29. Every result below comes from a real run, log or pull request; nothing is estimated.
 
 This record covers what has been tested so far, the results (expected and actual), the defects found and how they were corrected, and the initial evaluation evidence. What is still to evaluate is listed at the end.
 
@@ -168,6 +168,8 @@ The weight α between the rule engine and SBERT similarity was chosen on 11 *tun
 7 of the 8 test children improved. The fixed rule chose α = 1.0, an artefact of the ID tie-break at that setting, so α = 0.7 was kept; see [eval_v2_results.md](eval_v2_results.md).
 
 **v2 statistics (2026-11-09, #196):** against SBERT-only, test nDCG@5 +0.254, bootstrap 95% CI [+0.136, +0.379], Wilcoxon signed-rank p = 0.016. Against α = 0, +0.029, CI [−0.007, +0.095], not significant. Four alternative sets of age weights give the same test top 5; removing age weighting lowers test nDCG@5 to 0.520. See [eval_v2_statistics.md](eval_v2_statistics.md).
+
+**v3 statistics (2026-11-22, #268):** the configuration the app uses since #250 (SBERT + TF-IDF at β = 0.25, α = 0.7), with every top-5 pair graded. Against SBERT-only, test nDCG@5 +0.305, 95% CI [+0.164, +0.455], all 8 children better, Wilcoxon p = 0.008 (nurse's grades: +0.406, p = 0.016). Against the v2 system, +0.059, CI [−0.005, +0.127], p = 0.156, not significant. See [eval_v3_statistics.md](eval_v3_statistics.md).
 
 **Accessibility (2026-11-10, #206):** `accessibility_test.dart` runs Flutter's Android tap-target, labelled tap-target and text-contrast guidelines on sign-in and all five caregiver tabs in light and dark themes, and renders every tab at twice the text size. The first run found the child switcher and the Log in/Register toggle under 48 px, muted text, terracotta and rose text below 4.5:1 contrast in the light theme, and two rows overflowing at large text. All were fixed; all checks now pass.
 
