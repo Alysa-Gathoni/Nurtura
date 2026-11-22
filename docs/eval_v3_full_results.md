@@ -81,6 +81,7 @@ Batches were stored for the 20 profiles, giving 100 explanations:
 
 - **What grading them would settle:** once both raters grade these 15 pairs, the α grid, the selection rule over every α and both remaining ablations will be complete.
 - **Not affected:** every headline figure above (α = 0.7 and both baselines) is fully graded.
+- **Grading them (#272):** `python manage.py evaluate_v3_full --export-ungraded PATH` writes the 15 pairs as a blind, shuffled sheet in the held-out format (child profile and activity only: no setting, rank or score). Once both raters have graded it, it goes in as `data/evaluation/v3_extra.csv`, and the command reads it automatically.
 
 ## Limits
 

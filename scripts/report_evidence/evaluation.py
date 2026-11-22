@@ -451,8 +451,6 @@ The app's configuration (β = {app_beta:g}, α = {REPORTED_ALPHA:g}) against SBE
         call_command(
             "evaluate_v3_full",
             "--markdown",
-            "--extra-labels",
-            str(ROOT / TFIDF_EXTRA),
             "--raw-dir",
             str(RAW),
             stdout=full_out,
@@ -463,7 +461,7 @@ The app's configuration (β = {app_beta:g}, α = {REPORTED_ALPHA:g}) against SBE
     body += f"""
 ## Full evaluation of the current system (v3)
 
-The configuration the app uses (β = {app_beta:g}, α = {REPORTED_ALPHA:g}), evaluated in full with the v2 method, so Chapter 5 can report the current system (#270). The plan was committed before the run (`docs/eval_v3_full_plan.md:{line_of('docs/eval_v3_full_plan.md', '^## What is computed')}`). Labels: the v2 sheet plus `{TFIDF_EXTRA}`; researcher's grades unless stated. No grade is imputed and no ungraded pair counts as 0: figures that need one are UNKNOWN, and every ungraded pair is in `raw/v3_ungraded_pairs.csv` with empty grade columns. Command: `manage.py evaluate_v3_full --markdown --raw-dir docs/report_evidence/raw` (raw output `raw/v3_full_markdown.txt`). Raw tables: `raw/v3_alpha_grid.csv`, `raw/v3_test_results.csv`, `raw/v3_per_profile_by_rater.csv`, `raw/v3_rater_agreement.json`, `raw/v3_confusion.csv`, `raw/v3_beyond_accuracy.csv`, `raw/v3_rank_grade_matrix.csv`, `raw/v3_ablation.csv`, `raw/v3_explanation_check.json`, `raw/v3_label_coverage.csv`. Figures: `figures/v3_alpha_curve.png`, `figures/v3_per_profile.png`, `figures/v3_grade_by_rank.png` (see `09_figures.md`).
+The configuration the app uses (β = {app_beta:g}, α = {REPORTED_ALPHA:g}), evaluated in full with the v2 method, so Chapter 5 can report the current system (#270). The plan was committed before the run (`docs/eval_v3_full_plan.md:{line_of('docs/eval_v3_full_plan.md', '^## What is computed')}`). Labels: the v2 sheet plus `{TFIDF_EXTRA}` and, once graded, `data/evaluation/v3_extra.csv` (the command's \"Setting\" line names the sheets used); researcher's grades unless stated. No grade is imputed and no ungraded pair counts as 0: figures that need one are UNKNOWN, and every ungraded pair is in `raw/v3_ungraded_pairs.csv` with empty grade columns. Command: `manage.py evaluate_v3_full --markdown --raw-dir docs/report_evidence/raw` (raw output `raw/v3_full_markdown.txt`). Raw tables: `raw/v3_alpha_grid.csv`, `raw/v3_test_results.csv`, `raw/v3_per_profile_by_rater.csv`, `raw/v3_rater_agreement.json`, `raw/v3_confusion.csv`, `raw/v3_beyond_accuracy.csv`, `raw/v3_rank_grade_matrix.csv`, `raw/v3_ablation.csv`, `raw/v3_explanation_check.json`, `raw/v3_label_coverage.csv`. Figures: `figures/v3_alpha_curve.png`, `figures/v3_per_profile.png`, `figures/v3_grade_by_rank.png` (see `09_figures.md`).
 {full_sections}"""
     write_md("04_evaluation.md", body, "Held-out evaluation (v2 and v3)", COMMAND)
     print("ok", len(sources), "grade-0 slots")

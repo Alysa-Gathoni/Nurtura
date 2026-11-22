@@ -18,6 +18,7 @@ from . import heldout
 from .evaluation import HELDOUT_COLUMNS
 from .explanation_check import check, named_in, sentences
 from .management.commands.evaluate_v3_full import strict_mean
+from .management.commands.export_heldout_labels import COLUMNS as SHEET_COLUMNS
 from .models import Recommendation
 from .test_heldout import HeldOutCommandTestCase
 
@@ -80,7 +81,7 @@ class HelperTests(SimpleTestCase):
         self.assertEqual(result["max_sentences"], 2)
 
 
-class EvaluateV3FullTests(HeldOutCommandTestCase):
+class V3FullCommandTestCase(HeldOutCommandTestCase):
     def setUp(self):
         super().setUp()
         tmp = tempfile.TemporaryDirectory()
@@ -123,6 +124,8 @@ class EvaluateV3FullTests(HeldOutCommandTestCase):
                             }
                         )
 
+
+class EvaluateV3FullTests(V3FullCommandTestCase):
     @override_settings(RETRIEVAL_BETA=1.0)
     def test_refuses_to_run_at_beta_1(self):
         self.publish()
@@ -175,3 +178,50 @@ class EvaluateV3FullTests(HeldOutCommandTestCase):
         self.assertEqual({r["relevance"] for r in rows}, {""})
         self.assertEqual({r["relevance_rater2"] for r in rows}, {""})
         self.assertEqual({r["missing_for"] for r in rows}, {"researcher and nurse"})
+
+
+class ExportUngradedTests(V3FullCommandTestCase):
+    def export(self, *extra):
+        out = StringIO()
+        sheet = self.raw.parent / "v3_extra_blank.csv"
+        call_command(
+            "evaluate_v3_full",
+            "--labels",
+            str(self.path),
+            "--extra-labels",
+            "--export-ungraded",
+            str(sheet),
+            *extra,
+            stdout=out,
+            stderr=StringIO(),
+        )
+        return sheet, out.getvalue()
+
+    def test_the_sheet_is_blind_and_has_only_the_ungraded_pairs(self):
+        self.publish()
+        self.grade(keep=lambda child_id, activity_id: activity_id != "ACT-0957")
+        sheet, output = self.export()
+        with open(sheet, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+        self.assertEqual(reader.fieldnames, list(SHEET_COLUMNS))
+        self.assertTrue(rows)
+        self.assertEqual({r["activity_id"] for r in rows}, {"ACT-0957"})
+        self.assertEqual({r["relevance"] for r in rows}, {""})
+        self.assertEqual({r["relevance_rater2"] for r in rows}, {""})
+        # Nothing reveals which setting or rank produced a pair.
+        for column in ("settings", "rank", "alpha", "score"):
+            self.assertNotIn(column, reader.fieldnames)
+        self.assertIn(f"Wrote {len(rows)} ungraded pair(s)", output)
+
+    def test_an_existing_sheet_is_not_overwritten_without_force(self):
+        self.publish()
+        self.grade()
+        sheet = self.raw.parent / "v3_extra_blank.csv"
+        sheet.parent.mkdir(parents=True, exist_ok=True)
+        sheet.write_text("keep me", encoding="utf-8")
+        with self.assertRaisesMessage(CommandError, "already exists"):
+            self.export()
+        self.assertEqual(sheet.read_text(encoding="utf-8"), "keep me")
+        self.export("--force")
+        self.assertNotEqual(sheet.read_text(encoding="utf-8"), "keep me")
