@@ -1,0 +1,21 @@
+children,setting,rank,grade_0,grade_1,grade_2,ungraded
+all 20,alpha 0.7,1,0,4,16,0
+all 20,alpha 0.7,2,0,3,17,0
+all 20,alpha 0.7,3,1,4,15,0
+all 20,alpha 0.7,4,0,7,13,0
+all 20,alpha 0.7,5,0,8,12,0
+all 20,SBERT only,1,2,6,12,0
+all 20,SBERT only,2,5,9,6,0
+all 20,SBERT only,3,2,10,8,0
+all 20,SBERT only,4,3,11,6,0
+all 20,SBERT only,5,4,8,8,0
+test,alpha 0.7,1,0,2,6,0
+test,alpha 0.7,2,0,1,7,0
+test,alpha 0.7,3,0,0,8,0
+test,alpha 0.7,4,0,0,8,0
+test,alpha 0.7,5,0,4,4,0
+test,SBERT only,1,1,2,5,0
+test,SBERT only,2,2,3,3,0
+test,SBERT only,3,1,4,3,0
+test,SBERT only,4,1,5,2,0
+test,SBERT only,5,1,4,3,0

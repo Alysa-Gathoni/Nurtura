@@ -39,10 +39,10 @@
     "defined_in": "backend/recommendations/heldout.py:59"
   },
   "recommendation_row (rolled back)": {
-    "id": 1872,
-    "child": 1710,
+    "id": 2187,
+    "child": 2098,
     "activity": 42,
-    "batch": "bbfcfa91-fced-4bbf-82f5-5a584bbeea9a",
+    "batch": "0e5b532e-0798-4233-b720-560cda767f0f",
     "position": 1,
     "similarity_score": 0.3717355212749981,
     "ranking_score": 1.0,
@@ -55,8 +55,8 @@
     "pinned": false,
     "pin_note": "",
     "explanation_version": "2",
-    "date_generated": "2026-11-21 20:21:00.928951+00:00",
-    "plan_start": "2026-11-16",
+    "date_generated": "2026-11-22 21:21:40.139934+00:00",
+    "plan_start": "2026-11-23",
     "activity_id": "ACT-0002"
   }
 }

@@ -1,6 +1,6 @@
 # Mobile app, repository and reader test
 
-> Generated 2026-11-21T23:26:03+03:00 at commit `45ea972` by `python scripts\report_evidence\mobile_and_repo.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T00:25:35+03:00 at commit `3966c02` by `python scripts\report_evidence\mobile_and_repo.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1h. Mobile app
 
@@ -92,11 +92,11 @@ Screens in `mobile/nurtura_app/lib/screens/` on `main` (every file on `main` is 
 | URL | https://github.com/Alysa-Gathoni/Nurtura | `gh repo view` |
 | Default branch | main | `gh repo view` |
 | Tags | pre-weekly-plan 2026-11-20, sprint5-eval-v1 2026-10-10, sprint6-explanations-v1 2026-10-10, sprint9-eval-v2 2026-11-02, sprint9-eval-v3 2026-11-21, sprint9-eval-v3.1 2026-11-21 | `git tag` |
-| Merged pull requests | 132 | `gh pr list --state merged` |
-| Closed issues | 132 | `gh issue list --state closed` |
-| Commits on main | 328 | `git rev-list --count origin/main` |
-| CI runs (completed, last 304) | {'success': 299, 'failure': 5}; pass rate 98.4% | `gh run list` |
-| Contributors (GitHub) | 1 (logins redacted; contributions: [324]) | `gh api repos/.../contributors` |
+| Merged pull requests | 134 | `gh pr list --state merged` |
+| Closed issues | 134 | `gh issue list --state closed` |
+| Commits on main | 333 | `git rev-list --count origin/main` |
+| CI runs (completed, last 309) | {'success': 304, 'failure': 5}; pass rate 98.4% | `gh run list` |
+| Contributors (GitHub) | 1 (logins redacted; contributions: [333]) | `gh api repos/.../contributors` |
 
 Milestones (`raw/milestones_github.csv`). Milestones are set on issues; a merged PR counts towards its own milestone or, if it has none, the milestone of the issue it closes. Commits are those in those PRs. No milestone has been closed on GitHub, so there are no close dates.
 
@@ -109,7 +109,7 @@ Milestones (`raw/milestones_github.csv`). Milestones are set on issues; a merged
 | Sprint 6: Explainability | open | 2026-09-29 | open | 14 | 14 | 26 |
 | Sprint 7: Feedback & History | open | 2026-09-29 | open | 3 | 3 | 3 |
 | Sprint 8: Mobile App | open | 2026-09-29 | open | 27 | 27 | 37 |
-| Sprint 9: Evaluation | open | 2026-09-29 | open | 57 | 56 | 77 |
+| Sprint 9: Evaluation | open | 2026-09-29 | open | 59 | 58 | 80 |
 | Sprint 10: Documentation | open | 2026-09-29 | open | 5 | 5 | 7 |
 | Sprint 3.5: Minimal Mobile Shell | open | 2026-10-01 | open | 3 | 3 | 6 |
 | (no milestone) |  |  |  | 1 | 1 | 1 |

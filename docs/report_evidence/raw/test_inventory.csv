@@ -443,32 +443,32 @@ backend,LoadLabelsTests.test_missing_columns_or_file,backend/recommendations/tes
 backend,SampleKeyTests.test_keys_are_unique_and_stable,backend/recommendations/test_evaluation.py:137,"assertEqual(len(SAMPLES_BY_KEY), len(SAMPLE_PROFILES))",unit,logic
 backend,ExportTemplateTests.test_one_row_per_sample_and_eligible_activity,backend/recommendations/test_evaluation.py:183,"assertIn(""Wrote 13 rows"", self.export())  # 6 x 2 + 1",integration,logic
 backend,ExportTemplateTests.test_refuses_to_overwrite_without_force,backend/recommendations/test_evaluation.py:199,"assertRaisesMessage(CommandError, ""already exists""):",integration,logic
-backend,WordingTests.test_cdc_not_yet_is_one_sentence,backend/recommendations/test_explanations.py:134,assertEqual(,integration,logic
-backend,WordingTests.test_who_wording_rounds_up_and_mixed_sources,backend/recommendations/test_explanations.py:144,assertEqual(,integration,logic
-backend,WordingTests.test_who_alone,backend/recommendations/test_explanations.py:155,assertEqual(,integration,logic
-backend,WordingTests.test_same_status_milestones_share_one_sentence_capped_at_three,backend/recommendations/test_explanations.py:164,"assertTrue(lead.startswith(""You recorded “""))",integration,logic
-backend,WordingTests.test_inner_quotes_become_single_quotes,backend/recommendations/test_explanations.py:181,"assertIn(""“Waves ‘bye-bye’”"", e.text)",integration,logic
-backend,WordingTests.test_two_groups_not_yet_first,backend/recommendations/test_explanations.py:186,"assertRegex(e.sentences[0], r""as not yet; most children do this by 12"")",integration,logic
-backend,WordingTests.test_at_most_two_groups,backend/recommendations/test_explanations.py:198,"assertNotIn(""often comes next"", e.text)",integration,logic
-backend,WordingTests.test_ages_name_only_the_milestones_shown,backend/recommendations/test_explanations.py:211,"assertLessEqual(aged, shown)",integration,logic
-backend,WordingTests.test_concern_and_interest_merge_with_literal_use,backend/recommendations/test_explanations.py:228,assertEqual(,integration,logic
-backend,WordingTests.test_stand_alone_use_of_a_non_sensory_interest,backend/recommendations/test_explanations.py:240,"assertIn(""It uses books, which you said your child enjoys."", e.text)",integration,logic
-backend,WordingTests.test_fallback_for_a_child_with_no_requests,backend/recommendations/test_explanations.py:245,assertEqual(,integration,logic
-backend,WordingTests.test_fallback_for_an_area_outside_the_childs_requests,backend/recommendations/test_explanations.py:254,assertEqual(,integration,logic
-backend,WordingTests.test_prenatal,backend/recommendations/test_explanations.py:263,"assertIn(""It's an activity for parents during pregnancy."", e.text)",integration,logic
-backend,WordingTests.test_aim_sentence_only_with_plain_aim,backend/recommendations/test_explanations.py:268,"assertNotIn(""Its aim is to"", self.explain_activity(child, ""ACT-0953"").text)",integration,logic
-backend,WordingTests.test_cap_drops_uses_then_plain_age_keeps_first_reason_and_aim,backend/recommendations/test_explanations.py:280,"assertEqual(len(e.sentences), MAX_SENTENCES)",integration,logic
-backend,WordingTests.test_cap_keeps_a_non_plain_age_and_drops_support_instead,backend/recommendations/test_explanations.py:299,"assertEqual(len(e.sentences), MAX_SENTENCES)",integration,logic
-backend,WordingTests.test_support_is_kept_when_it_is_the_first_reason,backend/recommendations/test_explanations.py:314,"assertTrue(e.sentences[0].startswith(""You said you'd like support""))",integration,logic
-backend,WordingTests.test_used_interests_matches_whole_words_only,backend/recommendations/test_explanations.py:323,assertEqual(,integration,logic
-backend,EveryExplanationTests.test_named_items_exist_in_the_childs_stored_profile,backend/recommendations/test_explanations.py:332,"assertLessEqual(set(milestones), stored_milestones)",integration,logic
-backend,EveryExplanationTests.test_no_judgemental_or_technical_words_and_at_most_four_sentences,backend/recommendations/test_explanations.py:357,"assertIsNone(BANNED.search(e.text), e.text)",integration,logic
-backend,StoredExplanationTests.test_post_stores_explanations_with_their_version,backend/recommendations/test_explanations.py:375,assertEqual(,integration,api
-backend,StoredExplanationTests.test_batches_without_explanations_are_kept_and_superseded,backend/recommendations/test_explanations.py:387,"assertEqual(response.status_code, status.HTTP_201_CREATED)",integration,api
-backend,StoredExplanationTests.test_a_new_plain_aim_gives_a_new_batch,backend/recommendations/test_explanations.py:397,"assertEqual(self.client.post(self.url).status_code, status.HTTP_200_OK)",integration,api
-backend,AreaWordsTests.test_every_domain_has_plain_words,backend/recommendations/test_explanations.py:415,"assertEqual(set(AREA), {d.value for d in Domain})",integration,logic
-backend,ExplanationSamplesCommandTests.test_prints_scenarios_and_explanations_without_storing,backend/recommendations/test_explanations.py:423,"assertEqual(text.count(""**Your child:**""), 10)",integration,command
-backend,ExplanationSamplesCommandTests.test_unknown_child,backend/recommendations/test_explanations.py:437,"assertRaisesMessage(Exception, ""Unknown child""):",integration,command
+backend,WordingTests.test_cdc_not_yet_is_one_sentence,backend/recommendations/test_explanations.py:117,assertEqual(,integration,logic
+backend,WordingTests.test_who_wording_rounds_up_and_mixed_sources,backend/recommendations/test_explanations.py:127,assertEqual(,integration,logic
+backend,WordingTests.test_who_alone,backend/recommendations/test_explanations.py:138,assertEqual(,integration,logic
+backend,WordingTests.test_same_status_milestones_share_one_sentence_capped_at_three,backend/recommendations/test_explanations.py:147,"assertTrue(lead.startswith(""You recorded “""))",integration,logic
+backend,WordingTests.test_inner_quotes_become_single_quotes,backend/recommendations/test_explanations.py:164,"assertIn(""“Waves ‘bye-bye’”"", e.text)",integration,logic
+backend,WordingTests.test_two_groups_not_yet_first,backend/recommendations/test_explanations.py:169,"assertRegex(e.sentences[0], r""as not yet; most children do this by 12"")",integration,logic
+backend,WordingTests.test_at_most_two_groups,backend/recommendations/test_explanations.py:181,"assertNotIn(""often comes next"", e.text)",integration,logic
+backend,WordingTests.test_ages_name_only_the_milestones_shown,backend/recommendations/test_explanations.py:194,"assertLessEqual(aged, shown)",integration,logic
+backend,WordingTests.test_concern_and_interest_merge_with_literal_use,backend/recommendations/test_explanations.py:211,assertEqual(,integration,logic
+backend,WordingTests.test_stand_alone_use_of_a_non_sensory_interest,backend/recommendations/test_explanations.py:223,"assertIn(""It uses books, which you said your child enjoys."", e.text)",integration,logic
+backend,WordingTests.test_fallback_for_a_child_with_no_requests,backend/recommendations/test_explanations.py:228,assertEqual(,integration,logic
+backend,WordingTests.test_fallback_for_an_area_outside_the_childs_requests,backend/recommendations/test_explanations.py:237,assertEqual(,integration,logic
+backend,WordingTests.test_prenatal,backend/recommendations/test_explanations.py:246,"assertIn(""It's an activity for parents during pregnancy."", e.text)",integration,logic
+backend,WordingTests.test_aim_sentence_only_with_plain_aim,backend/recommendations/test_explanations.py:251,"assertNotIn(""Its aim is to"", self.explain_activity(child, ""ACT-0953"").text)",integration,logic
+backend,WordingTests.test_cap_drops_uses_then_plain_age_keeps_first_reason_and_aim,backend/recommendations/test_explanations.py:263,"assertEqual(len(e.sentences), MAX_SENTENCES)",integration,logic
+backend,WordingTests.test_cap_keeps_a_non_plain_age_and_drops_support_instead,backend/recommendations/test_explanations.py:282,"assertEqual(len(e.sentences), MAX_SENTENCES)",integration,logic
+backend,WordingTests.test_support_is_kept_when_it_is_the_first_reason,backend/recommendations/test_explanations.py:297,"assertTrue(e.sentences[0].startswith(""You said you'd like support""))",integration,logic
+backend,WordingTests.test_used_interests_matches_whole_words_only,backend/recommendations/test_explanations.py:306,assertEqual(,integration,logic
+backend,EveryExplanationTests.test_named_items_exist_in_the_childs_stored_profile,backend/recommendations/test_explanations.py:315,"assertLessEqual(set(milestones), stored_milestones)",integration,logic
+backend,EveryExplanationTests.test_no_judgemental_or_technical_words_and_at_most_four_sentences,backend/recommendations/test_explanations.py:340,"assertIsNone(BANNED.search(e.text), e.text)",integration,logic
+backend,StoredExplanationTests.test_post_stores_explanations_with_their_version,backend/recommendations/test_explanations.py:358,assertEqual(,integration,api
+backend,StoredExplanationTests.test_batches_without_explanations_are_kept_and_superseded,backend/recommendations/test_explanations.py:370,"assertEqual(response.status_code, status.HTTP_201_CREATED)",integration,api
+backend,StoredExplanationTests.test_a_new_plain_aim_gives_a_new_batch,backend/recommendations/test_explanations.py:380,"assertEqual(self.client.post(self.url).status_code, status.HTTP_200_OK)",integration,api
+backend,AreaWordsTests.test_every_domain_has_plain_words,backend/recommendations/test_explanations.py:398,"assertEqual(set(AREA), {d.value for d in Domain})",integration,logic
+backend,ExplanationSamplesCommandTests.test_prints_scenarios_and_explanations_without_storing,backend/recommendations/test_explanations.py:406,"assertEqual(text.count(""**Your child:**""), 10)",integration,command
+backend,ExplanationSamplesCommandTests.test_unknown_child,backend/recommendations/test_explanations.py:420,"assertRaisesMessage(Exception, ""Unknown child""):",integration,command
 backend,HeldOutDefinitionTests.test_twenty_children_with_unique_ids,backend/recommendations/test_heldout.py:37,"assertEqual(len(ids), 20)",unit,logic
 backend,HeldOutDefinitionTests.test_split_is_11_tune_8_test_1_gap,backend/recommendations/test_heldout.py:43,"assertEqual(counts, {""tune"": 11, ""test"": 8, ""gap"": 1})",unit,logic
 backend,HeldOutDefinitionTests.test_only_the_content_gap_child_is_in_the_gap_split,backend/recommendations/test_heldout.py:49,"assertEqual(gap, [""H17""])",unit,logic
@@ -698,6 +698,20 @@ backend,AgeScenarioTests.test_weights_are_replaced_and_restored,backend/recommen
 backend,EvaluateStatisticsTests.test_refuses_unlabelled_rankings,backend/recommendations/test_statistics.py:160,"assertRaisesMessage(CommandError, ""no label""):",integration,logic
 backend,EvaluateStatisticsTests.test_reports_paired_statistics_and_sensitivity,backend/recommendations/test_statistics.py:166,"assertIn(text, output)",integration,logic
 backend,EvaluateStatisticsTests.test_reports_agreement_and_results_on_the_second_raters_labels,backend/recommendations/test_statistics.py:182,"assertIn(text, output)",integration,logic
+backend,HelperTests.test_a_mean_with_an_unknown_value_is_unknown,backend/recommendations/test_v3_full.py:39,"assertIsNone(strict_mean([0.5, None, 1.0]))",unit,logic
+backend,HelperTests.test_sentences_split_at_full_stops_only,backend/recommendations/test_v3_full.py:44,"assertEqual(len(sentences(text)), 3)",unit,logic
+backend,HelperTests.test_named_items_are_read_back,backend/recommendations/test_v3_full.py:52,"assertEqual(milestones, [""Waves bye-bye""])",unit,logic
+backend,HelperTests.test_check_counts_items_not_in_the_profile_and_scores,backend/recommendations/test_v3_full.py:62,"assertEqual(result[""explanations""], 2)",unit,logic
+backend,EvaluateV3FullTests.test_refuses_to_run_at_beta_1,backend/recommendations/test_v3_full.py:127,"assertRaisesMessage(CommandError, ""RETRIEVAL_BETA is 1""):",integration,logic
+backend,EvaluateV3FullTests.test_fully_graded_reports_every_section_writes_raw_and_stores_nothing,backend/recommendations/test_v3_full.py:133,assertEqual(,integration,logic
+backend,EvaluateV3FullTests.test_ungraded_pairs_are_unknown_and_listed_without_grades,backend/recommendations/test_v3_full.py:164,"assertIn(""UNKNOWN"", output)",integration,logic
+backend,MergeGradesTests.test_sheets_are_merged_per_rater,backend/recommendations/test_v3_statistics.py:25,"assertEqual(merge_grades(sheets, ""relevance""), {""H01"": {""A"": 2, ""B"": 0}})",unit,logic
+backend,MergeGradesTests.test_a_pair_graded_differently_is_an_error,backend/recommendations/test_v3_statistics.py:33,"assertRaisesMessage(CommandError, ""graded 2 in one sheet and 1""):",unit,logic
+backend,MergeGradesTests.test_ungraded_counts_top_k_slots_only,backend/recommendations/test_v3_statistics.py:41,"assertEqual(ungraded(rankings, grades, [""m""]), 2)  # D and E, not F",unit,logic
+backend,EvaluateV3StatisticsTests.test_refuses_ungraded_rankings,backend/recommendations/test_v3_statistics.py:83,"assertRaisesMessage(CommandError, ""no label""):",integration,logic
+backend,EvaluateV3StatisticsTests.test_refuses_to_run_at_beta_1,backend/recommendations/test_v3_statistics.py:90,"assertRaisesMessage(CommandError, ""RETRIEVAL_BETA is 1""):",integration,logic
+backend,EvaluateV3StatisticsTests.test_reports_both_comparisons_for_both_raters_and_stores_nothing,backend/recommendations/test_v3_statistics.py:96,assertEqual(,integration,logic
+backend,EvaluateV3StatisticsTests.test_without_second_rater_grades_their_section_is_withheld,backend/recommendations/test_v3_statistics.py:116,"assertIn(""no grade from the nurse"", output)",integration,logic
 backend,WarmUpTests.test_loads_the_encoder_once_and_encodes,backend/recommendations/test_warmup.py:39,assertIsNotNone(warmup.warm_up()),unit,logic
 backend,WarmUpTests.test_env_flag_disables_it,backend/recommendations/test_warmup.py:48,assertIsNone(warmup.warm_up()),unit,logic
 backend,WarmUpTests.test_default_is_off_in_development_and_on_otherwise,backend/recommendations/test_warmup.py:56,assertFalse(warmup.enabled()),unit,logic

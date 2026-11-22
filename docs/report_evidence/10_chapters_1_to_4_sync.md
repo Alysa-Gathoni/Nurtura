@@ -1,6 +1,6 @@
 # Chapters 1-4 against the build
 
-> Generated 2026-11-21T23:26:47+03:00 at commit `45ea972` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T00:26:05+03:00 at commit `3966c02` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 3a. Data model
 
@@ -194,6 +194,8 @@ Who can enter: Django's `AdminSite.has_permission` requires an active staff user
 | `evaluate_beyond_accuracy` | Diversity, novelty, coverage and personalisation of the top 5. | no | no | no |
 | `evaluate_learned_ranker` | Train a learned ranker on the tune children and test it once. | yes | yes | no |
 | `evaluate_statistics` | Paired statistics and age-weight sensitivity on the held-out set. | no | no | no |
+| `evaluate_v3_full` | Full offline evaluation of the current system (v3). | yes | yes | no |
+| `evaluate_v3_statistics` | Paired significance tests for the v3 configuration (SBERT + TF-IDF). | no | no | no |
 | `explanation_samples` | Print the top recommendation and its explanation for held-out children. | no | no | no |
 | `export_heldout_labels` | Write the pooled, shuffled held-out labelling sheet. | no | yes | no |
 | `export_relevance_template` | Write the relevance-labelling CSV template for the sample children. | no | yes | no |
@@ -322,7 +324,7 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 
 ## 3i. Merged since tag `sprint6-explanations-v1` (2026-10-10)
 
-90 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
+92 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
 
 | PR | Merged | Title |
 |---|---|---|
@@ -416,3 +418,5 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 | #261 | 2026-11-21 | test: check alpha at the SBERT/TF-IDF mix (#260) |
 | #263 | 2026-11-21 | docs: record activity difficulty levels as future work (#262) |
 | #265 | 2026-11-21 | docs: refresh the report evidence pack after Kenyan time and the α check (#264) |
+| #267 | 2026-11-22 | docs: final refresh of the report evidence pack before submission (#266) |
+| #269 | 2026-11-22 | test: significance tests for the v3 configuration (#268) |
