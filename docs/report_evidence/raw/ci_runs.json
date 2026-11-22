@@ -1,6 +1,36 @@
 [
   {
     "conclusion": "success",
+    "createdAt": "2026-11-21T19:38:16Z",
+    "databaseId": 44941993266,
+    "displayTitle": "Merge pull request #265 from <redacted>/docs/264-evidence-refresh",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-21T19:37:58Z",
+    "databaseId": 44941966501,
+    "displayTitle": "Merge pull request #263 from <redacted>/docs/262-difficulty-levels",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-21T19:34:05Z",
+    "databaseId": 44941624269,
+    "displayTitle": "docs: refresh the report evidence pack after Kenyan time and the α check (#264)",
+    "event": "pull_request",
+    "headBranch": "docs/264-evidence-refresh",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
     "createdAt": "2026-11-21T17:30:04Z",
     "databaseId": 44930370274,
     "displayTitle": "docs: record activity difficulty levels as future work (#262)",
@@ -1966,36 +1996,6 @@
     "displayTitle": "Merge pull request #92 from <redacted>/feature/90-redesign",
     "event": "push",
     "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-14T10:22:06Z",
-    "databaseId": 38549073217,
-    "displayTitle": "Merge pull request #89 from <redacted>/feature/85-offline-recommen…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-14T10:21:55Z",
-    "databaseId": 38549050449,
-    "displayTitle": "Merge pull request #88 from <redacted>/feature/84-activity-detail",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-11T07:44:04Z",
-    "databaseId": 38122366050,
-    "displayTitle": "feat: two-step verification code screen in the app (#91)",
-    "event": "pull_request",
-    "headBranch": "feature/91-two-step-mobile",
     "status": "completed",
     "workflowName": "CI"
   }

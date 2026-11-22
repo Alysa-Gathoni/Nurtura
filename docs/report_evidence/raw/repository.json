@@ -9,11 +9,11 @@
     "sprint9-eval-v3 2026-11-21",
     "sprint9-eval-v3.1 2026-11-21"
   ],
-  "merged_prs": 130,
-  "closed_issues": 130,
-  "commits_on_main": "324",
+  "merged_prs": 132,
+  "closed_issues": 132,
+  "commits_on_main": "328",
   "ci_conclusions": {
-    "success": 296,
+    "success": 299,
     "failure": 5
   },
   "contributors": [

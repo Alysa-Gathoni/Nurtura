@@ -1,6 +1,6 @@
 # Security, privacy and deployment
 
-> Generated 2026-11-21T22:32:59+03:00 at commit `48210e2` by `backend\venv\Scripts\python.exe scripts\report_evidence\security_privacy.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-21T23:28:41+03:00 at commit `45ea972` by `backend\venv\Scripts\python.exe scripts\report_evidence\security_privacy.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 4a. Negative tests
 
@@ -91,8 +91,8 @@
 ## 4e. Deployment
 
 - **Deployment files in the repository:** none.
-- **Hosting:** No deployment files in the repository; docs/known_limitations.md:49 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).
-- **Measured** (one development laptop, `05_latency.md`): peak working set 603.0 MB; start-up 13.7 s.
+- **Hosting:** No deployment files in the repository; docs/known_limitations.md:50 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).
+- **Measured** (one development laptop, `05_latency.md`): peak working set 601.0 MB; start-up 31.1 s.
 
 | Disk | Size |
 |---|---|
