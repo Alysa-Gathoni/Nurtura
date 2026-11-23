@@ -7,7 +7,7 @@
 | **The current evaluation labels** (v2, frozen at `sprint9-eval-v2`) | `heldout_labels_v2.csv` |
 | The extra labels for the learned-ranker experiment | `learned_ranker_extra.csv` |
 | The pairs to grade for the TF-IDF comparison (#248) | `tfidf_extra.csv` |
-| The pairs to grade to complete the full v3 evaluation (#272), once graded | `v3_extra.csv` |
+| The pairs graded to complete the full v3 evaluation (#272, #274) | `v3_extra.csv` |
 | To grade a sheet | `label_heldout.html` (open it in Chrome or Edge, then choose the CSV) |
 | The v1 record (`sprint5-eval-v1`, 54 activities) and the old development-set template | `archive/` |
 
@@ -114,7 +114,7 @@ H17 stays the content-gap child and is reported separately, as in v1, although S
 
 **TF-IDF comparison** (#248): `tfidf_extra.csv` holds the 123 pairs that SBERT/TF-IDF hybrids put in a top 5 that the v2 sheet doesn't grade, exported blind and shuffled by `compare_tfidf --export-unlabelled`. Graded on 20 Nov 2026 by the researcher (`relevance`) and the nurse (`relevance_rater2`): quadratic-weighted κ 0.685. See [docs/tfidf_comparison.md](../../docs/tfidf_comparison.md).
 
-**Full v3 evaluation** (#272): `v3_extra.csv` will hold the 15 pairs that `evaluate_v3_full` (#270) found ungraded by both raters (at α 0.0 and 0.1, two H17 pairs at α 0.2 and 0.3, and the no-age-weight ablation), exported blind and shuffled by `evaluate_v3_full --export-ungraded`. It isn't in the repository until both raters have graded it; the command reads it automatically when it exists. See [docs/eval_v3_full_results.md](../../docs/eval_v3_full_results.md).
+**Full v3 evaluation** (#272, #274): `v3_extra.csv` holds the 15 pairs that `evaluate_v3_full` (#270) found ungraded by both raters (at α 0.0 and 0.1, two H17 pairs at α 0.2 and 0.3, and the no-age-weight ablation), exported blind and shuffled by `evaluate_v3_full --export-ungraded`. Graded on 23 Nov 2026 by the researcher (`relevance`) and the nurse (`relevance_rater2`), each on their own copy; the same grade on 9 of 15. The command reads it automatically. See [docs/eval_v3_full_results.md](../../docs/eval_v3_full_results.md).
 
 **Learned-ranker experiment** (#183): `learned_ranker_extra.csv` holds the 13 pairs the learned ranker put in a top 5 that the v2 sheet doesn't grade, all graded. Result: α = 0.7 stays (test nDCG@5 0.836 against 0.737). See [docs/experiment_learned_ranker.md](../../docs/experiment_learned_ranker.md).
 

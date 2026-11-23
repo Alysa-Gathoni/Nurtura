@@ -1,6 +1,6 @@
 # Testing and evaluation record
 
-> **Last updated: 2026-11-23** (full v3 evaluation added, #270; v3 statistics, #268). Earlier: 2026-11-12 (v2 statistics, beyond-accuracy measures and accessibility added; #31 hand check superseded). The phone run (section 1) is from 2026-10-15; the automated test counts and results are from `main` at commit `cddefe5`, run on 2026-10-16; defects D10–D12 were added on 2026-10-29. Every result below comes from a real run, log or pull request; nothing is estimated.
+> **Last updated: 2026-11-23** (full v3 evaluation, #270 and #274; v3 statistics, #268). Earlier: 2026-11-12 (v2 statistics, beyond-accuracy measures and accessibility added; #31 hand check superseded). The phone run (section 1) is from 2026-10-15; the automated test counts and results are from `main` at commit `cddefe5`, run on 2026-10-16; defects D10–D12 were added on 2026-10-29. Every result below comes from a real run, log or pull request; nothing is estimated.
 
 This record covers what has been tested so far, the results (expected and actual), the defects found and how they were corrected, and the initial evaluation evidence. What is still to evaluate is listed at the end.
 
@@ -171,7 +171,7 @@ The weight α between the rule engine and SBERT similarity was chosen on 11 *tun
 
 **v3 statistics (2026-11-22, #268):** the configuration the app uses since #250 (SBERT + TF-IDF at β = 0.25, α = 0.7), with every top-5 pair graded. Against SBERT-only, test nDCG@5 +0.305, 95% CI [+0.164, +0.455], all 8 children better, Wilcoxon p = 0.008 (nurse's grades: +0.406, p = 0.016). Against the v2 system, +0.059, CI [−0.005, +0.127], p = 0.156, not significant. See [eval_v3_statistics.md](eval_v3_statistics.md).
 
-**Full v3 evaluation (2026-11-23, #270):** the current system evaluated in full with the v2 method (plan committed first). Test nDCG@5 0.882 against 0.577 for SBERT only and 0.604 for hybrid retrieval only; rater agreement over 380 rows, quadratic κ 0.665; 1 grade-0 slot in 100 against 16; explanations all traced to the stored profile, none showing a score. 15 pairs (α 0.0 and 0.1, and the no-age-weight ablation) are still ungraded, so those figures are UNKNOWN. See [eval_v3_full_results.md](eval_v3_full_results.md).
+**Full v3 evaluation (2026-11-23, #270, #274):** the current system evaluated in full with the v2 method (plan committed first), every pair graded by both raters (395). Test nDCG@5 0.882 against 0.577 for SBERT only (+0.305, p = 0.008) and 0.604 for hybrid retrieval only; ablation: no age weight 0.577 (p = 0.016), no rule priority 0.881 (p = 0.781); quadratic κ 0.655; 1 grade-0 slot in 100 against 16; explanations all traced to the stored profile, none showing a score. See [eval_v3_full_results.md](eval_v3_full_results.md).
 
 **Accessibility (2026-11-10, #206):** `accessibility_test.dart` runs Flutter's Android tap-target, labelled tap-target and text-contrast guidelines on sign-in and all five caregiver tabs in light and dark themes, and renders every tab at twice the text size. The first run found the child switcher and the Log in/Register toggle under 48 px, muted text, terracotta and rose text below 4.5:1 contrast in the light theme, and two rows overflowing at large text. All were fixed; all checks now pass.
 
