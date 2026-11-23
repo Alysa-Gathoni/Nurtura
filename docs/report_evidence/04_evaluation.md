@@ -1,6 +1,6 @@
 # Held-out evaluation (v2 and v3)
 
-> Generated 2026-11-23T00:22:17+03:00 at commit `3966c02` by `backend\venv\Scripts\python.exe scripts\report_evidence\evaluation.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T10:49:59+03:00 at commit `36a36a4` by `backend\venv\Scripts\python.exe scripts\report_evidence\evaluation.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 Labels: `data/evaluation/heldout_labels_v2.csv`. Raw command output: `raw/alpha_grid_markdown.txt` (`manage.py evaluate_alpha_grid --markdown --report-alpha 0.7`). The tables below are recomputed from the same rankings and labels.
 
@@ -186,10 +186,10 @@ The app's configuration (β = 0.25, α = 0.7) against SBERT only and against the
 
 ## Full evaluation of the current system (v3)
 
-The configuration the app uses (β = 0.25, α = 0.7), evaluated in full with the v2 method, so Chapter 5 can report the current system (#270). The plan was committed before the run (`docs/eval_v3_full_plan.md:40`). Labels: the v2 sheet plus `data/evaluation/tfidf_extra.csv`; researcher's grades unless stated. No grade is imputed and no ungraded pair counts as 0: figures that need one are UNKNOWN, and every ungraded pair is in `raw/v3_ungraded_pairs.csv` with empty grade columns. Command: `manage.py evaluate_v3_full --markdown --raw-dir docs/report_evidence/raw` (raw output `raw/v3_full_markdown.txt`). Raw tables: `raw/v3_alpha_grid.csv`, `raw/v3_test_results.csv`, `raw/v3_per_profile_by_rater.csv`, `raw/v3_rater_agreement.json`, `raw/v3_confusion.csv`, `raw/v3_beyond_accuracy.csv`, `raw/v3_rank_grade_matrix.csv`, `raw/v3_ablation.csv`, `raw/v3_explanation_check.json`, `raw/v3_label_coverage.csv`. Figures: `figures/v3_alpha_curve.png`, `figures/v3_per_profile.png`, `figures/v3_grade_by_rank.png` (see `09_figures.md`).
+The configuration the app uses (β = 0.25, α = 0.7), evaluated in full with the v2 method, so Chapter 5 can report the current system (#270). The plan was committed before the run (`docs/eval_v3_full_plan.md:40`). Labels: the v2 sheet plus `data/evaluation/tfidf_extra.csv` and, once graded, `data/evaluation/v3_extra.csv` (the command's "Setting" line names the sheets used); researcher's grades unless stated. No grade is imputed and no ungraded pair counts as 0: figures that need one are UNKNOWN, and every ungraded pair is in `raw/v3_ungraded_pairs.csv` with empty grade columns. Command: `manage.py evaluate_v3_full --markdown --raw-dir docs/report_evidence/raw` (raw output `raw/v3_full_markdown.txt`). Raw tables: `raw/v3_alpha_grid.csv`, `raw/v3_test_results.csv`, `raw/v3_per_profile_by_rater.csv`, `raw/v3_rater_agreement.json`, `raw/v3_confusion.csv`, `raw/v3_beyond_accuracy.csv`, `raw/v3_rank_grade_matrix.csv`, `raw/v3_ablation.csv`, `raw/v3_explanation_check.json`, `raw/v3_label_coverage.csv`. Figures: `figures/v3_alpha_curve.png`, `figures/v3_per_profile.png`, `figures/v3_grade_by_rank.png` (see `09_figures.md`).
 
 ### Setting
-v3: retrieval beta 0.25 (settings.RETRIEVAL_BETA), alpha 0.7. Labels: heldout_labels_v2.csv, tfidf_extra.csv. Plan fixed before the run: docs/eval_v3_full_plan.md (#270).
+v3: retrieval beta 0.25 (settings.RETRIEVAL_BETA), alpha 0.7. Labels: heldout_labels_v2.csv, tfidf_extra.csv, v3_extra.csv. Plan fixed before the run: docs/eval_v3_full_plan.md (#270).
 Bootstrap: 10,000 resamples of children, seed 2026, percentile 95% interval. Wilcoxon: two-sided signed-rank test, zero differences dropped. Test children primary.
 No grade is imputed and no ungraded pair counts as 0: a figure that needs an ungraded top-k pair is UNKNOWN.
 
@@ -198,10 +198,10 @@ No grade is imputed and no ungraded pair counts as 0: a figure that needs an ung
 |---|---|---|---|
 | SBERT only | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
 | Hybrid retrieval only | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
-| alpha 0.0 | 50/55 (5 ungraded by nurse) | 35/40 (5 ungraded by nurse) | 3/5 (2 ungraded by nurse) |
-| alpha 0.1 | 53/55 (2 ungraded by nurse) | 39/40 (1 ungraded by nurse) | 4/5 (1 ungraded by nurse) |
-| alpha 0.2 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 4/5 (1 ungraded by nurse) |
-| alpha 0.3 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 4/5 (1 ungraded by nurse) |
+| alpha 0.0 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
+| alpha 0.1 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
+| alpha 0.2 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
+| alpha 0.3 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
 | alpha 0.4 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
 | alpha 0.5 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
 | alpha 0.6 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
@@ -209,17 +209,17 @@ No grade is imputed and no ungraded pair counts as 0: a figure that needs an ung
 | alpha 0.8 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
 | alpha 0.9 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
 | alpha 1.0 | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
-| No age weight | 53/55 (2 ungraded by nurse) | 39/40 (1 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
+| No age weight | 55/55 (0 ungraded by nurse) | 40/40 (0 ungraded by nurse) | 5/5 (0 ungraded by nurse) |
 
-Ungraded pairs across all settings: 15 (15 need grading by both raters). Listed in raw/v3_ungraded_pairs.csv with empty grade columns.
+Ungraded pairs across all settings: 0 (0 need grading by both raters). Listed in raw/v3_ungraded_pairs.csv with empty grade columns.
 
 ### 1. Alpha grid (mean nDCG@5, researcher's grades)
 | Setting | Tune | Test | Ungraded (tune) | Ungraded (test) |
 |---|---|---|---|---|
 | SBERT only | 0.535 | 0.577 | 0 | 0 |
 | Hybrid retrieval only | 0.474 | 0.604 | 0 | 0 |
-| alpha 0.0 | UNKNOWN | UNKNOWN | 5 | 5 |
-| alpha 0.1 | UNKNOWN | UNKNOWN | 2 | 1 |
+| alpha 0.0 | 0.781 | 0.881 | 0 | 0 |
+| alpha 0.1 | 0.792 | 0.892 | 0 | 0 |
 | alpha 0.2 | 0.820 | 0.892 | 0 | 0 |
 | alpha 0.3 | 0.821 | 0.893 | 0 | 0 |
 | alpha 0.4 | 0.820 | 0.893 | 0 | 0 |
@@ -230,7 +230,7 @@ Ungraded pairs across all settings: 15 (15 need grading by both raters). Listed 
 | alpha 0.9 | 0.822 | 0.882 | 0 | 0 |
 | alpha 1.0 | 0.803 | 0.852 | 0 | 0 |
 
-Rule (best tune mean, middle of the range within 0.02): best 0.822; within 0.02: 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0; chosen alpha 0.6. Left out (tune mean UNKNOWN): 0.0, 0.1.
+Rule (best tune mean, middle of the range within 0.02): best 0.822; within 0.02: 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0; chosen alpha 0.6.
 
 ### 2. Test set at alpha 0.7 against both baselines
 | Setting | nDCG@5 | nDCG@3 | P@5>=1 | P@5=2 |
@@ -249,7 +249,7 @@ P@5>=1 counts grade 1 or 2 in the top 5; P@5=2 counts grade 2 only.
 | H03 | test | researcher | 0.686 | 0.462 | 0.177 |
 | H03 | test | nurse | 0.686 | 0.462 | 0.049 |
 | H04 | test | researcher | 0.913 | 0.790 | 0.673 |
-| H04 | test | nurse | 0.752 | 0.365 | 0.287 |
+| H04 | test | nurse | 0.686 | 0.333 | 0.262 |
 | H07 | test | researcher | 1.000 | 0.688 | 0.799 |
 | H07 | test | nurse | 1.000 | 0.590 | 0.756 |
 | H10 | test | researcher | 1.000 | 0.647 | 0.815 |
@@ -269,28 +269,28 @@ Test, nurse's grades, alpha 0.7 against SBERT only: 7/0/1 better/tied/worse.
 Test, nurse's grades, alpha 0.7 against Hybrid retrieval only: 6/0/2 better/tied/worse.
 
 ### 4. Agreement between raters (every row graded by both)
-380 rows (20 children).
+395 rows (20 children).
 
 | Measure | Value | 95% CI |
 |---|---|---|
-| Cohen's kappa, unweighted | 0.477 | [0.381, 0.562] |
-| Cohen's kappa, linear | 0.564 | [0.484, 0.633] |
-| Cohen's kappa, quadratic | 0.665 | [0.599, 0.723] |
-| Exact agreement | 0.666 | - |
+| Cohen's kappa, unweighted | 0.471 | [0.377, 0.555] |
+| Cohen's kappa, linear | 0.556 | [0.477, 0.626] |
+| Cohen's kappa, quadratic | 0.655 | [0.587, 0.717] |
+| Exact agreement | 0.663 | - |
 
 Rows: researcher; columns: nurse.
 
 |  | Nurse 0 | Nurse 1 | Nurse 2 | Total |
 |---|---|---|---|---|
-| Researcher 0 | 41 | 10 | 0 | 51 |
-| Researcher 1 | 41 | 97 | 12 | 150 |
-| Researcher 2 | 4 | 60 | 115 | 179 |
+| Researcher 0 | 41 | 11 | 0 | 52 |
+| Researcher 1 | 41 | 99 | 15 | 155 |
+| Researcher 2 | 5 | 61 | 122 | 188 |
 
 ### 5. Test: alpha 0.7 against SBERT only, on each rater's grades
 | Rater | n | alpha 0.7 | SBERT only | Difference [95% CI] | Better/tied/worse | W | p |
 |---|---|---|---|---|---|---|---|
 | researcher | 8 | 0.882 | 0.577 | +0.305 [+0.164, +0.455] | 8/0/0 | 0 | 0.008 |
-| nurse | 8 | 0.788 | 0.382 | +0.406 [+0.225, +0.561] | 7/0/1 | 1 | 0.016 |
+| nurse | 8 | 0.780 | 0.379 | +0.401 [+0.221, +0.555] | 7/0/1 | 1 | 0.016 |
 
 ### 6. Beyond accuracy (all 20 profiles, researcher's grades)
 | Setting | Grade-0 slots (of 100) | From another age band | Grade-0 slots, test | Areas per top 5 | Distinct activities | Most frequent |
@@ -317,8 +317,8 @@ Grade by rank position, all 20 profiles:
 | Setting | Test nDCG@5 | Ungraded (test) | Full minus this [95% CI] | Full better/tied/worse | W | p |
 |---|---|---|---|---|---|---|
 | Full system | 0.882 | 0 | - | - | - | - |
-| No age weight | UNKNOWN | 1 | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN |
-| No rule priority (age weight + similarity) | UNKNOWN | 5 | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN |
+| No age weight | 0.577 | 0 | +0.305 [+0.167, +0.439] | 7/1/0 | 0 | 0.016 |
+| No rule priority (age weight + similarity) | 0.881 | 0 | +0.001 [-0.051, +0.057] | 3/2/3 | 9 | 0.781 |
 | Similarity only (hybrid retrieval) | 0.604 | 0 | +0.278 [+0.141, +0.422] | 8/0/0 | 0 | 0.008 |
 
 ### 8. Explanation check (stored batches, 20 profiles)

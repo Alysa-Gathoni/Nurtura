@@ -16,7 +16,7 @@
       "expires_in": 600,
       "resend_after": 30,
       "user": {
-        "id": 256,
+        "id": 274,
         "username": "<redacted>",
         "email": "<redacted>",
         "first_name": "",
@@ -40,7 +40,7 @@
     "response": {
       "token": "<redacted>",
       "user": {
-        "id": 256,
+        "id": 274,
         "username": "<redacted>",
         "email": "<redacted>",
         "first_name": "",
@@ -50,7 +50,7 @@
         "privacy_agreed_at": null,
         "has_password": true
       },
-      "device_trusted_until": "2026-12-22T21:23:04.099204+00:00"
+      "device_trusted_until": "2026-12-23T07:50:45.690728+00:00"
     }
   },
   {
@@ -72,7 +72,7 @@
     "response": {
       "token": "<redacted>",
       "user": {
-        "id": 256,
+        "id": 274,
         "username": "<redacted>",
         "email": "<redacted>",
         "first_name": "",
@@ -149,14 +149,14 @@
     },
     "status": 200,
     "response": {
-      "id": 256,
+      "id": 274,
       "username": "<redacted>",
       "email": "<redacted>",
       "first_name": "",
       "last_name": "",
       "role": "caregiver",
       "privacy_consent_required": false,
-      "privacy_agreed_at": "2026-11-23T00:23:05.191558+03:00",
+      "privacy_agreed_at": "2026-11-23T10:50:46.537154+03:00",
       "has_password": true
     }
   },
@@ -175,7 +175,7 @@
     },
     "status": 201,
     "response": {
-      "id": 2222,
+      "id": 2390,
       "name": "Fictional Child",
       "date_of_birth": "2025-10-23",
       "gender": "unspecified",
@@ -186,13 +186,13 @@
       "concerns": [
         "Language"
       ],
-      "created_at": "2026-11-23T00:23:05.206484+03:00",
-      "updated_at": "2026-11-23T00:23:05.206496+03:00"
+      "created_at": "2026-11-23T10:50:46.548482+03:00",
+      "updated_at": "2026-11-23T10:50:46.548496+03:00"
     }
   },
   {
     "step": "Record \"Waves bye-bye\" as Not yet",
-    "request": "POST /api/children/2222/milestones/",
+    "request": "POST /api/children/2390/milestones/",
     "body": {
       "reference": 184,
       "status": "not_yet"
@@ -200,14 +200,14 @@
     "status": 201,
     "response": {
       "milestone": {
-        "id": 2286,
+        "id": 2456,
         "reference": 184,
         "reference_key": "CDC-12M-LA-01",
         "domain": "Language",
         "description": "Waves \"bye-bye\"",
         "status": "not_yet",
         "observation_date": "2026-11-23",
-        "created_at": "2026-11-23T00:23:05.263845+03:00"
+        "created_at": "2026-11-23T10:50:46.585582+03:00"
       },
       "profile": {
         "age_months": 13.0,
@@ -251,18 +251,18 @@
             "reason": "Enjoys “water”, which sensory activities build on."
           }
         ],
-        "generated_at": "2026-11-23T00:23:05.268870+03:00"
+        "generated_at": "2026-11-23T10:50:46.588597+03:00"
       }
     }
   },
   {
     "step": "Generate recommendations",
-    "request": "POST /api/children/2222/recommendations/",
+    "request": "POST /api/children/2390/recommendations/",
     "body": {},
     "status": 201,
     "response": {
-      "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
-      "generated_at": "2026-11-22T21:23:18.637950+00:00",
+      "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
+      "generated_at": "2026-11-23T07:50:58.870803+00:00",
       "plan": {
         "starts": "2026-11-23",
         "ends": "2026-11-29",
@@ -270,10 +270,10 @@
       },
       "recommendations": [
         {
-          "id": 2392,
-          "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
+          "id": 2807,
+          "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
           "position": 1,
-          "generated_at": "2026-11-22T21:23:18.637950+00:00",
+          "generated_at": "2026-11-23T07:50:58.870803+00:00",
           "activity_id": "ACT-0179",
           "activity_name": "Songs About Daily Routines",
           "developmental_domain": "Language",
@@ -290,10 +290,10 @@
           "feedback": null
         },
         {
-          "id": 2393,
-          "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
+          "id": 2808,
+          "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
           "position": 2,
-          "generated_at": "2026-11-22T21:23:18.637950+00:00",
+          "generated_at": "2026-11-23T07:50:58.870803+00:00",
           "activity_id": "ACT-0176",
           "activity_name": "Building on Baby's Words",
           "developmental_domain": "Language",
@@ -310,10 +310,10 @@
           "feedback": null
         },
         {
-          "id": 2394,
-          "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
+          "id": 2809,
+          "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
           "position": 3,
-          "generated_at": "2026-11-22T21:23:18.637950+00:00",
+          "generated_at": "2026-11-23T07:50:58.870803+00:00",
           "activity_id": "ACT-0180",
           "activity_name": "Talking Through a Soft Toy",
           "developmental_domain": "Language",
@@ -330,10 +330,10 @@
           "feedback": null
         },
         {
-          "id": 2395,
-          "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
+          "id": 2810,
+          "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
           "position": 4,
-          "generated_at": "2026-11-22T21:23:18.637950+00:00",
+          "generated_at": "2026-11-23T07:50:58.870803+00:00",
           "activity_id": "ACT-0376",
           "activity_name": "Floating Flowers Colour Talk",
           "developmental_domain": "Language",
@@ -350,10 +350,10 @@
           "feedback": null
         },
         {
-          "id": 2396,
-          "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
+          "id": 2811,
+          "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
           "position": 5,
-          "generated_at": "2026-11-22T21:23:18.637950+00:00",
+          "generated_at": "2026-11-23T07:50:58.870803+00:00",
           "activity_id": "ACT-0375",
           "activity_name": "Real Words, Simple Directions",
           "developmental_domain": "Language",
@@ -386,12 +386,12 @@
   },
   {
     "step": "Read the stored batch",
-    "request": "GET /api/children/2222/recommendations/",
+    "request": "GET /api/children/2390/recommendations/",
     "body": null,
     "status": 200,
     "response": {
-      "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
-      "generated_at": "2026-11-22T21:23:18.637950+00:00",
+      "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
+      "generated_at": "2026-11-23T07:50:58.870803+00:00",
       "plan": {
         "starts": "2026-11-23",
         "ends": "2026-11-29",
@@ -399,10 +399,10 @@
       },
       "recommendations": [
         {
-          "id": 2392,
-          "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
+          "id": 2807,
+          "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
           "position": 1,
-          "generated_at": "2026-11-22T21:23:18.637950+00:00",
+          "generated_at": "2026-11-23T07:50:58.870803+00:00",
           "activity_id": "ACT-0179",
           "activity_name": "Songs About Daily Routines",
           "developmental_domain": "Language",
@@ -419,10 +419,10 @@
           "feedback": null
         },
         {
-          "id": 2393,
-          "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
+          "id": 2808,
+          "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
           "position": 2,
-          "generated_at": "2026-11-22T21:23:18.637950+00:00",
+          "generated_at": "2026-11-23T07:50:58.870803+00:00",
           "activity_id": "ACT-0176",
           "activity_name": "Building on Baby's Words",
           "developmental_domain": "Language",
@@ -439,10 +439,10 @@
           "feedback": null
         },
         {
-          "id": 2394,
-          "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
+          "id": 2809,
+          "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
           "position": 3,
-          "generated_at": "2026-11-22T21:23:18.637950+00:00",
+          "generated_at": "2026-11-23T07:50:58.870803+00:00",
           "activity_id": "ACT-0180",
           "activity_name": "Talking Through a Soft Toy",
           "developmental_domain": "Language",
@@ -459,10 +459,10 @@
           "feedback": null
         },
         {
-          "id": 2395,
-          "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
+          "id": 2810,
+          "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
           "position": 4,
-          "generated_at": "2026-11-22T21:23:18.637950+00:00",
+          "generated_at": "2026-11-23T07:50:58.870803+00:00",
           "activity_id": "ACT-0376",
           "activity_name": "Floating Flowers Colour Talk",
           "developmental_domain": "Language",
@@ -479,10 +479,10 @@
           "feedback": null
         },
         {
-          "id": 2396,
-          "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
+          "id": 2811,
+          "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
           "position": 5,
-          "generated_at": "2026-11-22T21:23:18.637950+00:00",
+          "generated_at": "2026-11-23T07:50:58.870803+00:00",
           "activity_id": "ACT-0375",
           "activity_name": "Real Words, Simple Directions",
           "developmental_domain": "Language",
@@ -515,7 +515,7 @@
   },
   {
     "step": "Mark the first idea done",
-    "request": "PUT /api/recommendations/2392/completion/",
+    "request": "PUT /api/recommendations/2807/completion/",
     "body": {
       "status": "completed"
     },
@@ -527,7 +527,7 @@
   },
   {
     "step": "Give feedback",
-    "request": "PUT /api/recommendations/2392/feedback/",
+    "request": "PUT /api/recommendations/2807/feedback/",
     "body": {
       "outcome": "went_well",
       "interest": "loved_it",
@@ -541,7 +541,7 @@
       "outcome": "went_well",
       "issues": [],
       "interest": "loved_it",
-      "date_submitted": "2026-11-22T21:23:18.691452+00:00",
+      "date_submitted": "2026-11-23T07:50:58.900382+00:00",
       "recorded": []
     }
   }

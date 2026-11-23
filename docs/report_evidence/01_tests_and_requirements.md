@@ -1,12 +1,12 @@
 # Tests, CI and requirement coverage
 
-> Generated 2026-11-23T00:19:21+03:00 at commit `3966c02` by `backend\venv\Scripts\python.exe scripts\report_evidence\tests_and_ci.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T12:42:50+03:00 at commit `36a36a4` by `backend\venv\Scripts\python.exe scripts\report_evidence\tests_and_ci.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1a. Test totals
 
 | Suite | Tests run | Result | Skipped | Time |
 |---|---|---|---|---|
-| Backend (`manage.py test -v 2`) | 728 | OK | 0 | 473.092 s |
+| Backend (`manage.py test -v 2`) | 730 | OK | 0 | 444.441 s |
 | Flutter (`flutter test --reporter json`) | 200 | {'success': 200} | 0 | |
 
 Skipped backend tests and the reason each gives:
@@ -17,9 +17,9 @@ Skipped backend tests and the reason each gives:
 
 Skipped Flutter tests: none.
 
-**Latest completed CI run on `main`:** CI, success, 2026-11-22T16:44:00Z (run 45045467383: Merge pull request #269 from <redacted>/test/268-v3-statistics).
+**Latest completed CI run on `main`:** CI, success, 2026-11-23T06:53:47Z (run 45127235810: Merge pull request #273 from <redacted>/test/272-v3-grading-sheet).
 
-**Skipped in that CI run (from its log):** Backend (Django, sqlite): 5, Backend (Django, postgresql): 3. CI runs without `-v`, so the log has counts only; the conditions in the code explain them:
+**Skipped in that CI run (from its log):** Backend (Django, postgresql): 3, Backend (Django, sqlite): 5. CI runs without `-v`, so the log has counts only; the conditions in the code explain them:
 
 | Test class | File | Runs only if | Reason given |
 |---|---|---|---|
@@ -34,11 +34,11 @@ Raw: `raw/tests_backend_log.txt`, `raw/tests_flutter_log.jsonl`, `raw/ci_runs.js
 
 ## 2e. Test inventory
 
-927 tests in `raw/test_inventory.csv` (suite, test, file:line, first assertion, level, type):
+929 tests in `raw/test_inventory.csv` (suite, test, file:line, first assertion, level, type):
 
 | Suite | Level | Tests |
 |---|---|---|
-| backend | integration | 575 |
+| backend | integration | 577 |
 | backend | unit | 153 |
 | flutter | end-to-end | 1 |
 | flutter | unit | 15 |

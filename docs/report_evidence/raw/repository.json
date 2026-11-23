@@ -7,19 +7,20 @@
     "sprint6-explanations-v1 2026-10-10",
     "sprint9-eval-v2 2026-11-02",
     "sprint9-eval-v3 2026-11-21",
-    "sprint9-eval-v3.1 2026-11-21"
+    "sprint9-eval-v3.1 2026-11-21",
+    "sprint9-eval-v3.2 2026-11-23"
   ],
-  "merged_prs": 134,
-  "closed_issues": 134,
-  "commits_on_main": "333",
+  "merged_prs": 136,
+  "closed_issues": 136,
+  "commits_on_main": "339",
   "ci_conclusions": {
-    "success": 304,
+    "success": 308,
     "failure": 5
   },
   "contributors": [
     {
       "login": "<redacted>",
-      "contributions": 333
+      "contributions": 339
     }
   ]
 }
