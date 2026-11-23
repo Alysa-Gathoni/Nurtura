@@ -1,12 +1,12 @@
 # Tests, CI and requirement coverage
 
-> Generated 2026-11-23T12:42:50+03:00 at commit `36a36a4` by `backend\venv\Scripts\python.exe scripts\report_evidence\tests_and_ci.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T13:33:36+03:00 at commit `d932476` by `backend\venv\Scripts\python.exe scripts\report_evidence\tests_and_ci.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1a. Test totals
 
 | Suite | Tests run | Result | Skipped | Time |
 |---|---|---|---|---|
-| Backend (`manage.py test -v 2`) | 730 | OK | 0 | 444.441 s |
+| Backend (`manage.py test -v 2`) | 730 | OK | 0 | 404.001 s |
 | Flutter (`flutter test --reporter json`) | 200 | {'success': 200} | 0 | |
 
 Skipped backend tests and the reason each gives:
@@ -17,9 +17,9 @@ Skipped backend tests and the reason each gives:
 
 Skipped Flutter tests: none.
 
-**Latest completed CI run on `main`:** CI, success, 2026-11-23T06:53:47Z (run 45127235810: Merge pull request #273 from <redacted>/test/272-v3-grading-sheet).
+**Latest completed CI run on `main`:** CI, success, 2026-11-23T10:04:11Z (run 45152683973: Merge pull request #277 from <redacted>/docs/276-readme-update).
 
-**Skipped in that CI run (from its log):** Backend (Django, postgresql): 3, Backend (Django, sqlite): 5. CI runs without `-v`, so the log has counts only; the conditions in the code explain them:
+**Skipped in that CI run (from its log):** Backend (Django, sqlite): 5, Backend (Django, postgresql): 3. CI runs without `-v`, so the log has counts only; the conditions in the code explain them:
 
 | Test class | File | Runs only if | Reason given |
 |---|---|---|---|

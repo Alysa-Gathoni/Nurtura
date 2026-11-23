@@ -1,14 +1,15 @@
 # Chapter 6 inputs
 
-> Generated 2026-11-23T10:55:47+03:00 at commit `36a36a4` by `backend\venv\Scripts\python.exe scripts\report_evidence\chapter6.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T13:42:25+03:00 at commit `d932476` by `backend\venv\Scripts\python.exe scripts\report_evidence\chapter6.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 5a. Open issues, TODO/FIXME and known defects
 
-**Open issues** (`gh issue list --state open`; `raw/open_issues.csv`): 1.
+**Open issues** (`gh issue list --state open`; `raw/open_issues.csv`): 2.
 
 | # | Title | Labels | Milestone | Opened |
 |---|---|---|---|---|
-| 274 | Add the graded v3 pairs and complete the full v3 evaluation | test | Sprint 9: Evaluation | 2026-11-23 |
+| 279 | fix: caregiver wording still says today's ideas instead of this week's | bug | Sprint 9: Evaluation | 2026-11-23 |
+| 278 | docs: retake three phone screenshots that show the old Today tab | docs | Sprint 9: Evaluation | 2026-11-23 |
 
 **TODO / FIXME / XXX / HACK comments** in backend, app and scripts code (`raw/todo_fixme.csv`): 0.
 
@@ -65,8 +66,8 @@ None found.
 | docs/known_limitations.md:65 | **Load tested on the laptop only** (#224, #226). The first run, on the development server, failed about half the requests at 200 caregivers at once, because PostgreSQL's 100 connections ran out. A connection pool, fewer PyTorch threads per request, a query-emb |
 | docs/known_limitations.md:66 | **The end-to-end test needs a person** to type the emailed code. It can't run unattended in CI. |
 | docs/known_limitations.md:67 | **The admin's fonts come from Google Fonts.** Offline, the admin falls back to system fonts. |
-| README.md:7 | **Where things stand:** see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) for the project in plain language, [docs/sprint_ii_review.md](docs/sprint_ii_review.md) for the current sprint status, and [docs/known_limitations.md](docs/known_limitations.md) f |
-| README.md:307 | / [docs/known_limitations.md](docs/known_limitations.md) / Known limitations and outstanding defects / |
+| README.md:7 | **Where things stand:** see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) for the project in plain language, [docs/known_limitations.md](docs/known_limitations.md) for known limitations and open defects, and [docs/report_evidence/00_INDEX.md](docs/repor |
+| README.md:310 | / [docs/known_limitations.md](docs/known_limitations.md) / Known limitations and outstanding defects / |
 | docs/activity_classifier_results.md:102 | ## Limitations |
 | docs/alpha_sensitivity_tfidf.md:14 | - **Reading:** apply the v2 α rule (every α within 0.02 of the best tune mean qualifies; the middle of that range wins). If 0.7 is within 0.02 of the best, the check supports it; otherwise it's a limitation for Chapter 5. |
 | docs/cognitive_walkthrough.md:104 | / 3 / The clinic message appears after a single "Not yet" / B3 / 3 / Keep (it follows CDC), and watch reactions in the sessions; have the wording reviewed by a health worker (already a known limitation). / |
@@ -151,7 +152,7 @@ From the "decisions" sections of merged pull requests (8 PRs, 32 decisions), gro
 
 | Task | How | Where |
 |---|---|---|
-| Run the backend | `cd backend`, activate the venv, `pip install -r requirements-dev.txt`, `python setup_sbert.py`, `python manage.py migrate`, then `make run-backend` (or `NURTURA_MODEL_WARMUP=1 python manage.py runserver`) | README.md:63; Makefile:31 |
+| Run the backend | `cd backend`, activate the venv, `pip install -r requirements-dev.txt`, `python setup_sbert.py`, `python manage.py migrate`, then `make run-backend` (or `NURTURA_MODEL_WARMUP=1 python manage.py runserver`) | README.md:65; Makefile:31 |
 | Run the app | `cd mobile/nurtura_app`, `flutter pub get`, `adb reverse tcp:8000 tcp:8000`, `flutter run -d <device> --dart-define=API_BASE_URL=http://127.0.0.1:8000` | mobile/nurtura_app/README.md |
 | Add an activity | In the app as an administrator: Activities → add; or the web admin. New activities start as Draft | backend/activities/api.py:62; backend/activities/models.py:26 |
 | Publish it | Draft → Under Review → Published (skipping review is refused); then `python manage.py embed_activities` if the app didn't embed it | backend/activities/models.py:26; backend/recommendations/management/commands/embed_activities.py |

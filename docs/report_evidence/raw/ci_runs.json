@@ -1,6 +1,46 @@
 [
   {
     "conclusion": "success",
+    "createdAt": "2026-11-23T10:04:11Z",
+    "databaseId": 45152683973,
+    "displayTitle": "Merge pull request #277 from <redacted>/docs/276-readme-update",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-23T09:54:01Z",
+    "databaseId": 45151153648,
+    "displayTitle": "docs: bring the README up to date with the current system and results (#276)",
+    "event": "pull_request",
+    "headBranch": "docs/276-readme-update",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-23T09:47:38Z",
+    "databaseId": 45150218359,
+    "displayTitle": "Merge pull request #275 from <redacted>/test/274-v3-grades",
+    "event": "push",
+    "headBranch": "main",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
+    "createdAt": "2026-11-23T09:43:28Z",
+    "databaseId": 45149616200,
+    "displayTitle": "data: add the graded v3 pairs and complete the full v3 evaluation (#274)",
+    "event": "pull_request",
+    "headBranch": "test/274-v3-grades",
+    "status": "completed",
+    "workflowName": "CI"
+  },
+  {
+    "conclusion": "success",
     "createdAt": "2026-11-23T06:53:47Z",
     "databaseId": 45127235810,
     "displayTitle": "Merge pull request #273 from <redacted>/test/272-v3-grading-sheet",
@@ -1954,46 +1994,6 @@
     "createdAt": "2026-10-14T18:53:42Z",
     "databaseId": 38619032060,
     "displayTitle": "Merge pull request #103 from <redacted>/fix/102-offline-launch",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-14T18:53:25Z",
-    "databaseId": 38618993014,
-    "displayTitle": "Merge pull request #101 from <redacted>/feature/100-done-and-feedb…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-14T18:53:08Z",
-    "databaseId": 38618952744,
-    "displayTitle": "Merge pull request #99 from <redacted>/feature/96-admin-feedback-r…",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-14T18:52:51Z",
-    "databaseId": 38618910833,
-    "displayTitle": "Merge pull request #98 from <redacted>/feature/95-feedback-manager",
-    "event": "push",
-    "headBranch": "main",
-    "status": "completed",
-    "workflowName": "CI"
-  },
-  {
-    "conclusion": "success",
-    "createdAt": "2026-10-14T18:52:38Z",
-    "databaseId": 38618880718,
-    "displayTitle": "Merge pull request #97 from <redacted>/feature/94-mark-completed",
     "event": "push",
     "headBranch": "main",
     "status": "completed",

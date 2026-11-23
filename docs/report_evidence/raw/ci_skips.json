@@ -1,7 +1,7 @@
 {
   "per_job": {
-    "Backend (Django, postgresql)": 3,
-    "Backend (Django, sqlite)": 5
+    "Backend (Django, sqlite)": 5,
+    "Backend (Django, postgresql)": 3
   },
   "conditions": [
     {

@@ -40,8 +40,8 @@ docs/known_limitations.md:64,"**Memory and start-up.** With the SBERT model load
 docs/known_limitations.md:65,"**Load tested on the laptop only** (#224, #226). The first run, on the development server, failed about half the requests at 200 caregivers at once, because PostgreSQL's 100 connections ran out. A connection pool, fewer PyTorch threads per request, a query-emb"
 docs/known_limitations.md:66,**The end-to-end test needs a person** to type the emailed code. It can't run unattended in CI.
 docs/known_limitations.md:67,"**The admin's fonts come from Google Fonts.** Offline, the admin falls back to system fonts."
-README.md:7,"**Where things stand:** see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) for the project in plain language, [docs/sprint_ii_review.md](docs/sprint_ii_review.md) for the current sprint status, and [docs/known_limitations.md](docs/known_limitations.md) f"
-README.md:307,| [docs/known_limitations.md](docs/known_limitations.md) | Known limitations and outstanding defects |
+README.md:7,"**Where things stand:** see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) for the project in plain language, [docs/known_limitations.md](docs/known_limitations.md) for known limitations and open defects, and [docs/report_evidence/00_INDEX.md](docs/repor"
+README.md:310,| [docs/known_limitations.md](docs/known_limitations.md) | Known limitations and outstanding defects |
 docs/activity_classifier_results.md:102,## Limitations
 docs/alpha_sensitivity_tfidf.md:14,"- **Reading:** apply the v2 α rule (every α within 0.02 of the best tune mean qualifies; the middle of that range wins). If 0.7 is within 0.02 of the best, the check supports it; otherwise it's a limitation for Chapter 5."
 docs/cognitive_walkthrough.md:104,"| 3 | The clinic message appears after a single ""Not yet"" | B3 | 3 | Keep (it follows CDC), and watch reactions in the sessions; have the wording reviewed by a health worker (already a known limitation). |"
