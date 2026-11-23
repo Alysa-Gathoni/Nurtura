@@ -1,10 +1,12 @@
 # Nurtura
 
-Nurtura is an AI-based recommendation system that suggests evidence-based early childhood developmental activities (prenatal to 36 months) matched to a child's age and developmental needs. A rule engine turns the milestones a caregiver records into developmental priorities, Sentence-BERT (SBERT) matches those needs to a curated activity library, a weighted ranking orders the results, and each recommendation comes with a plain-language explanation.
+Nurtura is an AI-based recommendation system that suggests evidence-based early childhood developmental activities (prenatal to 36 months) matched to a child's age and developmental needs. A rule engine turns the milestones a caregiver records into developmental priorities. Sentence-BERT (SBERT, matching by meaning) and TF-IDF (matching by words) match those needs to a curated library of 449 activities, a weighted ranking orders the results, and each recommendation comes with a plain-language explanation. Ideas come as a weekly plan, Monday to Sunday.
 
 **Relationship to SOFIA:** Nurtura is the developmental-activity recommendation component of SOFIA, a larger platform built for Webmasters Kenya.
 
-**Where things stand:** see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) for the project in plain language, [docs/sprint_ii_review.md](docs/sprint_ii_review.md) for the current sprint status, and [docs/known_limitations.md](docs/known_limitations.md) for known limitations and open defects.
+**Where things stand:** see [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) for the project in plain language, [docs/known_limitations.md](docs/known_limitations.md) for known limitations and open defects, and [docs/report_evidence/00_INDEX.md](docs/report_evidence/00_INDEX.md) for the evidence pack (tests, evaluation, figures) generated from the repository.
+
+**Results:** on 8 held-out test children, the current system reaches nDCG@5 0.882 against 0.577 for SBERT alone (+0.305, 95% CI [+0.164, +0.455], p = 0.008), and the result holds on an independent nurse's grades (p = 0.016). See [docs/eval_v3_full_results.md](docs/eval_v3_full_results.md). The caregiver sessions (usability and satisfaction) are still to run.
 
 ## Repository layout
 
@@ -14,7 +16,7 @@ nurtura/
 │   ├── nurtura_backend/        settings, URLs, admin branding tests
 │   ├── profiles/               caregivers, children, milestones, rule engine, two-step sign-in
 │   ├── activities/             activity library and content review workflow
-│   ├── recommendations/        SBERT retrieval, weighted ranking, explanations, evaluation
+│   ├── recommendations/        SBERT + TF-IDF retrieval, weighted ranking, weekly plans, explanations, evaluation
 │   ├── feedback/               "done" marks and ratings (FeedbackManager), admin review
 │   ├── insights/               admin analytics: the app's admin API and the web admin's dashboard
 │   ├── templates/, static/     admin theme and dashboard
@@ -176,7 +178,7 @@ All endpoints are under `/api/` and, apart from registration and the sign-in ste
 | GET | `/api/children/<id>/profile/` | The rule engine's developmental priorities for the child |
 | GET | `/api/reference-milestones/?search=&domain=` | The CDC/WHO milestone catalogue |
 | GET, POST | `/api/children/<id>/recommendations/` | GET the newest stored batch; POST ranks, explains and stores a new batch (or returns the identical newest one while its week runs). Ideas come as a weekly plan (#244): `plan` gives its `starts` and `ends` dates and `ended`; a plan runs Monday to Sunday (#253; one made on a Sunday runs to the following Sunday), batches stored during it keep its start, and the first POST after it ends starts a new plan. Ideas rotate between weeks (#246): the 2 best of last week's untried ideas stay and the rest are ideas that weren't in last week's plan. The app asks for one when `ended` is true. The child's feedback adjusts the order after ranking (#179): ideas similar to one that went well move up, ones similar to one that didn't work move down, and one that didn't work is left out. Each recommendation carries the activity in full (`description`, `materials`, `cultural_relevance`, `source`, `source_url`) as well as a `short_description` for lists, the explanation, and any completion and feedback; no scores. Each card has `pinned` (chosen from the options after feedback, #177). Both also return `referral`: `null`, or a gentle clinic-visit message with the due milestones marked "Not yet" (#161), worked out on each request and never ranked |
-| GET | `/api/children/<id>/candidates/?limit=10` | SBERT retrieval candidates before ranking (for inspection) |
+| GET | `/api/children/<id>/candidates/?limit=10` | Retrieval candidates (SBERT + TF-IDF similarity) before ranking (for inspection) |
 | PUT, DELETE | `/api/recommendations/<id>/completion/` | Mark a recommended activity done (`status`: `completed` or `partially_completed`), or undo it |
 | GET | `/api/children/<id>/activities-done/` | How many distinct activities the child has done (`completed`), partly done (`partly`), and either in the last 7 days (`last_7_days`), for the Progress tab (#231). Counts only, never compared with other children |
 | GET, PUT | `/api/recommendations/<id>/feedback/` | Read or submit the caregiver's feedback: `outcome` (`went_well`, `partly`, `didnt_work`), `issues`, a list of what got in the way (`too_hard`, `too_easy`, `not_interested`, `no_materials`, `no_time`, `child_upset`) (#175), the child's `interest` (`bored`, `okay`, `happy`, `loved_it`), an optional `rating` (1–5), a `comment`, and `observed`: milestone keys from `/observable/` to record as Emerging (#185; needs the privacy notice agreed). The PUT response adds `recorded`, the skills just recorded. Submitting again replaces it |
@@ -280,7 +282,7 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | Format Python | (automatic on commit) | `pre-commit run --all-files` |
 | Apply migrations | | `cd backend && python manage.py migrate` |
 | Verify SBERT model | | `cd backend && python setup_sbert.py` |
-| Re-run the ranking evaluation | | `cd backend && python manage.py evaluate_alpha_grid` (see [docs/eval_v2_results.md](docs/eval_v2_results.md)) |
+| Re-run the v2 ranking evaluation (SBERT only) | | `cd backend && RETRIEVAL_BETA=1 python manage.py evaluate_alpha_grid` (see [docs/eval_v2_results.md](docs/eval_v2_results.md)); the current system is evaluated by `evaluate_v3_full` below |
 | Diversity, novelty, coverage and personalisation | | `cd backend && python manage.py evaluate_beyond_accuracy` (see [docs/eval_v2_beyond_accuracy.md](docs/eval_v2_beyond_accuracy.md)) |
 | Confidence intervals and age-weight sensitivity | | `cd backend && python manage.py evaluate_statistics` (see [docs/eval_v2_statistics.md](docs/eval_v2_statistics.md)) |
 | Significance tests for v3 (SBERT + TF-IDF) | | `cd backend && python manage.py evaluate_v3_statistics` (see [docs/eval_v3_statistics.md](docs/eval_v3_statistics.md)) |
@@ -302,13 +304,19 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | Document | What it covers |
 |---|---|
 | [docs/PROJECT_OVERVIEW.md](docs/PROJECT_OVERVIEW.md) | The project in plain language: pipeline, a worked example, results, status |
-| [docs/sprint_ii_review.md](docs/sprint_ii_review.md) | Sprint II requirements against their evidence; tasks done and outstanding; next steps |
+| [docs/sprint_ii_review.md](docs/sprint_ii_review.md) | Sprint II review (19 Oct 2026): requirements against their evidence at that point |
+| [docs/report_evidence/00_INDEX.md](docs/report_evidence/00_INDEX.md) | The evidence pack for the report: tests, environment, catalogue, evaluation, figures, security, generated by `scripts/report_evidence/run_all.ps1` |
 | [docs/testing_and_evaluation_record.md](docs/testing_and_evaluation_record.md) | Tests run, expected and actual results, defects and corrections, evaluation so far |
 | [docs/known_limitations.md](docs/known_limitations.md) | Known limitations and outstanding defects |
 | [docs/deployment_requirements.md](docs/deployment_requirements.md) | What hosting needs (Sprint III) |
+| [docs/cognitive_walkthrough.md](docs/cognitive_walkthrough.md) | Expert inspection of the caregiver tasks with eight personas: findings and severities |
+| [docs/performance_recommendations.md](docs/performance_recommendations.md) | Latency of the recommendations endpoint and the model warm-up |
+| [docs/load_test_results.md](docs/load_test_results.md) | Load test with Locust, 10 to 200 users at once (first run) |
+| [docs/performance_under_load.md](docs/performance_under_load.md) | The load test after the fixes in #226 |
 | [docs/device_tests.md](docs/device_tests.md) | The end-to-end test on four emulated devices (Android 7.0 small phone to tablet, large text): results and how to rerun |
 | [docs/database_backup.md](docs/database_backup.md) | Backing up and restoring the PostgreSQL database, and the backups taken |
 | [docs/demo_checklist.md](docs/demo_checklist.md) | Running a live demo on a phone |
+| [docs/sprint4_retrieval_spot_check.md](docs/sprint4_retrieval_spot_check.md) | Sprint 4 automatic check of SBERT retrieval |
 | [docs/sprint5_alpha_results.md](docs/sprint5_alpha_results.md) | The ranking evaluation v1 on 54 activities (held-out children, nDCG, choice of α) |
 | [docs/requirements_traceability.md](docs/requirements_traceability.md) | Every Chapter 4 requirement: where it is built, its tests and its status, with the old-ID crosswalk |
 | [docs/eval_v2_results.md](docs/eval_v2_results.md) | The ranking evaluation v2 on 449 activities, and why α stays 0.7 |
@@ -319,10 +327,11 @@ If black reformats a file, the commit stops. Stage the changes (`git add`) and c
 | [docs/alpha_sensitivity_tfidf.md](docs/alpha_sensitivity_tfidf.md) | α at the SBERT/TF-IDF mix: a sensitivity check (`manage.py alpha_sensitivity`) |
 | [docs/eval_v3_statistics.md](docs/eval_v3_statistics.md) | Confidence intervals and Wilcoxon tests for v3, against SBERT only and the v2 system (#268) |
 | [docs/eval_v3_full_plan.md](docs/eval_v3_full_plan.md) | The plan for the full v3 evaluation, fixed before the run (#270) |
-| [docs/eval_v3_full_results.md](docs/eval_v3_full_results.md) | Full evaluation of the current system (v3): α grid, baselines, both raters, beyond accuracy, ablation, explanations, label coverage (#270) |
+| [docs/eval_v3_full_results.md](docs/eval_v3_full_results.md) | **Full evaluation of the current system (v3), the main results:** α grid, baselines, both raters, beyond accuracy, ablation, explanations; every pair graded by both raters (#270, #274) |
 | [docs/activity_classifier_results.md](docs/activity_classifier_results.md) | The activity classifier: cross-validated accuracy, precision, recall, F1 and confusion matrices for area and age band (#181) |
 | [docs/experiment_learned_ranker.md](docs/experiment_learned_ranker.md) | Experiment: a ranker learned from the tune children's labels, against the α = 0.7 formula, with its decision rule (#183) |
-| [docs/explanation_reader_test.md](docs/explanation_reader_test.md) | The explanation reader test (Sprint 6) |
+| [docs/explanation_reader_test.md](docs/explanation_reader_test.md) | The explanation reader test (Sprint 6), with its [cards](docs/explanation_reader_test_cards.md), [form](docs/explanation_reader_test_form.md) and [session sheet](docs/explanation_reader_test_session_sheet.md) |
+| [docs/caregiver_evaluation.md](docs/caregiver_evaluation.md) | The caregiver evaluation plan (SUS, satisfaction), with its [consent form](docs/caregiver_evaluation_consent.md), [questionnaire](docs/caregiver_evaluation_form.md) and [session sheet](docs/caregiver_evaluation_session_sheet.md) |
 | [docs/DEVELOPMENT_PLAN.md](docs/DEVELOPMENT_PLAN.md) | The sprint plan and GitHub workflow |
 | [data/README.md](data/README.md) | Activity data: schema, sources, cleaning, ethics |
 
