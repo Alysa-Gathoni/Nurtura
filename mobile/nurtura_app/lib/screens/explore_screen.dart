@@ -18,7 +18,7 @@ import '../widgets/message_banner.dart';
 import '../widgets/pill_chip.dart';
 
 /// Explore (#194): browse and search activities for the child, save them
-/// for later, or add one to today's ideas.
+/// for later, or add one to this week's ideas.
 ///
 /// Without a search or filter it shows "Based on [child]'s interests",
 /// "Saved for later" and every activity for the child's age; a search
@@ -173,7 +173,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         key: const Key('exploreTried'),
-        content: Text("Added to ${widget.child.name}'s ideas for today."),
+        content: Text("Added to ${widget.child.name}'s ideas for this week."),
       ),
     );
     widget.onTried?.call(tried);
