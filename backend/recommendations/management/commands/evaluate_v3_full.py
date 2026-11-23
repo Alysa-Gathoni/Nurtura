@@ -1,8 +1,8 @@
 """Full offline evaluation of the current system, v3 (#270).
 
 Usage (from backend/):
-    python manage.py evaluate_v3_full [--labels PATH] [--extra-labels PATH]
-        [--markdown] [--raw-dir PATH]
+    python manage.py evaluate_v3_full [--labels PATH] [--extra-labels PATH ...]
+        [--markdown] [--raw-dir PATH] [--export-ungraded PATH [--force]]
 
 v3 is the configuration the app uses: retrieval mixing SBERT and TF-IDF at
 settings.RETRIEVAL_BETA (0.25) and the ranking at settings.RANKING_ALPHA
@@ -16,6 +16,12 @@ Label coverage: grades are never imputed and an ungraded pair never counts as
 0. A per-child figure that needs an ungraded top-k pair is UNKNOWN, and so is
 any mean or test using it. Every ungraded pair is listed (raw file
 v3_ungraded_pairs.csv, with empty grade columns for both raters).
+
+Extra labels default to tfidf_extra.csv and, once it exists, v3_extra.csv
+(the graded sheet of pairs this command found ungraded, #272).
+--export-ungraded writes those pairs as a blind, shuffled sheet in the
+held-out format (child profile and activity only: no setting, rank or score),
+for both raters to grade.
 
 With --raw-dir, the tables are also written there as CSV and JSON. The
 children are created inside a transaction that is rolled back, so nothing is
@@ -55,11 +61,13 @@ from recommendations.statistics import (
 )
 
 from .alpha_sensitivity import DEFAULT_EXTRA
+from .export_heldout_labels import COLUMNS as SHEET_COLUMNS
 from .evaluate_alpha_grid import DEFAULT_LABELS, TOLERANCE
 from .evaluate_statistics import fmt_p
 from .evaluate_v3_statistics import merge_grades
 
 USERNAME = "v3-full@nurtura.invalid"
+DEFAULT_V3_EXTRA = DEFAULT_LABELS.with_name("v3_extra.csv")
 K = 5
 UNKNOWN = "UNKNOWN"
 SBERT = "SBERT only"
@@ -95,18 +103,33 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--labels", type=Path, default=DEFAULT_LABELS)
-        parser.add_argument("--extra-labels", type=Path, default=DEFAULT_EXTRA)
+        parser.add_argument(
+            "--extra-labels",
+            type=Path,
+            nargs="*",
+            default=[DEFAULT_EXTRA, DEFAULT_V3_EXTRA],
+            help="Extra graded sheets; files that don't exist are skipped.",
+        )
         parser.add_argument("--markdown", action="store_true")
         parser.add_argument("--raw-dir", type=Path)
+        parser.add_argument(
+            "--export-ungraded",
+            type=Path,
+            help="Write the ungraded pairs as a blind sheet for both raters.",
+        )
+        parser.add_argument("--force", action="store_true")
 
     # ------------------------------------------------------------------ setup
 
     def handle(self, *args, **options):
         self.markdown = options["markdown"]
         self.raw_dir = options["raw_dir"]
-        paths = [options["labels"]]
-        if options["extra_labels"] and options["extra_labels"].exists():
-            paths.append(options["extra_labels"])
+        export = options["export_ungraded"]
+        if export and export.exists() and not options["force"]:
+            raise CommandError(f"{export} already exists. Use --force to overwrite it.")
+        paths = [options["labels"]] + [
+            p for p in options["extra_labels"] or [] if p.exists()
+        ]
         sheets = []
         for path in paths:
             try:
@@ -158,6 +181,8 @@ class Command(BaseCommand):
         self._beyond_section()
         self._ablation_section()
         self._explanation_section()
+        if export:
+            self._export_sheet(export)
 
     def _run(self):
         """Rankings for every setting, and the stored batches' explanations."""
@@ -711,6 +736,48 @@ class Command(BaseCommand):
             ],
         )
         self._write_json("v3_explanation_check.json", summary)
+
+    def _export_sheet(self, path):
+        """The pairs ungraded by both raters, blind and shuffled per child."""
+        by_child = {}
+        for pair in self.ungraded_pairs:
+            if pair["missing_for"] == "researcher and nurse":
+                by_child.setdefault(pair["child"], []).append(pair["activity_id"])
+        partial = sum(
+            1 for p in self.ungraded_pairs if p["missing_for"] != "researcher and nurse"
+        )
+        rows = []
+        for child in self.children:
+            for activity_id in heldout.shuffled(
+                by_child.get(child.child_id, []), child.child_id
+            ):
+                activity = self.activity[activity_id]
+                rows.append(
+                    {
+                        "child_id": child.child_id,
+                        "split": child.split,
+                        "child_profile": child.profile,
+                        "activity_id": activity_id,
+                        "activity_name": activity.activity_name,
+                        "activity_description": activity.description,
+                        "age_range": activity.age_range,
+                        "relevance": "",
+                        "notes": "",
+                        "relevance_rater2": "",
+                    }
+                )
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with open(path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=SHEET_COLUMNS)
+            writer.writeheader()
+            writer.writerows(rows)
+        self._line("")
+        self._line(f"Wrote {len(rows)} ungraded pair(s) to {path} (blind, shuffled).")
+        if partial:
+            self._line(
+                f"{partial} pair(s) are graded by one rater only and aren't in the "
+                "sheet; grade them in the sheet they came from."
+            )
 
     # ---------------------------------------------------------------- output
 
