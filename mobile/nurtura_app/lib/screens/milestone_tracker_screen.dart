@@ -135,7 +135,7 @@ class _MilestoneTrackerScreenState extends State<MilestoneTrackerScreen> {
           key: const Key('trackerSaved'),
           content: Text(
             'Saved: “${m.description}” is ${_statusWords[status]!.toLowerCase()}. '
-            "Today's ideas will update.",
+            "This week's ideas will update.",
           ),
         ),
       );
@@ -188,7 +188,7 @@ class _MilestoneTrackerScreenState extends State<MilestoneTrackerScreen> {
           ],
           if (tracker.prenatal)
             MessageBanner.info(
-              'Milestones start once $name is born. Until then, Today has '
+              'Milestones start once $name is born. Until then, This week has '
               'ideas for pregnancy.',
               key: const Key('trackerPrenatal'),
             )

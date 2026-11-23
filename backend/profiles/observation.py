@@ -77,7 +77,7 @@ def observation(child, on_date=None):
             f"You tried {tried} pregnancy {'idea' if tried == 1 else 'ideas'} "
             "this week."
             if tried
-            else "Try one of today's pregnancy ideas this week; talking and "
+            else "Try one of this week's pregnancy ideas; talking and "
             "singing to your bump is a lovely start."
         )
         return {
@@ -106,7 +106,7 @@ def observation(child, on_date=None):
         sentences.append(line)
     else:
         sentences.append(
-            f"No activities were marked done this week. One of today's ideas "
+            f"No activities were marked done this week. One of this week's ideas "
             f"is a good place to start with {name}."
         )
 

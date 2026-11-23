@@ -133,6 +133,10 @@ void main() {
     );
     expect(jsonDecode(post.body), {'reference': 1, 'status': 'emerging'});
     expect(find.byKey(const Key('trackerSaved')), findsOneWidget);
+    expect(
+      find.textContaining("This week's ideas will update."),
+      findsOneWidget,
+    );
     // Reloaded with the new status.
     expect(find.textContaining('Starting'), findsWidgets);
   });

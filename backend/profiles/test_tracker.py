@@ -106,7 +106,15 @@ class ObservationTests(TrackerTestCase):
 
     def test_nothing_this_week(self):
         self.assertIn("No activities were marked done this week", self.text())
+        self.assertIn("One of this week's ideas", self.text())
         self.assertIn("Record a few milestones", self.text())
+
+    def test_wording_follows_the_weekly_plan(self):
+        # Ideas come as a weekly plan (#244); nothing should say "today" (#279).
+        self.assertNotIn("today", self.text().lower())
+        self.child.date_of_birth = TODAY + datetime.timedelta(days=60)
+        self.child.save()
+        self.assertNotIn("today", self.text().lower())
 
     def test_counts_activities_and_how_they_went(self):
         recs = self.recommend(3)
@@ -153,6 +161,7 @@ class ObservationTests(TrackerTestCase):
         self.child.date_of_birth = TODAY + datetime.timedelta(days=60)
         self.child.save()
         self.assertIn("pregnancy ideas", self.text())
+        self.assertIn("this week's pregnancy ideas", self.text())
 
 
 class EndpointTests(TrackerTestCase):
