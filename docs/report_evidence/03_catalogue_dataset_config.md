@@ -1,6 +1,6 @@
 # Catalogue, dataset and configuration
 
-> Generated 2026-11-23T00:21:40+03:00 at commit `3966c02` by `backend\venv\Scripts\python.exe scripts\report_evidence\catalogue_and_config.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T10:49:22+03:00 at commit `36a36a4` by `backend\venv\Scripts\python.exe scripts\report_evidence\catalogue_and_config.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1c. Milestone catalogue
 

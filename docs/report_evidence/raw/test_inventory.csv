@@ -698,13 +698,15 @@ backend,AgeScenarioTests.test_weights_are_replaced_and_restored,backend/recommen
 backend,EvaluateStatisticsTests.test_refuses_unlabelled_rankings,backend/recommendations/test_statistics.py:160,"assertRaisesMessage(CommandError, ""no label""):",integration,logic
 backend,EvaluateStatisticsTests.test_reports_paired_statistics_and_sensitivity,backend/recommendations/test_statistics.py:166,"assertIn(text, output)",integration,logic
 backend,EvaluateStatisticsTests.test_reports_agreement_and_results_on_the_second_raters_labels,backend/recommendations/test_statistics.py:182,"assertIn(text, output)",integration,logic
-backend,HelperTests.test_a_mean_with_an_unknown_value_is_unknown,backend/recommendations/test_v3_full.py:39,"assertIsNone(strict_mean([0.5, None, 1.0]))",unit,logic
-backend,HelperTests.test_sentences_split_at_full_stops_only,backend/recommendations/test_v3_full.py:44,"assertEqual(len(sentences(text)), 3)",unit,logic
-backend,HelperTests.test_named_items_are_read_back,backend/recommendations/test_v3_full.py:52,"assertEqual(milestones, [""Waves bye-bye""])",unit,logic
-backend,HelperTests.test_check_counts_items_not_in_the_profile_and_scores,backend/recommendations/test_v3_full.py:62,"assertEqual(result[""explanations""], 2)",unit,logic
-backend,EvaluateV3FullTests.test_refuses_to_run_at_beta_1,backend/recommendations/test_v3_full.py:127,"assertRaisesMessage(CommandError, ""RETRIEVAL_BETA is 1""):",integration,logic
-backend,EvaluateV3FullTests.test_fully_graded_reports_every_section_writes_raw_and_stores_nothing,backend/recommendations/test_v3_full.py:133,assertEqual(,integration,logic
-backend,EvaluateV3FullTests.test_ungraded_pairs_are_unknown_and_listed_without_grades,backend/recommendations/test_v3_full.py:164,"assertIn(""UNKNOWN"", output)",integration,logic
+backend,HelperTests.test_a_mean_with_an_unknown_value_is_unknown,backend/recommendations/test_v3_full.py:40,"assertIsNone(strict_mean([0.5, None, 1.0]))",unit,logic
+backend,HelperTests.test_sentences_split_at_full_stops_only,backend/recommendations/test_v3_full.py:45,"assertEqual(len(sentences(text)), 3)",unit,logic
+backend,HelperTests.test_named_items_are_read_back,backend/recommendations/test_v3_full.py:53,"assertEqual(milestones, [""Waves bye-bye""])",unit,logic
+backend,HelperTests.test_check_counts_items_not_in_the_profile_and_scores,backend/recommendations/test_v3_full.py:63,"assertEqual(result[""explanations""], 2)",unit,logic
+backend,EvaluateV3FullTests.test_refuses_to_run_at_beta_1,backend/recommendations/test_v3_full.py:130,"assertRaisesMessage(CommandError, ""RETRIEVAL_BETA is 1""):",integration,logic
+backend,EvaluateV3FullTests.test_fully_graded_reports_every_section_writes_raw_and_stores_nothing,backend/recommendations/test_v3_full.py:136,assertEqual(,integration,logic
+backend,EvaluateV3FullTests.test_ungraded_pairs_are_unknown_and_listed_without_grades,backend/recommendations/test_v3_full.py:167,"assertIn(""UNKNOWN"", output)",integration,logic
+backend,ExportUngradedTests.test_the_sheet_is_blind_and_has_only_the_ungraded_pairs,backend/recommendations/test_v3_full.py:200,"assertEqual(reader.fieldnames, list(SHEET_COLUMNS))",integration,logic
+backend,ExportUngradedTests.test_an_existing_sheet_is_not_overwritten_without_force,backend/recommendations/test_v3_full.py:217,"assertRaisesMessage(CommandError, ""already exists""):",integration,logic
 backend,MergeGradesTests.test_sheets_are_merged_per_rater,backend/recommendations/test_v3_statistics.py:25,"assertEqual(merge_grades(sheets, ""relevance""), {""H01"": {""A"": 2, ""B"": 0}})",unit,logic
 backend,MergeGradesTests.test_a_pair_graded_differently_is_an_error,backend/recommendations/test_v3_statistics.py:33,"assertRaisesMessage(CommandError, ""graded 2 in one sheet and 1""):",unit,logic
 backend,MergeGradesTests.test_ungraded_counts_top_k_slots_only,backend/recommendations/test_v3_statistics.py:41,"assertEqual(ungraded(rankings, grades, [""m""]), 2)  # D and E, not F",unit,logic

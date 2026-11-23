@@ -1,6 +1,6 @@
 # Chapter 6 inputs
 
-> Generated 2026-11-23T00:27:58+03:00 at commit `3966c02` by `backend\venv\Scripts\python.exe scripts\report_evidence\chapter6.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T10:55:47+03:00 at commit `36a36a4` by `backend\venv\Scripts\python.exe scripts\report_evidence\chapter6.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 5a. Open issues, TODO/FIXME and known defects
 
@@ -8,7 +8,7 @@
 
 | # | Title | Labels | Milestone | Opened |
 |---|---|---|---|---|
-| 270 | Full v3 evaluation for the report | test | Sprint 9: Evaluation | 2026-11-22 |
+| 274 | Add the graded v3 pairs and complete the full v3 evaluation | test | Sprint 9: Evaluation | 2026-11-23 |
 
 **TODO / FIXME / XXX / HACK comments** in backend, app and scripts code (`raw/todo_fixme.csv`): 0.
 
@@ -158,5 +158,5 @@ From the "decisions" sections of merged pull requests (8 PRs, 32 decisions), gro
 | Bulk-load activities | `python manage.py seed_activities` (validates every row; new rows are Draft) | backend/activities/management/commands/seed_activities.py |
 | Change α | Set `RANKING_ALPHA` in `backend/.env` and restart; stored batches record the α they used | backend/nurtura_backend/settings.py:316 |
 | Change a rule or its weight | Edit the constants or `Rule` objects, then run the tests; the ranking version changes | backend/profiles/rules/guidelines.py:29 |
-| Rerun the evaluation | `python manage.py evaluate_alpha_grid --check-provenance`, then `evaluate_alpha_grid --markdown --report-alpha 0.7`, `evaluate_statistics`, `evaluate_beyond_accuracy`. A changed rule, α, activity or embedding makes the provenance check fail: label the new pool first | data/evaluation/README.md:13 |
+| Rerun the evaluation | `python manage.py evaluate_alpha_grid --check-provenance`, then `evaluate_alpha_grid --markdown --report-alpha 0.7`, `evaluate_statistics`, `evaluate_beyond_accuracy`. A changed rule, α, activity or embedding makes the provenance check fail: label the new pool first | data/evaluation/README.md:14 |
 | Regenerate this evidence pack | `powershell -File scripts\report_evidence\run_all.ps1` | scripts/report_evidence/run_all.ps1 |

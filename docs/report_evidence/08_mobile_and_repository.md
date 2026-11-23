@@ -1,6 +1,6 @@
 # Mobile app, repository and reader test
 
-> Generated 2026-11-23T00:25:35+03:00 at commit `3966c02` by `python scripts\report_evidence\mobile_and_repo.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T10:53:20+03:00 at commit `36a36a4` by `python scripts\report_evidence\mobile_and_repo.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 1h. Mobile app
 
@@ -61,7 +61,7 @@ Screens in `mobile/nurtura_app/lib/screens/` on `main` (every file on `main` is 
 
 **"Activity ideas, not a medical check" footer:** not found in `mobile/nurtura_app/lib` (searched: "not a medical", "medical check", "ideas, not", "health check", "footer", case-insensitive). Treat it as not built.
 
-**Screenshots in the repository:** 21 files:
+**Screenshots in the repository:** 24 files:
 
 - `docs/evidence/e2e_2026-10-15/01_login.png`
 - `docs/evidence/e2e_2026-10-15/02_register.png`
@@ -84,6 +84,9 @@ Screens in `mobile/nurtura_app/lib/screens/` on `main` (every file on `main` is 
 - `docs/report_evidence/figures/per_profile_test_ndcg5.png`
 - `docs/report_evidence/figures/published_heatmap.png`
 - `docs/report_evidence/figures/rank_grade_matrix.png`
+- `docs/report_evidence/figures/v3_alpha_curve.png`
+- `docs/report_evidence/figures/v3_grade_by_rank.png`
+- `docs/report_evidence/figures/v3_per_profile.png`
 
 ## 1i. Repository
 
@@ -91,12 +94,12 @@ Screens in `mobile/nurtura_app/lib/screens/` on `main` (every file on `main` is 
 |---|---|---|
 | URL | https://github.com/Alysa-Gathoni/Nurtura | `gh repo view` |
 | Default branch | main | `gh repo view` |
-| Tags | pre-weekly-plan 2026-11-20, sprint5-eval-v1 2026-10-10, sprint6-explanations-v1 2026-10-10, sprint9-eval-v2 2026-11-02, sprint9-eval-v3 2026-11-21, sprint9-eval-v3.1 2026-11-21 | `git tag` |
-| Merged pull requests | 134 | `gh pr list --state merged` |
-| Closed issues | 134 | `gh issue list --state closed` |
-| Commits on main | 333 | `git rev-list --count origin/main` |
-| CI runs (completed, last 309) | {'success': 304, 'failure': 5}; pass rate 98.4% | `gh run list` |
-| Contributors (GitHub) | 1 (logins redacted; contributions: [333]) | `gh api repos/.../contributors` |
+| Tags | pre-weekly-plan 2026-11-20, sprint5-eval-v1 2026-10-10, sprint6-explanations-v1 2026-10-10, sprint9-eval-v2 2026-11-02, sprint9-eval-v3 2026-11-21, sprint9-eval-v3.1 2026-11-21, sprint9-eval-v3.2 2026-11-23 | `git tag` |
+| Merged pull requests | 136 | `gh pr list --state merged` |
+| Closed issues | 136 | `gh issue list --state closed` |
+| Commits on main | 339 | `git rev-list --count origin/main` |
+| CI runs (completed, last 313) | {'success': 308, 'failure': 5}; pass rate 98.4% | `gh run list` |
+| Contributors (GitHub) | 1 (logins redacted; contributions: [339]) | `gh api repos/.../contributors` |
 
 Milestones (`raw/milestones_github.csv`). Milestones are set on issues; a merged PR counts towards its own milestone or, if it has none, the milestone of the issue it closes. Commits are those in those PRs. No milestone has been closed on GitHub, so there are no close dates.
 
@@ -109,7 +112,7 @@ Milestones (`raw/milestones_github.csv`). Milestones are set on issues; a merged
 | Sprint 6: Explainability | open | 2026-09-29 | open | 14 | 14 | 26 |
 | Sprint 7: Feedback & History | open | 2026-09-29 | open | 3 | 3 | 3 |
 | Sprint 8: Mobile App | open | 2026-09-29 | open | 27 | 27 | 37 |
-| Sprint 9: Evaluation | open | 2026-09-29 | open | 59 | 58 | 80 |
+| Sprint 9: Evaluation | open | 2026-09-29 | open | 61 | 60 | 84 |
 | Sprint 10: Documentation | open | 2026-09-29 | open | 5 | 5 | 7 |
 | Sprint 3.5: Minimal Mobile Shell | open | 2026-10-01 | open | 3 | 3 | 6 |
 | (no milestone) |  |  |  | 1 | 1 | 1 |

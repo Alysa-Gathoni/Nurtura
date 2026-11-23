@@ -1,6 +1,6 @@
 # Workflow transcript (fictional caregiver)
 
-> Generated 2026-11-23T00:23:18+03:00 at commit `3966c02` by `backend\venv\Scripts\python.exe scripts\report_evidence\workflow_transcript.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T10:50:58+03:00 at commit `36a36a4` by `backend\venv\Scripts\python.exe scripts\report_evidence\workflow_transcript.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 One fictional caregiver through the REST API, in one transaction that was rolled back (nothing saved). Emails were captured from the console backend; tokens, codes, challenges, device IDs and email addresses are `<redacted>`. Raw: `raw/workflow_transcript.json` (every request and response), `raw/workflow_rows.json` (rows read back before the rollback).
 
@@ -13,11 +13,11 @@ One fictional caregiver through the REST API, in one transaction that was rolled
 | 5 | Read the privacy notice | `GET /api/privacy-notice/` | 200 |
 | 6 | Agree to the privacy notice | `POST /api/auth/privacy-consent/` | 200 |
 | 7 | Create a child (about 13 months) | `POST /api/children/` | 201 |
-| 8 | Record "Waves bye-bye" as Not yet | `POST /api/children/2222/milestones/` | 201 |
-| 9 | Generate recommendations | `POST /api/children/2222/recommendations/` | 201 |
-| 10 | Read the stored batch | `GET /api/children/2222/recommendations/` | 200 |
-| 11 | Mark the first idea done | `PUT /api/recommendations/2392/completion/` | 201 |
-| 12 | Give feedback | `PUT /api/recommendations/2392/feedback/` | 201 |
+| 8 | Record "Waves bye-bye" as Not yet | `POST /api/children/2390/milestones/` | 201 |
+| 9 | Generate recommendations | `POST /api/children/2390/recommendations/` | 201 |
+| 10 | Read the stored batch | `GET /api/children/2390/recommendations/` | 200 |
+| 11 | Mark the first idea done | `PUT /api/recommendations/2807/completion/` | 201 |
+| 12 | Give feedback | `PUT /api/recommendations/2807/feedback/` | 201 |
 
 ## Rows created
 
@@ -33,10 +33,10 @@ First stored recommendation (fields as saved):
 
 ```json
 {
-  "id": 2392,
-  "child": 2222,
+  "id": 2807,
+  "child": 2390,
   "activity": 1235,
-  "batch": "c55b9586-6f77-46b6-b834-307e7e7137db",
+  "batch": "f14d0d89-7fd7-411d-adf0-572742928c17",
   "position": 1,
   "similarity_score": 0.21811268134092165,
   "ranking_score": 0.8638383816616524,
@@ -48,7 +48,7 @@ First stored recommendation (fields as saved):
   "pinned": false,
   "pin_note": "",
   "explanation_version": "2",
-  "date_generated": "2026-11-22 21:23:18.637950+00:00",
+  "date_generated": "2026-11-23 07:50:58.870803+00:00",
   "plan_start": "2026-11-23",
   "activity_id": "ACT-0179",
   "explanation": "You recorded “Waves ‘bye-bye’” as not yet; most children do this by 12 months. You said you'd like support with language and communication. It's designed for children aged 12–18 months, your child's age group. Its aim is to help your child learn words for the things you do every day."

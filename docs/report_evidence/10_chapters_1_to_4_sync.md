@@ -1,6 +1,6 @@
 # Chapters 1-4 against the build
 
-> Generated 2026-11-23T00:26:05+03:00 at commit `3966c02` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T10:53:56+03:00 at commit `36a36a4` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 3a. Data model
 
@@ -324,7 +324,7 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 
 ## 3i. Merged since tag `sprint6-explanations-v1` (2026-10-10)
 
-92 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
+94 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
 
 | PR | Merged | Title |
 |---|---|---|
@@ -420,3 +420,5 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 | #265 | 2026-11-21 | docs: refresh the report evidence pack after Kenyan time and the α check (#264) |
 | #267 | 2026-11-22 | docs: final refresh of the report evidence pack before submission (#266) |
 | #269 | 2026-11-22 | test: significance tests for the v3 configuration (#268) |
+| #271 | 2026-11-22 | test: full evaluation of the current system, v3 (#270) |
+| #273 | 2026-11-23 | test: blind grading sheet for the ungraded v3 pairs (#272) |
