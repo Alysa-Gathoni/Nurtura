@@ -1,2 +1,3 @@
 issue,title,labels,milestone,opened
-274,Add the graded v3 pairs and complete the full v3 evaluation,test,Sprint 9: Evaluation,2026-11-23
+279,fix: caregiver wording still says today's ideas instead of this week's,bug,Sprint 9: Evaluation,2026-11-23
+278,docs: retake three phone screenshots that show the old Today tab,docs,Sprint 9: Evaluation,2026-11-23

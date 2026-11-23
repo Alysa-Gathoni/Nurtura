@@ -1,6 +1,6 @@
 # Figures
 
-> Generated 2026-11-23T10:55:51+03:00 at commit `36a36a4` by `scripts\report_evidence\.venv\Scripts\python.exe scripts\report_evidence\make_figures.py`. PNG at 300 dpi.
+> Generated 2026-11-23T13:42:30+03:00 at commit `d932476` by `scripts\report_evidence\.venv\Scripts\python.exe scripts\report_evidence\make_figures.py`. PNG at 300 dpi.
 
 | Figure | Shows | Data | Insight |
 |---|---|---|---|

@@ -1,7 +1,7 @@
 {
   "backend": {
     "ran": 730,
-    "seconds": 444.441,
+    "seconds": 404.001,
     "verdict": "OK",
     "counted": {
       "ok": 3

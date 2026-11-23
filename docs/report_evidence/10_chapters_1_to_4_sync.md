@@ -1,6 +1,6 @@
 # Chapters 1-4 against the build
 
-> Generated 2026-11-23T10:53:56+03:00 at commit `36a36a4` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T13:40:21+03:00 at commit `d932476` by `backend\venv\Scripts\python.exe scripts\report_evidence\sync_chapters.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 3a. Data model
 
@@ -324,7 +324,7 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 
 ## 3i. Merged since tag `sprint6-explanations-v1` (2026-10-10)
 
-94 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
+96 pull requests (`gh pr list --state merged`, merged after the tag's commit date). `raw/changes_since_sprint6.csv`.
 
 | PR | Merged | Title |
 |---|---|---|
@@ -422,3 +422,5 @@ From `docs/requirements_traceability.md` (rows that are met with a deviation or 
 | #269 | 2026-11-22 | test: significance tests for the v3 configuration (#268) |
 | #271 | 2026-11-22 | test: full evaluation of the current system, v3 (#270) |
 | #273 | 2026-11-23 | test: blind grading sheet for the ungraded v3 pairs (#272) |
+| #275 | 2026-11-23 | data: add the graded v3 pairs and complete the full v3 evaluation (#274) |
+| #277 | 2026-11-23 | docs: bring the README up to date with the current system and results (#276) |

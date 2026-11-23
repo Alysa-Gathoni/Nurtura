@@ -1,6 +1,6 @@
 # Security, privacy and deployment
 
-> Generated 2026-11-23T10:55:25+03:00 at commit `36a36a4` by `backend\venv\Scripts\python.exe scripts\report_evidence\security_privacy.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
+> Generated 2026-11-23T13:42:03+03:00 at commit `d932476` by `backend\venv\Scripts\python.exe scripts\report_evidence\security_privacy.py`. Figures come from that run; UNKNOWN marks anything the script couldn't verify.
 
 ## 4a. Negative tests
 
@@ -73,7 +73,7 @@
 | Google API key | 0 | — |  |
 | GitHub token | 0 | — |  |
 | Slack token | 0 | — |  |
-| password/secret assignment with a literal | 27 | backend/insights/test_admin_api.py, backend/profiles/test_api.py, backend/profiles/test_google_sign_in.py, backend/profiles/test_password_reset.py, backend/profiles/test_password_reset_two_step.py, backend/profiles/test_token_expiry.py, backend/profiles/test_two_factor.py, mobile/nurtura_app/test/auth_screen_test.dart, mobile/nurtura_app/test/forgot_password_test.dart, mobile/nurtura_app/test/google_sign_in_test.dart, mobile/nurtura_app/test/verify_code_screen_test.dart, scripts/report_evidence/sync_chapters.py, scripts/report_evidence/workflow_transcript.py |  |
+| password/secret assignment with a literal | 25 | backend/insights/test_admin_api.py, backend/profiles/test_api.py, backend/profiles/test_google_sign_in.py, backend/profiles/test_password_reset.py, backend/profiles/test_password_reset_two_step.py, backend/profiles/test_token_expiry.py, backend/profiles/test_two_factor.py, mobile/nurtura_app/test/auth_screen_test.dart, mobile/nurtura_app/test/forgot_password_test.dart, mobile/nurtura_app/test/google_sign_in_test.dart, mobile/nurtura_app/test/verify_code_screen_test.dart, scripts/report_evidence/sync_chapters.py, scripts/report_evidence/workflow_transcript.py |  |
 | Django SECRET_KEY literal | 1 | backend/nurtura_backend/settings.py | only the `django-insecure-` development fallback, used when DEBUG is on; production reads SECRET_KEY from the environment (backend/nurtura_backend/settings.py:42) |
 
 `.env` files ever committed: none. Matches of the generic "password/secret assignment" pattern are candidates to review, not confirmed secrets; `raw/secret_scan.json`.
@@ -92,7 +92,7 @@
 
 - **Deployment files in the repository:** none.
 - **Hosting:** No deployment files in the repository; docs/known_limitations.md:51 says the backend is not hosted. URL, provider, region, instance, database, HTTPS and cost: UNKNOWN (nothing hosted).
-- **Measured** (one development laptop, `05_latency.md`): peak working set 605.0 MB; start-up 15.8 s.
+- **Measured** (one development laptop, `05_latency.md`): peak working set 597.0 MB; start-up 18.7 s.
 
 | Disk | Size |
 |---|---|
