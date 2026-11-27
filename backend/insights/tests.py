@@ -16,7 +16,7 @@ from feedback.models import CompletedActivity, Feedback
 from profiles.models import ChildProfile, DevelopmentalMilestone
 from recommendations.models import Recommendation
 
-from .metrics import dashboard
+from .metrics import dashboard, suggestion_counts
 
 User = get_user_model()
 
@@ -105,8 +105,28 @@ class DashboardFiguresTests(DashboardTestCase):
         )
         self.assertEqual(d["batches"], 2)
         self.assertEqual(d["batches_recent"], 2)
-        self.assertEqual(d["recommended"], 4)
-        self.assertEqual((d["done"], d["partly"], d["tried_share"]), (1, 1, 50))
+        # Singing Together is in two batches of the same week: one suggestion
+        # (#287), so three in all.
+        self.assertEqual(d["recommended"], 3)
+        self.assertEqual((d["done"], d["partly"], d["tried_share"]), (1, 1, 67))
+
+    def test_a_suggestion_counts_once_per_child_per_week(self):
+        def again(plan_start):
+            Recommendation.objects.create(
+                child=self.child,
+                activity=self.songs,
+                batch=uuid.uuid4(),
+                position=1,
+                similarity_score=0.8,
+                ranking_score=0.7,
+                plan_start=plan_start,
+            )
+
+        again(datetime.date(2026, 11, 16))
+        again(datetime.date(2026, 11, 16))  # rebuilt the same week
+        again(datetime.date(2026, 11, 23))
+        self.assertEqual(suggestion_counts()[self.songs.pk], 3)
+        self.assertEqual(suggestion_counts()[self.ball.pk], 1)
 
     def test_ratings(self):
         d = dashboard()

@@ -88,11 +88,11 @@ class OverviewTests(AdminApiTestCase):
         self.assertEqual(
             body["outcomes"],
             {
-                "recommended": 4,
+                "recommended": 3,
                 "done": 1,
                 "partly": 1,
-                "not_marked": 2,
-                "tried_share": 50,
+                "not_marked": 1,
+                "tried_share": 67,
             },
         )
         self.assertEqual(body["ratings"]["by_star"], [1, 1, 0, 0, 1])
@@ -129,7 +129,8 @@ class ActivityTests(AdminApiTestCase):
             ["ACT-9001", "ACT-9002", "ACT-9003", "ACT-9004"],
         )
         songs = rows[0]
-        self.assertEqual((songs["times_recommended"], songs["feedback_count"]), (2, 1))
+        # Two batches of the same week count once (#287).
+        self.assertEqual((songs["times_recommended"], songs["feedback_count"]), (1, 1))
         self.assertEqual(songs["average_rating"], 5.0)
         self.assertEqual(songs["status_label"], "Published")
         self.assertFalse(songs["searchable"])  # not embedded in this test

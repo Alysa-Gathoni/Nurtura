@@ -40,6 +40,11 @@ are stored as one batch of Recommendation rows.
   order, topped up with more of last week's if there aren't enough. Pinned
   ideas are kept regardless. The ranking itself is unchanged, so the first
   week is the evaluated top 5.
+- What was tried in a week stays in it (#287). A batch stored while a plan
+  runs doesn't re-rank the activities already done or started that week:
+  their rows (which hold the completion and feedback) stay part of the week
+  (week_rows), and the new batch fills only the remaining places. The week
+  therefore keeps its five ideas and its "tried" count.
 """
 
 import datetime
@@ -247,6 +252,36 @@ def previous_plan_ids(child, plan_start):
     )
 
 
+def plan_tried(child, plan_start):
+    """The rows tried (done or started) during the plan starting on
+    plan_start, the newest per activity, oldest first (#287)."""
+    rows = (
+        Recommendation.objects.filter(
+            child=child, plan_start=plan_start, completion__isnull=False
+        )
+        .select_related("activity")
+        .order_by("-date_generated", "-id")
+    )
+    newest = {}
+    for row in rows:
+        newest.setdefault(row.activity_id, row)
+    return sorted(newest.values(), key=lambda r: (r.date_generated, r.position))
+
+
+def week_rows(child, recommendations):
+    """The week as the caregiver sees it (#287): the newest batch, then the
+    plan's tried rows from earlier batches that it doesn't include."""
+    if not recommendations:
+        return recommendations
+    shown = {r.activity_id for r in recommendations}
+    earlier = [
+        r
+        for r in plan_tried(child, _plan_start_of(recommendations[0]))
+        if r.activity_id not in shown
+    ]
+    return list(recommendations) + earlier
+
+
 def rotate(candidates, rested, count, keep=KEEP_UNTRIED):
     """Choose `count` of the ranked `candidates` for a new week (#246).
 
@@ -280,21 +315,26 @@ def generate(child_id, caregiver, pin=None):
         completed = completed_activity_ids(child)
         newest = latest_batch(child)
         ranked = {r.activity.pk: r for r in personal.ranked}
+        plan_start = current_plan_start(newest, timezone.localdate())
+        # Tried this week (#287): kept on their own rows, not ranked again.
+        tried_this_week = {r.activity_id for r in plan_tried(child, plan_start)}
         notes = {
             pk: note
             for pk, note in _pins(newest, completed, pin)
-            # still eligible, and not since marked as not working
-            if pk in ranked and pk not in personal.excluded
+            # still eligible, not since marked as not working, not yet tried
+            if pk in ranked
+            and pk not in personal.excluded
+            and pk not in tried_this_week
         }
-        skip = completed | personal.excluded | set(notes)
+        skip = completed | personal.excluded | set(notes) | tried_this_week
         candidates = [r for r in personal.ranked if r.activity.pk not in skip]
         # Rotation (#246): from the second week on, last week's untried
         # ideas mostly rest. Decided by the previous plan, so a mid-week
         # refresh keeps the week's mix.
-        plan_start = current_plan_start(newest, timezone.localdate())
         rested = previous_plan_ids(child, plan_start) - tried_activity_ids(child)
+        room = RECOMMENDATIONS_PER_BATCH - len(notes) - len(tried_this_week)
         top = [ranked[pk] for pk in notes] + rotate(
-            candidates, rested - set(notes), RECOMMENDATIONS_PER_BATCH - len(notes)
+            candidates, rested - set(notes), max(room, 0)
         )
         alpha = result.alpha
         fingerprint = profile_fingerprint(result.evaluation, result.query)
@@ -334,7 +374,9 @@ def generate(child_id, caregiver, pin=None):
         ):
             return GenerationResult(recommendations=newest, created=False)
         if not top:
-            return GenerationResult(recommendations=[], created=False)
+            # Everything this week has been tried: the week stands as it is.
+            kept = newest if tried_this_week else []
+            return GenerationResult(recommendations=kept, created=False)
 
         batch, now = uuid.uuid4(), timezone.now()
         rows = Recommendation.objects.bulk_create(

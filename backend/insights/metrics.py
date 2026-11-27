@@ -8,7 +8,8 @@ recommendations is touched.
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
-from django.db.models import Avg, Count, Q
+from django.db.models import Avg, CharField, Count, Q, Value
+from django.db.models.functions import Cast, Coalesce, Concat, TruncDate
 from django.utils import timezone
 from django.utils.text import Truncator
 
@@ -24,6 +25,34 @@ ACTIVE_DAYS = 7
 NEEDS_ATTENTION_AT = 2.5
 
 TOP_N = 5
+
+
+def suggestion_week(prefix=""):
+    """One key per child and weekly plan (#287), for counting suggestions.
+
+    A batch stored mid-week repeats the week's untried ideas on new rows, so
+    counting rows would count the same suggestion again. Rows from before
+    the weekly plan (#244) have no plan_start; their day stands in for it.
+    `prefix` is the path to the Recommendation, such as "recommendations__".
+    """
+    return Concat(
+        Cast(f"{prefix}child_id", CharField()),
+        Value("|"),
+        Cast(
+            Coalesce(f"{prefix}plan_start", TruncDate(f"{prefix}date_generated")),
+            CharField(),
+        ),
+        output_field=CharField(),
+    )
+
+
+def suggestion_counts():
+    """{activity pk: times suggested}, once per child per weekly plan."""
+    return dict(
+        Recommendation.objects.values_list("activity_id").annotate(
+            n=Count(suggestion_week(), distinct=True)
+        )
+    )
 
 
 def _share(part, whole):
@@ -97,7 +126,7 @@ def dashboard(now=None):
     child_count = children.count()
     expecting = children.filter(date_of_birth__gt=today).count()
 
-    recommended = Recommendation.objects.count()
+    recommended = sum(suggestion_counts().values())
     completions = CompletedActivity.objects.aggregate(
         done=Count("id", filter=Q(status=CompletedActivity.Status.COMPLETED)),
         partly=Count(

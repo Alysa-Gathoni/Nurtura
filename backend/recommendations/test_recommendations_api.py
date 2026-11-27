@@ -452,7 +452,7 @@ class GenerateTests(RecommendationAPITestCase):
             self.assertEqual(Recommendation.objects.filter(alpha=0.71).count(), 5)
         self.assertEqual(Recommendation.objects.count(), 20)  # nothing deleted
 
-    def test_completed_activities_are_excluded_partial_stay(self):
+    def test_tried_activities_keep_their_rows_and_the_rest_is_reranked(self):
         cards = self.post().json()["recommendations"]
         done, partial = Recommendation.objects.order_by("position")[:2]
         CompletedActivity.objects.create(recommendation=done)
@@ -462,13 +462,21 @@ class GenerateTests(RecommendationAPITestCase):
         )
         response = self.post()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        ids = [c["activity_id"] for c in response.json()["recommendations"]]
-        self.assertNotIn(cards[0]["activity_id"], ids)
-        self.assertIn(cards[1]["activity_id"], ids)
-        # The rest keep the evaluated order.
+        body = response.json()
+        tried = [cards[0]["activity_id"], cards[1]["activity_id"]]
+        # The new batch fills the other three places in the evaluated order;
+        # the tried two stay in the week on their own rows (#287).
         evaluated = [r.activity.activity_id for r in rank(self.child).ranked]
+        new = [c for c in body["recommendations"] if c["batch"] == body["batch"]]
         self.assertEqual(
-            ids, [a for a in evaluated if a != cards[0]["activity_id"]][:5]
+            [c["activity_id"] for c in new],
+            [a for a in evaluated if a not in tried][:3],
+        )
+        kept = [c for c in body["recommendations"] if c["batch"] != body["batch"]]
+        self.assertEqual([c["id"] for c in kept], [done.pk, partial.pk])
+        self.assertEqual(
+            [c["completion"]["status"] for c in kept],
+            ["completed", "partially_completed"],
         )
 
     def test_fewer_eligible_activities_than_5(self):
@@ -662,6 +670,82 @@ class WeeklyPlanTests(RecommendationAPITestCase):
             week3 = self.post().json()
         # Rested from week 2: e0, e1, e5, e6, e7; keep e0, e1; new: e2, e3, e4.
         self.assertEqual(self.ids(week3), e[0:5])
+
+    def tried(self, *pairs):
+        """Marks (activity_id, status) on the newest rows."""
+        rows = {r.activity.activity_id: r for r in generation.latest_batch(self.child)}
+        for activity_id, state in pairs:
+            CompletedActivity.objects.create(
+                recommendation=rows[activity_id], status=state
+            )
+
+    def test_a_mid_week_rebuild_keeps_what_was_tried(self):
+        # #287: a rebuild mid-week used to drop the week's tried ideas and
+        # reset "x of 5 tried".
+        e = self.evaluated()
+        with self.on(0):
+            first = self.post().json()
+        self.tried(
+            (e[0], CompletedActivity.Status.COMPLETED),
+            (e[1], CompletedActivity.Status.PARTIALLY_COMPLETED),
+        )
+        with self.on(2), mock.patch.object(
+            generation, "profile_fingerprint", return_value="f" * 64
+        ):
+            rebuilt = self.post()
+        self.assertEqual(rebuilt.status_code, status.HTTP_201_CREATED)
+        body = rebuilt.json()
+        self.assertNotEqual(body["batch"], first["batch"])
+        self.assertEqual(self.ids(body), [e[2], e[3], e[4], e[0], e[1]])
+        # Numbered by their place in the week: the app sorts by position.
+        self.assertEqual(
+            [c["position"] for c in body["recommendations"]], [1, 2, 3, 4, 5]
+        )
+        self.assertEqual(
+            sum(c["completion"] is not None for c in body["recommendations"]), 2
+        )
+        self.assertEqual(Recommendation.objects.filter(batch=body["batch"]).count(), 3)
+        with self.on(3):
+            self.assertEqual(self.ids(self.get().json()), self.ids(body))
+
+    def test_a_choice_mid_week_takes_an_untried_place(self):
+        e = self.evaluated()
+        with self.on(0):
+            self.post()
+        self.tried((e[0], CompletedActivity.Status.COMPLETED))
+        chosen = DevelopmentalActivity.objects.get(activity_id=e[8])
+        with self.on(2):
+            result = generation.generate(
+                self.child.pk, self.caregiver, pin=(chosen.pk, "You chose it.")
+            )
+        batch = [r.activity.activity_id for r in result.recommendations]
+        self.assertEqual(batch, [e[8], e[1], e[2], e[3]])
+        with self.on(2):
+            week = self.ids(self.get().json())
+        self.assertEqual(week, [e[8], e[1], e[2], e[3], e[0]])
+
+    def test_a_week_with_everything_tried_stands(self):
+        e = self.evaluated()
+        with self.on(0):
+            first = self.post().json()
+        self.tried(*[(a, CompletedActivity.Status.COMPLETED) for a in e[:5]])
+        with self.on(2), mock.patch.object(
+            generation, "profile_fingerprint", return_value="f" * 64
+        ):
+            again = self.post()
+        self.assertEqual(again.status_code, status.HTTP_200_OK)
+        self.assertEqual(again.json()["batch"], first["batch"])
+        self.assertEqual(self.ids(again.json()), e[:5])
+
+    def test_a_new_week_doesnt_carry_last_weeks_tried_rows(self):
+        e = self.evaluated()
+        with self.on(0):
+            self.post()
+        self.tried((e[0], CompletedActivity.Status.COMPLETED))
+        with self.on(7):
+            week2 = self.post().json()
+        self.assertNotIn(e[0], self.ids(week2))
+        self.assertEqual(len(week2["recommendations"]), 5)
 
     def test_older_batches_start_on_the_day_they_were_generated(self):
         with self.on(0):

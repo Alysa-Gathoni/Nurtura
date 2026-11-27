@@ -17,6 +17,7 @@ from rest_framework import generics, serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from insights.metrics import suggestion_week
 from profiles.permissions import IsAdministrator
 from recommendations import embeddings
 
@@ -141,7 +142,12 @@ def annotated():
     return (
         DevelopmentalActivity.objects.select_related("embedding")
         .annotate(
-            times_recommended=Count("recommendations", distinct=True),
+            # Once per child per weekly plan, as on the dashboard (#287).
+            times_recommended=Count(
+                suggestion_week("recommendations__"),
+                filter=Q(recommendations__isnull=False),
+                distinct=True,
+            ),
             feedback_count=Count("recommendations__feedback", distinct=True),
             average_rating=Avg("recommendations__feedback__rating"),
         )
