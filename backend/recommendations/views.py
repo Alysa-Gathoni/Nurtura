@@ -62,12 +62,14 @@ class ChildCandidatesView(APIView):
         )
 
 
-def _card(recommendation):
+def _card(recommendation, position=None):
     activity = recommendation.activity
     return {
         "id": recommendation.pk,
         "batch": str(recommendation.batch),
-        "position": recommendation.position,
+        # The place in the week; for the newest batch, the stored position
+        # (#287: tried rows kept from earlier batches follow it).
+        "position": position or recommendation.position,
         "generated_at": recommendation.date_generated.isoformat(),
         "activity_id": activity.activity_id,
         "activity_name": activity.activity_name,
@@ -92,6 +94,8 @@ def _card(recommendation):
 
 
 def _payload(child, recommendations):
+    # The week includes what was tried in it before a rebuild (#287).
+    recommendations = generation.week_rows(child, recommendations)
     prefetch_related_objects(recommendations, "completion", "feedback")
     first = recommendations[0] if recommendations else None
     referral = referral_for(child)
@@ -109,7 +113,9 @@ def _payload(child, recommendations):
             if plan
             else None
         ),
-        "recommendations": [_card(r) for r in recommendations],
+        "recommendations": [
+            _card(r, place) for place, r in enumerate(recommendations, start=1)
+        ],
         # Worked out on each request and never stored or ranked (#161).
         "referral": referral.to_dict() if referral else None,
     }

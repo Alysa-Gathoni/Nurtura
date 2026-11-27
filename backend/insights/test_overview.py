@@ -148,7 +148,8 @@ class EventsAndTableTests(DashboardTestCase):
     def test_most_recommended_table(self):
         table = overview.most_recommended()
         first = table[0]
-        self.assertEqual((first["activity_id"], first["times"]), ("ACT-9001", 2))
-        self.assertEqual(first["done_share"], 50)  # 1 of its 2 recommendations
+        # Its two batches are the same week: one suggestion (#287).
+        self.assertEqual((first["activity_id"], first["times"]), ("ACT-9001", 1))
+        self.assertEqual(first["done_share"], 100)
         self.assertEqual(first["average"], 5.0)
         self.assertEqual(first["status_key"], ContentStatus.PUBLISHED)

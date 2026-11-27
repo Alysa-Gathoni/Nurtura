@@ -29,7 +29,7 @@ from profiles.two_factor import MAX_ATTEMPTS
 from recommendations import embeddings
 from recommendations.models import ActivityEmbedding, Recommendation
 
-from .metrics import dashboard
+from .metrics import dashboard, suggestion_counts
 
 # Period tabs on the trend chart, in days.
 RANGES = (7, 30, 90)
@@ -313,9 +313,11 @@ def recent_events(limit=EVENTS_N):
 
 
 def most_recommended(limit=TABLE_N):
-    rows = (
-        DevelopmentalActivity.objects.annotate(
-            times=Count("recommendations", distinct=True),
+    # Suggestions count once per child per weekly plan (#287).
+    counts = suggestion_counts()
+    activities = {
+        a.pk: a
+        for a in DevelopmentalActivity.objects.filter(pk__in=counts).annotate(
             done=Count(
                 "recommendations__completion",
                 filter=Q(
@@ -323,25 +325,25 @@ def most_recommended(limit=TABLE_N):
                 ),
                 distinct=True,
             ),
-            ratings=Count("recommendations__feedback", distinct=True),
             average=Avg("recommendations__feedback__rating"),
         )
-        .filter(times__gt=0)
-        .order_by("-times", "activity_id")[:limit]
-    )
+    }
+    ordered = sorted(activities.values(), key=lambda a: (-counts[a.pk], a.activity_id))[
+        :limit
+    ]
     return [
         {
             "pk": a.pk,
             "activity_id": a.activity_id,
             "name": a.activity_name,
             "domain": a.developmental_domain,
-            "times": a.times,
-            "done_share": round(100 * a.done / a.times) if a.times else 0,
+            "times": counts[a.pk],
+            "done_share": round(100 * a.done / counts[a.pk]),
             "average": round(a.average, 1) if a.average is not None else None,
             "status": a.get_content_status_display(),
             "status_key": a.content_status,
         }
-        for a in rows
+        for a in ordered
     ]
 
 
