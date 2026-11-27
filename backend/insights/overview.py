@@ -31,6 +31,16 @@ from recommendations.models import ActivityEmbedding, Recommendation
 
 from .metrics import dashboard, suggestion_counts
 
+# The names the app shows (#290); the catalogue keeps its own spelling.
+AREA_NAMES = {
+    Domain.COGNITIVE: "Thinking",
+    Domain.LANGUAGE: "Talking",
+    Domain.MOTOR: "Moving",
+    Domain.SENSORY: "Senses",
+    Domain.SOCIO_EMOTIONAL: "Feelings",
+}
+STATUS_NAMES = {"achieved": "Achieved", "emerging": "Starting", "not_yet": "Not yet"}
+
 # Period tabs on the trend chart, in days.
 RANGES = (7, 30, 90)
 DEFAULT_RANGE = 30
@@ -244,7 +254,8 @@ def recent_events(limit=EVENTS_N):
                 m.created_at,
                 "milestone",
                 "Milestone recorded",
-                f"{m.domain} · {m.get_status_display()}",
+                f"{AREA_NAMES.get(m.domain, m.domain)} · "
+                f"{STATUS_NAMES.get(m.status, m.get_status_display())}",
             )
         )
     for c in CompletedActivity.objects.select_related(

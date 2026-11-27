@@ -20,7 +20,7 @@ void main() {
 
     expect(find.byKey(const Key('activityDetail')), findsOneWidget);
     expect(find.text('Naming Everyday Objects'), findsOneWidget);
-    expect(find.text('Language'), findsOneWidget);
+    expect(find.text('Talking'), findsOneWidget);
     expect(find.text('12–18 months'), findsOneWidget);
     expect(find.text('How to play'), findsOneWidget);
     expect(find.text('Name things you see together.'), findsOneWidget);

@@ -38,7 +38,9 @@ class ReferenceMilestone {
 /// How the child is doing with a milestone (the rule engine's statuses).
 enum MilestoneStatus {
   achieved('achieved', 'Achieved'),
-  emerging('emerging', 'Emerging'),
+  // "Starting", as in the tracker, the feedback sheet and the explanations
+  // (#290); the rule engine and the API still call it emerging.
+  emerging('emerging', 'Starting'),
   notYet('not_yet', 'Not yet');
 
   const MilestoneStatus(this.apiValue, this.label);

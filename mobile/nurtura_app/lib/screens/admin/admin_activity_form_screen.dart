@@ -7,6 +7,7 @@ import '../../services/api_client.dart';
 import '../../state/auth_state.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_theme.dart';
+import '../../theme/domain_style.dart';
 import '../../widgets/app_card.dart';
 import '../../widgets/buttons.dart';
 import '../../widgets/message_banner.dart';
@@ -178,7 +179,7 @@ class _AdminActivityFormScreenState extends State<AdminActivityFormScreen> {
           for (final s in options)
             ActionChip(
               key: Key('suggest_${field}_${s.value}'),
-              label: Text('${s.label} · ${s.percent}'),
+              label: Text('${domainLabels[s.value] ?? s.label} · ${s.percent}'),
               onPressed: () => _apply(field, s),
             ),
         ],
@@ -406,7 +407,10 @@ class _AdminActivityFormScreenState extends State<AdminActivityFormScreen> {
         ),
         items: [
           for (final o in options)
-            DropdownMenuItem(value: o.value, child: Text(o.label)),
+            DropdownMenuItem(
+              value: o.value,
+              child: Text(domainLabels[o.value] ?? o.label),
+            ),
         ],
         onChanged: (v) => setState(() => _picks[field] = v),
         validator: (v) => v == null ? 'Required.' : null,

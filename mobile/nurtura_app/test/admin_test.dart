@@ -506,7 +506,7 @@ void main() {
 
       await typeInForm(tester, 'field_activity_name', 'Clapping Songs');
       for (final (key, value) in [
-        ('developmental_domain', 'Language'),
+        ('developmental_domain', 'Talking'), // shown for Language (#290)
         ('age_range', '6-12 months'),
         ('difficulty_level', 'Beginner'),
         ('source', 'UNICEF'),
@@ -583,7 +583,7 @@ void main() {
       ) as Map;
       expect(sent['activity_name'], 'Clapping Songs');
       expect(sent['description'], 'Clap and sing together.');
-      expect(find.text('Language · 91%'), findsOneWidget);
+      expect(find.text('Talking · 91%'), findsOneWidget);
 
       await tapInForm(
         tester,

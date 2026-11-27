@@ -150,7 +150,7 @@ void main() {
       });
       expect(find.text('Edit profile'), findsNothing);
       expect(find.text('Zawadi'), findsOneWidget);
-      expect(find.text('Language'), findsOneWidget);
+      expect(find.text('Talking'), findsOneWidget);
     });
 
     testWidgets('after an edit, Today asks for fresh ideas once', (

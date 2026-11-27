@@ -108,7 +108,7 @@ void main() {
 
     expect(find.text('Naming Everyday Objects'), findsOneWidget);
     expect(find.text('Naming Pictures in a Book'), findsOneWidget);
-    expect(find.text('Language'), findsNWidgets(2));
+    expect(find.text('Talking'), findsNWidgets(2));
     expect(find.text('12–18 months'), findsNWidgets(2));
     expect(find.text('Name things you see together.'), findsNWidgets(2));
     expect(find.byKey(const Key('explanationBox')), findsNWidgets(2));

@@ -1,5 +1,6 @@
 """Tests for the admin operations overview (#120)."""
 
+import datetime
 from datetime import timedelta
 from pathlib import Path
 from unittest import mock
@@ -10,9 +11,14 @@ from django.test import override_settings
 from django.urls import reverse
 from django.utils import timezone
 
-from activities.choices import ContentStatus
+from activities.choices import ContentStatus, Domain
 from activities.models import DevelopmentalActivity
-from profiles.models import ChildProfile, LoginChallenge, ReferenceMilestone
+from profiles.models import (
+    ChildProfile,
+    DevelopmentalMilestone,
+    LoginChallenge,
+    ReferenceMilestone,
+)
 from recommendations import embeddings
 from recommendations.models import ActivityEmbedding
 
@@ -135,6 +141,24 @@ class EventsAndTableTests(DashboardTestCase):
         self.assertNotIn("Secretname", text)  # the child-profile log entry is left out
         self.assertNotIn("family@example.com", text)
         self.assertIn("Rated 5★", text)
+
+    def test_milestone_events_use_the_apps_names(self):
+        # #290: "Language · Emerging" here, "Talking" and "Starting" elsewhere.
+        DevelopmentalMilestone.objects.create(
+            child=self.child,
+            domain=Domain.LANGUAGE,
+            description="x",
+            status="emerging",
+            observation_date=datetime.date(2026, 10, 1),
+        )
+        details = {
+            e["detail"]
+            for e in overview.recent_events(limit=50)
+            if e["kind"] == "milestone"
+        }
+        self.assertEqual(
+            details, {"Talking · Achieved", "Talking · Not yet", "Talking · Starting"}
+        )
 
     def test_admin_content_changes_appear(self):
         LogEntry.objects.log_actions(
