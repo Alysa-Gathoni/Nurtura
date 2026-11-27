@@ -8,6 +8,10 @@ Cognitive; the catalogue has no Sensory milestones), the tracker lists:
   to UPCOMING_MONTHS after it, so the caregiver sees what is due and what
   is coming without the whole catalogue.
 
+Unrecorded milestones settled by an Achieved one (a twin, or an earlier step
+of the walking sequence) and the hidden twin of a CDC/WHO pair are left out
+(#289, profiles/milestone_links.py).
+
 Each entry has its latest status and the child's age when it was observed
 ("Achieved at 22 months"). Before birth there is nothing to track.
 """
@@ -16,7 +20,8 @@ from django.utils import timezone
 
 from activities.choices import Domain
 
-from .models import ReferenceMilestone
+from . import milestone_links
+from .models import DevelopmentalMilestone, ReferenceMilestone
 from .rules.facts import age_in_months
 from .rules.guidelines import UPCOMING_WINDOW_MONTHS
 
@@ -42,9 +47,11 @@ AREAS = (Domain.MOTOR, Domain.SOCIO_EMOTIONAL, Domain.LANGUAGE, Domain.COGNITIVE
 
 def _latest_observations(child, on_date):
     latest = {}
-    for m in child.milestones.filter(
-        reference__isnull=False, observation_date__lte=on_date
-    ).order_by("observation_date", "created_at"):
+    for m in (
+        child.milestones.filter(reference__isnull=False, observation_date__lte=on_date)
+        .select_related("reference")
+        .order_by("observation_date", "created_at")
+    ):
         latest[m.reference_id] = m
     return latest
 
@@ -56,6 +63,11 @@ def tracker(child, on_date=None):
         return {"age_months": round(age, 1), "prenatal": True, "areas": []}
 
     latest = _latest_observations(child, on_date)
+    settled = milestone_links.implied_keys(
+        m.reference.milestone_key
+        for m in latest.values()
+        if m.status == DevelopmentalMilestone.Status.ACHIEVED
+    )
     areas = []
     for domain in AREAS:
         entries = []
@@ -65,7 +77,11 @@ def tracker(child, on_date=None):
             expected = float(ref.expected_age_months)
             observation = latest.get(ref.pk)
             in_window = age - RECENT_MONTHS <= expected <= age + UPCOMING_MONTHS
-            if observation is None and not in_window:
+            if observation is None and (
+                not in_window
+                or ref.milestone_key in settled
+                or milestone_links.is_hidden_twin(ref.milestone_key)
+            ):
                 continue
             entries.append(
                 {
