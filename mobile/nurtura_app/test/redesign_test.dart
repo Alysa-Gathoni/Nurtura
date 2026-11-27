@@ -230,7 +230,7 @@ void main() {
       await tapVisible(tester, find.byKey(const Key('tab_progress')));
       expect(find.text('1 milestone celebrated'), findsOneWidget);
       // Activities done (#231).
-      expect(find.text('2 activities done'), findsOneWidget);
+      expect(find.text('2 activities tried'), findsOneWidget);
       expect(
         find.text('1 of them started · 2 in the last 7 days'),
         findsOneWidget,

@@ -1,3 +1,7 @@
+/// A whole number of months for caregivers (#291): WHO ages such as 13.7
+/// round up, as the explanations do ("by 14 months").
+String monthsLabel(double months) => '${months.ceil()} months';
+
 /// A guideline milestone from the CDC/WHO catalogue.
 class ReferenceMilestone {
   const ReferenceMilestone({
@@ -27,12 +31,7 @@ class ReferenceMilestone {
   final String source;
 
   /// e.g. "By 12 months · CDC".
-  String get expectedLabel {
-    final age = expectedAgeMonths == expectedAgeMonths.roundToDouble()
-        ? expectedAgeMonths.toInt().toString()
-        : expectedAgeMonths.toString();
-    return 'By $age months · $source';
-  }
+  String get expectedLabel => 'By ${monthsLabel(expectedAgeMonths)} · $source';
 }
 
 /// How the child is doing with a milestone (the rule engine's statuses).

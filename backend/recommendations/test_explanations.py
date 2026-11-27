@@ -248,6 +248,17 @@ class WordingTests(ExplanationTestCase):
         e = self.explain_activity(child, "ACT-0956")
         self.assertIn("It's an activity for parents during pregnancy.", e.text)
 
+    def test_prenatal_fallback_doesnt_mention_the_childs_age(self):
+        # #291: "a general activity for your child's age" before birth.
+        child = self.child(-3)
+        e = self.explain_activity(child, "ACT-0956")
+        self.assertEqual(
+            e.sentences[0],
+            "You haven't asked for help with a particular area, so this is a general "
+            "activity for this stage of your pregnancy.",
+        )
+        self.assertNotIn("child's age", e.text)
+
     def test_aim_sentence_only_with_plain_aim(self):
         child = self.child(9)
         self.assertNotIn("Its aim is to", self.explain_activity(child, "ACT-0953").text)

@@ -63,6 +63,7 @@ Future<void> pumpScreen(
   RecommendationCache? cache,
   MemoryTokenStore? store,
   EngagementState? engagement,
+  ChildProfile? forChild,
 }) async {
   AppText.useGoogleFonts = false;
   final api = ApiClient(baseUrl: 'http://test', httpClient: backend.client)
@@ -87,13 +88,29 @@ Future<void> pumpScreen(
         ),
       ],
       child: MaterialApp(
-        home: RecommendationsScreen(child: child, refresh: refresh),
+        home: RecommendationsScreen(child: forChild ?? child, refresh: refresh),
       ),
     ),
   );
 }
 
 void main() {
+  testWidgets('pregnancy ideas say what to do, not how to play (#291)', (
+    tester,
+  ) async {
+    final prenatal = card('ACT-0002', 'Talking and Singing to the Baby');
+    final backend = FakeBackend((r) async => json(batch([prenatal])));
+    final due = DateTime.now().add(const Duration(days: 60));
+    await pumpScreen(
+      tester,
+      backend,
+      forChild: ChildProfile(id: 4, name: 'Zawadi', dateOfBirth: due),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Tap an idea to see what to do.'), findsOneWidget);
+    expect(find.text('Tap an idea to see how to play.'), findsNothing);
+  });
+
   testWidgets('shows the newest batch without generating one', (tester) async {
     final backend = FakeBackend(
       (r) async => json(
