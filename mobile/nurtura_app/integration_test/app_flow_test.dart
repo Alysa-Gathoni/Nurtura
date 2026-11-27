@@ -292,19 +292,21 @@ void main() {
     await pumpUntil(tester, find.byKey(const Key('activityDetail')));
     await screenshot('12_activity_detail');
     await tapOnDetail(tester, find.byKey(const Key('markDoneButton')));
-    // Since #185, "Done!" opens the "Well done!" sheet over the screen: how
-    // it went and the child's interest are given there (#230).
-    await pumpUntil(tester, find.byKey(const Key('wellDoneSheet')));
+    // "Done!" opens the feedback sheet over the screen (#185, #283): how it
+    // went and the child's interest are given there.
+    await pumpUntil(tester, find.byKey(const Key('feedbackSheet')));
     await tap(tester, find.byKey(const Key('interest_happy')));
     await tap(tester, find.byKey(const Key('sheetOutcome_went_well')));
-    await tap(tester, find.byKey(const Key('saveProgressButton')));
-    await pumpUntilGone(tester, find.byKey(const Key('wellDoneSheet')));
+    await tap(tester, find.byKey(const Key('saveFeedbackButton')));
+    await pumpUntilGone(tester, find.byKey(const Key('feedbackSheet')));
     await pumpUntil(tester, find.byKey(const Key('doneStatus')));
-    // Then a rating and a comment, through Edit on the saved feedback.
+    // Then a rating and a note, through Edit, which reopens the same sheet.
     await tapOnDetail(tester, find.byKey(const Key('editFeedbackButton')));
-    await tapOnDetail(tester, find.byKey(const Key('star_4')));
-    await type(tester, 'feedbackComment', 'Lots of smiles. (E2E test)');
-    await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
+    await pumpUntil(tester, find.byKey(const Key('feedbackSheet')));
+    await tap(tester, find.byKey(const Key('star_4')));
+    await type(tester, 'feedbackNote', 'Lots of smiles. (E2E test)');
+    await tap(tester, find.byKey(const Key('saveFeedbackButton')));
+    await pumpUntilGone(tester, find.byKey(const Key('feedbackSheet')));
     await pumpUntil(tester, find.text('Thanks for your feedback!'));
     await screenshot('13_done_and_feedback');
 

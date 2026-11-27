@@ -50,6 +50,13 @@ Future<void> openDetail(
 
 /// Scrolls the detail screen until [finder] is built and visible, then taps.
 Future<void> tapOnDetail(WidgetTester tester, Finder finder) async {
+  await scrollOnDetail(tester, finder);
+  await tester.tap(finder);
+  await tester.pumpAndSettle();
+}
+
+/// Scrolls the detail screen until [finder] is built and visible.
+Future<void> scrollOnDetail(WidgetTester tester, Finder finder) async {
   await tester.scrollUntilVisible(
     finder,
     200,
@@ -58,19 +65,30 @@ Future<void> tapOnDetail(WidgetTester tester, Finder finder) async {
           of: find.byKey(const Key('activityDetail')),
           matching: find.byType(Scrollable),
         )
-        .first, // the list itself; the comment field has its own
+        .first, // the list itself
   );
-  await tester.pumpAndSettle();
-  await tester.tap(finder);
   await tester.pumpAndSettle();
 }
 
-/// Closes the "Well done!" sheet (#185) with "Skip for now".
-Future<void> skipWellDone(WidgetTester tester) async {
-  await tester.ensureVisible(find.byKey(const Key('skipWellDone')));
+/// Brings [key] into view in the feedback sheet (#283), then taps it.
+Future<void> tapInSheet(WidgetTester tester, String key) async {
+  await tester.ensureVisible(find.byKey(Key(key)));
   await tester.pumpAndSettle();
-  await tester.tap(find.byKey(const Key('skipWellDone')));
+  await tester.tap(find.byKey(Key(key)));
   await tester.pumpAndSettle();
+}
+
+/// Closes the feedback sheet with "Skip for now" (or "Cancel" when editing).
+Future<void> skipFeedback(WidgetTester tester) =>
+    tapInSheet(tester, 'skipFeedbackButton');
+
+/// Marks the activity done, skips the sheet, then opens it again through
+/// "Add feedback" on the screen (#283).
+Future<void> doneThenAddFeedback(WidgetTester tester) async {
+  await tapOnDetail(tester, find.byKey(const Key('markDoneButton')));
+  await skipFeedback(tester);
+  await tapOnDetail(tester, find.byKey(const Key('addFeedbackButton')));
+  expect(find.byKey(const Key('feedbackSheet')), findsOneWidget);
 }
 
 Future<void> back(WidgetTester tester) async {
@@ -92,11 +110,14 @@ void main() {
     expect(jsonDecode(backend.to(completionPath).single.body), {
       'status': 'completed',
     });
-    // The "Well done!" sheet opens (#185); skipping closes it.
-    expect(find.byKey(const Key('wellDoneSheet')), findsOneWidget);
+    // The feedback sheet opens (#185, #283); skipping closes it.
+    expect(find.byKey(const Key('feedbackSheet')), findsOneWidget);
     expect(find.text('Well done!'), findsOneWidget);
-    await skipWellDone(tester);
-    expect(find.byKey(const Key('wellDoneSheet')), findsNothing);
+    await skipFeedback(tester);
+    expect(find.byKey(const Key('feedbackSheet')), findsNothing);
+    // Skipping leaves a short prompt, not the whole form (#283).
+    expect(find.byKey(const Key('addFeedbackButton')), findsOneWidget);
+    expect(find.byKey(const Key('saveFeedbackButton')), findsNothing);
     expect(find.text('Done on 14 Oct 2026'), findsOneWidget);
     expect(find.textContaining("It won't come up again"), findsOneWidget);
     expect(engagement.checkedInThisWeek, isTrue);
@@ -108,16 +129,29 @@ void main() {
     expect(saved!.batch.items.single.completion!.partial, isFalse);
   });
 
-  testWidgets('partly done, then undo', (tester) async {
+  testWidgets('no feedback is asked for before the activity is tried', (
+    tester,
+  ) async {
+    await openDetail(tester, progressBackend());
+    expect(find.byKey(const Key('markDoneButton')), findsOneWidget);
+    expect(find.byKey(const Key('feedbackCard')), findsNothing);
+    expect(find.byKey(const Key('addFeedbackButton')), findsNothing);
+    expect(find.byKey(const Key('saveFeedbackButton')), findsNothing);
+  });
+
+  testWidgets('started, then undo', (tester) async {
     final backend = progressBackend();
     await openDetail(tester, backend);
 
-    await tapOnDetail(tester, find.byKey(const Key('markPartlyButton')));
+    await tapOnDetail(tester, find.byKey(const Key('markStartedButton')));
     expect(jsonDecode(backend.to(completionPath).single.body), {
       'status': 'partially_completed',
     });
-    await skipWellDone(tester);
-    expect(find.text('Partly done on 14 Oct 2026'), findsOneWidget);
+    // "Started" has its own heading: no trophy for an unfinished activity.
+    expect(find.text('Good start!'), findsOneWidget);
+    expect(find.text('Well done!'), findsNothing);
+    await skipFeedback(tester);
+    expect(find.text('Started on 14 Oct 2026'), findsOneWidget);
 
     await tapOnDetail(tester, find.byKey(const Key('undoDoneButton')));
     expect(backend.to(completionPath).last.method, 'DELETE');
@@ -132,20 +166,22 @@ void main() {
   ) async {
     final backend = progressBackend();
     await openDetail(tester, backend);
+    await doneThenAddFeedback(tester);
 
-    await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
+    await tapInSheet(tester, 'saveFeedbackButton');
     expect(find.text('Choose how it went.'), findsOneWidget);
-    await tapOnDetail(tester, find.byKey(const Key('outcome_went_well')));
+    await tapInSheet(tester, 'sheetOutcome_went_well');
     // Nothing "got in the way" of an activity that went well.
     expect(find.text('What got in the way?'), findsNothing);
     expect(backend.to(feedbackPath), isEmpty);
 
-    await tapOnDetail(tester, find.byKey(const Key('star_4')));
+    // The rating is asked in the sheet, the one place feedback is given.
+    await tapInSheet(tester, 'star_4');
     await tester.enterText(
-      find.byKey(const Key('feedbackComment')),
+      find.byKey(const Key('feedbackNote')),
       '  She giggled the whole time ',
     );
-    await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
+    await tapInSheet(tester, 'saveFeedbackButton');
 
     expect(jsonDecode(backend.to(feedbackPath).single.body), {
       'rating': 4,
@@ -181,14 +217,16 @@ void main() {
     final backend = progressBackend(card: card);
     await openDetail(tester, backend);
 
-    expect(find.text('Partly done on 13 Oct 2026'), findsOneWidget);
+    expect(find.text('Started on 13 Oct 2026'), findsOneWidget);
     await tapOnDetail(tester, find.byKey(const Key('editFeedbackButton')));
-    expect(find.text('Update feedback'), findsOneWidget);
-    await tapOnDetail(tester, find.byKey(const Key('star_5')));
+    expect(find.text('Your feedback'), findsOneWidget);
+    // The saved note and rating come back.
+    expect(find.text('Too hard'), findsWidgets);
+    await tapInSheet(tester, 'star_5');
     // Feedback from before the question was asked has no outcome yet.
-    await tapOnDetail(tester, find.byKey(const Key('outcome_partly')));
-    await tapOnDetail(tester, find.byKey(const Key('issue_too_hard')));
-    await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
+    await tapInSheet(tester, 'sheetOutcome_partly');
+    await tapInSheet(tester, 'sheetIssue_too_hard');
+    await tapInSheet(tester, 'saveFeedbackButton');
     expect(jsonDecode(backend.to(feedbackPath).single.body), {
       'rating': 5,
       'comment': 'Too hard',
@@ -207,9 +245,10 @@ void main() {
       }, 400),
     );
     await openDetail(tester, backend);
-    await tapOnDetail(tester, find.byKey(const Key('outcome_went_well')));
-    await tapOnDetail(tester, find.byKey(const Key('star_3')));
-    await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
+    await doneThenAddFeedback(tester);
+    await tapInSheet(tester, 'sheetOutcome_went_well');
+    await tapInSheet(tester, 'star_3');
+    await tapInSheet(tester, 'saveFeedbackButton');
     expect(find.byKey(const Key('feedbackError')), findsOneWidget);
     expect(find.text('Thanks for your feedback!'), findsNothing);
   });
@@ -219,18 +258,19 @@ void main() {
   ) async {
     final backend = progressBackend();
     await openDetail(tester, backend);
+    await doneThenAddFeedback(tester);
 
-    await tapOnDetail(tester, find.byKey(const Key('outcome_didnt_work')));
+    await tapInSheet(tester, 'sheetOutcome_didnt_work');
     expect(find.text('What got in the way?'), findsOneWidget);
-    await tapOnDetail(tester, find.byKey(const Key('issue_not_interested')));
-    await tapOnDetail(tester, find.byKey(const Key('issue_too_hard')));
-    await tapOnDetail(tester, find.byKey(const Key('issue_no_time')));
-    await tapOnDetail(
-      tester,
-      find.byKey(const Key('issue_no_time')),
-    ); // off again
-    await tapOnDetail(tester, find.byKey(const Key('star_2')));
-    await tapOnDetail(tester, find.byKey(const Key('sendFeedbackButton')));
+    // No trophy for an activity that didn't work (#283).
+    expect(find.text('Thanks for trying it'), findsOneWidget);
+    expect(find.text('Well done!'), findsNothing);
+    await tapInSheet(tester, 'sheetIssue_not_interested');
+    await tapInSheet(tester, 'sheetIssue_too_hard');
+    await tapInSheet(tester, 'sheetIssue_no_time');
+    await tapInSheet(tester, 'sheetIssue_no_time'); // off again
+    await tapInSheet(tester, 'star_2');
+    await tapInSheet(tester, 'saveFeedbackButton');
 
     final sent = jsonDecode(backend.to(feedbackPath).single.body);
     expect(sent['outcome'], 'didnt_work');

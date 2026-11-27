@@ -232,7 +232,7 @@ void main() {
       // Activities done (#231).
       expect(find.text('2 activities done'), findsOneWidget);
       expect(
-        find.text('1 of them partly · 2 in the last 7 days'),
+        find.text('1 of them started · 2 in the last 7 days'),
         findsOneWidget,
       );
       await tester.scrollUntilVisible(

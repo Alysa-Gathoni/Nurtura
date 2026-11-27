@@ -34,42 +34,46 @@ Map<String, dynamic> option(String id, String name, {String tip = ''}) => {
 
 /// One card, feedback, and options; choosing returns a batch with the
 /// chosen activity pinned first.
-FakeBackend optionsBackend({Map<String, dynamic>? card}) =>
-    FakeBackend((r) async {
-      if (r.url.path == recs.path) {
-        return json(recs.batch([card ?? recs.card('ACT-0004', 'Peekaboo')]));
-      }
-      if (r.url.path == progress.feedbackPath) {
-        final body = jsonDecode(r.body) as Map<String, dynamic>;
-        return json({...body, 'date_submitted': '2026-11-03T10:00:00Z'}, 201);
-      }
-      if (r.url.path == optionsPath && r.method == 'GET') {
-        return json({
-          'options': [
-            option(
-              'ACT-0903',
-              'Talk About Your Day',
-              tip: 'Try again another day.',
-            ),
-          ],
-        });
-      }
-      if (r.url.path == optionsPath && r.method == 'POST') {
-        final chosen = jsonDecode(r.body)['activity_id'];
-        return json({
-          ...recs.batch([
-            {
-              ...recs.card(chosen as String, 'Talk About Your Day'),
-              'batch': 'b-2',
-              'pinned': true,
-            },
-            {...recs.card('ACT-0031', 'Naming Pictures', position: 2)},
-          ]),
-          'batch': 'b-2',
-        }, 201);
-      }
-      return http.Response('', 404);
+FakeBackend optionsBackend({Map<String, dynamic>? card}) => FakeBackend((
+  r,
+) async {
+  if (r.url.path == recs.path) {
+    return json(recs.batch([card ?? recs.card('ACT-0004', 'Peekaboo')]));
+  }
+  if (r.url.path == progress.completionPath) {
+    return json({'status': 'completed', 'completion_date': '2026-11-03'}, 201);
+  }
+  if (r.url.path == progress.feedbackPath) {
+    final body = jsonDecode(r.body) as Map<String, dynamic>;
+    return json({...body, 'date_submitted': '2026-11-03T10:00:00Z'}, 201);
+  }
+  if (r.url.path == optionsPath && r.method == 'GET') {
+    return json({
+      'options': [
+        option(
+          'ACT-0903',
+          'Talk About Your Day',
+          tip: 'Try again another day.',
+        ),
+      ],
     });
+  }
+  if (r.url.path == optionsPath && r.method == 'POST') {
+    final chosen = jsonDecode(r.body)['activity_id'];
+    return json({
+      ...recs.batch([
+        {
+          ...recs.card(chosen as String, 'Talk About Your Day'),
+          'batch': 'b-2',
+          'pinned': true,
+        },
+        {...recs.card('ACT-0031', 'Naming Pictures', position: 2)},
+      ]),
+      'batch': 'b-2',
+    }, 201);
+  }
+  return http.Response('', 404);
+});
 
 void main() {
   testWidgets('after feedback, options are offered and one can be added', (
@@ -80,20 +84,14 @@ void main() {
     await progress.openDetail(tester, backend, cache: cache);
     expect(find.byKey(const Key('feedbackOptions')), findsNothing);
 
-    await progress.tapOnDetail(
-      tester,
-      find.byKey(const Key('outcome_didnt_work')),
-    );
-    await progress.tapOnDetail(
-      tester,
-      find.byKey(const Key('issue_no_materials')),
-    );
-    await progress.tapOnDetail(tester, find.byKey(const Key('star_2')));
-    await progress.tapOnDetail(
-      tester,
-      find.byKey(const Key('sendFeedbackButton')),
-    );
+    await progress.doneThenAddFeedback(tester);
+    await progress.tapInSheet(tester, 'sheetOutcome_didnt_work');
+    await progress.tapInSheet(tester, 'sheetIssue_no_materials');
+    await progress.tapInSheet(tester, 'star_2');
+    await progress.tapInSheet(tester, 'saveFeedbackButton');
 
+    // "What next?" sits under the saved feedback.
+    await progress.scrollOnDetail(tester, find.text('What next?'));
     expect(find.text('What next?'), findsOneWidget);
     expect(find.text('Needs nothing special'), findsOneWidget);
     expect(find.text('Talk About Your Day'), findsOneWidget);
