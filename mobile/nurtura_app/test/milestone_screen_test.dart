@@ -187,7 +187,8 @@ void main() {
       'WHO-MO-06', // 4.6
       'CDC-36M-LA-05', // 23
     ]);
-    expect(find.text('By 17.6 months · WHO'), findsOneWidget);
+    // WHO's 17.6 months, rounded up for caregivers (#291).
+    expect(find.text('By 18 months · WHO'), findsOneWidget);
   });
 
   testWidgets('searches as you type, after a short pause', (tester) async {

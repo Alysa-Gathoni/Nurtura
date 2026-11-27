@@ -507,7 +507,7 @@ void main() {
       await typeInForm(tester, 'field_activity_name', 'Clapping Songs');
       for (final (key, value) in [
         ('developmental_domain', 'Talking'), // shown for Language (#290)
-        ('age_range', '6-12 months'),
+        ('age_range', '6–12 months'), // shown with an en dash (#291)
         ('difficulty_level', 'Beginner'),
         ('source', 'UNICEF'),
       ]) {

@@ -42,9 +42,7 @@ class TrackerMilestone {
   final MilestoneStatus? status;
   final int? observedAtMonths;
 
-  String get expectedLabel => expectedAgeMonths % 1 == 0
-      ? '${expectedAgeMonths.toInt()} months'
-      : '$expectedAgeMonths months';
+  String get expectedLabel => monthsLabel(expectedAgeMonths);
 
   /// For recording through [MilestoneService.record].
   ReferenceMilestone get reference => ReferenceMilestone(

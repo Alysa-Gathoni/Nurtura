@@ -70,3 +70,8 @@ String ageLabel(DateTime dateOfBirth, [DateTime? on]) {
   final rest = months % 12;
   return rest == 0 ? '$years years' : '$years years $rest months';
 }
+
+/// Number ranges with an en dash, as caregivers see them: "12-18 months"
+/// becomes "12–18 months" (#291). Display only; API values keep "-".
+String enDash(String text) =>
+    text.replaceAllMapped(RegExp(r'(\d)-(\d)'), (m) => '${m[1]}–${m[2]}');
