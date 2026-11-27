@@ -63,7 +63,7 @@ void main() {
     await tapVisible(tester, find.byKey(const Key('tab_family')));
     expect(find.text('Amani'), findsOneWidget);
     expect(find.text('14 months'), findsOneWidget);
-    expect(find.text('Language'), findsOneWidget);
+    expect(find.text('Talking'), findsOneWidget);
     expect(find.text('Due 1 Feb 2027'), findsOneWidget);
     expect(find.text('Expecting'), findsOneWidget);
   });

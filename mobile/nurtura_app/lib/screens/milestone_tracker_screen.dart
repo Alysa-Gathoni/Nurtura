@@ -32,13 +32,6 @@ class MilestoneTrackerScreen extends StatefulWidget {
   State<MilestoneTrackerScreen> createState() => _MilestoneTrackerScreenState();
 }
 
-/// Friendlier words for the statuses in this screen.
-const _statusWords = {
-  MilestoneStatus.achieved: 'Achieved',
-  MilestoneStatus.emerging: 'Starting',
-  MilestoneStatus.notYet: 'Not yet',
-};
-
 class _MilestoneTrackerScreenState extends State<MilestoneTrackerScreen> {
   late final MilestoneService _service = MilestoneService(
     context.read<ApiClient>(),
@@ -110,7 +103,7 @@ class _MilestoneTrackerScreenState extends State<MilestoneTrackerScreen> {
                 ListTile(
                   key: Key('setStatus_${s.apiValue}'),
                   leading: Icon(_icon(s)),
-                  title: Text(_statusWords[s]!),
+                  title: Text(s.label),
                   selected: m.status == s,
                   onTap: () => Navigator.of(context).pop(s),
                 ),
@@ -134,7 +127,7 @@ class _MilestoneTrackerScreenState extends State<MilestoneTrackerScreen> {
         SnackBar(
           key: const Key('trackerSaved'),
           content: Text(
-            'Saved: “${m.description}” is ${_statusWords[status]!.toLowerCase()}. '
+            'Saved: “${m.description}” is ${status.label.toLowerCase()}. '
             "This week's ideas will update.",
           ),
         ),

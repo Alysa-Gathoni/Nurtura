@@ -12,7 +12,8 @@ const developmentalDomains = [
   'Socio-Emotional',
 ];
 
-/// Plain words for each domain, for tiles and headings.
+/// Plain words for each domain: the only names caregivers and
+/// administrators see (#290). The backend's spelling stays in the API.
 const domainLabels = {
   'Cognitive': 'Thinking',
   'Language': 'Talking',
@@ -82,7 +83,7 @@ class DomainChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = DomainStyle.of(domain, context.palette);
     return PillChip(
-      label: domain,
+      label: domainLabels[domain] ?? domain,
       icon: style.icon,
       color: style.color,
       background: style.background,
