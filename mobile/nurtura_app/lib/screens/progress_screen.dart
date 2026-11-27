@@ -325,10 +325,11 @@ class _ActivitiesDoneCard extends StatelessWidget {
     final p = context.palette;
     final total = done.total;
     final title = total == 0
-        ? 'No activities done yet'
-        : '$total ${total == 1 ? 'activity' : 'activities'} done';
+        ? 'No activities tried yet'
+        // "Tried": the total counts started ones too (#291).
+        : '$total ${total == 1 ? 'activity' : 'activities'} tried';
     final detail = total == 0
-        ? 'Mark an idea done and it will show here.'
+        ? 'Mark an idea Done or Started and it will show here.'
         : [
             if (done.partly > 0) '${done.partly} of them started',
             '${done.lastSevenDays} in the last 7 days',

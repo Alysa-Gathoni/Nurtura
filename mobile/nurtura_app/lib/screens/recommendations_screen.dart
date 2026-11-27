@@ -311,7 +311,10 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Tap an idea to see how to play.',
+                      // Pregnancy ideas aren't play (#291).
+                      widget.child.isExpecting
+                          ? 'Tap an idea to see what to do.'
+                          : 'Tap an idea to see how to play.',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),

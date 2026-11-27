@@ -43,7 +43,7 @@ from profiles.rules.facts import ConcernFact, InterestFact
 
 from .ranking import FURTHER, ONE_OLDER, ONE_YOUNGER, SAME_BRACKET, TWO_AWAY
 
-EXPLANATION_VERSION = "2"
+EXPLANATION_VERSION = "3"
 MAX_SENTENCES = 4
 MAX_NAMED_MILESTONES = 3
 MAX_GROUPS = 2
@@ -226,16 +226,21 @@ def explain(child, evaluation, ranked):
         support += "."
 
     fallback = None
+    # Before birth there is no "child's age" yet (#291).
+    stage = (
+        "this stage of your pregnancy"
+        if activity.age_range == AgeRange.PRENATAL
+        else "your child's age"
+    )
     if not groups and support is None:
         if not evaluation.firings:
             fallback = (
                 "You haven't asked for help with a particular area, so this is a "
-                "general activity for your child's age."
+                f"general activity for {stage}."
             )
         else:
             fallback = (
-                "This one is a good fit for your child's age and supports "
-                f"{AREA[domain]}."
+                f"This one is a good fit for {stage} and supports " f"{AREA[domain]}."
             )
     uses = (
         f"It uses {_join(used_alone)}, which you said your child enjoys."
