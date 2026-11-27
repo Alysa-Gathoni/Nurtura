@@ -16,6 +16,7 @@ import 'package:nurtura_app/state/preferences.dart';
 import 'package:nurtura_app/state/recommendation_cache.dart';
 import 'package:nurtura_app/state/token_store.dart';
 import 'package:nurtura_app/theme/app_theme.dart';
+import 'package:nurtura_app/utils/dates.dart';
 import 'package:provider/provider.dart';
 
 import 'helpers.dart';
@@ -181,18 +182,27 @@ void main() {
   }
 
   group('weekly plan (#244)', () {
+    // Plans are built around today (#285): the app compares a plan's last
+    // day with the real date, so fixed dates fail once they have passed.
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    DateTime day(int offset) =>
+        DateTime(today.year, today.month, today.day + offset);
+    String iso(DateTime d) => d.toIso8601String().substring(0, 10);
+
+    // This week: started yesterday, ends in five days.
+    final starts = day(-1);
+    final ends = day(5);
+
     Map<String, dynamic> weekBatch({required bool ended}) => {
       ...batch([
         {
           ...card('ACT-0004', 'Naming Everyday Objects'),
-          'completion': {
-            'status': 'completed',
-            'completion_date': '2026-11-20',
-          },
+          'completion': {'status': 'completed', 'completion_date': iso(today)},
         },
         card('ACT-0031', 'Naming Pictures in a Book', position: 2),
       ]),
-      'plan': {'starts': '2026-11-19', 'ends': '2026-11-25', 'ended': ended},
+      'plan': {'starts': iso(starts), 'ends': iso(ends), 'ended': ended},
     };
 
     testWidgets('shows the week, how many were tried and when new ideas come', (
@@ -203,8 +213,14 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(backend.to(path).map((r) => r.method), ['GET']);
-      expect(find.text('This week: 19–25 Nov'), findsOneWidget);
-      expect(find.text('1 of 2 tried · New ideas on 26 Nov'), findsOneWidget);
+      expect(
+        find.text('This week: ${formatWeek(starts, ends)}'),
+        findsOneWidget,
+      );
+      expect(
+        find.text('1 of 2 tried · New ideas on ${formatShortDate(day(6))}'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('a plan whose week has ended is replaced by a new one', (
@@ -214,11 +230,7 @@ void main() {
         if (r.method == 'GET') return json(weekBatch(ended: true));
         return json({
           ...batch([card('ACT-0023', 'Animal Sound Imitation Game')]),
-          'plan': {
-            'starts': '2026-11-26',
-            'ends': '2026-12-02',
-            'ended': false,
-          },
+          'plan': {'starts': iso(today), 'ends': iso(day(6)), 'ended': false},
         }, 201);
       });
       await pumpScreen(tester, backend);
@@ -226,8 +238,14 @@ void main() {
 
       expect(backend.to(path).map((r) => r.method), ['GET', 'POST']);
       expect(find.text('Animal Sound Imitation Game'), findsOneWidget);
-      expect(find.text('This week: 26 Nov – 2 Dec'), findsOneWidget);
-      expect(find.text('0 of 1 tried · New ideas on 3 Dec'), findsOneWidget);
+      expect(
+        find.text('This week: ${formatWeek(today, day(6))}'),
+        findsOneWidget,
+      );
+      expect(
+        find.text('0 of 1 tried · New ideas on ${formatShortDate(day(7))}'),
+        findsOneWidget,
+      );
     });
 
     test('a saved plan counts as ended once its last day has passed', () {
