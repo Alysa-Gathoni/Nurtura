@@ -7,6 +7,11 @@ WINDOW_BEFORE months before and WINDOW_AFTER months after the child's age,
 and not already Achieved. Only catalogue milestones have an expected age
 the rule engine can use, so free text is never offered.
 
+Since #289 the window is WINDOW_BEFORE = 3 months (it was 6, which offered
+a 14-month-old 9-month skills), only one of a CDC/WHO twin is offered, and a
+step of the walking sequence below one the child has Achieved isn't offered
+(profiles/milestone_links.py).
+
 Ticking one records it as Emerging, the ASQ-3 "sometimes": seeing a skill
 once during play shows it is starting rather than secure. A milestone
 already Emerging or Achieved is left as it is. Pregnancy activities have no
@@ -15,10 +20,11 @@ milestones to observe, and the catalogue has no Sensory milestones.
 
 from django.utils import timezone
 
+from profiles import milestone_links
 from profiles.models import DevelopmentalMilestone, ReferenceMilestone
 from profiles.rules.facts import age_in_months
 
-WINDOW_BEFORE = 6
+WINDOW_BEFORE = 3
 WINDOW_AFTER = 3
 MAX_SKILLS = 6
 
@@ -26,12 +32,14 @@ Status = DevelopmentalMilestone.Status
 
 
 def _latest_statuses(child):
-    """{reference pk: status of the latest observation}."""
+    """{reference pk: (milestone key, status of the latest observation)}."""
     latest = {}
-    for m in child.milestones.filter(reference__isnull=False).order_by(
-        "observation_date", "created_at"
+    for m in (
+        child.milestones.filter(reference__isnull=False)
+        .select_related("reference")
+        .order_by("observation_date", "created_at")
     ):
-        latest[m.reference_id] = m.status
+        latest[m.reference_id] = (m.reference.milestone_key, m.status)
     return latest
 
 
@@ -43,6 +51,9 @@ def observable(recommendation, on_date=None):
     if age < 0:
         return []
     latest = _latest_statuses(child)
+    settled = milestone_links.implied_keys(
+        key for key, status in latest.values() if status == Status.ACHIEVED
+    )
     found = []
     candidates = ReferenceMilestone.objects.filter(
         domain=recommendation.activity.developmental_domain,
@@ -50,8 +61,12 @@ def observable(recommendation, on_date=None):
         expected_age_months__lte=age + WINDOW_AFTER,
     ).order_by("expected_age_months", "milestone_key")
     for ref in candidates:
-        status = latest.get(ref.pk)
-        if status == Status.ACHIEVED:
+        status = latest.get(ref.pk, (None, None))[1]
+        if (
+            status == Status.ACHIEVED
+            or ref.milestone_key in settled
+            or milestone_links.is_hidden_twin(ref.milestone_key)
+        ):
             continue
         found.append((ref, status))
         if len(found) == MAX_SKILLS:
