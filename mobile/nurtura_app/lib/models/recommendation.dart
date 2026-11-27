@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../utils/dates.dart';
 
-/// The caregiver marked the activity as done, fully or partly (FR-14).
+/// The caregiver marked the activity as done, or as started but not finished
+/// (FR-14). The API calls the second partially_completed.
 class Completion {
   const Completion({required this.partial, required this.date});
 
@@ -14,7 +15,9 @@ class Completion {
   final bool partial;
   final DateTime date;
 
-  String get label => partial ? 'Partly done' : 'Done';
+  /// "Started" rather than "Partly done", so that "Partly" only ever
+  /// describes how an activity went (#283).
+  String get label => partial ? 'Started' : 'Done';
 
   Map<String, dynamic> toJson() => {
     'status': partial ? 'partially_completed' : 'completed',

@@ -85,7 +85,7 @@ Every area starts at 1. After the rules, the scores are scaled so the most urgen
 
 The explanation is built only from what the caregiver told the app, the milestone guidelines and the activity's own details. It never shows scores or rankings.
 
-**Step 6: Feedback.** After trying the activity, the caregiver can mark it **Done** or **Partly done**, say how it went (went well, partly, didn't work) and what got in the way (too hard, not interested, no materials and so on), rate it from 1 to 5 stars and add a comment (#175). A done activity isn't suggested again. The next batch also learns from the feedback (#179): activities similar to one that went well move up, with a note saying so, ones similar to one that didn't work move down, and an activity that didn't work isn't suggested again.
+**Step 6: Feedback.** After trying the activity, the caregiver can mark it **Done** or **Started**. One feedback sheet then asks how it went (went well, partly, didn't work), what got in the way (too hard, not interested, no materials and so on), how interested the child was, which skills they saw, an optional 1–5 star rating and a note (#175, #185, #283). The same sheet opens from "Add feedback" and from Edit. A done activity isn't suggested again. The next batch also learns from the feedback (#179): activities similar to one that went well move up, with a note saying so, ones similar to one that didn't work move down, and an activity that didn't work isn't suggested again.
 
 **Before birth:** an expecting parent can create a profile from the **due date** and choose an area they'd like support with. They then see only pregnancy activities, ranked for that area.
 
@@ -181,7 +181,7 @@ The project follows a sprint plan, with a GitHub issue, branch, pull request and
   - **Milestones:** record from the searchable checklist;
   - **Family:** children, theme and logout.
 - **Administrator screens:** an administrator account opens Dashboard, Activities, Feedback and Account tabs instead. Together they cover the system's use and health, adding, editing and publishing activities, and reviewing ratings without family details.
-- **Activity screen:** the full activity, then "How did it go?": Done or Partly done (with undo), and 1–5 stars with a comment.
+- **Activity screen:** the full activity, then "How did it go?": Done or Started (with undo). Either opens the feedback sheet; once saved, a summary with Edit (#283).
 - **Offline (a SOFIA addition):** the last recommendations and the child list are kept on the phone. Opening the app offline keeps the caregiver signed in and shows them, marked as saved.
 - **Look and feel:** a playful design with light and dark mode, a week streak and badges (a day streak until #244), inspired by Kinedu. It keeps the agreed teal, coral and gold colours, rounded cards, and the Nunito and Quicksand fonts.
 - Runs on a real Android phone against the backend.

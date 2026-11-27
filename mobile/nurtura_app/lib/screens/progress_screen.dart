@@ -330,7 +330,7 @@ class _ActivitiesDoneCard extends StatelessWidget {
     final detail = total == 0
         ? 'Mark an idea done and it will show here.'
         : [
-            if (done.partly > 0) '${done.partly} of them partly',
+            if (done.partly > 0) '${done.partly} of them started',
             '${done.lastSevenDays} in the last 7 days',
           ].join(' · ');
     return AppCard(

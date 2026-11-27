@@ -276,7 +276,7 @@ class _OverviewCard extends StatelessWidget {
                 icon: Icons.check_rounded,
                 color: const Color(0xFF4F7A44),
                 value: '${data.triedShare}%',
-                label: 'Tried · ${data.done} done, ${data.partly} partly',
+                label: 'Tried · ${data.done} done, ${data.partly} started',
               ),
             ],
           ),
@@ -445,7 +445,7 @@ class _OutcomesCard extends StatelessWidget {
         data.recommended == 0 ? 0 : (100 * n / data.recommended).round();
     final parts = [
       ('Done', data.done, c.done),
-      ('Partly done', data.partly, c.partly),
+      ('Started', data.partly, c.partly),
       ('Not marked yet', data.notMarked, p.border),
     ];
     return _Section(

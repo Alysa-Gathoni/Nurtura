@@ -12,7 +12,7 @@ import 'recommendations_screen_test.dart' as recs;
 const observablePath = '/api/recommendations/1/observable/';
 
 /// One card; marking done, feedback, and two skills to observe.
-FakeBackend wellDoneBackend({
+FakeBackend feedbackBackend({
   String firstSkill = 'Makes a lot of different sounds',
 }) => FakeBackend((r) async {
   if (r.url.path == recs.path) {
@@ -53,12 +53,8 @@ FakeBackend wellDoneBackend({
   return http.Response('', 404);
 });
 
-Future<void> tapInSheet(WidgetTester tester, String key) async {
-  await tester.ensureVisible(find.byKey(Key(key)));
-  await tester.pumpAndSettle();
-  await tester.tap(find.byKey(Key(key)));
-  await tester.pumpAndSettle();
-}
+Future<void> tapInSheet(WidgetTester tester, String key) =>
+    progress.tapInSheet(tester, key);
 
 void main() {
   testWidgets('long milestone names wrap instead of being clipped (#214)', (
@@ -66,7 +62,7 @@ void main() {
   ) async {
     const long =
         'Makes a lot of different sounds like "mamamama" and "bababababa"';
-    await progress.openDetail(tester, wellDoneBackend(firstSkill: long));
+    await progress.openDetail(tester, feedbackBackend(firstSkill: long));
     await progress.tapOnDetail(tester, find.byKey(const Key('markDoneButton')));
     final label = tester.renderObject<RenderParagraph>(find.text(long));
     expect(label.didExceedMaxLines, isFalse);
@@ -77,7 +73,7 @@ void main() {
   testWidgets('the sheet saves interest, outcome and skills seen (#185)', (
     tester,
   ) async {
-    final backend = wellDoneBackend();
+    final backend = feedbackBackend();
     await progress.openDetail(tester, backend);
     await progress.tapOnDetail(tester, find.byKey(const Key('markDoneButton')));
 
@@ -85,7 +81,7 @@ void main() {
     expect(find.text('How did “Peekaboo” go with Amani?'), findsOneWidget);
     expect(find.text('Makes a lot of different sounds'), findsOneWidget);
 
-    await tapInSheet(tester, 'saveProgressButton');
+    await tapInSheet(tester, 'saveFeedbackButton');
     expect(find.text('Choose how it went.'), findsOneWidget);
     expect(backend.to(progress.feedbackPath), isEmpty);
 
@@ -94,10 +90,10 @@ void main() {
     expect(find.text('What got in the way?'), findsNothing);
     await tapInSheet(tester, 'skill_CDC-09M-LA-01');
     await tester.enterText(
-      find.byKey(const Key('wellDoneNote')),
+      find.byKey(const Key('feedbackNote')),
       'Lots of babble',
     );
-    await tapInSheet(tester, 'saveProgressButton');
+    await tapInSheet(tester, 'saveFeedbackButton');
 
     expect(jsonDecode(backend.to(progress.feedbackPath).single.body), {
       'rating': null,
@@ -107,7 +103,7 @@ void main() {
       'interest': 'loved_it',
       'observed': ['CDC-09M-LA-01'],
     });
-    expect(find.byKey(const Key('wellDoneSheet')), findsNothing);
+    expect(find.byKey(const Key('feedbackSheet')), findsNothing);
     expect(find.byKey(const Key('milestonesRecordedSnack')), findsOneWidget);
     expect(find.text('Interest: Loved it'), findsOneWidget);
 
@@ -117,13 +113,13 @@ void main() {
   });
 
   testWidgets('Edit starts from what the sheet saved (#231)', (tester) async {
-    final backend = wellDoneBackend();
+    final backend = feedbackBackend();
     await progress.openDetail(tester, backend);
     await progress.tapOnDetail(tester, find.byKey(const Key('markDoneButton')));
     await tapInSheet(tester, 'interest_happy');
     await tapInSheet(tester, 'sheetOutcome_went_well');
-    await tester.enterText(find.byKey(const Key('wellDoneNote')), 'Giggles');
-    await tapInSheet(tester, 'saveProgressButton');
+    await tester.enterText(find.byKey(const Key('feedbackNote')), 'Giggles');
+    await tapInSheet(tester, 'saveFeedbackButton');
 
     await progress.tapOnDetail(
       tester,
@@ -133,19 +129,44 @@ void main() {
         tester.widget<ChoiceChip>(find.byKey(Key(key)));
     // Before #231 the outcome came back empty, and saving said
     // "Choose how it went." although it had been chosen in the sheet.
-    expect(chip('outcome_went_well').selected, isTrue);
-    expect(chip('cardInterest_happy').selected, isTrue);
-    expect(find.text('Giggles'), findsOneWidget);
+    expect(find.text('Your feedback'), findsOneWidget);
+    expect(chip('sheetOutcome_went_well').selected, isTrue);
+    bool picked(String key) => tester
+        .widget<Semantics>(
+          find
+              .ancestor(
+                of: find.byKey(Key(key)),
+                matching: find.byType(Semantics),
+              )
+              .first,
+        )
+        .properties
+        .selected!;
+    expect(picked('interest_happy'), isTrue);
+    expect(picked('interest_bored'), isFalse);
+    expect(
+      tester
+          .widget<TextField>(find.byKey(const Key('feedbackNote')))
+          .controller!
+          .text,
+      'Giggles',
+    );
+    // Skills seen are asked once, with new feedback, not again on Edit.
+    expect(find.byKey(const Key('skill_CDC-09M-LA-01')), findsNothing);
+    // Cancel leaves the saved feedback as it was.
+    await tapInSheet(tester, 'skipFeedbackButton');
+    expect(backend.to(progress.feedbackPath), hasLength(1));
+    expect(find.text('Thanks for your feedback!'), findsOneWidget);
   });
 
   testWidgets("didn't work asks what got in the way", (tester) async {
-    final backend = wellDoneBackend();
+    final backend = feedbackBackend();
     await progress.openDetail(tester, backend);
     await progress.tapOnDetail(tester, find.byKey(const Key('markDoneButton')));
     await tapInSheet(tester, 'interest_bored');
     await tapInSheet(tester, 'sheetOutcome_didnt_work');
     await tapInSheet(tester, 'sheetIssue_too_hard');
-    await tapInSheet(tester, 'saveProgressButton');
+    await tapInSheet(tester, 'saveFeedbackButton');
     final sent = jsonDecode(backend.to(progress.feedbackPath).single.body);
     expect(sent['issues'], ['too_hard']);
     expect(sent['interest'], 'bored');

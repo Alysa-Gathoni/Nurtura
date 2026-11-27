@@ -1,6 +1,6 @@
 # Requirements traceability
 
-> **Last updated: 2026-11-22.** Traces every requirement in Chapter 4 (Section 4.2) of the June 2026 proposal to where it is built, how it is tested and its status. Figures come from real runs. The proposal text hasn't been updated yet; where the built system differs from the wording, the row says so and [Wording to update in Chapter 4](#wording-to-update-in-chapter-4) lists the change.
+> **Last updated: 2026-11-27.** Traces every requirement in Chapter 4 (Section 4.2) of the June 2026 proposal to where it is built, how it is tested and its status. Figures come from real runs. The proposal text hasn't been updated yet; where the built system differs from the wording, the row says so and [Wording to update in Chapter 4](#wording-to-update-in-chapter-4) lists the change.
 
 Status key:
 
@@ -57,7 +57,7 @@ All other IDs in the repo (FR-01, FR-02, FR-05, FR-11, FR-14 to FR-16, NFR-02, N
 | FR-12 | View recommendations | Today tab; `GET`/`POST /api/children/<id>/recommendations/` | app `recommendations_screen_test.dart`; `test_recommendations_api.py` | **Met** |
 | FR-13 | Activity details | Activity screen: description, materials, Kenyan context, source and link (#138) | app `activity_detail_screen_test.dart`, `activity_details_and_polish_test.dart` | **Met** |
 | FR-14 | Completion tracking | Done, partly done and undo (#94) | `feedback/test_api.py`; app `activity_progress_test.dart` | **Met** |
-| FR-15 | Caregiver feedback | `FeedbackManager`: how it went, issues, interest level, optional rating and comment (#175, #185) | `feedback/tests.py`, `test_api.py`, `test_observations.py`; app `well_done_sheet_test.dart`, `feedback_options_test.dart` | **Met** |
+| FR-15 | Caregiver feedback | `FeedbackManager`: how it went, issues, interest level, optional rating and comment, all in one sheet (#175, #185, #283) | `feedback/tests.py`, `test_api.py`, `test_observations.py`; app `feedback_sheet_test.dart`, `activity_progress_test.dart`, `feedback_options_test.dart` | **Met** |
 | FR-16 | Feedback review | Administrator feedback screens in the app and the Django admin, without the child or caregiver shown | `feedback/test_admin.py`; app `admin_test.dart` | **Met** |
 | FR-17 | Request validation | Child and milestone input validated on entry (required fields, known areas only, observations neither in the future nor before birth); the app checks forms before sending | `profiles/tests.py`, `test_milestone_api.py`; app `children_screen_test.dart` | **Met.** Validation happens when data is entered, so a recommendation request needs nothing further. |
 | FR-18 | Recommendation storage | `Recommendation`: batch, position, scores, α, profile fingerprint, explanation and versions | `recommendations/test_recommendations_api.py` | **Met** |

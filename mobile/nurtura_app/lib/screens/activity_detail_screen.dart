@@ -14,16 +14,14 @@ import '../widgets/app_card.dart';
 import '../widgets/buttons.dart';
 import '../widgets/message_banner.dart';
 import '../widgets/nurtura_app_bar.dart';
+import '../widgets/feedback_sheet.dart';
 import '../widgets/pill_chip.dart';
-import '../widgets/well_done_sheet.dart';
+import '../widgets/rating_stars.dart';
 import 'recommendations_screen.dart';
 
-/// Longest comment the server accepts (FeedbackManager).
-const maxFeedbackComment = 1000;
-
 /// One suggested activity in full: the steps, what's needed, how it fits at
-/// home and its source (#138), then "How did it go?": mark it done (FR-14) and leave
-/// feedback (FR-15).
+/// home and its source (#138), then "How did it go?": mark it done or started
+/// (FR-14), then give feedback (FR-15) in the one feedback sheet (#283).
 class ActivityDetailScreen extends StatefulWidget {
   const ActivityDetailScreen({
     super.key,
@@ -45,7 +43,7 @@ class ActivityDetailScreen extends StatefulWidget {
   /// offered after feedback (#177); the screen then closes.
   final ValueChanged<RecommendationBatch>? onNewBatch;
 
-  /// Called when skills ticked in the "Well done!" sheet were recorded as
+  /// Called when skills ticked in the feedback sheet were recorded as
   /// milestones (#185), so the child's ideas are out of date.
   final VoidCallback? onProfileChanged;
 
@@ -58,35 +56,16 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     context.read<ApiClient>(),
   );
   late Recommendation _r = widget.recommendation;
-  late final _comment = TextEditingController(
-    text: widget.recommendation.feedback?.comment ?? '',
-  );
-
-  late int _rating = widget.recommendation.feedback?.rating ?? 0;
-  late FeedbackInterest? _interest = widget.recommendation.feedback?.interest;
-  late FeedbackOutcome? _outcome = widget.recommendation.feedback?.outcome;
-  late final Set<FeedbackIssue> _issues = {
-    ...?widget.recommendation.feedback?.issues,
-  };
-  late bool _editingFeedback = widget.recommendation.feedback == null;
   List<FeedbackOption> _options = const [];
   String? _choosing; // activity_id being added
   String? _optionsError;
   bool _savingDone = false;
-  bool _sendingFeedback = false;
   String? _doneError;
-  String? _feedbackError;
 
   @override
   void initState() {
     super.initState();
     if (widget.recommendation.feedback?.outcome != null) _loadOptions();
-  }
-
-  @override
-  void dispose() {
-    _comment.dispose();
-    super.dispose();
   }
 
   /// The options for the saved feedback (#177). Quietly empty if they
@@ -158,40 +137,26 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
       await context.read<EngagementState>().checkIn();
       if (!mounted) return;
       setState(() => _savingDone = false);
-      // "Well done!": how it went, interest and skills seen (#185).
-      final saved = await WellDoneSheet.show(
-        context,
-        recommendation: _r,
-        childName: widget.childName,
-        service: _service,
+      await _openFeedback(
+        partial ? FeedbackSheetMode.started : FeedbackSheetMode.done,
       );
-      if (!mounted || saved == null) return;
-      await _feedbackSaved(saved);
     }, (message) => setState(() => _doneError = message));
     if (mounted) setState(() => _savingDone = false);
   }
 
-  /// Makes the feedback editor show [saved], so "Edit" starts from what was
-  /// actually saved: outcome, issues, interest, rating and comment.
-  void _loadEditor(ActivityFeedback saved) {
-    _outcome = saved.outcome;
-    _interest = saved.interest;
-    _rating = saved.rating ?? 0;
-    _issues
-      ..clear()
-      ..addAll(saved.issues);
-    _comment.text = saved.comment;
-  }
-
-  /// Shows newly saved feedback, its options, and any milestones recorded.
-  Future<void> _feedbackSaved(ActivityFeedback saved) async {
+  /// The feedback sheet (#283): after Done or Started, from "Add feedback",
+  /// and from Edit. Saving shows the summary, its options and any milestones
+  /// recorded.
+  Future<void> _openFeedback(FeedbackSheetMode mode) async {
+    final saved = await FeedbackSheet.show(
+      context,
+      recommendation: _r,
+      childName: widget.childName,
+      service: _service,
+      mode: mode,
+    );
+    if (!mounted || saved == null) return;
     _update(_r.withProgress(feedback: saved));
-    setState(() {
-      _editingFeedback = false;
-      // The "Well done!" sheet saves feedback that this screen's editor
-      // hasn't seen; without this, Edit showed the interest but no outcome.
-      _loadEditor(saved);
-    });
     if (saved.recorded.isNotEmpty) {
       widget.onProfileChanged?.call();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -217,38 +182,6 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
       if (mounted) _update(_r.withProgress(completion: () => null));
     }, (message) => setState(() => _doneError = message));
     if (mounted) setState(() => _savingDone = false);
-  }
-
-  Future<void> _sendFeedback() async {
-    if (_outcome == null) {
-      setState(() => _feedbackError = 'Choose how it went.');
-      return;
-    }
-    setState(() {
-      _sendingFeedback = true;
-      _feedbackError = null;
-    });
-    await _attempt(() async {
-      final feedback = await _service.sendFeedback(
-        _r.id,
-        rating: _rating == 0 ? null : _rating,
-        comment: _comment.text,
-        outcome: _outcome,
-        interest: _interest,
-        // Nothing "got in the way" of an activity that went well.
-        issues: _outcome == FeedbackOutcome.wentWell
-            ? const []
-            : FeedbackIssue.values.where(_issues.contains).toList(),
-      );
-      if (!mounted) return;
-      _update(_r.withProgress(feedback: feedback));
-      setState(() {
-        _editingFeedback = false;
-        _loadEditor(feedback);
-      });
-      await _loadOptions();
-    }, (message) => setState(() => _feedbackError = message));
-    if (mounted) setState(() => _sendingFeedback = false);
   }
 
   @override
@@ -334,9 +267,11 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                 Text('How did it go?', style: AppText.quicksand(size: 20)),
                 const SizedBox(height: 10),
                 _doneCard(context),
-                const SizedBox(height: 14),
-                _feedbackCard(context),
-                if (_options.isNotEmpty && !_editingFeedback) ...[
+                if (_r.completion != null || _r.feedback != null) ...[
+                  const SizedBox(height: 14),
+                  _feedbackCard(context),
+                ],
+                if (_options.isNotEmpty) ...[
                   const SizedBox(height: 18),
                   _optionsSection(context),
                 ],
@@ -378,8 +313,8 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: SecondaryButton(
-                    key: const Key('markPartlyButton'),
-                    label: 'Partly',
+                    key: const Key('markStartedButton'),
+                    label: 'Started',
                     icon: Icons.timelapse_rounded,
                     onPressed: _savingDone
                         ? null
@@ -394,7 +329,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                 Icon(
                   done.partial
                       ? Icons.timelapse_rounded
-                      : Icons.emoji_events_rounded,
+                      : Icons.check_circle_rounded,
                   color: p.sage,
                   size: 30,
                 ),
@@ -434,65 +369,38 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     );
   }
 
+  /// After the activity is tried: "Add feedback", or the saved feedback with
+  /// Edit. Both open the feedback sheet (#283).
   Widget _feedbackCard(BuildContext context) {
     final p = context.palette;
     final saved = _r.feedback;
-    if (saved != null && !_editingFeedback) {
+    if (saved == null) {
       return AppCard(
         key: const Key('feedbackCard'),
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Thanks for your feedback!',
-                    style: AppText.nunito(size: 16, weight: FontWeight.w700),
-                  ),
-                ),
-                TextButton(
-                  key: const Key('editFeedbackButton'),
-                  onPressed: () => setState(() => _editingFeedback = true),
-                  child: const Text('Edit'),
-                ),
-              ],
+            Text(
+              'Tell us how it went',
+              style: AppText.nunito(size: 16, weight: FontWeight.w700),
             ),
-            if (saved.outcome != null) ...[
-              Text(
-                saved.outcome!.label,
-                key: const Key('savedOutcome'),
-                style: AppText.nunito(size: 15, weight: FontWeight.w700),
+            const SizedBox(height: 4),
+            Text(
+              'It helps us suggest better ideas for ${widget.childName}.',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 12),
+            SecondaryButton(
+              key: const Key('addFeedbackButton'),
+              label: 'Add feedback',
+              icon: Icons.rate_review_outlined,
+              onPressed: () => _openFeedback(
+                _r.completion?.partial == true
+                    ? FeedbackSheetMode.started
+                    : FeedbackSheetMode.done,
               ),
-              const SizedBox(height: 4),
-            ],
-            if (saved.issues.isNotEmpty) ...[
-              Text(
-                saved.issues.map((i) => i.label).join(' · '),
-                key: const Key('savedIssues'),
-                style: AppText.nunito(size: 14, color: p.mutedText),
-              ),
-              const SizedBox(height: 4),
-            ],
-            if (saved.interest != null) ...[
-              Text(
-                'Interest: ${saved.interest!.label}',
-                key: const Key('savedInterest'),
-                style: AppText.nunito(size: 14, color: p.mutedText),
-              ),
-              const SizedBox(height: 4),
-            ],
-            if (saved.rating != null)
-              _Stars(rating: saved.rating!, color: p.mustard),
-            if (saved.comment.isNotEmpty) ...[
-              const SizedBox(height: 6),
-              Text(
-                '“${saved.comment}”',
-                key: const Key('savedComment'),
-                style: AppText.nunito(size: 15, height: 1.4),
-              ),
-            ],
+            ),
           ],
         ),
       );
@@ -501,127 +409,57 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
       key: const Key('feedbackCard'),
       padding: const EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'How did it go?',
-            style: AppText.nunito(size: 16, weight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
+          Row(
             children: [
-              for (final o in FeedbackOutcome.values)
-                ChoiceChip(
-                  key: Key('outcome_${o.value}'),
-                  label: Text(o.label),
-                  selected: _outcome == o,
-                  onSelected: _sendingFeedback
-                      ? null
-                      : (_) => setState(() {
-                          _outcome = o;
-                          _feedbackError = null;
-                        }),
+              Expanded(
+                child: Text(
+                  'Thanks for your feedback!',
+                  style: AppText.nunito(size: 16, weight: FontWeight.w700),
                 ),
+              ),
+              TextButton(
+                key: const Key('editFeedbackButton'),
+                onPressed: () => _openFeedback(FeedbackSheetMode.edit),
+                child: const Text('Edit'),
+              ),
             ],
           ),
-          if (_outcome != null && _outcome != FeedbackOutcome.wentWell) ...[
-            const SizedBox(height: 14),
+          if (saved.outcome != null) ...[
             Text(
-              'What got in the way?',
-              style: AppText.nunito(size: 16, weight: FontWeight.w700),
+              saved.outcome!.label,
+              key: const Key('savedOutcome'),
+              style: AppText.nunito(size: 15, weight: FontWeight.w700),
             ),
-            const SizedBox(height: 2),
-            Text(
-              'Choose any that apply.',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (final i in FeedbackIssue.values)
-                  FilterChip(
-                    key: Key('issue_${i.value}'),
-                    label: Text(i.label),
-                    selected: _issues.contains(i),
-                    onSelected: _sendingFeedback
-                        ? null
-                        : (on) => setState(
-                            () => on ? _issues.add(i) : _issues.remove(i),
-                          ),
-                  ),
-              ],
-            ),
+            const SizedBox(height: 4),
           ],
-          const SizedBox(height: 14),
-          Text(
-            'How interested was ${widget.childName}?',
-            style: AppText.nunito(size: 16, weight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final i in FeedbackInterest.values)
-                ChoiceChip(
-                  key: Key('cardInterest_${i.value}'),
-                  avatar: Icon(i.icon, size: 18),
-                  label: Text(i.label),
-                  selected: _interest == i,
-                  onSelected: _sendingFeedback
-                      ? null
-                      : (_) => setState(() => _interest = i),
-                ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Text(
-            'How helpful was this idea? (optional)',
-            style: AppText.nunito(size: 16, weight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          _Stars(
-            rating: _rating,
-            color: p.mustard,
-            onRate: _sendingFeedback
-                ? null
-                : (value) => setState(() {
-                    _rating = value;
-                    _feedbackError = null;
-                  }),
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            key: const Key('feedbackComment'),
-            controller: _comment,
-            enabled: !_sendingFeedback,
-            minLines: 2,
-            maxLines: 5,
-            maxLength: maxFeedbackComment,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: const InputDecoration(
-              hintText: 'Anything to add? (optional)',
+          if (saved.issues.isNotEmpty) ...[
+            Text(
+              saved.issues.map((i) => i.label).join(' · '),
+              key: const Key('savedIssues'),
+              style: AppText.nunito(size: 14, color: p.mutedText),
             ),
-          ),
-          if (_feedbackError != null) ...[
+            const SizedBox(height: 4),
+          ],
+          if (saved.interest != null) ...[
+            Text(
+              'Interest: ${saved.interest!.label}',
+              key: const Key('savedInterest'),
+              style: AppText.nunito(size: 14, color: p.mutedText),
+            ),
+            const SizedBox(height: 4),
+          ],
+          if (saved.rating != null)
+            RatingStars(rating: saved.rating!, keyPrefix: 'savedStar'),
+          if (saved.comment.isNotEmpty) ...[
             const SizedBox(height: 6),
-            MessageBanner.error(
-              _feedbackError!,
-              key: const Key('feedbackError'),
+            Text(
+              '“${saved.comment}”',
+              key: const Key('savedComment'),
+              style: AppText.nunito(size: 15, height: 1.4),
             ),
           ],
-          const SizedBox(height: 10),
-          PrimaryButton(
-            key: const Key('sendFeedbackButton'),
-            label: saved == null ? 'Send feedback' : 'Update feedback',
-            icon: Icons.send_rounded,
-            loading: _sendingFeedback,
-            onPressed: _sendFeedback,
-          ),
         ],
       ),
     );
@@ -705,36 +543,6 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
             ),
           ),
         ],
-      ],
-    );
-  }
-}
-
-/// Five stars; tappable when [onRate] is set.
-class _Stars extends StatelessWidget {
-  const _Stars({required this.rating, required this.color, this.onRate});
-
-  final int rating;
-  final Color color;
-  final ValueChanged<int>? onRate;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        for (var i = 1; i <= 5; i++)
-          IconButton(
-            key: Key('star_$i'),
-            tooltip: '$i out of 5',
-            visualDensity: VisualDensity.compact,
-            onPressed: onRate == null ? null : () => onRate!(i),
-            icon: Icon(
-              i <= rating ? Icons.star_rounded : Icons.star_outline_rounded,
-              color: i <= rating ? color : context.palette.mutedText,
-              size: 32,
-            ),
-            disabledColor: i <= rating ? color : context.palette.mutedText,
-          ),
       ],
     );
   }

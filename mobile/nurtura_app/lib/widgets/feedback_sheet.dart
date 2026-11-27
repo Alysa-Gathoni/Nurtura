@@ -9,24 +9,45 @@ import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'buttons.dart';
 import 'message_banner.dart';
+import 'rating_stars.dart';
 
-/// The "Well done!" sheet shown after an activity is marked done (#185).
+/// Longest note the server accepts (FeedbackManager).
+const maxFeedbackComment = 1000;
+
+/// Why the feedback sheet was opened: it changes the heading, and whether the
+/// skills seen are asked about.
+enum FeedbackSheetMode {
+  /// Just marked done.
+  done,
+
+  /// Just marked as started but not finished.
+  started,
+
+  /// Changing feedback already given.
+  edit,
+}
+
+/// The one place a caregiver says how an activity went (#185, #283).
 ///
-/// Asks how interested the child was, how it went and what got in the way
-/// (#175), which skills the caregiver saw, and for a note. Ticked skills are
-/// recorded as milestones by the server. Closes with the saved feedback, or
-/// null when skipped; a 401 ends the session, as elsewhere.
-class WellDoneSheet extends StatefulWidget {
-  const WellDoneSheet({
+/// Opened after Done or Started, from "Add feedback", and from Edit. Asks, in
+/// this order: how it went; what got in the way (unless it went well); how
+/// interested the child was; which skills the caregiver saw (new feedback
+/// only; ticked ones are recorded as milestones by the server); an optional
+/// rating and note. Closes with the saved feedback, or null when skipped; a
+/// 401 ends the session, as elsewhere.
+class FeedbackSheet extends StatefulWidget {
+  const FeedbackSheet({
     super.key,
     required this.recommendation,
     required this.childName,
     required this.service,
+    required this.mode,
   });
 
   final Recommendation recommendation;
   final String childName;
   final RecommendationService service;
+  final FeedbackSheetMode mode;
 
   /// Opens the sheet; resolves to the saved feedback, or null if skipped.
   static Future<ActivityFeedback?> show(
@@ -34,30 +55,32 @@ class WellDoneSheet extends StatefulWidget {
     required Recommendation recommendation,
     required String childName,
     required RecommendationService service,
+    required FeedbackSheetMode mode,
   }) => showModalBottomSheet<ActivityFeedback>(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
-    builder: (_) => WellDoneSheet(
+    builder: (_) => FeedbackSheet(
       recommendation: recommendation,
       childName: childName,
       service: service,
+      mode: mode,
     ),
   );
 
   @override
-  State<WellDoneSheet> createState() => _WellDoneSheetState();
+  State<FeedbackSheet> createState() => _FeedbackSheetState();
 }
 
-class _WellDoneSheetState extends State<WellDoneSheet> {
-  late final _note = TextEditingController(
-    text: widget.recommendation.feedback?.comment ?? '',
-  );
-  late FeedbackInterest? _interest = widget.recommendation.feedback?.interest;
-  late FeedbackOutcome? _outcome = widget.recommendation.feedback?.outcome;
-  late final Set<FeedbackIssue> _issues = {
-    ...?widget.recommendation.feedback?.issues,
-  };
+class _FeedbackSheetState extends State<FeedbackSheet> {
+  ActivityFeedback? get _saved => widget.recommendation.feedback;
+  bool get _editing => widget.mode == FeedbackSheetMode.edit;
+
+  late final _note = TextEditingController(text: _saved?.comment ?? '');
+  late FeedbackOutcome? _outcome = _saved?.outcome;
+  late final Set<FeedbackIssue> _issues = {...?_saved?.issues};
+  late FeedbackInterest? _interest = _saved?.interest;
+  late int _rating = _saved?.rating ?? 0;
   final _observed = <String>{};
   List<ObservableSkill> _skills = const [];
   bool _saving = false;
@@ -66,7 +89,8 @@ class _WellDoneSheetState extends State<WellDoneSheet> {
   @override
   void initState() {
     super.initState();
-    _loadSkills();
+    // Skills seen are recorded as milestones; asked once, with new feedback.
+    if (!_editing) _loadSkills();
   }
 
   @override
@@ -99,9 +123,10 @@ class _WellDoneSheetState extends State<WellDoneSheet> {
     try {
       final feedback = await widget.service.sendFeedback(
         widget.recommendation.id,
-        rating: widget.recommendation.feedback?.rating,
+        rating: _rating == 0 ? null : _rating,
         comment: _note.text,
         outcome: _outcome,
+        // Nothing "got in the way" of an activity that went well.
         issues: _outcome == FeedbackOutcome.wentWell
             ? const []
             : FeedbackIssue.values.where(_issues.contains).toList(),
@@ -130,21 +155,48 @@ class _WellDoneSheetState extends State<WellDoneSheet> {
     }
   }
 
+  /// The heading follows the situation (#283): no trophy for an activity that
+  /// didn't work.
+  (String, IconData, Color, Color) _heading(NurturaPalette p) {
+    if (_editing) {
+      return ('Your feedback', Icons.edit_note_rounded, p.cardAlt, p.primary);
+    }
+    if (_outcome == FeedbackOutcome.didntWork) {
+      return (
+        'Thanks for trying it',
+        Icons.volunteer_activism_rounded,
+        p.cardAlt,
+        p.primary,
+      );
+    }
+    if (widget.mode == FeedbackSheetMode.started) {
+      return ('Good start!', Icons.timelapse_rounded, p.sageSoft, p.sage);
+    }
+    return ('Well done!', Icons.emoji_events_rounded, p.mustardSoft, p.mustard);
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
     final name = widget.childName;
-    Widget heading(String text) => Padding(
+    final (title, icon, iconBackground, iconColor) = _heading(p);
+    Widget heading(String text, {String? hint}) => Padding(
       padding: const EdgeInsets.only(top: 18, bottom: 8),
-      child: Text(
-        text,
-        style: AppText.nunito(size: 16, weight: FontWeight.w700),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(text, style: AppText.nunito(size: 16, weight: FontWeight.w700)),
+          if (hint != null) ...[
+            const SizedBox(height: 2),
+            Text(hint, style: Theme.of(context).textTheme.bodySmall),
+          ],
+        ],
       ),
     );
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: SingleChildScrollView(
-        key: const Key('wellDoneSheet'),
+        key: const Key('feedbackSheet'),
         padding: const EdgeInsets.fromLTRB(22, 18, 22, 22),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -152,7 +204,7 @@ class _WellDoneSheetState extends State<WellDoneSheet> {
             Align(
               alignment: Alignment.topRight,
               child: IconButton(
-                key: const Key('closeWellDone'),
+                key: const Key('closeFeedbackSheet'),
                 tooltip: 'Close',
                 icon: const Icon(Icons.close_rounded),
                 onPressed: _saving ? null : () => Navigator.of(context).pop(),
@@ -160,16 +212,13 @@ class _WellDoneSheetState extends State<WellDoneSheet> {
             ),
             CircleAvatar(
               radius: 32,
-              backgroundColor: p.mustardSoft,
-              child: Icon(
-                Icons.emoji_events_rounded,
-                size: 34,
-                color: p.mustard,
-              ),
+              backgroundColor: iconBackground,
+              child: Icon(icon, size: 34, color: iconColor),
             ),
             const SizedBox(height: 12),
             Text(
-              'Well done!',
+              title,
+              key: const Key('feedbackSheetTitle'),
               textAlign: TextAlign.center,
               style: AppText.quicksand(size: 26),
             ),
@@ -179,18 +228,6 @@ class _WellDoneSheetState extends State<WellDoneSheet> {
               '$name?',
               textAlign: TextAlign.center,
               style: AppText.nunito(size: 15, color: p.mutedText),
-            ),
-            heading("$name's interest"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                for (final i in FeedbackInterest.values)
-                  _InterestButton(
-                    interest: i,
-                    selected: _interest == i,
-                    onTap: _saving ? null : () => setState(() => _interest = i),
-                  ),
-              ],
             ),
             heading('How did it go?'),
             Wrap(
@@ -212,7 +249,7 @@ class _WellDoneSheetState extends State<WellDoneSheet> {
               ],
             ),
             if (_outcome != null && _outcome != FeedbackOutcome.wentWell) ...[
-              heading('What got in the way?'),
+              heading('What got in the way?', hint: 'Choose any that apply.'),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -231,13 +268,25 @@ class _WellDoneSheetState extends State<WellDoneSheet> {
                 ],
               ),
             ],
+            heading('How interested was $name?'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                for (final i in FeedbackInterest.values)
+                  _InterestButton(
+                    interest: i,
+                    selected: _interest == i,
+                    onTap: _saving ? null : () => setState(() => _interest = i),
+                  ),
+              ],
+            ),
             if (_skills.isNotEmpty) ...[
-              heading('Did you see any of these?'),
-              Text(
-                'Ticking one adds it to $name\'s milestones as “starting”.',
-                style: Theme.of(context).textTheme.bodySmall,
+              heading(
+                'Did you see any of these?',
+                hint:
+                    'Ticking one adds it to $name\'s milestones as '
+                    '“starting”.',
               ),
-              const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -264,35 +313,42 @@ class _WellDoneSheetState extends State<WellDoneSheet> {
                 ],
               ),
             ],
-            heading('Notes'),
+            heading('How helpful was this idea? (optional)'),
+            RatingStars(
+              rating: _rating,
+              onRate: _saving
+                  ? null
+                  : (value) => setState(() => _rating = value),
+            ),
+            const SizedBox(height: 10),
             TextField(
-              key: const Key('wellDoneNote'),
+              key: const Key('feedbackNote'),
               controller: _note,
               enabled: !_saving,
               minLines: 2,
               maxLines: 4,
-              maxLength: 1000,
+              maxLength: maxFeedbackComment,
               textCapitalization: TextCapitalization.sentences,
               decoration: const InputDecoration(
-                hintText: 'Was it too hard? Too easy? Anything else?',
+                hintText: 'Anything to add? (optional)',
               ),
             ),
             if (_error != null) ...[
               const SizedBox(height: 6),
-              MessageBanner.error(_error!, key: const Key('wellDoneError')),
+              MessageBanner.error(_error!, key: const Key('feedbackError')),
             ],
             const SizedBox(height: 10),
             PrimaryButton(
-              key: const Key('saveProgressButton'),
-              label: 'Save progress',
+              key: const Key('saveFeedbackButton'),
+              label: 'Save feedback',
               icon: Icons.check_rounded,
               loading: _saving,
               onPressed: _save,
             ),
             TextButton(
-              key: const Key('skipWellDone'),
+              key: const Key('skipFeedbackButton'),
               onPressed: _saving ? null : () => Navigator.of(context).pop(),
-              child: const Text('Skip for now'),
+              child: Text(_editing ? 'Cancel' : 'Skip for now'),
             ),
           ],
         ),
@@ -315,32 +371,36 @@ class _InterestButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    return InkWell(
-      key: Key('interest_${interest.value}'),
-      borderRadius: BorderRadius.circular(32),
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(4),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 24,
-              backgroundColor: selected ? p.primary : p.cardAlt,
-              child: Icon(
-                interest.icon,
-                size: 28,
-                color: selected ? Colors.white : p.mutedText,
+    return Semantics(
+      button: true,
+      selected: selected,
+      child: InkWell(
+        key: Key('interest_${interest.value}'),
+        borderRadius: BorderRadius.circular(32),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundColor: selected ? p.primary : p.cardAlt,
+                child: Icon(
+                  interest.icon,
+                  size: 28,
+                  color: selected ? Colors.white : p.mutedText,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              interest.label,
-              style: AppText.nunito(
-                size: 13,
-                weight: selected ? FontWeight.w800 : FontWeight.w500,
+              const SizedBox(height: 4),
+              Text(
+                interest.label,
+                style: AppText.nunito(
+                  size: 13,
+                  weight: selected ? FontWeight.w800 : FontWeight.w500,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
