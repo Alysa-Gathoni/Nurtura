@@ -237,6 +237,8 @@ class _FeedbackSheetState extends State<FeedbackSheet> {
                 for (final o in FeedbackOutcome.values)
                   ChoiceChip(
                     key: Key('sheetOutcome_${o.value}'),
+                    // A tick widened the chip and moved it to a new line (#293).
+                    showCheckmark: false,
                     label: Text(o.label),
                     selected: _outcome == o,
                     onSelected: _saving

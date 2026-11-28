@@ -40,6 +40,10 @@ class ForgotPasswordScreen extends StatefulWidget {
 enum _Step { email, code, password }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  /// Until a submit fails, errors wait; after it, each field is checked as
+  /// it changes, so a fixed field's error goes away (#293).
+  AutovalidateMode _autovalidate = AutovalidateMode.disabled;
+
   final _emailForm = GlobalKey<FormState>();
   final _passwordForm = GlobalKey<FormState>();
   late final _email = TextEditingController(text: widget.email.trim());
@@ -105,7 +109,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   Future<void> _sendCode() async {
-    if (_busy || !_emailForm.currentState!.validate()) return;
+    if (_busy) return;
+    if (!_emailForm.currentState!.validate()) {
+      setState(() => _autovalidate = AutovalidateMode.onUserInteraction);
+      return;
+    }
     setState(() {
       _busy = true;
       _error = null;
@@ -193,7 +201,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       _error = null;
       _passwordError = null;
     });
-    if (!_passwordForm.currentState!.validate()) return;
+    if (!_passwordForm.currentState!.validate()) {
+      setState(() => _autovalidate = AutovalidateMode.onUserInteraction);
+      return;
+    }
 
     setState(() => _busy = true);
     final navigator = Navigator.of(context);
@@ -334,6 +345,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   Widget _emailStep() => Form(
+    autovalidateMode: _autovalidate,
     key: _emailForm,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -416,6 +428,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       onPressed: () => setState(() => _showPassword = !_showPassword),
     );
     return Form(
+      autovalidateMode: _autovalidate,
       key: _passwordForm,
       child: AutofillGroup(
         child: Column(

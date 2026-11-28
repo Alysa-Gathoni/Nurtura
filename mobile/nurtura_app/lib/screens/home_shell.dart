@@ -42,17 +42,34 @@ class _HomeShellState extends State<HomeShell> {
     });
   }
 
-  void _go(int tab) => setState(() {
-    _tab = tab;
-    if (tab != milestones) _justCreated = false;
-    _refreshIdeas = false;
-  });
+  void _go(int tab) {
+    if (tab == _tab) return _scrollToTop();
+    setState(() {
+      _tab = tab;
+      if (tab != milestones) _justCreated = false;
+      _refreshIdeas = false;
+    });
+  }
+
+  /// Tapping the tab that's already open goes back to its top (#293). The
+  /// tabs' lists use the page's primary scroll controller.
+  void _scrollToTop() {
+    final controller = PrimaryScrollController.maybeOf(context);
+    if (controller == null || controller.positions.length != 1) return;
+    controller.animateTo(
+      0,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
 
   void _childAdded(ChildProfile child) {
     context.read<ChildrenState>().select(child);
     setState(() {
-      _tab = milestones;
-      _justCreated = true;
+      // Before birth there are no milestones to record yet, so an expected
+      // baby opens on its pregnancy ideas (#293).
+      _tab = child.isExpecting ? today : milestones;
+      _justCreated = !child.isExpecting;
     });
   }
 
@@ -116,6 +133,7 @@ class _HomeShellState extends State<HomeShell> {
                   today => RecommendationsScreen(
                     child: child,
                     embedded: true,
+                    startOffline: state.offline,
                     // After the profile was edited, ask for ideas that fit
                     // it (#134). The flag is taken once: `refresh` is only
                     // read when this screen is created.

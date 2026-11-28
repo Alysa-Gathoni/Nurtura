@@ -536,15 +536,23 @@ class _ActivitySheetState extends State<_ActivitySheet> {
               ),
             ],
           ),
-          section('How to do it', a.description),
-          section('You need', a.materialsNeeded ?? 'Nothing special'),
+          // The activity screen's headings and source line (#292).
+          section('How to play', a.description),
+          section(
+            "What you'll need",
+            a.materialsNeeded ??
+                'Nothing special: just you and ${widget.childName}.',
+          ),
           if (a.culturalRelevance.isNotEmpty)
-            section('Make it your own', a.culturalRelevance),
-          if (a.source.isNotEmpty)
-            section(
-              'Source',
-              a.sourceUrl.isEmpty ? a.source : '${a.source} · ${a.sourceUrl}',
+            section('Making it work at home', a.culturalRelevance),
+          if (a.source.isNotEmpty) ...[
+            const SizedBox(height: 14),
+            Text(
+              sourceLine(a.source, a.sourceUrl),
+              key: const Key('exploreSource'),
+              style: Theme.of(context).textTheme.bodySmall,
             ),
+          ],
           if (_error != null) ...[
             const SizedBox(height: 10),
             MessageBanner.error(_error!, key: const Key('tryError')),

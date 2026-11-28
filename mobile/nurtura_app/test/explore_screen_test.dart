@@ -164,6 +164,21 @@ void main() {
     expect(backend.requests.last.method, 'DELETE');
   });
 
+  testWidgets("the preview uses the activity screen's headings (#292)", (
+    tester,
+  ) async {
+    await openExplore(tester);
+    await tester.tap(find.byKey(const Key('explore_ACT-0004')));
+    await tester.pumpAndSettle();
+    expect(find.text('How to play'), findsOneWidget);
+    expect(find.text("What you'll need"), findsOneWidget);
+    expect(find.text('Making it work at home'), findsOneWidget);
+    expect(find.text('Based on guidance from Pathways.org.'), findsOneWidget);
+    for (final old in ['How to do it', 'You need', 'Make it your own']) {
+      expect(find.text(old), findsNothing);
+    }
+  });
+
   testWidgets('"Try this" adds it to the ideas and opens Today', (
     tester,
   ) async {

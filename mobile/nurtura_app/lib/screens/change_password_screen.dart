@@ -42,6 +42,10 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  /// Until a submit fails, errors wait; after it, each field is checked as
+  /// it changes, so a fixed field's error goes away (#293).
+  AutovalidateMode _autovalidate = AutovalidateMode.disabled;
+
   final _form = GlobalKey<FormState>();
   final _current = TextEditingController();
   final _password = TextEditingController();
@@ -68,7 +72,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Future<void> _save() async {
     if (_saving) return;
     setState(() => _error = null);
-    if (!_form.currentState!.validate()) return;
+    if (!_form.currentState!.validate()) {
+      setState(() => _autovalidate = AutovalidateMode.onUserInteraction);
+      return;
+    }
     setState(() => _saving = true);
     final auth = context.read<AuthState>();
     final navigator = Navigator.of(context);
@@ -127,6 +134,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: AppCard(
                 padding: const EdgeInsets.all(18),
                 child: Form(
+                  autovalidateMode: _autovalidate,
                   key: _form,
                   child: AutofillGroup(
                     child: Column(
