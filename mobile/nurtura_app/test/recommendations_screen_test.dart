@@ -49,6 +49,9 @@ Map<String, dynamic> batch(List<Map<String, dynamic>> cards) => {
 
 final emptyBatch = batch(const []);
 
+/// Today on the app's clock (`utils/dates.dart`), which tests can move (#304).
+DateTime appToday() => today();
+
 final child = ChildProfile(
   id: 3,
   name: 'Amani',
@@ -100,7 +103,8 @@ void main() {
   ) async {
     final prenatal = card('ACT-0002', 'Talking and Singing to the Baby');
     final backend = FakeBackend((r) async => json(batch([prenatal])));
-    final due = DateTime.now().add(const Duration(days: 60));
+    // The app's clock, not the real one (#304).
+    final due = today().add(const Duration(days: 60));
     await pumpScreen(
       tester,
       backend,
@@ -200,9 +204,10 @@ void main() {
 
   group('weekly plan (#244)', () {
     // Plans are built around today (#285): the app compares a plan's last
-    // day with the real date, so fixed dates fail once they have passed.
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
+    // day with today, so fixed dates fail once they have passed. Today on
+    // the app's clock, not the real one, so the test and the app agree even
+    // when the clock is moved (#304).
+    final today = appToday();
     DateTime day(int offset) =>
         DateTime(today.year, today.month, today.day + offset);
     String iso(DateTime d) => d.toIso8601String().substring(0, 10);
