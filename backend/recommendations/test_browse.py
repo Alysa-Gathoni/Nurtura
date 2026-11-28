@@ -150,10 +150,23 @@ class BrowseTests(ExploreTestCase):
         found = browse.browse(self.child, query="splash water in the bath")
         self.assertEqual(found[0].activity.activity_id, "ACT-0921")
 
-    def test_interests_query(self):
-        self.assertIn("water", browse.interests_query(self.child))
+    def test_child_interests(self):
+        self.child.interests = [" water ", "", "books"]
+        self.assertEqual(browse.child_interests(self.child), ["water", "books"])
         self.child.interests = []
-        self.assertEqual(browse.interests_query(self.child), "")
+        self.assertEqual(browse.child_interests(self.child), [])
+
+    def test_each_interest_counts_on_its_own(self):
+        # #288: one search for "a child who enjoys water, toys" blurred the
+        # two; now each interest finds its own ideas.
+        found = self.ids(browse.browse(self.child, interests=["water", "toys"]))
+        self.assertIn("ACT-0921", found)  # Splashing in the Bath
+        self.assertIn("ACT-0922", found)  # Naming Toys
+
+    def test_weak_matches_are_left_out(self):
+        found = self.ids(browse.browse(self.child, interests=["water"]))
+        self.assertEqual(found, ["ACT-0921"])  # nothing else is about water
+        self.assertEqual(browse.browse(self.child, interests=["dinosaurs"]), [])
 
 
 class ExploreAPITests(ExploreTestCase):
@@ -175,8 +188,8 @@ class ExploreAPITests(ExploreTestCase):
         body = self.client.get(self.list_url(q="splash water in the bath")).json()
         self.assertEqual(body["results"][0]["activity_id"], "ACT-0921")
         body = self.client.get(self.list_url(**{"for": "interests"})).json()
-        self.assertIn("water", body["query"])
-        self.assertEqual(body["results"][0]["activity_id"], "ACT-0921")
+        self.assertEqual(body["query"], "water")
+        self.assertEqual([r["activity_id"] for r in body["results"]], ["ACT-0921"])
 
     def test_limit_is_checked(self):
         self.assertEqual(self.client.get(self.list_url(limit=0)).status_code, 400)
