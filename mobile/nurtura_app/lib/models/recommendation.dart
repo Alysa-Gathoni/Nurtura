@@ -4,6 +4,23 @@ import '../utils/dates.dart';
 
 /// The caregiver marked the activity as done, or as started but not finished
 /// (FR-14). The API calls the second partially_completed.
+
+/// A link's site ("cdc.gov"), or null without a link. The whole link is too
+/// long to read on a phone.
+String? siteOf(String url) {
+  final host = Uri.tryParse(url.trim())?.host ?? '';
+  return host.isEmpty ? null : host.replaceFirst(RegExp(r'^www\.'), '');
+}
+
+/// "Based on guidance from Pathways.org (pathways.org).": the same line on
+/// the activity screen and in Explore (#292).
+String sourceLine(String source, String sourceUrl) {
+  final site = siteOf(sourceUrl);
+  return site == null
+      ? 'Based on guidance from $source.'
+      : 'Based on guidance from $source ($site).';
+}
+
 class Completion {
   const Completion({required this.partial, required this.date});
 
@@ -242,10 +259,7 @@ class Recommendation {
 
   /// The source link's site ("cdc.gov"), or null without a link. The whole
   /// link is too long to read on a phone.
-  String? get sourceSite {
-    final host = Uri.tryParse(sourceUrl.trim())?.host ?? '';
-    return host.isEmpty ? null : host.replaceFirst(RegExp(r'^www\.'), '');
-  }
+  String? get sourceSite => siteOf(sourceUrl);
 
   /// What's needed, or null when nothing is ("None") or it isn't known.
   String? get materialsNeeded {
