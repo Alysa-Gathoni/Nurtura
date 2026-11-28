@@ -195,6 +195,8 @@ class _MilestoneTrackerScreenState extends State<MilestoneTrackerScreen> {
                       padding: const EdgeInsets.only(right: 8),
                       child: ChoiceChip(
                         key: Key('trackerArea_$area'),
+                        // The tick drew over the area icon (#293).
+                        showCheckmark: false,
                         avatar: Icon(
                           DomainStyle.of(area, context.palette).icon,
                           size: 18,

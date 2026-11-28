@@ -34,6 +34,7 @@ class RecommendationsScreen extends StatefulWidget {
     required this.child,
     this.refresh = false,
     this.embedded = false,
+    this.startOffline = false,
   });
 
   final ChildProfile child;
@@ -44,6 +45,11 @@ class RecommendationsScreen extends StatefulWidget {
   /// Ask for a fresh batch straight away (e.g. right after a milestone was
   /// recorded) instead of showing the newest stored one.
   final bool refresh;
+
+  /// The server didn't answer when the children were loaded: open on the
+  /// saved ideas instead of waiting for another timeout (#293). Refresh
+  /// still asks the server.
+  final bool startOffline;
 
   @override
   State<RecommendationsScreen> createState() => _RecommendationsScreenState();
@@ -68,7 +74,22 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
   @override
   void initState() {
     super.initState();
-    _load(regenerate: widget.refresh);
+    _start();
+  }
+
+  Future<void> _start() async {
+    if (widget.startOffline && !widget.refresh) {
+      final saved = await _cache.read(widget.child.id);
+      if (!mounted) return;
+      if (saved != null) {
+        return setState(() {
+          _batch = saved.batch;
+          _savedAt = saved.savedAt;
+          _phase = _Phase.ready;
+        });
+      }
+    }
+    await _load(regenerate: widget.refresh);
   }
 
   Future<void> _load({bool regenerate = false}) async {

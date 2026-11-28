@@ -29,6 +29,10 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  /// Until a submit fails, errors wait; after it, each field is checked as
+  /// it changes, so a fixed field's error goes away (#293).
+  AutovalidateMode _autovalidate = AutovalidateMode.disabled;
+
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
   final _password = TextEditingController();
@@ -95,7 +99,10 @@ class _AuthScreenState extends State<AuthScreen> {
   Future<void> _submit() async {
     if (_submitting) return;
     setState(() => _error = null);
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      setState(() => _autovalidate = AutovalidateMode.onUserInteraction);
+      return;
+    }
 
     setState(() => _submitting = true);
     final auth = context.read<AuthState>();
@@ -151,6 +158,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         AppCard(
                           padding: const EdgeInsets.all(18),
                           child: Form(
+                            autovalidateMode: _autovalidate,
                             key: _formKey,
                             child: AutofillGroup(
                               child: Column(

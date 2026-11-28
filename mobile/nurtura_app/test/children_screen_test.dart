@@ -140,11 +140,10 @@ void main() {
       'interests': ['water play'],
       'concerns': ['Sensory'],
     });
-    // Saving goes straight to the Milestones tab; an expected baby gets a
-    // message instead of the picker.
-    expect(find.text('What can Amani do?'), findsOneWidget);
-    expect(find.byKey(const Key('prenatalMessage')), findsOneWidget);
-    expect(find.text("Amani's profile is saved."), findsOneWidget);
+    // An expected baby opens on the pregnancy ideas: before birth there are
+    // no milestones to record (#293).
+    expect(find.text('Gentle ideas for your pregnancy'), findsOneWidget);
+    expect(find.text('What can Amani do?'), findsNothing);
 
     await tapVisible(tester, find.byKey(const Key('tab_family')));
     expect(find.text('Your children'), findsOneWidget);

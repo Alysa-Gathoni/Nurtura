@@ -51,14 +51,21 @@ void main() {
     expect(find.text('Tummy Time'), findsOneWidget);
     expect(prefs.values[ChildrenState.savedKey], contains('Amani'));
 
+    final down = offline();
     final token = await relaunch(
       tester,
-      offline(),
+      down,
       token: 'tok',
       prefs: prefs,
       cache: cache,
     );
     expect(token, 'tok'); // not signed out
+    // The children list already found the server unreachable, so the ideas
+    // open from the saved copy without a second wait (#293).
+    expect(
+      down.requests.where((r) => r.url.path.endsWith('/recommendations/')),
+      isEmpty,
+    );
     expect(find.byKey(const Key('emailField')), findsNothing);
     expect(find.text('Tummy Time'), findsOneWidget);
     expect(find.byKey(const Key('savedRecommendationsNotice')), findsOneWidget);
