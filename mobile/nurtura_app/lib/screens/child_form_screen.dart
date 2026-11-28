@@ -31,6 +31,10 @@ class ChildFormScreen extends StatefulWidget {
 }
 
 class _ChildFormScreenState extends State<ChildFormScreen> {
+  /// Until a submit fails, errors wait; after it, each field is checked as
+  /// it changes, so a fixed field's error goes away (#293).
+  AutovalidateMode _autovalidate = AutovalidateMode.disabled;
+
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _interest = TextEditingController();
@@ -122,6 +126,9 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
     if (_submitting || _deleting) return;
     _addInterest(); // keep anything typed but not yet added
     final valid = _formKey.currentState!.validate();
+    if (!valid) {
+      setState(() => _autovalidate = AutovalidateMode.onUserInteraction);
+    }
     setState(() {
       _error = null;
       _dateMissing = _date == null;
@@ -227,6 +234,7 @@ class _ChildFormScreenState extends State<ChildFormScreen> {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 520),
               child: Form(
+                autovalidateMode: _autovalidate,
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,

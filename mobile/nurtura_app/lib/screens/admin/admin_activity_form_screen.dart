@@ -46,6 +46,10 @@ const _transitionLabels = {
 };
 
 class _AdminActivityFormScreenState extends State<AdminActivityFormScreen> {
+  /// Until a submit fails, errors wait; after it, each field is checked as
+  /// it changes, so a fixed field's error goes away (#293).
+  AutovalidateMode _autovalidate = AutovalidateMode.disabled;
+
   late final AdminService _service = AdminService(context.read<ApiClient>());
   final _formKey = GlobalKey<FormState>();
   final _scroll = ScrollController();
@@ -233,7 +237,10 @@ class _AdminActivityFormScreenState extends State<AdminActivityFormScreen> {
       _notice = null;
       _fieldErrors = {};
     });
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      setState(() => _autovalidate = AutovalidateMode.onUserInteraction);
+      return;
+    }
     setState(() => _saving = true);
     try {
       final before = _activity?.status;
@@ -322,6 +329,7 @@ class _AdminActivityFormScreenState extends State<AdminActivityFormScreen> {
           child: choices == null && _error == null
               ? const Center(child: CircularProgressIndicator())
               : Form(
+                  autovalidateMode: _autovalidate,
                   key: _formKey,
                   child: ListView(
                     key: const Key('activityForm'),
