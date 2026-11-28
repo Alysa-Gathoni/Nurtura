@@ -234,7 +234,8 @@ class ChildActivitiesView(APIView):
 
     GET lists Published activities suited to the child's age and not yet
     done, best first. ?q= searches by meaning with SBERT; ?for=interests
-    searches with the child's interests. Filters: ?area=, ?no_materials=1,
+    searches with the child's interests (each on its own; weak matches are
+    left out, #288). Filters: ?area=, ?no_materials=1,
     ?quick=1, ?saved=1; ?limit= (default 30, at most 100).
     """
 
@@ -244,10 +245,12 @@ class ChildActivitiesView(APIView):
         child = get_object_or_404(request.user.children, pk=child_id)
         params = request.query_params
         query = params.get("q", "")
+        interests = None
         if params.get("for") == "interests":
-            query = browse.interests_query(child)
-            if not query:
+            interests = browse.child_interests(child)
+            if not interests:
                 return Response({"query": "", "results": []})
+            query = ", ".join(interests)
         try:
             limit = int(params.get("limit", browse.DEFAULT_LIMIT))
         except ValueError:
@@ -259,6 +262,7 @@ class ChildActivitiesView(APIView):
         found = browse.browse(
             child,
             query=query,
+            interests=interests,
             area=params.get("area") or None,
             no_materials=_flag(params, "no_materials"),
             quick=_flag(params, "quick"),
