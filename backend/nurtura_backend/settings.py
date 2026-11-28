@@ -245,6 +245,8 @@ REST_FRAMEWORK = {
     # Login attempts per client (IP address) to slow down password guessing.
     "DEFAULT_THROTTLE_RATES": {
         "login": "5/minute",
+        # Registering (#294): as for log in.
+        "register": "5/minute",
         # Entering or resending the emailed login code (#86).
         "two_factor": "10/minute",
         # Asking for a password-reset code (#126).

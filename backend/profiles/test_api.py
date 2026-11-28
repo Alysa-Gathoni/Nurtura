@@ -337,6 +337,38 @@ class LoginThrottleTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
+class RegisterThrottleTests(APITestCase):
+    """#294: "An account with this email already exists." stays, so a
+    caregiver knows to log in, but it can't be used to check addresses in
+    bulk."""
+
+    def setUp(self):
+        cache.clear()
+        User.objects.create_user(
+            username="taken@example.com", email="taken@example.com"
+        )
+
+    def register(self, email):
+        return self.client.post(
+            reverse("register"),
+            {"username": email, "email": email, "password": "Str0ng-Passw0rd!"},
+            format="json",
+        )
+
+    def test_registering_is_throttled_after_five_attempts_per_minute(self):
+        for n in range(5):
+            response = self.register(f"guess{n}@example.com")
+            self.assertNotEqual(response.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
+        response = self.register("taken@example.com")
+        self.assertEqual(response.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
+        self.assertNotIn("already exists", str(response.data))
+
+    def test_the_existing_account_message_is_kept(self):
+        response = self.register("taken@example.com")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("already exists", str(response.data))
+
+
 class CorsTests(APITestCase):
     """The Flutter web app (served on a random localhost port) can call the API."""
 

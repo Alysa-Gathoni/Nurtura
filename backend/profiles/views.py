@@ -52,10 +52,16 @@ class RegisterView(generics.CreateAPIView):
 
     No token yet: the app gets it from /auth/login/verify/ once the emailed
     code is entered, which also proves the address belongs to the caregiver.
+
+    Throttled like log in (#294): the "already exists" message tells a
+    caregiver to log in instead, so it stays, but it can't be used to check
+    many addresses quickly or to create accounts in bulk.
     """
 
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "register"
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
