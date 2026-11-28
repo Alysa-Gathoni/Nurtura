@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'config.dart';
@@ -110,6 +111,12 @@ class NurturaApp extends StatelessWidget {
           theme: AppTheme.light(),
           darkTheme: AppTheme.dark(),
           themeMode: theme.mode,
+          // British English, as the app's own text is: the date picker shows
+          // "Thu 25 Feb" and starts weeks on Monday, like the weekly plan
+          // (#293).
+          locale: const Locale('en', 'GB'),
+          supportedLocales: const [Locale('en', 'GB')],
+          localizationsDelegates: GlobalMaterialLocalizations.delegates,
           home: const AuthGate(),
         ),
       ),
